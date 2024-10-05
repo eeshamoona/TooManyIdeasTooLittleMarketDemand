@@ -6,6 +6,7 @@
     "outDir": "dist",
     "esModuleInterop": true,
     "jsx": "react",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "lib": ["es2015", "dom"]
   }
 }

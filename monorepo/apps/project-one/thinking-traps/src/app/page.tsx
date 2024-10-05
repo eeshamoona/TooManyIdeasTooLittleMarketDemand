@@ -1,6 +1,5 @@
 import { Heading } from "@chakra-ui/react";
 import { Button } from "ui/src/Button";
-
 export default function HomePage() {
   return (
     <div>
