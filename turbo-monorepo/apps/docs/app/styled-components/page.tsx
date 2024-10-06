@@ -7,7 +7,7 @@ const sharedComponents = [
     id: 1,
     name: "Button",
     description: "A customizable button component.",
-    component: <CustomButton appName="MyApp">Click Me</CustomButton>,
+    component: <CustomButton>Click Me</CustomButton>,
   },
 ];
 
