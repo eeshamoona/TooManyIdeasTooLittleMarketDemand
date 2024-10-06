@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { Button as ChakraButton } from "@chakra-ui/react";
 
 interface ButtonProps {
   children: ReactNode;
@@ -10,11 +11,12 @@ interface ButtonProps {
 
 export const Button = ({ children, className, appName }: ButtonProps) => {
   return (
-    <button
+    <ChakraButton
+      variant={"outline"}
       className={className}
       onClick={() => alert(`Hello from your ${appName} app!`)}
     >
       {children}
-    </button>
+    </ChakraButton>
   );
 };
