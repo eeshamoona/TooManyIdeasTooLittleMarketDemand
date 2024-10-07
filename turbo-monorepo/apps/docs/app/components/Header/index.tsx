@@ -1,6 +1,9 @@
-import { Flex, Box, Link, Text } from "@chakra-ui/react";
+"use client";
 
-const Header = () => {
+import { Flex, Box, Link, Text, Button } from "@chakra-ui/react";
+import { handleLogout } from "../../logout/logoutClient";
+
+const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   return (
     <Box as="header" bg="white" p={4} color="black" boxShadow="md">
       <Flex justify="space-between" align="center" mx="auto">
@@ -36,6 +39,15 @@ const Header = () => {
           >
             Components
           </Link>
+          {isLoggedIn && (
+            <Button
+              onClick={handleLogout}
+              p={2}
+              _hover={{ textDecoration: "none", bg: "gray.100" }}
+            >
+              Logout
+            </Button>
+          )}
         </Flex>
       </Flex>
     </Box>

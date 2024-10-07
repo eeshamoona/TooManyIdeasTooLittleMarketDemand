@@ -1,8 +1,13 @@
-import { type NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "./app/utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+  try {
+    return await updateSession(request);
+  } catch (error) {
+    console.error("Error in root middleware:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
 }
 
 export const config = {
