@@ -1,31 +1,53 @@
 "use client";
-import { Box, Heading, VStack, HStack, Text, Divider } from "@chakra-ui/react";
-import { Button as CustomButton } from "@repo/ui/button";
+import { useState } from "react";
+import {
+  Box,
+  Heading,
+  VStack,
+  HStack,
+  Text,
+  Divider,
+  Input,
+  Button,
+} from "@chakra-ui/react";
 
-const sharedComponents = [
-  {
-    id: 1,
-    name: "Button",
-    description: "A customizable button component.",
-    component: <CustomButton>Click Me</CustomButton>,
-  },
-];
+interface TodoItem {
+  id: number;
+  text: string;
+}
 
-export default function ComponentsShowcase() {
+export default function TodoApp() {
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [newTodo, setNewTodo] = useState("");
+
+  const addTodo = () => {
+    if (newTodo.trim() === "") return;
+    setTodos([...todos, { id: Date.now(), text: newTodo }]);
+    setNewTodo("");
+  };
+
   return (
     <Box p={4}>
-      <Heading mb={6}>Shared Styled Components</Heading>
-      <VStack spacing={8} align="stretch">
-        {sharedComponents.map((comp) => (
-          <Box key={comp.id} p={5} shadow="md" borderWidth="1px">
+      <Heading mb={6}>Todo App</Heading>
+      <VStack spacing={4} align="stretch">
+        {todos.map((todo) => (
+          <Box key={todo.id} p={5} shadow="md" borderWidth="1px">
             <HStack justify="space-between">
-              <Heading fontSize="xl">{comp.name}</Heading>
+              <Text>{todo.text}</Text>
             </HStack>
-            <Text mt={4}>{comp.description}</Text>
-            <Box mt={4}>{comp.component}</Box>
-            <Divider mt={4} />
           </Box>
         ))}
+        <Divider />
+        <HStack>
+          <Input
+            placeholder="New todo"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+          />
+          <Button colorScheme="teal" onClick={addTodo}>
+            Add Todo
+          </Button>
+        </HStack>
       </VStack>
     </Box>
   );
