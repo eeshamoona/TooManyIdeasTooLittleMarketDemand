@@ -24,7 +24,6 @@ export default async function Page() {
           Creative Prompts
         </Heading>
         <SettingsButton />
-        <div style={{ width: "40px" }} />
       </div>
       <Filter prompts={prompts} />
     </div>

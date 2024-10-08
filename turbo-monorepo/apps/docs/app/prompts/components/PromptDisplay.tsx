@@ -23,26 +23,36 @@ export default function PromptDisplay({ prompt }) {
   };
 
   const handleSparkleClick = async () => {
-    //Get the last 100 characters of the response but make sure to include full sentences
-    const last100Chars = response.slice(-100);
+    //TODO: Determine if the response should be cut down and to what length
+    const getTrimmedResponse = () => {
+      return response.length > 500 ? response.slice(-500) : response;
+    };
 
     try {
-      const generatedSentence = await fetch("/api/addASentence", {
+      console.log("Calling API...", getTrimmedResponse());
+      const generateResponse = await fetch("/api/addASentence", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ response: last100Chars, prompt: prompt.text }),
+        body: JSON.stringify({
+          response: getTrimmedResponse(),
+          prompt: prompt.text,
+        }),
       });
-      const data = await generatedSentence.json();
-      console.log("API response:", data);
+      const data = await generateResponse.json();
+      const { generatedSentence } = data;
+      if (generatedSentence) {
+        const newResponse = response + " " + generatedSentence;
+        setResponse(newResponse);
+      }
     } catch (error) {
       console.error("Error calling API:", error);
     }
   };
 
   return (
-    <VStack spacing={4} margin="0 auto">
+    <VStack spacing={4} w="full">
       <Text fontSize="xl" fontWeight="bold" width={"full"}>
         {prompt.text}
       </Text>
@@ -51,26 +61,27 @@ export default function PromptDisplay({ prompt }) {
         placeholder="Write your response here..."
         value={response}
         onChange={(e) => setResponse(e.target.value)}
-        rows={6}
+        rows={10}
       />
 
       <HStack w={"100%"}>
         <Button
           colorScheme="red"
-          flex={1}
+          flex={3}
           onClick={handleSaveAndClearResponse}
           disabled={response === ""}
         >
           Clear
         </Button>
         <IconButton
+          flex={1}
           colorScheme="yellow"
           icon={<FaWandMagicSparkles />}
           aria-label="Sparkle"
           disabled={response.length <= 100}
           onClick={handleSparkleClick}
         />
-        <Button colorScheme="green" flex={1} onClick={handleSaveResponse}>
+        <Button colorScheme="green" flex={3} onClick={handleSaveResponse}>
           Save Response
         </Button>
       </HStack>

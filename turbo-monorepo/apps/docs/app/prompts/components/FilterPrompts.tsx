@@ -31,7 +31,7 @@ export default function Filter({ prompts }) {
   };
 
   return (
-    <VStack spacing={4} maxWidth="50%" margin="0 auto">
+    <VStack spacing={4} maxWidth="80%" margin="0 auto">
       <Select
         placeholder="Filter by category"
         value={filter}
