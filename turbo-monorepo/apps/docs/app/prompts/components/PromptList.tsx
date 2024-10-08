@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { VStack, Select, List, ListItem, Text } from "@chakra-ui/react";
+import { NEW_PROMPT_CATEGORIES } from "../interface";
 
 export default function PromptList({ prompts }) {
   const [filter, setFilter] = useState("");
@@ -17,9 +18,12 @@ export default function PromptList({ prompts }) {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       >
-        <option value="self-reflection">Self Reflection</option>
-        <option value="productivity">Productivity</option>
-        <option value="creativity">Creativity</option>
+        {NEW_PROMPT_CATEGORIES.map((category) => (
+          <option key={category.title} value={category.title}>
+            {category.title}: {""}
+            {category.description}
+          </option>
+        ))}
       </Select>
 
       <List spacing={3}>

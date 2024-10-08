@@ -18,7 +18,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <Flex direction="column" minH="100vh" w="100vw" bg="lightgrey">
+          <Flex direction="column" minH="100vh" w="100vw" bg="gray.100">
             <Header isLoggedIn={isLoggedIn} />
             <Box as="main" flex="1" p={4}>
               {children}

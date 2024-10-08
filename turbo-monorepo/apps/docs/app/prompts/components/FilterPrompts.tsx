@@ -1,57 +1,51 @@
-// app/prompts/components/Filter.tsx
 "use client";
-
 import { useState } from "react";
-import { VStack, CheckboxGroup, Checkbox, Button } from "@chakra-ui/react";
+import { VStack, Button, Select } from "@chakra-ui/react";
 import PromptDisplay from "./PromptDisplay";
-
-const categories = [
-  "Gratitude",
-  "Creative Thinking",
-  "Emotional Clarity",
-  "Future Life Visualization",
-  "Problem Solving",
-  "Self-Reflection",
-  "Topical Exploration",
-  "Wellness",
-  "Skill-Building",
-  "Challenge-Based Prompts",
-];
+import { NEW_PROMPT_CATEGORIES } from "../interface";
 
 export default function Filter({ prompts }) {
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  // const [selectedCategories, setSelectedCategories] = useState([]);
   const [randomPrompt, setRandomPrompt] = useState(null);
 
-  // Filter prompts by selected categories
+  const [filter, setFilter] = useState("");
+
   const filteredPrompts = prompts.filter((prompt) =>
-    selectedCategories.every((category) => prompt.categories.includes(category))
+    filter ? prompt.category === filter : true
   );
 
-  // Get a random prompt from the filtered list
   const getRandomPrompt = () => {
-    if (filteredPrompts.length > 0) {
-      const randomIndex = Math.floor(Math.random() * filteredPrompts.length);
-      setRandomPrompt(filteredPrompts[randomIndex]);
+    if (filteredPrompts.length > 1) {
+      let randomIndex;
+      let newPrompt;
+      do {
+        randomIndex = Math.floor(Math.random() * filteredPrompts.length);
+        newPrompt = filteredPrompts[randomIndex];
+      } while (newPrompt === randomPrompt);
+      setRandomPrompt(newPrompt);
+    } else if (filteredPrompts.length === 1) {
+      setRandomPrompt(filteredPrompts[0]);
     } else {
       setRandomPrompt(null);
     }
   };
 
   return (
-    <VStack spacing={4} align="stretch">
-      <CheckboxGroup
-        colorScheme="teal"
-        value={selectedCategories}
-        onChange={setSelectedCategories}
+    <VStack spacing={4} maxWidth="50%" margin="0 auto">
+      <Select
+        placeholder="Filter by category"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
       >
-        {categories.map((category) => (
-          <Checkbox key={category} value={category}>
-            {category}
-          </Checkbox>
+        {NEW_PROMPT_CATEGORIES.map((category) => (
+          <option key={category.title} value={category.title}>
+            {category.title}: {""}
+            {category.description}
+          </option>
         ))}
-      </CheckboxGroup>
+      </Select>
 
-      <Button colorScheme="teal" onClick={getRandomPrompt}>
+      <Button colorScheme="blue" width={"full"} onClick={getRandomPrompt}>
         Get Prompt
       </Button>
 

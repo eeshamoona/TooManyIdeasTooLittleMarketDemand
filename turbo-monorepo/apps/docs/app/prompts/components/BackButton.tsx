@@ -1,12 +1,18 @@
-"use client"; // Ensure this component is a client-side component
-
+"use client";
 import { useRouter } from "next/navigation";
-import { Button } from "@repo/ui/button"; // Adjust the import based on your button component
+import { BiArrowBack } from "react-icons/bi";
+import { IconButton } from "@chakra-ui/react";
 
 const BackButton = () => {
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
 
-  return <Button onClick={() => router.back()}>Back</Button>;
+  return (
+    <IconButton
+      aria-label="Go back"
+      onClick={() => router.back()}
+      icon={<BiArrowBack />}
+    />
+  );
 };
 
 export default BackButton;

@@ -1,13 +1,17 @@
-"use client"; // Ensure this component is a client-side component
-
+"use client";
 import { useRouter } from "next/navigation";
-import { Button } from "@repo/ui/button";
+import { FiSettings } from "react-icons/fi";
+import { IconButton } from "@chakra-ui/react";
 
 const SettingsButton = () => {
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
 
   return (
-    <Button onClick={() => router.push("/prompts/settings")}>Settings</Button>
+    <IconButton
+      aria-label="Go to settings"
+      onClick={() => router.push("/prompts/settings")}
+      icon={<FiSettings />}
+    />
   );
 };
 
