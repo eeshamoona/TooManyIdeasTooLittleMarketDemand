@@ -10,9 +10,12 @@ import {
   Divider,
   Icon,
 } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { FaPenFancy, FaUsers, FaStar } from "react-icons/fa";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <Box p={4}>
       {/* Hero Section */}
@@ -23,7 +26,11 @@ export default function Home() {
         <Text fontSize="lg" mb={6}>
           Unleash your creativity with our AI-powered prompt writing tool.
         </Text>
-        <Button colorScheme="teal" size="lg">
+        <Button
+          colorScheme="blue"
+          size="lg"
+          onClick={() => router.push("/prompts")}
+        >
           Get Started
         </Button>
       </Box>

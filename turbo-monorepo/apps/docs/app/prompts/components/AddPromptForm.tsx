@@ -26,7 +26,7 @@ export default function AddPromptForm() {
     if (res.ok) {
       setText("");
       setCategory("");
-      router.refresh(); // Refresh to load new prompts
+      router.refresh();
     } else {
       console.error("Failed to add prompt");
     }

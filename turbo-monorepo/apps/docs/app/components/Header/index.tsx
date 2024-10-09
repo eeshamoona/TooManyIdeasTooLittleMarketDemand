@@ -17,15 +17,6 @@ const Header = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           maxW="md"
         >
           <Link
-            href="/"
-            p={2}
-            backgroundColor={"white"}
-            borderRadius={"md"}
-            _hover={{ textDecoration: "none", bg: "gray.300" }}
-          >
-            Blog
-          </Link>
-          <Link
             href="/prompts"
             p={2}
             backgroundColor={"white"}
