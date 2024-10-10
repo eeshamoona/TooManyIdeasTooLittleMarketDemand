@@ -6,7 +6,8 @@
     "./button": "./src/components/button.tsx",
     "./card": "./src/components/card.tsx",
     "./code": "./src/components/code.tsx",
-    "./providers": "./src/providers.tsx"
+    "./chakraProvider": "./src/providers/chakraProvider.tsx",
+    "./mantineProvider": "./src/providers/mantineProvider.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -21,12 +22,17 @@
     "@types/react": "^18.2.61",
     "@types/react-dom": "^18.2.19",
     "eslint": "^8.57.0",
+    "postcss": "^8.4.47",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.10.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@mantine/core": "^7.13.2",
+    "@mantine/hooks": "^7.13.2",
     "framer-motion": "^11.11.1",
     "react": "^18.2.0"
   }

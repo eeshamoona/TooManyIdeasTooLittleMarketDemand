@@ -2,7 +2,7 @@ import TrackedTextarea from "./TrackedTextarea";
 
 export default function PromptDisplay({ prompt }) {
   const generateAIResponse = async (
-    currentResponse: string
+    currentResponse: string,
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -16,7 +16,7 @@ export default function PromptDisplay({ prompt }) {
         }),
       });
       const data = await generateResponse.json();
-      return data.generatedSentence || ""; 
+      return data.generatedSentence || "";
     } catch (error) {
       console.error("Error calling API:", error);
       return ""; // Return empty string in case of error

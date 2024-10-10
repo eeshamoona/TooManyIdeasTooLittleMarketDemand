@@ -1,8 +1,8 @@
-import { Box, Flex } from "@chakra-ui/react";
-import Header from "./components/Header";
 import "./globals.css";
-import Providers from "@repo/ui/chakraProvider";
+import Providers from "@repo/ui/mantineProvider";
 import { createClient } from "./utils/supabase/server";
+import { CustomAppShell } from "./shell";
+import "@mantine/core/styles.css";
 
 export default async function RootLayout({
   children,
@@ -18,12 +18,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <Flex direction="column" minH="100vh" w="100vw">
-            <Header isLoggedIn={isLoggedIn} />
-            <Box as="main" flex="1" p={4}>
-              {children}
-            </Box>
-          </Flex>
+          <CustomAppShell isLoggedIn={isLoggedIn}>{children}</CustomAppShell>
         </Providers>
       </body>
     </html>

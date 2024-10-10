@@ -103,7 +103,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user"
+      (char) => char.type === "user",
     ).length;
 
     const userPercentage =

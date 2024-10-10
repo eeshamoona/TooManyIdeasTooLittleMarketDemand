@@ -51,4 +51,3 @@ addTodo(newTodo)
     console.error("Error adding todo:", error);
   });
 ```
-

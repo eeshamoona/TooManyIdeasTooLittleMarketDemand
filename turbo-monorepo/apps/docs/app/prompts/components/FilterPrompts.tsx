@@ -11,7 +11,7 @@ export default function Filter({ prompts }) {
   const [filter, setFilter] = useState("");
 
   const filteredPrompts = prompts.filter((prompt) =>
-    filter ? prompt.category === filter : true
+    filter ? prompt.category === filter : true,
   );
 
   const getRandomPrompt = () => {
