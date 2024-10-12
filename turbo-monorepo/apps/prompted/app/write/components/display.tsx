@@ -16,6 +16,7 @@ import { NEW_PROMPT_CATEGORIES } from "../interface";
 import TrackedTextarea from "./tracked-textarea";
 import { PromptList } from "./prompt-list";
 import { FaCheck, FaCog } from "react-icons/fa";
+import { LuLayoutDashboard } from "react-icons/lu";
 
 export interface Prompt {
   text: string;
@@ -31,9 +32,9 @@ export default function Display({ prompts }: DisplayProps) {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
   const { colorScheme } = useMantineColorScheme();
+
   const handleFilterChange = (value: string) => {
     const filtered = prompts.filter((prompt) => prompt.category === value);
-    console.log(value);
     if (!value) {
       setFilteredPrompts(prompts);
     } else {
@@ -55,7 +56,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const Icon = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     )?.icon;
     return (
       <Group
@@ -103,7 +104,16 @@ export default function Display({ prompts }: DisplayProps) {
 
   return (
     <Container>
-      <Group mt="xl" style={{ justifyContent: "flex-end" }}>
+      <Group mt="xl" style={{ justifyContent: "flex-end" }} gap="0">
+        <Button
+          variant="subtle"
+          px={"sm"}
+          color={"blue"}
+          onClick={() => router.push("read")}
+          leftSection={<LuLayoutDashboard />}
+        >
+          View All
+        </Button>
         <Button
           variant="subtle"
           px={"sm"}

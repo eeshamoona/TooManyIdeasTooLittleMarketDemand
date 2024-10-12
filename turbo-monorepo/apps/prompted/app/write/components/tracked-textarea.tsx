@@ -13,6 +13,7 @@ import {
 import { FaHandSparkles, FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import DiffMatchPatch from "diff-match-patch";
 import { StatsGrid } from "./stats";
+import { useRouter } from "next/navigation";
 
 const dmp = new DiffMatchPatch();
 
@@ -22,7 +23,7 @@ interface TrackedTextareaProps {
   categoryText: string;
 }
 
-interface Character {
+export interface Character {
   type: "AI" | "user";
   value: string;
 }
@@ -36,6 +37,7 @@ export default function TrackedTextarea({
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
+  const router = useRouter();
 
   const handleStatsMouseDown = () => {
     setShowStats(true);
@@ -75,7 +77,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -107,13 +109,15 @@ export default function TrackedTextarea({
           text: combinedResponse,
           prompt: promptText,
           category: categoryText,
+          character_data: characters,
           metadata_stats: generateCharacterStats(characters),
         }),
       });
       const data = await saveResponse.json();
       const submissionId = data.submissionId;
-      console.log("Submission ID:", submissionId);
+      console.log("Route to submission page with ID:", submissionId);
       //TODO: Re-route to the submission page
+      router.push(`/read/${submissionId}`);
     } catch (error) {
       console.error("Error calling API:", error);
     }
@@ -141,7 +145,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =
@@ -156,10 +160,7 @@ export default function TrackedTextarea({
   };
 
   const handleSaveResponse = () => {
-    console.log("Combined Response:", combinedResponse);
-
-    const stats = generateCharacterStats(characters);
-    console.log("Character Stats:", stats);
+    console.log("Saving response...");
 
     // TODO: Send the combined response and metadata to the backend here
     saveSubmission();

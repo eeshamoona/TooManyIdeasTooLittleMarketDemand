@@ -29,8 +29,6 @@ export function CustomAppShell({
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
 
-  console.log(metadata);
-
   return (
     <AppShell
       header={{ height: 60 }}

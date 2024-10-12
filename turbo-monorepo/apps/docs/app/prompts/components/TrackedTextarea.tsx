@@ -23,7 +23,7 @@ interface TrackedTextareaProps {
   promptText: string;
 }
 
-interface Character {
+export interface Character {
   type: "AI" | "user";
   value: string;
 }
