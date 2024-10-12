@@ -4,6 +4,7 @@ This folder contains the API functions for the project. Currently, there are two
 
 1. **addPrompt**
 2. **addTodo**
+3. **saveSubmission**
 
 ## Functions
 
@@ -49,5 +50,33 @@ addTodo(newTodo)
   })
   .catch((error) => {
     console.error("Error adding todo:", error);
+  });
+```
+
+### 3. saveSubmission
+
+The `saveSubmission` function is responsible for saving a new submission to the system. This function takes in the necessary parameters and processes them to store the submission.
+
+Usage
+
+```typescript
+import { saveSubmission } from "./path/to/api";
+
+const newSubmission = {
+  text: "New Submission Text",
+  userId: "user123",
+  category: "General",
+  metadata: {
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+};
+
+saveSubmission(newSubmission)
+  .then((response) => {
+    console.log("Submission saved successfully:", response);
+  })
+  .catch((error) => {
+    console.error("Error saving submission:", error);
   });
 ```

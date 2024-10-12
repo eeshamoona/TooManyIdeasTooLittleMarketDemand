@@ -39,6 +39,9 @@ export default function TrackedTextarea({
   const [showStats, setShowStats] = useState(false);
   const router = useRouter();
 
+  //TODO: Debounce the user input for better performance
+  // Ex. const [debounced] = useDebouncedValue(combinedResponse, 200);
+
   const handleStatsMouseDown = () => {
     setShowStats(true);
   };

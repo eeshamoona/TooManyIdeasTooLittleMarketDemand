@@ -1,5 +1,12 @@
 "use client";
-import { ActionIcon, Box, Button, Container, Paper } from "@mantine/core";
+import {
+  ActionIcon,
+  Box,
+  Button,
+  Container,
+  Paper,
+  Title,
+} from "@mantine/core";
 import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import { Character } from "../../../write/components/tracked-textarea";
@@ -11,6 +18,7 @@ interface DisplayTextProps {
     metadata_stats: any;
     text: string;
     character_data: Character[];
+    prompt: string;
   };
 }
 
@@ -40,6 +48,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
           {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
         </ActionIcon>
       </Box>
+      <Title order={2}>{data.prompt}</Title>
       {showAIParts ? (
         <Paper my={"md"}>
           <div>{data.text}</div>

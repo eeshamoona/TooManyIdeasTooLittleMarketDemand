@@ -1,8 +1,8 @@
 "use client";
-import { Box, Button, Container, Paper, Text } from "@mantine/core";
-import Link from "next/link";
+import { Box, Button, Container, SimpleGrid, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { TiPencil } from "react-icons/ti";
+import { SubmissionCard } from "./card";
 
 export default function DisplaySubmissions({ data }) {
   const router = useRouter();
@@ -35,28 +35,11 @@ export default function DisplaySubmissions({ data }) {
           Write!
         </Button>
       </Box>
-      {data.map((submission) => (
-        <Link href={`/read/${submission.id}`} key={submission.id} passHref>
-          <Paper
-            mb="md"
-            p="md"
-            shadow="sm"
-            withBorder
-            style={{ cursor: "pointer", textDecoration: "none" }}
-          >
-            <Text size="lg">{submission.text}</Text>
-            <Text c="dimmed" size="sm">
-              {submission.category}
-            </Text>
-            <Text c="dimmed" size="xs">
-              {new Date(submission.created_at).toLocaleDateString()}
-            </Text>
-            <Text c="dimmed" size="sm">
-              {submission.prompt}
-            </Text>
-          </Paper>
-        </Link>
-      ))}
+      <SimpleGrid cols={2} spacing="sm" verticalSpacing="sm">
+        {data.map((submission) => (
+          <SubmissionCard key={submission.id} submission={submission} />
+        ))}
+      </SimpleGrid>
     </Box>
   );
 }
