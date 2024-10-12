@@ -26,6 +26,7 @@ const StatProgress: React.FC<StatProgressProps> = ({
   uniqueWordPercentage,
   totalWords,
 }) => {
+  const commonWords = totalWords - uniqueWordCount;
   return (
     <>
       <Flex mt="sm" gap={"sm"} align={"center"}>
@@ -59,22 +60,19 @@ const StatProgress: React.FC<StatProgressProps> = ({
       <Progress.Root size="xl">
         <Tooltip label={`${uniqueWordCount} unique words`} position="bottom">
           <Progress.Section
-            value={uniqueWordCount}
-            bg={getPercentageColor(uniqueWordPercentage)}
+            value={uniqueWordPercentage}
+            color={getPercentageColor(uniqueWordPercentage)} // Changed 'bg' to 'color'
           >
             <Progress.Label>Unique</Progress.Label>
           </Progress.Section>
         </Tooltip>
 
-        <Tooltip
-          label={`${totalWords - uniqueWordCount} common words`}
-          position="bottom"
-        >
+        <Tooltip label={`${commonWords} common words`} position="bottom">
           <Progress.Section
-            value={totalWords - uniqueWordCount}
+            value={100 - uniqueWordPercentage}
             color="var(--mantine-color-gray-dark-hover)"
           >
-            <Progress.Label c="gray">Common</Progress.Label>
+            <Progress.Label color="gray">Common</Progress.Label>
           </Progress.Section>
         </Tooltip>
       </Progress.Root>
