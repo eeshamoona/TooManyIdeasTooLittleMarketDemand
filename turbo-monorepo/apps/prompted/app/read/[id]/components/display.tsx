@@ -31,15 +31,18 @@ export default function DisplayText({ data }: DisplayTextProps) {
   };
 
   return (
-    <Container>
-      <Button
-        variant="outline"
-        leftSection={<LuLayoutDashboard />}
-        onClick={() => router.push("/read")}
+    <Container h="100%">
+      <Box
+        my={"md"}
+        style={{ display: "flex", justifyContent: "space-between" }}
       >
-        View All
-      </Button>
-      <Box my={"md"} style={{ display: "flex", justifyContent: "end" }}>
+        <Button
+          variant="outline"
+          leftSection={<LuLayoutDashboard />}
+          onClick={() => router.push("/read")}
+        >
+          View All
+        </Button>
         <ActionIcon
           onClick={handleToggleStats}
           color={!showAIParts ? "yellow" : "gray"}
@@ -49,24 +52,28 @@ export default function DisplayText({ data }: DisplayTextProps) {
         </ActionIcon>
       </Box>
       <Title order={2}>{data.prompt}</Title>
-      {showAIParts ? (
-        <Paper my={"md"}>
-          <div>{data.text}</div>
+      <Box style={{ flex: 1, overflow: "auto", maxHeight: "100%" }}>
+        <Paper
+          my="md"
+          style={{ height: "100%", overflowY: "auto", padding: "16px" }}
+        >
+          {showAIParts ? (
+            <div>{data.text}</div>
+          ) : (
+            data.character_data.map((char: Character, index: number) => (
+              <span
+                key={index}
+                style={{
+                  backgroundColor:
+                    char.type === "AI" ? "yellow" : "transparent",
+                }}
+              >
+                {char.value}
+              </span>
+            ))
+          )}
         </Paper>
-      ) : (
-        <Paper my={"md"}>
-          {data.character_data.map((char: Character, index: number) => (
-            <span
-              key={index}
-              style={{
-                backgroundColor: char.type === "AI" ? "yellow" : "transparent",
-              }}
-            >
-              {char.value}
-            </span>
-          ))}
-        </Paper>
-      )}
+      </Box>
     </Container>
   );
 }

@@ -65,7 +65,7 @@ export const AddPromptForm = () => {
     checked,
   }) => {
     const Icon = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     )?.icon;
     return (
       <Group

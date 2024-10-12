@@ -37,6 +37,7 @@ export default function TrackedTextarea({
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
+  const [startTime, setStartTime] = useState<number | null>(null);
   const router = useRouter();
 
   //TODO: Debounce the user input for better performance
@@ -53,6 +54,10 @@ export default function TrackedTextarea({
   const combinedResponse = characters.map((char) => char.value).join("");
 
   const handleUserInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (startTime === null) {
+      setStartTime(Date.now());
+    }
+
     const newText = e.target.value;
 
     const diffs = dmp.diff_main(combinedResponse, newText);
@@ -101,7 +106,79 @@ export default function TrackedTextarea({
     }
   };
 
+  const wordFrequencyMap = (text: string) => {
+    // Convert the text to lowercase and remove punctuation
+    const cleanText = text.toLowerCase().replace(/[^\w\s]/g, "");
+
+    // Split the text into individual words
+    const words = cleanText.split(/\s+/).filter((word) => word !== "");
+
+    // Calculate the total number of words
+    const totalWords = words.length;
+
+    // Create a word frequency dictionary
+    const wordFreq: { [word: string]: number } = {};
+
+    words.forEach((word) => {
+      if (wordFreq[word]) {
+        wordFreq[word]++;
+      } else {
+        wordFreq[word] = 1;
+      }
+    });
+
+    // Convert the dictionary to an array of tuples [word, frequency]
+    const sortedWordFreq = Object.entries(wordFreq).sort(
+      ([, a], [, b]) => b - a
+    );
+
+    // Convert back to an object and return
+    const sortedWordFreqDict: { [word: string]: number } = {};
+    sortedWordFreq.forEach(([word, freq]) => {
+      sortedWordFreqDict[word] = freq;
+    });
+
+    // Get the top 10 most commonly used words
+    const top10Words = sortedWordFreq.slice(0, 10);
+
+    return { sortedWordFreqDict, totalWords, top10Words };
+  };
+
   const saveSubmission = async () => {
+    console.log("Saving submission...");
+    const stats = generateCharacterStats(characters);
+    //TODO: Split up the words into a frequency map for the AI to give better suggestions on high frequency words
+    const { sortedWordFreqDict, totalWords, top10Words } =
+      wordFrequencyMap(combinedResponse);
+
+    const uniqueWordCount = Object.keys(sortedWordFreqDict).length;
+    const uniqueWordPercentage = (uniqueWordCount / totalWords) * 100;
+
+    // Get the top 10 most commonly used words
+    console.log("Top 10 most words:", top10Words);
+
+    //Append sortedWordFreqDict, totalWords, top10Words to stats object
+    stats["totalWords"] = totalWords;
+    stats["uniqueWordCount"] = uniqueWordCount;
+    stats["uniqueWordPercentage"] = uniqueWordPercentage;
+
+    //TODO: Call AI to get suggestions on high frequency words to get synonyms
+
+    const elapsedTime = startTime ? (Date.now() - startTime) / 1000 : 0; // Calculate elapsed time in seconds
+    setStartTime(null);
+
+    // Convert elapsed time to a descriptive format
+    let descriptiveTime: string;
+    if (elapsedTime >= 60) {
+      const minutes = Math.floor(elapsedTime / 60);
+      const seconds = Math.floor(elapsedTime % 60);
+      descriptiveTime = `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""}`;
+    } else {
+      descriptiveTime = `${Math.floor(elapsedTime)} second${elapsedTime !== 1 ? "s" : ""}`;
+    }
+
+    stats["elapsedTime"] = descriptiveTime;
+
     try {
       const saveResponse = await fetch("/api/saveSubmission", {
         method: "POST",
@@ -113,7 +190,8 @@ export default function TrackedTextarea({
           prompt: promptText,
           category: categoryText,
           character_data: characters,
-          metadata_stats: generateCharacterStats(characters),
+          metadata_stats: stats,
+          word_freq: sortedWordFreqDict,
         }),
       });
       const data = await saveResponse.json();
@@ -170,6 +248,8 @@ export default function TrackedTextarea({
   };
 
   const handleSaveAndClearResponse = () => {
+    console.log("Clearing response...");
+    setStartTime(null);
     setCharacters([]);
   };
 

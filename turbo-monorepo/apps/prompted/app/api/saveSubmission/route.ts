@@ -3,8 +3,14 @@ import { createClient } from "../../utils/supabase/server";
 
 export async function POST(request: Request) {
   try {
-    const { text, category, metadata_stats, character_data, prompt } =
-      await request.json();
+    const {
+      text,
+      category,
+      metadata_stats,
+      word_freq,
+      character_data,
+      prompt,
+    } = await request.json();
 
     if (!text || !category || !metadata_stats || !prompt) {
       return NextResponse.json(
@@ -38,6 +44,7 @@ export async function POST(request: Request) {
           metadata_stats,
           prompt,
           character_data,
+          word_freq,
           user_id: user.id,
         },
       ])

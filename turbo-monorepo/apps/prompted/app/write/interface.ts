@@ -14,6 +14,52 @@ import {
   IoRocketOutline,
 } from "react-icons/io5";
 import { LiaHandshake } from "react-icons/lia";
+import { FaRegMoon, FaGlobe, FaMap } from "react-icons/fa";
+import { FaGears } from "react-icons/fa6";
+import { MdBrush } from "react-icons/md";
+
+export const OLD_PROMPT_CATEGORIES = [
+  {
+    title: "Dreams",
+    description: "Imagine yourself in fantastical scenarios.",
+    icon: FaRegMoon,
+  },
+  {
+    title: "Growth",
+    description: "Reflect on your personal experiences and growth.",
+    icon: IoLeafOutline,
+  },
+  {
+    title: "Imagination",
+    description: "Envision others in creative, fictional ways.",
+    icon: FaRegLightbulb,
+  },
+  {
+    title: "Connection",
+    description: "Reflect on real connections with others.",
+    icon: LiaHandshake,
+  },
+  {
+    title: "Invention",
+    description: "Imagine creative possibilities with objects.",
+    icon: FaGears,
+  },
+  {
+    title: "Creations",
+    description: "Reflect on real objects and their significance.",
+    icon: MdBrush,
+  },
+  {
+    title: "Worlds",
+    description: "Imagine new, fantastical places and environments.",
+    icon: FaGlobe,
+  },
+  {
+    title: "Spaces",
+    description: "Reflect on meaningful real places in your life.",
+    icon: FaMap,
+  },
+];
 
 export const NEW_PROMPT_CATEGORIES = [
   {

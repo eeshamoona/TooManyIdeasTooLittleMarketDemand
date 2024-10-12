@@ -6,15 +6,13 @@ import {
   Group,
   ActionIcon,
   useMantineTheme,
-  Tooltip,
-  Progress,
-  Flex,
 } from "@mantine/core";
 import { PiExportLight } from "react-icons/pi";
 import { IoCheckmark } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getEntry } from "../actions";
+import StatProgress from "./bar-chart";
 
 export function SubmissionCard({ submission }) {
   const router = useRouter();
@@ -34,12 +32,6 @@ export function SubmissionCard({ submission }) {
     setTimeout(() => {
       setExported(false);
     }, 3000);
-  };
-
-  const getUserPercentageColor = (percentage: number) => {
-    if (percentage < 33) return "red";
-    if (percentage < 66) return "yellow";
-    return "green";
   };
 
   return (
@@ -66,6 +58,9 @@ export function SubmissionCard({ submission }) {
         <Badge variant="light" color="blue" size="sm" radius="sm">
           {submission.category}
         </Badge>
+        <Text fz="xs" c="dimmed">
+          Completed in {submission.metadata_stats.elapsedTime}
+        </Text>
       </Group>
 
       <Text fz="lg" fw={500} mt="md">
@@ -87,38 +82,7 @@ export function SubmissionCard({ submission }) {
       </Text>
 
       <Card.Section inheritPadding mt="sm">
-        <Flex my="sm" gap={"sm"} align={"center"}>
-          <Text fw={"bold"}>Total Characters:</Text>
-          <Text>{submission.metadata_stats.totalCharacters}</Text>
-        </Flex>
-
-        <Progress.Root size="xl">
-          <Tooltip
-            label={`${submission.metadata_stats.userCharacters} characters`}
-            position="bottom"
-          >
-            <Progress.Section
-              value={submission.metadata_stats.userCharacters}
-              bg={getUserPercentageColor(
-                submission.metadata_stats.userPercentage
-              )}
-            >
-              <Progress.Label>User</Progress.Label>
-            </Progress.Section>
-          </Tooltip>
-
-          <Tooltip
-            label={`${submission.metadata_stats.aiCharacters} characters`}
-            position="bottom"
-          >
-            <Progress.Section
-              value={submission.metadata_stats.aiCharacters}
-              color="var(--mantine-color-gray-dark-hover)"
-            >
-              <Progress.Label c="gray">AI</Progress.Label>
-            </Progress.Section>
-          </Tooltip>
-        </Progress.Root>
+        <StatProgress {...submission.metadata_stats} />
       </Card.Section>
       <Card.Section inheritPadding pb="md">
         <Group justify="end" mt="md">
