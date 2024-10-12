@@ -1,19 +1,21 @@
 "use client";
 import {
   Container,
-  Title,
   Button,
   Select,
   Group,
   Divider,
+  useMantineColorScheme,
   Center,
+  SelectProps,
+  Text,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import TrackedTextarea from "./tracked-textarea";
 import { PromptList } from "./prompt-list";
-import { FaCog } from "react-icons/fa";
+import { FaCheck, FaCog } from "react-icons/fa";
 
 export interface Prompt {
   text: string;
@@ -28,7 +30,7 @@ export default function Display({ prompts }: DisplayProps) {
   const router = useRouter();
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
-
+  const { colorScheme } = useMantineColorScheme();
   const handleFilterChange = (value: string) => {
     const filtered = prompts.filter((prompt) => prompt.category === value);
     console.log(value);
@@ -48,27 +50,82 @@ export default function Display({ prompts }: DisplayProps) {
     setRandomPrompt(null);
   };
 
+  const renderSelectOption: SelectProps["renderOption"] = ({
+    option,
+    checked,
+  }) => {
+    const Icon = NEW_PROMPT_CATEGORIES.find(
+      (cat) => cat.title === option.value,
+    )?.icon;
+    return (
+      <Group
+        flex="1"
+        align="center"
+        style={{
+          padding: "0px", // Add padding for better spacing
+          borderRadius: "8px", // Rounded corners for smoother edges
+          cursor: "pointer", // Indicate interactivity
+        }}
+        gap="sm"
+      >
+        {Icon && (
+          <Center>
+            <Icon style={{ marginRight: "8px" }} />
+          </Center>
+        )}
+        <Text
+          style={{
+            fontWeight: "600", // Semi-bold for better readability
+            fontSize: "14px", // Slightly larger for better legibility
+          }}
+        >
+          {option.value}
+        </Text>
+        <Text
+          c="dimmed"
+          style={{
+            fontSize: "12px", // Keep the label smaller for a subtle look
+          }}
+        >
+          {option["description"]}
+        </Text>
+        {checked && (
+          <FaCheck
+            style={{
+              marginLeft: "auto", // Push the check icon to the right
+              color: "#1976d2", // Give it a pleasant, accent color
+            }}
+          />
+        )}
+      </Group>
+    );
+  };
+
   return (
     <Container>
-      <Group mt="xl" align="center" justify="space-between">
-        <Title order={1}>Prompt Generator</Title>
+      <Group mt="xl" style={{ justifyContent: "flex-end" }}>
         <Button
-          variant="outline"
+          variant="subtle"
+          px={"sm"}
+          color={colorScheme === "dark" ? "light" : "dark"}
           onClick={() => router.push("write/more")}
-          leftSection={<FaCog />}
         >
-          Settings
+          <FaCog />
         </Button>
       </Group>
 
-      <Group my="lg" align="center">
+      <Group my={"md"} align="center">
         <Select
           flex={1}
           placeholder="All prompts!"
           data={NEW_PROMPT_CATEGORIES.map((category) => ({
             value: category.title,
-            label: `${category.title}: ${category.description}`,
+            label: category.title,
+            description: category.description,
+            icon: category.icon,
           }))}
+          renderOption={renderSelectOption}
+          size="md"
           onChange={handleFilterChange}
         />
         <Button
@@ -86,9 +143,7 @@ export default function Display({ prompts }: DisplayProps) {
       ) : (
         <>
           <Divider my="md" />
-          <Center p={"1rem"} bg="var(--mantine-color-gray-light)">
-            <PromptList data={filteredPrompts} />
-          </Center>
+          <PromptList data={filteredPrompts} />
         </>
       )}
     </Container>

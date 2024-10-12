@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { FaSearch } from "react-icons/fa";
 import { Prompt } from "./display";
+import { NEW_PROMPT_CATEGORIES } from "../interface";
 
 interface PromptListProps {
   data: Prompt[];
@@ -37,15 +38,38 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
   };
 
   const filteredData = data.filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase())
+    item.text.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const rows = filteredData.map((row: Prompt) => (
-    <Table.Tr key={row.text}>
-      <Table.Td>{row.text}</Table.Td>
-      <Table.Td>{row.category}</Table.Td>
-    </Table.Tr>
-  ));
+  const rows = filteredData.map((row: Prompt) => {
+    const Icon = NEW_PROMPT_CATEGORIES.find(
+      (cat) => cat.title === row.category,
+    )?.icon;
+
+    return (
+      <Table.Tr key={row.text}>
+        <Table.Td
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {Icon && <Icon style={{ marginRight: "8px" }} />}
+          {row.category}
+        </Table.Td>
+        <Table.Td
+          style={{
+            whiteSpace: "wrap",
+          }}
+        >
+          {row.text}
+        </Table.Td>
+      </Table.Tr>
+    );
+  });
 
   return (
     <div>
@@ -58,21 +82,21 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
       />
 
       <ScrollArea
-        h={300}
+        h={400}
         offsetScrollbars
-        scrollbarSize={6}
+        scrollbarSize={8}
         scrollHideDelay={0}
       >
         <Table
-          horizontalSpacing="md"
-          verticalSpacing="xs"
-          miw={700}
-          layout="fixed"
+          horizontalSpacing="xl"
+          verticalSpacing="md"
+          stickyHeader
+          highlightOnHover
         >
           <Table.Thead>
             <Table.Tr>
-              <Th>Prompt</Th>
               <Th>Category</Th>
+              <Th>Prompt</Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
