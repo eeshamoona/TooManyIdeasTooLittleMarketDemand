@@ -7,19 +7,19 @@ import {
   Group,
   Stack,
   ActionIcon,
-  Grid,
   Paper,
   Title,
-  Text,
 } from "@mantine/core";
 import { FaHandSparkles, FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import DiffMatchPatch from "diff-match-patch";
+import { StatsGrid } from "./stats";
 
 const dmp = new DiffMatchPatch();
 
 interface TrackedTextareaProps {
   placeholder?: string;
   promptText: string;
+  categoryText: string;
 }
 
 interface Character {
@@ -32,6 +32,7 @@ const minTextBoxHeight = "15rem";
 export default function TrackedTextarea({
   placeholder = "Write your response here...",
   promptText,
+  categoryText,
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
@@ -95,6 +96,29 @@ export default function TrackedTextarea({
     }
   };
 
+  const saveSubmission = async () => {
+    try {
+      const saveResponse = await fetch("/api/saveSubmission", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: combinedResponse,
+          prompt: promptText,
+          category: categoryText,
+          metadata_stats: generateCharacterStats(characters),
+        }),
+      });
+      const data = await saveResponse.json();
+      const submissionId = data.submissionId;
+      console.log("Submission ID:", submissionId);
+      //TODO: Re-route to the submission page
+    } catch (error) {
+      console.error("Error calling API:", error);
+    }
+  };
+
   const handleGenerateClick = async () => {
     try {
       const generatedSentence = await generateAIResponse(combinedResponse);
@@ -127,7 +151,7 @@ export default function TrackedTextarea({
       totalCharacters,
       aiCharacters,
       userCharacters,
-      userPercentage: userPercentage.toFixed(2),
+      userPercentage: parseFloat(userPercentage.toFixed(2)),
     };
   };
 
@@ -138,6 +162,7 @@ export default function TrackedTextarea({
     console.log("Character Stats:", stats);
 
     // TODO: Send the combined response and metadata to the backend here
+    saveSubmission();
   };
 
   const handleSaveAndClearResponse = () => {
@@ -145,39 +170,34 @@ export default function TrackedTextarea({
   };
 
   const stats = generateCharacterStats(characters);
-  const getUserPercentageColor = (percentage: number) => {
-    if (percentage < 33) return "red";
-    if (percentage < 66) return "yellow";
-    return "green";
-  };
 
   return (
     <Stack style={{ width: "100%" }}>
       <Group style={{ width: "100%", justifyContent: "space-between" }}>
         <Title order={3}>{promptText}</Title>
-        <Tooltip
-          label="Highlighted sections show AI-generated text"
-          aria-label="Character stats tooltip"
-          position="right"
-          withArrow
-          transitionProps={{ transition: "fade" }}
-        >
-          <ActionIcon
-            onMouseEnter={handleStatsMouseDown}
-            onMouseLeave={handleStatsMouseUp}
-            color={showStats ? "yellow" : "gray"}
-            variant="light"
+        {combinedResponse.length > 0 ? (
+          <Tooltip
+            label="Highlighted sections show AI-generated text"
+            aria-label="Character stats tooltip"
+            position="right"
+            withArrow
+            transitionProps={{ transition: "fade" }}
           >
-            {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-          </ActionIcon>
-        </Tooltip>
+            <ActionIcon
+              onMouseEnter={handleStatsMouseDown}
+              onMouseLeave={handleStatsMouseUp}
+              color={showStats ? "yellow" : "gray"}
+              variant="light"
+            >
+              {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+            </ActionIcon>
+          </Tooltip>
+        ) : null}
       </Group>
 
       <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
         {showStats ? (
-          <Paper
-            style={{ lineHeight: "1.5", borderRadius: 8, borderColor: "#ccc" }}
-          >
+          <Paper>
             {characters.map((char, index) => (
               <span
                 key={index}
@@ -196,7 +216,7 @@ export default function TrackedTextarea({
             value={combinedResponse}
             onChange={handleUserInputChange}
             autosize
-            minRows={6}
+            minRows={10}
           />
         )}
       </Box>
@@ -234,34 +254,7 @@ export default function TrackedTextarea({
         </Button>
       </Group>
 
-      {showStats && (
-        <Paper withBorder radius="md">
-          <Grid>
-            <Grid.Col span={3}>
-              <Text>Total Characters</Text>
-              <Text>{stats.totalCharacters}</Text>
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <Text>AI Characters</Text>
-              <Text>{stats.aiCharacters}</Text>
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <Text>User Characters</Text>
-              <Text>{stats.userCharacters}</Text>
-            </Grid.Col>
-            <Grid.Col span={3}>
-              <Text>User Percentage</Text>
-              <Text
-                style={{
-                  color: getUserPercentageColor(Number(stats.userPercentage)),
-                }}
-              >
-                {stats.userPercentage}%
-              </Text>
-            </Grid.Col>
-          </Grid>
-        </Paper>
-      )}
+      {showStats && <StatsGrid stats={stats} />}
     </Stack>
   );
 }

@@ -1,9 +1,11 @@
 "use client";
-import { Container, Title, Text, Button, Select } from "@mantine/core";
+import { Container, Title, Button, Select, Group } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import TrackedTextarea from "./tracked-textarea";
+import { PromptList } from "./prompt-list";
+import { FaCog } from "react-icons/fa";
 
 interface Prompt {
   text: string;
@@ -21,7 +23,12 @@ export default function Display({ prompts }: DisplayProps) {
 
   const handleFilterChange = (value: string) => {
     const filtered = prompts.filter((prompt) => prompt.category === value);
-    setFilteredPrompts(filtered);
+    console.log(value);
+    if (!value) {
+      setFilteredPrompts(prompts);
+    } else {
+      setFilteredPrompts(filtered);
+    }
   };
 
   const handleRandomPrompt = () => {
@@ -31,37 +38,36 @@ export default function Display({ prompts }: DisplayProps) {
 
   return (
     <Container>
-      <Title order={1} mt="xl">
-        Hello World
-      </Title>
-      <Button variant="outline" onClick={() => router.push("write/more")}>
-        Settings
-      </Button>
-      <Text mt="md">Welcome to my simple Mantine application.</Text>
+      <Group mt="xl" align="center" justify="space-between">
+        <Title order={1}>Prompt Generator</Title>
+        <Button
+          variant="outline"
+          onClick={() => router.push("write/more")}
+          leftSection={<FaCog />}
+        >
+          Settings
+        </Button>
+      </Group>
 
-      <Select
-        placeholder="Select category"
-        data={NEW_PROMPT_CATEGORIES.map((category) => ({
-          value: category.title,
-          label: `${category.title}: ${category.description}`,
-        }))}
-        onChange={handleFilterChange}
-      />
-
-      <Button mt="md" onClick={handleRandomPrompt}>
-        Get Random Prompt
-      </Button>
-
-      <TrackedTextarea promptText={randomPrompt?.text} />
-
-      <div>
-        {filteredPrompts.map((prompt, index) => (
-          <div key={index}>
-            <h3>{prompt.text}</h3>
-            <p>{prompt.category}</p>
-          </div>
-        ))}
-      </div>
+      <Group my="lg" align="center">
+        <Select
+          flex={1}
+          placeholder="All prompts!"
+          data={NEW_PROMPT_CATEGORIES.map((category) => ({
+            value: category.title,
+            label: `${category.title}: ${category.description}`,
+          }))}
+          onChange={handleFilterChange}
+        />
+        <Button onClick={handleRandomPrompt}>Get Random Prompt</Button>
+      </Group>
+      {randomPrompt && (
+        <TrackedTextarea
+          promptText={randomPrompt?.text}
+          categoryText={randomPrompt?.category}
+        />
+      )}
+      <PromptList data={filteredPrompts} />
     </Container>
   );
 }

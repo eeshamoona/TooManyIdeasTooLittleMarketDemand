@@ -3,11 +3,11 @@ import { createClient } from "../../utils/supabase/server";
 
 export async function POST(request: Request) {
   try {
-    const { text, category, metadata_stats } = await request.json();
+    const { text, category, metadata_stats, prompt } = await request.json();
 
-    if (!text || !category) {
+    if (!text || !category || !metadata_stats || !prompt) {
       return NextResponse.json(
-        { error: "Text and category are required" },
+        { error: "Missing required fields" },
         { status: 400 }
       );
     }
@@ -15,31 +15,38 @@ export async function POST(request: Request) {
     const supabase = createClient();
     const {
       data: { user },
+      error: userError,
     } = await supabase.auth.getUser();
 
-    // Extract user ID from request headers or session
-    const userId = user.id;
-    if (!userId) {
+    if (userError || !user) {
+      console.error("User authentication error:", userError);
       return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
+        { error: "User not authenticated" },
+        { status: 401 }
       );
     }
 
+    console.log("User ID:", user.id);
+
     const { data, error } = await supabase
-      .from("prompts")
-      .insert([{ text, category, metadata_stats, user_id: userId }])
+      .from("submissions")
+      .insert([{ text, category, metadata_stats, prompt, user_id: user.id }])
       .select();
 
+    const [submission] = data;
+    const submissionId = submission.id;
+
     if (error) {
+      console.error("Database insertion error:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json(
-      { message: "Prompt added successfully", data },
+      { message: "Prompt added successfully", submissionId },
       { status: 200 }
     );
   } catch (err) {
+    console.error("Unexpected error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
