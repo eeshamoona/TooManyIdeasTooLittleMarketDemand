@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { login } from "./actions";
+import { signup } from "../login/actions";
 import {
   Button,
   Checkbox,
@@ -18,16 +18,16 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
-  const handleLogin = async (
+  const handleSignup = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    await login(formData);
+    await signup(formData);
   };
 
-  const switchToSignup = () => {
-    router.push("/signup");
+  const switchToLogin = () => {
+    router.push("/login");
   };
 
   return (
@@ -39,6 +39,14 @@ export default function LoginPage() {
 
         <form>
           <Stack>
+            <TextInput
+              label="Username"
+              placeholder="mostCreativeWriterEver"
+              size="md"
+              id="username"
+              name="username"
+              required
+            />
             <TextInput
               label="Email address"
               placeholder="hello@gmail.com"
@@ -57,13 +65,13 @@ export default function LoginPage() {
               required
             />
             <Checkbox label="Keep me logged in" size="md" />
-            <Button fullWidth size="md" onClick={handleLogin}>
-              Login
+            <Button fullWidth size="md" onClick={handleSignup}>
+              Sign up
             </Button>
             <Text c="dimmed" size="sm" ta="center" mt={5}>
-              Do not have an account yet?{" "}
-              <Anchor size="sm" component="button" onClick={switchToSignup}>
-                Create account
+              Already have an account?{" "}
+              <Anchor size="sm" component="button" onClick={switchToLogin}>
+                Login
               </Anchor>
             </Text>
           </Stack>

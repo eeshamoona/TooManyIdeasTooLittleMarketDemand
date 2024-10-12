@@ -13,12 +13,15 @@ export default async function RootLayout({
   const { data } = await supabase.auth.getUser();
   const user = data?.user ?? null;
   const isLoggedIn = !!user;
+  let metadata = isLoggedIn ? user.user_metadata : null;
 
   return (
     <html lang="en">
       <body>
         <Providers>
-          <CustomAppShell isLoggedIn={isLoggedIn}>{children}</CustomAppShell>
+          <CustomAppShell metadata={metadata} isLoggedIn={isLoggedIn}>
+            {children}
+          </CustomAppShell>
         </Providers>
       </body>
     </html>

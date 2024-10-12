@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   Container,
@@ -10,8 +11,14 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { FaPenFancy, FaLightbulb, FaStar } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const LandingPage = () => {
+  const router = useRouter();
+  const getStarted = () => {
+    router.push("/write");
+  };
+
   return (
     <Container size="lg" py={60}>
       {/* Hero Section */}
@@ -24,7 +31,9 @@ const LandingPage = () => {
           limits. Write outside your comfort zone, guided by AI when needed.
         </Text>
         <Group justify="center">
-          <Button size="xl">Start Your Creative Journey</Button>
+          <Button onClick={getStarted} size="xl">
+            Start Your Creative Journey
+          </Button>
         </Group>
       </Box>
 
@@ -102,7 +111,9 @@ const LandingPage = () => {
           with Prompted today.
         </Text>
         <Group justify="center">
-          <Button size="xl">Get Started Now</Button>
+          <Button onClick={getStarted} size="xl">
+            Get Started Now
+          </Button>
         </Group>
       </Box>
 

@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // NOTE: Add public routes here
-const publicRoutes = ["/", "/traps", "/error"];
+const publicRoutes = ["/", "/signup", "/login", "/error"];
 
 export async function updateSession(request: NextRequest) {
   console.log("Middleware updateSession is being run");

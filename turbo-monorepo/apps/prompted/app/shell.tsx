@@ -12,15 +12,24 @@ import {
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import { handleLogout } from "./logout/logoutClient";
+import { useRouter } from "next/navigation";
 
 interface CustomAppShellProps {
+  metadata: any;
   isLoggedIn: boolean;
   children: React.ReactNode;
 }
 
-export function CustomAppShell({ isLoggedIn, children }: CustomAppShellProps) {
+export function CustomAppShell({
+  metadata,
+  isLoggedIn,
+  children,
+}: CustomAppShellProps) {
   const [opened, { toggle }] = useDisclosure();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const router = useRouter();
+
+  console.log(metadata);
 
   return (
     <AppShell
@@ -37,12 +46,19 @@ export function CustomAppShell({ isLoggedIn, children }: CustomAppShellProps) {
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group justify="space-between" style={{ flex: 1 }}>
             <Group gap={0} visibleFrom="sm">
-              <UnstyledButton>Prompted</UnstyledButton>
+              <UnstyledButton onClick={() => router.push("/")}>
+                Prompted
+              </UnstyledButton>
             </Group>
             <Group>
               {isLoggedIn && (
                 <Group>
-                  <Avatar radius="xl" />
+                  <Avatar
+                    key={metadata.username}
+                    name={metadata.username}
+                    color="initials"
+                    radius="xl"
+                  />
                   <Button variant="outline" color="red" onClick={handleLogout}>
                     Logout
                   </Button>

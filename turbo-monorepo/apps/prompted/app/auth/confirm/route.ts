@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
       console.error("Error verifying OTP:", error);
     } else {
       console.log("OTP verified successfully");
+
       // redirect user to specified redirect URL or root of app
       redirect(next);
       return;
