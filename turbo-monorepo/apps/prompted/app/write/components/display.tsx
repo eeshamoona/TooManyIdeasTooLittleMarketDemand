@@ -1,5 +1,13 @@
 "use client";
-import { Container, Title, Button, Select, Group } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Button,
+  Select,
+  Group,
+  Divider,
+  Center,
+} from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
@@ -7,12 +15,12 @@ import TrackedTextarea from "./tracked-textarea";
 import { PromptList } from "./prompt-list";
 import { FaCog } from "react-icons/fa";
 
-interface Prompt {
+export interface Prompt {
   text: string;
   category: string;
 }
 
-interface DisplayProps {
+export interface DisplayProps {
   prompts: Prompt[];
 }
 
@@ -34,6 +42,10 @@ export default function Display({ prompts }: DisplayProps) {
   const handleRandomPrompt = () => {
     const randomIndex = Math.floor(Math.random() * filteredPrompts.length);
     setRandomPrompt(filteredPrompts[randomIndex]);
+  };
+
+  const clearRandomPrompt = () => {
+    setRandomPrompt(null);
   };
 
   return (
@@ -59,15 +71,26 @@ export default function Display({ prompts }: DisplayProps) {
           }))}
           onChange={handleFilterChange}
         />
-        <Button onClick={handleRandomPrompt}>Get Random Prompt</Button>
+        <Button
+          color={randomPrompt ? "red" : "blue"}
+          onClick={randomPrompt ? clearRandomPrompt : handleRandomPrompt}
+        >
+          {randomPrompt ? "Clear Random Prompt" : "Get Random Prompt"}
+        </Button>
       </Group>
-      {randomPrompt && (
+      {randomPrompt ? (
         <TrackedTextarea
           promptText={randomPrompt?.text}
           categoryText={randomPrompt?.category}
         />
+      ) : (
+        <>
+          <Divider my="md" />
+          <Center p={"1rem"} bg="var(--mantine-color-gray-light)">
+            <PromptList data={filteredPrompts} />
+          </Center>
+        </>
       )}
-      <PromptList data={filteredPrompts} />
     </Container>
   );
 }

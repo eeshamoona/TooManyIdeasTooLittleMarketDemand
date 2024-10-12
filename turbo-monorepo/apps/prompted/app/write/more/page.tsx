@@ -1,21 +1,15 @@
-"use client";
-import { Container, Title, Text, Button, Group } from "@mantine/core";
-import { useRouter } from "next/navigation";
+import { Container } from "@mantine/core";
+import { Display } from "./components/display";
+import { createClient } from "../../utils/supabase/server";
 
-export default function Write() {
-  const router = useRouter();
+export default async function Write() {
+  const supabase = createClient();
+  const { data: prompts, error } = await supabase.from("prompts").select();
+  if (error) return <div>{error.message}</div>;
 
   return (
     <Container>
-      <Group mt="xl">
-        <Button variant="outline" onClick={() => router.back()}>
-          Back
-        </Button>
-      </Group>
-      <Title order={1} mt="xl">
-        Hello World
-      </Title>
-      <Text mt="md">Settings</Text>
+      <Display prompts={prompts} />
     </Container>
   );
 }

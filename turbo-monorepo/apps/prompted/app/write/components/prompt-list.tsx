@@ -5,99 +5,42 @@ import {
   UnstyledButton,
   Group,
   Text,
-  Center,
   TextInput,
   rem,
 } from "@mantine/core";
-import { FaSort, FaSortUp, FaSortDown, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { Prompt } from "./display";
 
-interface RowData {
-  text: string;
-  category: string;
+interface PromptListProps {
+  data: Prompt[];
 }
 
-interface ThProps {
-  children: React.ReactNode;
-  reversed: boolean;
-  sorted: boolean;
-  onSort(): void;
-}
-
-interface DisplayProps {
-  data: RowData[];
-}
-
-function Th({ children, reversed, sorted, onSort }: ThProps) {
-  const Icon = sorted ? (reversed ? FaSortUp : FaSortDown) : FaSort;
+function Th({ children }) {
   return (
     <Table.Th>
-      <UnstyledButton onClick={onSort}>
+      <UnstyledButton>
         <Group justify="space-between">
           <Text fw={500} fz="sm">
             {children}
           </Text>
-          <Center>
-            <Icon style={{ width: rem(16), height: rem(16) }} />
-          </Center>
         </Group>
       </UnstyledButton>
     </Table.Th>
   );
 }
 
-function filterData(data: RowData[], search: string) {
-  const query = search.toLowerCase().trim();
-  return data.filter((item) =>
-    Object.keys(data[0]).some((key) =>
-      item[key as keyof RowData].toLowerCase().includes(query)
-    )
-  );
-}
-
-function sortData(
-  data: RowData[],
-  payload: { sortBy: keyof RowData | null; reversed: boolean; search: string }
-) {
-  const { sortBy } = payload;
-
-  if (!sortBy) {
-    return filterData(data, payload.search);
-  }
-
-  return filterData(
-    [...data].sort((a, b) => {
-      if (payload.reversed) {
-        return b[sortBy].localeCompare(a[sortBy]);
-      }
-
-      return a[sortBy].localeCompare(b[sortBy]);
-    }),
-    payload.search
-  );
-}
-
-export function PromptList({ data }: DisplayProps): JSX.Element {
+export function PromptList({ data }: PromptListProps): JSX.Element {
   const [search, setSearch] = useState("");
-  const [sortedData, setSortedData] = useState(data);
-  const [sortBy, setSortBy] = useState<keyof RowData | null>(null);
-  const [reverseSortDirection, setReverseSortDirection] = useState(false);
-
-  const setSorting = (field: keyof RowData) => {
-    const reversed = field === sortBy ? !reverseSortDirection : false;
-    setReverseSortDirection(reversed);
-    setSortBy(field);
-    setSortedData(sortData(data, { sortBy: field, reversed, search }));
-  };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.currentTarget;
-    setSearch(value);
-    setSortedData(
-      sortData(data, { sortBy, reversed: reverseSortDirection, search: value })
-    );
+    setSearch(event.currentTarget.value);
   };
 
-  const rows = sortedData.map((row: RowData) => (
+  const filteredData = data.filter((item) =>
+    item.text.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const rows = filteredData.map((row: Prompt) => (
     <Table.Tr key={row.text}>
       <Table.Td>{row.text}</Table.Td>
       <Table.Td>{row.category}</Table.Td>
@@ -105,52 +48,48 @@ export function PromptList({ data }: DisplayProps): JSX.Element {
   ));
 
   return (
-    <ScrollArea>
+    <div>
       <TextInput
-        placeholder="Search by any field"
+        placeholder="Search for any prompt"
         mb="md"
         leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
         value={search}
         onChange={handleSearchChange}
       />
-      <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        miw={700}
-        layout="fixed"
+
+      <ScrollArea
+        h={300}
+        offsetScrollbars
+        scrollbarSize={6}
+        scrollHideDelay={0}
       >
-        <Table.Tbody>
-          <Table.Tr>
-            <Th
-              sorted={sortBy === "text"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("text")}
-            >
-              Prompt
-            </Th>
-            <Th
-              sorted={sortBy === "category"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("category")}
-            >
-              Category
-            </Th>
-          </Table.Tr>
-        </Table.Tbody>
-        <Table.Tbody>
-          {rows.length > 0 ? (
-            rows
-          ) : (
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          miw={700}
+          layout="fixed"
+        >
+          <Table.Thead>
             <Table.Tr>
-              <Table.Td colSpan={Object.keys(data[0]).length}>
-                <Text fw={500} ta="center">
-                  Nothing found
-                </Text>
-              </Table.Td>
+              <Th>Prompt</Th>
+              <Th>Category</Th>
             </Table.Tr>
-          )}
-        </Table.Tbody>
-      </Table>
-    </ScrollArea>
+          </Table.Thead>
+          <Table.Tbody>
+            {rows.length > 0 ? (
+              rows
+            ) : (
+              <Table.Tr>
+                <Table.Td colSpan={Object.keys(data[0]).length}>
+                  <Text fw={500} ta="center">
+                    Nothing found
+                  </Text>
+                </Table.Td>
+              </Table.Tr>
+            )}
+          </Table.Tbody>
+        </Table>
+      </ScrollArea>
+    </div>
   );
 }
