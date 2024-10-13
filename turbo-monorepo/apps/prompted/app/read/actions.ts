@@ -27,7 +27,7 @@ export const getEntry = async (submission) => {
     [
       `Date: ${formattedCreatedAt} at ${formattedTime}\n\nCategory: ${submission.category}\n\nPrompt: ${submission.prompt}\n\nText: ${submission.text}`,
     ],
-    { type: "text/plain" }
+    { type: "text/plain" },
   );
   element.href = URL.createObjectURL(file);
   element.download = `${formattedCreatedAt}-entry_${submission.id}.txt`;

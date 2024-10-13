@@ -57,7 +57,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value
+      (cat) => cat.title === option.value,
     );
     const Icon = category?.icon;
     const color = category?.color;

@@ -36,7 +36,7 @@ export function SubmissionCard({ submission }) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === submission.category
+    (cat) => cat.title === submission.category,
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
