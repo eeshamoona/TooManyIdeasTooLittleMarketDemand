@@ -17,6 +17,7 @@ import { Character } from "../../../write/components/tracked-textarea";
 import { useRouter } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { StatsProps } from "./stats-grid";
+import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 
 interface DisplayTextProps {
   data: {
@@ -37,6 +38,12 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
   const handleToggleStats = () => {
     setShowAIParts((prev) => !prev);
   };
+
+  const category = NEW_PROMPT_CATEGORIES.find(
+    (cat) => cat.title === data.category
+  );
+  const Icon = category?.icon;
+  const color = `var(--mantine-color-${category?.color}-5)`;
 
   return (
     <Container h="100%">
@@ -74,9 +81,17 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
             Completed in {data.metadata_stats.elapsedTime}
           </Text>
         </Group>
-        <Badge variant="light" color="blue" radius="sm">
-          {data.category}
-        </Badge>
+        {Icon && (
+          <Badge
+            size="md"
+            radius="md"
+            variant="light"
+            color={color}
+            leftSection={<Icon />}
+          >
+            {data.category}
+          </Badge>
+        )}
       </Group>
       <Box style={{ flex: 1, overflow: "auto", maxHeight: "70%" }}>
         <Paper my="md" mb="lg" style={{ height: "100%", overflowY: "auto" }}>

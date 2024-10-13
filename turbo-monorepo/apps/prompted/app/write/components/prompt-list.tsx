@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   rem,
+  Badge,
 } from "@mantine/core";
 import { FaSearch } from "react-icons/fa";
 import { Prompt } from "./display";
@@ -38,13 +39,15 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
   };
 
   const filteredData = data.filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase()),
+    item.text.toLowerCase().includes(search.toLowerCase())
   );
 
   const rows = filteredData.map((row: Prompt) => {
-    const Icon = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === row.category,
-    )?.icon;
+    const category = NEW_PROMPT_CATEGORIES.find(
+      (cat) => cat.title === row.category
+    );
+    const Icon = category?.icon;
+    const color = `var(--mantine-color-${category?.color}-5)`;
 
     return (
       <Table.Tr key={row.text}>
@@ -57,8 +60,17 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
             alignItems: "center",
           }}
         >
-          {Icon && <Icon style={{ marginRight: "8px" }} />}
-          {row.category}
+          {Icon && (
+            <Badge
+              size="md"
+              radius="md"
+              variant="light"
+              color={color}
+              leftSection={<Icon />}
+            >
+              {row.category}
+            </Badge>
+          )}
         </Table.Td>
         <Table.Td
           style={{

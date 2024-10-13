@@ -9,6 +9,7 @@ import {
   Center,
   SelectProps,
   Text,
+  ActionIcon,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -55,9 +56,11 @@ export default function Display({ prompts }: DisplayProps) {
     option,
     checked,
   }) => {
-    const Icon = NEW_PROMPT_CATEGORIES.find(
+    const category = NEW_PROMPT_CATEGORIES.find(
       (cat) => cat.title === option.value
-    )?.icon;
+    );
+    const Icon = category?.icon;
+    const color = category?.color;
     return (
       <Group
         flex="1"
@@ -71,7 +74,9 @@ export default function Display({ prompts }: DisplayProps) {
       >
         {Icon && (
           <Center>
-            <Icon style={{ marginRight: "8px" }} />
+            <ActionIcon variant="light" color={color} size="lg">
+              <Icon />
+            </ActionIcon>
           </Center>
         )}
         <Text

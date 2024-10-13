@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getEntry } from "../actions";
 import StatProgress from "./bar-chart";
+import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 
 export function SubmissionCard({ submission }) {
   const router = useRouter();
@@ -33,6 +34,12 @@ export function SubmissionCard({ submission }) {
       setExported(false);
     }, 3000);
   };
+
+  const category = NEW_PROMPT_CATEGORIES.find(
+    (cat) => cat.title === submission.category
+  );
+  const Icon = category?.icon;
+  const color = `var(--mantine-color-${category?.color}-5)`;
 
   return (
     <Card
@@ -55,9 +62,17 @@ export function SubmissionCard({ submission }) {
       }}
     >
       <Group justify="space-between">
-        <Badge variant="light" color="blue" size="sm" radius="sm">
-          {submission.category}
-        </Badge>
+        {Icon && (
+          <Badge
+            size="md"
+            radius="sm"
+            variant="light"
+            color={color}
+            leftSection={<Icon />}
+          >
+            {submission.category}
+          </Badge>
+        )}
         <Text fz="xs" c="dimmed">
           Completed in {submission.metadata_stats.elapsedTime}
         </Text>

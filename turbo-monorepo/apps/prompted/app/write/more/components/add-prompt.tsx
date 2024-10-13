@@ -9,6 +9,7 @@ import {
   SelectProps,
   Text,
   Center,
+  ActionIcon,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../interface";
 import { useRouter } from "next/navigation";
@@ -64,9 +65,11 @@ export const AddPromptForm = () => {
     option,
     checked,
   }) => {
-    const Icon = NEW_PROMPT_CATEGORIES.find(
+    const category = NEW_PROMPT_CATEGORIES.find(
       (cat) => cat.title === option.value
-    )?.icon;
+    );
+    const Icon = category?.icon;
+    const color = category?.color;
     return (
       <Group
         flex="1"
@@ -80,10 +83,13 @@ export const AddPromptForm = () => {
       >
         {Icon && (
           <Center>
-            <Icon style={{ marginRight: "8px" }} />
+            <ActionIcon variant="light" color={color} size="lg">
+              <Icon />
+            </ActionIcon>
           </Center>
         )}
         <Text
+          ml={"xs"}
           style={{
             fontWeight: "600", // Semi-bold for better readability
             fontSize: "14px", // Slightly larger for better legibility
@@ -129,6 +135,7 @@ export const AddPromptForm = () => {
         />
         <Group>
           <Select
+            miw={"15rem"}
             label="Category"
             placeholder="Select a category"
             data={NEW_PROMPT_CATEGORIES.map((category) => ({
