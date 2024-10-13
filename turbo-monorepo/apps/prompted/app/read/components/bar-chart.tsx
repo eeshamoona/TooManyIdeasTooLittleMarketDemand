@@ -1,5 +1,11 @@
 import React from "react";
-import { Flex, Progress, Tooltip, Text } from "@mantine/core";
+import {
+  Flex,
+  Progress,
+  Tooltip,
+  Text,
+  useMantineColorScheme,
+} from "@mantine/core";
 
 interface StatProgressProps {
   totalCharacters: number;
@@ -11,12 +17,6 @@ interface StatProgressProps {
   totalWords: number;
 }
 
-const getPercentageColor = (percentage: number) => {
-  if (percentage > 66) return "green";
-  if (percentage > 33) return "yellow";
-  return "red";
-};
-
 const StatProgress: React.FC<StatProgressProps> = ({
   totalCharacters,
   userCharacters,
@@ -27,6 +27,27 @@ const StatProgress: React.FC<StatProgressProps> = ({
   totalWords,
 }) => {
   const commonWords = totalWords - uniqueWordCount;
+  const { colorScheme } = useMantineColorScheme();
+  const otherColor =
+    colorScheme === "dark"
+      ? "var(--mantine-color-gray-dark-hover)"
+      : "var(--mantine-color-gray-1)";
+
+  const textColor = colorScheme === "dark" ? "white" : "dark";
+
+  const getPercentageColor = (percentage: number) => {
+    if (percentage > 66)
+      return colorScheme === "dark"
+        ? "var(--mantine-color-green-8)"
+        : "var(--mantine-color-green-3)";
+    if (percentage > 33)
+      return colorScheme === "dark"
+        ? "var(--mantine-color-yellow-8)"
+        : "var(--mantine-color-yellow-3)";
+    return colorScheme === "dark"
+      ? "var(--mantine-color-red-8)"
+      : "var(--mantine-color-red-2)";
+  };
   return (
     <>
       <Flex mt="sm" gap={"sm"} align={"center"}>
@@ -39,16 +60,13 @@ const StatProgress: React.FC<StatProgressProps> = ({
             value={userCharacters}
             bg={getPercentageColor(userPercentage)}
           >
-            <Progress.Label>User</Progress.Label>
+            <Progress.Label c={textColor}>User</Progress.Label>
           </Progress.Section>
         </Tooltip>
 
         <Tooltip label={`${aiCharacters} characters`} position="bottom">
-          <Progress.Section
-            value={aiCharacters}
-            color="var(--mantine-color-gray-dark-hover)"
-          >
-            <Progress.Label c="gray">AI</Progress.Label>
+          <Progress.Section value={aiCharacters} color={otherColor}>
+            <Progress.Label c={textColor}>AI</Progress.Label>
           </Progress.Section>
         </Tooltip>
       </Progress.Root>
@@ -61,18 +79,18 @@ const StatProgress: React.FC<StatProgressProps> = ({
         <Tooltip label={`${uniqueWordCount} unique words`} position="bottom">
           <Progress.Section
             value={uniqueWordPercentage}
-            color={getPercentageColor(uniqueWordPercentage)} // Changed 'bg' to 'color'
+            color={getPercentageColor(uniqueWordPercentage)}
           >
-            <Progress.Label>Unique</Progress.Label>
+            <Progress.Label c={textColor}>Unique</Progress.Label>
           </Progress.Section>
         </Tooltip>
 
         <Tooltip label={`${commonWords} common words`} position="bottom">
           <Progress.Section
             value={100 - uniqueWordPercentage}
-            color="var(--mantine-color-gray-dark-hover)"
+            color={otherColor}
           >
-            <Progress.Label color="gray">Common</Progress.Label>
+            <Progress.Label c={textColor}>Common</Progress.Label>
           </Progress.Section>
         </Tooltip>
       </Progress.Root>
