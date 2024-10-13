@@ -1,5 +1,6 @@
 import { Group, Paper, SimpleGrid, Text } from "@mantine/core";
 import { FaUserPlus, FaPercentage, FaReceipt, FaCoins } from "react-icons/fa";
+import { getPercentageColor } from "../../read/actions";
 
 const icons = {
   user: FaUserPlus,
@@ -15,12 +16,6 @@ type StatsProps = {
   userPercentage: number;
 };
 
-const getUserPercentageColor = (percentage: number) => {
-  if (percentage < 33) return "red";
-  if (percentage < 66) return "yellow";
-  return "green";
-};
-
 const data = (stats: StatsProps) =>
   [
     {
@@ -32,6 +27,7 @@ const data = (stats: StatsProps) =>
       title: "AI Characters",
       icon: "coin",
       value: stats.aiCharacters.toString(),
+      color: "grape",
     },
     {
       title: "User Characters",
@@ -42,7 +38,7 @@ const data = (stats: StatsProps) =>
       title: "User Percentage",
       icon: "percentage",
       value: `${stats.userPercentage}%`,
-      color: getUserPercentageColor(stats.userPercentage),
+      color: getPercentageColor(stats.userPercentage),
     },
   ] as const;
 
@@ -62,7 +58,11 @@ export function StatsGrid({ stats }: { stats: StatsProps }) {
         <Group align="flex-end" mt={25}>
           <Text
             size="xl"
-            c={stat.title === "User Percentage" ? stat.color : undefined}
+            c={
+              stat.title === "User Percentage" || stat.title === "AI Characters"
+                ? stat.color
+                : undefined
+            }
             style={{ fontSize: "1.5rem", fontWeight: "bold" }}
           >
             {stat.value}

@@ -6,6 +6,7 @@ import {
   Text,
   useMantineColorScheme,
 } from "@mantine/core";
+import { getPercentageColor } from "../actions";
 
 interface StatProgressProps {
   totalCharacters: number;
@@ -35,19 +36,6 @@ const StatProgress: React.FC<StatProgressProps> = ({
 
   const textColor = colorScheme === "dark" ? "white" : "dark";
 
-  const getPercentageColor = (percentage: number) => {
-    if (percentage > 66)
-      return colorScheme === "dark"
-        ? "var(--mantine-color-green-8)"
-        : "var(--mantine-color-green-3)";
-    if (percentage > 33)
-      return colorScheme === "dark"
-        ? "var(--mantine-color-yellow-8)"
-        : "var(--mantine-color-yellow-3)";
-    return colorScheme === "dark"
-      ? "var(--mantine-color-red-8)"
-      : "var(--mantine-color-red-2)";
-  };
   return (
     <>
       <Flex mt="sm" gap={"sm"} align={"center"}>
@@ -58,7 +46,7 @@ const StatProgress: React.FC<StatProgressProps> = ({
         <Tooltip label={`${userCharacters} characters`} position="bottom">
           <Progress.Section
             value={userCharacters}
-            bg={getPercentageColor(userPercentage)}
+            bg={getPercentageColor(userPercentage, colorScheme)}
           >
             <Progress.Label c={textColor}>User</Progress.Label>
           </Progress.Section>
@@ -79,7 +67,7 @@ const StatProgress: React.FC<StatProgressProps> = ({
         <Tooltip label={`${uniqueWordCount} unique words`} position="bottom">
           <Progress.Section
             value={uniqueWordPercentage}
-            color={getPercentageColor(uniqueWordPercentage)}
+            color={getPercentageColor(uniqueWordPercentage, colorScheme)}
           >
             <Progress.Label c={textColor}>Unique</Progress.Label>
           </Progress.Section>

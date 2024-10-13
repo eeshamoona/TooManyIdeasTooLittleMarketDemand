@@ -9,6 +9,7 @@ import {
   FaRobot,
   FaClock,
 } from "react-icons/fa";
+import { getPercentageColor } from "../../actions";
 
 const icons = {
   totalCharacters: FaFont,
@@ -32,12 +33,6 @@ export type StatsProps = {
   elapsedTime: number;
 };
 
-const getUserPercentageColor = (percentage: number) => {
-  if (percentage < 33) return "red";
-  if (percentage < 66) return "yellow";
-  return "green";
-};
-
 const data = (stats: StatsProps) =>
   [
     {
@@ -59,7 +54,7 @@ const data = (stats: StatsProps) =>
       title: "User Percentage",
       icon: "userPercentage",
       value: `${stats.userPercentage}%`,
-      color: getUserPercentageColor(stats.userPercentage),
+      color: getPercentageColor(stats.userPercentage),
     },
     {
       title: "Total Words",
@@ -75,7 +70,7 @@ const data = (stats: StatsProps) =>
       title: "Uniqueness Percentage",
       icon: "uniqueWordPercentage",
       value: `${stats.uniqueWordPercentage.toFixed(2)}%`,
-      color: getUserPercentageColor(stats.uniqueWordPercentage),
+      color: getPercentageColor(stats.uniqueWordPercentage),
     },
   ] as const;
 

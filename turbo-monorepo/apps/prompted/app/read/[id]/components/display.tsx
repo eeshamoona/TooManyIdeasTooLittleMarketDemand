@@ -64,7 +64,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         </Button>
         <ActionIcon
           onClick={handleToggleStats}
-          color={!showAIParts ? "yellow" : "gray"}
+          color={!showAIParts ? "grape" : "gray"}
           variant="light"
         >
           {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
@@ -102,8 +102,14 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
               <span
                 key={index}
                 style={{
+                  color:
+                    char.type === "AI"
+                      ? "var(--mantine-color-grape-light-color)"
+                      : "",
                   backgroundColor:
-                    char.type === "AI" ? "yellow" : "transparent",
+                    char.type === "AI"
+                      ? "var(--mantine-color-grape-light-hover)"
+                      : "transparent",
                 }}
               >
                 {char.value}

@@ -1,3 +1,5 @@
+import { MantineColorScheme } from "@mantine/core";
+
 export const getEntry = async (submission) => {
   // Convert to JavaScript Date object
   const dateObj = new Date(submission.created_at);
@@ -34,4 +36,27 @@ export const getEntry = async (submission) => {
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+};
+
+export const getPercentageColor = (
+  percentage: number,
+  colorScheme?: MantineColorScheme,
+) => {
+  if (colorScheme) {
+    if (percentage > 66)
+      return colorScheme === "dark"
+        ? "var(--mantine-color-green-8)"
+        : "var(--mantine-color-green-3)";
+    if (percentage > 33)
+      return colorScheme === "dark"
+        ? "var(--mantine-color-yellow-8)"
+        : "var(--mantine-color-yellow-3)";
+    return colorScheme === "dark"
+      ? "var(--mantine-color-red-7)"
+      : "var(--mantine-color-red-3)";
+  } else {
+    if (percentage > 66) return "var(--mantine-color-green-6)";
+    if (percentage > 33) return "var(--mantine-color-yellow-6)";
+    return "var(--mantine-color-red-6)";
+  }
 };

@@ -9,8 +9,11 @@ import {
   ActionIcon,
   Paper,
   Title,
+  TitleOrder,
+  Text,
 } from "@mantine/core";
-import { FaHandSparkles, FaLightbulb, FaRegLightbulb } from "react-icons/fa";
+import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
+import { FaWandMagicSparkles } from "react-icons/fa6";
 import DiffMatchPatch from "diff-match-patch";
 import { StatsGrid } from "./stats";
 import { useRouter } from "next/navigation";
@@ -255,43 +258,97 @@ export default function TrackedTextarea({
 
   const stats = generateCharacterStats(characters);
 
+  const promptTextLength = promptText.length;
+
+  let titleOrder: TitleOrder;
+  if (promptTextLength > 90) {
+    titleOrder = 5;
+  } else if (promptTextLength > 60) {
+    titleOrder = 4;
+  } else if (promptTextLength > 30) {
+    titleOrder = 3;
+  } else {
+    titleOrder = 2;
+  }
+
   return (
     <Stack style={{ width: "100%" }}>
-      <Group style={{ width: "100%", justifyContent: "space-between" }}>
-        <Title order={3}>{promptText}</Title>
+      <Group
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Title m={4} flex={1} order={titleOrder}>
+          {promptText}
+        </Title>
         {combinedResponse.length > 0 ? (
-          <Tooltip
-            label="Highlighted sections show AI-generated text"
-            aria-label="Character stats tooltip"
-            position="right"
-            withArrow
-            transitionProps={{ transition: "fade" }}
-          >
-            <ActionIcon
-              onMouseEnter={handleStatsMouseDown}
-              onMouseLeave={handleStatsMouseUp}
-              color={showStats ? "yellow" : "gray"}
-              variant="light"
+          <>
+            <Tooltip
+              label="AI-generated text highlighted"
+              aria-label="Character stats tooltip"
+              position="top"
+              withArrow
+              color="gray"
+              transitionProps={{ transition: "fade" }}
             >
-              {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-            </ActionIcon>
-          </Tooltip>
+              <ActionIcon
+                onMouseEnter={handleStatsMouseDown}
+                onMouseLeave={handleStatsMouseUp}
+                color={showStats ? "grape" : "gray"}
+                variant="light"
+                size="lg"
+              >
+                {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip
+              label={
+                combinedResponse.length > 100
+                  ? "Generate AI text"
+                  : "At least 100 characters required"
+              }
+              position="right"
+              withArrow
+              color="grape"
+              transitionProps={{ transition: "fade" }}
+            >
+              <ActionIcon
+                color="grape"
+                onClick={handleGenerateClick}
+                disabled={combinedResponse.length <= 100}
+                variant="filled"
+                size="lg"
+              >
+                <FaWandMagicSparkles />
+              </ActionIcon>
+            </Tooltip>
+          </>
         ) : null}
       </Group>
 
       <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
         {showStats ? (
-          <Paper>
+          <Paper px="12" py="3" mih={minTextBoxHeight}>
             {characters.map((char, index) => (
-              <span
+              <Text
+                span
                 key={index}
                 style={{
+                  color:
+                    char.type === "AI"
+                      ? "var(--mantine-color-grape-light-color)"
+                      : "",
                   backgroundColor:
-                    char.type === "AI" ? "yellow" : "transparent",
+                    char.type === "AI"
+                      ? "var(--mantine-color-grape-light-hover)"
+                      : "transparent",
+                  fontSize:
+                    "var(--input-fz, var(--input-fz, var(--mantine-font-size-sm)))",
                 }}
               >
                 {char.value}
-              </span>
+              </Text>
             ))}
           </Paper>
         ) : (
@@ -307,30 +364,14 @@ export default function TrackedTextarea({
 
       <Group grow>
         <Button
-          color="red"
+          variant="outline"
           onClick={handleSaveAndClearResponse}
           disabled={combinedResponse.trim() === ""}
         >
           Clear
         </Button>
-        <Tooltip
-          label="To generate with magic, write at least 100 characters"
-          disabled={combinedResponse.length > 100}
-          position="bottom"
-          withArrow
-          transitionProps={{ transition: "fade" }}
-        >
-          <ActionIcon
-            color="yellow"
-            onClick={handleGenerateClick}
-            disabled={combinedResponse.length <= 100}
-            size="lg"
-          >
-            <FaHandSparkles />
-          </ActionIcon>
-        </Tooltip>
         <Button
-          color="green"
+          variant="solid"
           onClick={handleSaveResponse}
           disabled={combinedResponse.trim() === ""}
         >
