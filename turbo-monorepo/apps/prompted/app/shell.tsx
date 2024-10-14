@@ -61,7 +61,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         </Group>
       </UnstyledButton>
     );
-  }
+  },
 );
 
 function UserMenu({ username }: { username: string }) {
