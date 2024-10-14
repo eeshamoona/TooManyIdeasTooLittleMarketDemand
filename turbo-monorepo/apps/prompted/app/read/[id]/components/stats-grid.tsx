@@ -44,6 +44,7 @@ const data = (stats: StatsProps) =>
       title: "AI Characters",
       icon: "aiCharacters",
       value: stats.aiCharacters.toString(),
+      color: "grape",
     },
     {
       title: "User Characters",
@@ -98,7 +99,8 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
                   size="lg"
                   c={
                     stat.title === "Uniqueness Percentage" ||
-                    stat.title === "User Percentage"
+                    stat.title === "User Percentage" ||
+                    stat.title === "AI Characters"
                       ? stat.color
                       : undefined
                   }

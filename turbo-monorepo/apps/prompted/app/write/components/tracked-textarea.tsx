@@ -17,6 +17,7 @@ import { FaWandMagicSparkles } from "react-icons/fa6";
 import DiffMatchPatch from "diff-match-patch";
 import { StatsGrid } from "./stats";
 import { useRouter } from "next/navigation";
+import { useDisclosure } from "@mantine/hooks";
 
 const dmp = new DiffMatchPatch();
 
@@ -41,6 +42,8 @@ export default function TrackedTextarea({
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
+  const [aiCallCount, setAICallCount] = useState<number>(0);
+  const [loading, { open, close }] = useDisclosure();
   const router = useRouter();
 
   //TODO: Debounce the user input for better performance
@@ -88,7 +91,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -132,7 +135,7 @@ export default function TrackedTextarea({
 
     // Convert the dictionary to an array of tuples [word, frequency]
     const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
 
     // Convert back to an object and return
@@ -167,20 +170,9 @@ export default function TrackedTextarea({
 
     //TODO: Call AI to get suggestions on high frequency words to get synonyms
 
-    const elapsedTime = startTime ? (Date.now() - startTime) / 1000 : 0; // Calculate elapsed time in seconds
+    const elapsedTime = startTime ? (Date.now() - startTime) / 1000 : 0;
     setStartTime(null);
-
-    // Convert elapsed time to a descriptive format
-    let descriptiveTime: string;
-    if (elapsedTime >= 60) {
-      const minutes = Math.floor(elapsedTime / 60);
-      const seconds = Math.floor(elapsedTime % 60);
-      descriptiveTime = `${minutes} minute${minutes !== 1 ? "s" : ""} and ${seconds} second${seconds !== 1 ? "s" : ""}`;
-    } else {
-      descriptiveTime = `${Math.floor(elapsedTime)} second${elapsedTime !== 1 ? "s" : ""}`;
-    }
-
-    stats["elapsedTime"] = descriptiveTime;
+    stats["elapsedTime"] = elapsedTime;
 
     try {
       const saveResponse = await fetch("/api/saveSubmission", {
@@ -208,12 +200,15 @@ export default function TrackedTextarea({
   };
 
   const handleGenerateClick = async () => {
+    open();
     try {
       const generatedSentence = await generateAIResponse(combinedResponse);
+      close();
       if (generatedSentence) {
+        setAICallCount(aiCallCount + 1);
         const aiChars: Character[] = generatedSentence
           .split("")
-          .map((char) => ({
+          .map((char: string) => ({
             type: "AI",
             value: char,
           }));
@@ -229,7 +224,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =
@@ -284,24 +279,26 @@ export default function TrackedTextarea({
         </Title>
         {combinedResponse.length > 0 ? (
           <>
-            <Tooltip
-              label="AI-generated text highlighted"
-              aria-label="Character stats tooltip"
-              position="top"
-              withArrow
-              color="gray"
-              transitionProps={{ transition: "fade" }}
-            >
-              <ActionIcon
-                onMouseEnter={handleStatsMouseDown}
-                onMouseLeave={handleStatsMouseUp}
-                color={showStats ? "grape" : "gray"}
-                variant="light"
-                size="lg"
+            {aiCallCount > 0 && (
+              <Tooltip
+                label="AI-generated text highlighted"
+                aria-label="Character stats tooltip"
+                position="top"
+                withArrow
+                color="gray"
+                transitionProps={{ transition: "fade" }}
               >
-                {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-              </ActionIcon>
-            </Tooltip>
+                <ActionIcon
+                  onMouseEnter={handleStatsMouseDown}
+                  onMouseLeave={handleStatsMouseUp}
+                  color={showStats ? "grape" : "gray"}
+                  variant="light"
+                  size="lg"
+                >
+                  {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+                </ActionIcon>
+              </Tooltip>
+            )}
             <Tooltip
               label={
                 combinedResponse.length > 100
@@ -310,14 +307,16 @@ export default function TrackedTextarea({
               }
               position="right"
               withArrow
-              color="grape"
+              color={combinedResponse.length > 100 ? "grape" : "gray"}
               transitionProps={{ transition: "fade" }}
             >
               <ActionIcon
-                color="grape"
+                loading={loading}
+                loaderProps={{ type: "dots", size: "xs" }}
                 onClick={handleGenerateClick}
                 disabled={combinedResponse.length <= 100}
-                variant="filled"
+                variant={"filled"}
+                color="grape"
                 size="lg"
               >
                 <FaWandMagicSparkles />

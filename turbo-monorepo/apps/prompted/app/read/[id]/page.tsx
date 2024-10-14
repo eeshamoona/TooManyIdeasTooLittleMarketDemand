@@ -36,6 +36,7 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
             word_freq: data.word_freq,
             metadata_stats: data.metadata_stats,
             category: data.category,
+            created_at: data.created_at,
           }}
           username={username}
         />

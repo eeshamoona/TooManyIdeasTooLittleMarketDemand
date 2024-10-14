@@ -14,6 +14,8 @@ import { useState } from "react";
 import { getEntry } from "../actions";
 import StatProgress from "./bar-chart";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
+import { LuTimer } from "react-icons/lu";
+import { convertTimeToDescription } from "../../write/actions";
 
 export function SubmissionCard({ submission }) {
   const router = useRouter();
@@ -36,7 +38,7 @@ export function SubmissionCard({ submission }) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === submission.category,
+    (cat) => cat.title === submission.category
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
@@ -73,9 +75,16 @@ export function SubmissionCard({ submission }) {
             {submission.category}
           </Badge>
         )}
-        <Text fz="xs" c="dimmed">
-          Completed in {submission.metadata_stats.elapsedTime}
-        </Text>
+        <Group>
+          <Text size="sm" c="dimmed">
+            {new Date(submission.created_at).toLocaleDateString("en-US", {
+              weekday: "long", // Add this line to include the day of the week
+              month: "long",
+              day: "2-digit",
+              year: "numeric",
+            })}
+          </Text>
+        </Group>
       </Group>
 
       <Text fz="lg" fw={500} mt="md">
@@ -100,7 +109,13 @@ export function SubmissionCard({ submission }) {
         <StatProgress {...submission.metadata_stats} />
       </Card.Section>
       <Card.Section inheritPadding pb="md">
-        <Group justify="end" mt="md">
+        <Group justify="space-between" mt="md">
+          <Group justify="center" gap={"xs"}>
+            <LuTimer />
+            <Text fz="xs" c="dimmed">
+              {convertTimeToDescription(submission.metadata_stats.elapsedTime)}
+            </Text>
+          </Group>
           <ActionIcon
             onClick={handleExport}
             variant="default"
