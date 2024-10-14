@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { SlBadge } from "react-icons/sl";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { IoExitOutline } from "react-icons/io5";
-import { HiChevronRight, HiChevronDown } from "react-icons/hi2";
+import { HiChevronDown, HiChevronLeft } from "react-icons/hi2";
 
 interface CustomAppShellProps {
   metadata: any;
@@ -51,12 +51,12 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         onClick={handleClick}
       >
         <Group gap="4px" mr={"2px"}>
-          <Avatar key={name} name={name} color="initials" radius="xl" />
+          <Avatar key={name} name={name} color="initials" radius="sm" />
           {icon ||
             (isOpen ? (
               <HiChevronDown size="1rem" />
             ) : (
-              <HiChevronRight size="1rem" />
+              <HiChevronLeft size="1rem" />
             ))}
         </Group>
       </UnstyledButton>
@@ -75,7 +75,7 @@ function UserMenu({ username }: { username: string }) {
   return (
     <Menu
       position="bottom-end"
-      offset={-10}
+      offset={0}
       withArrow
       opened={menuOpened}
       onClose={() => setMenuOpened(false)}
@@ -145,9 +145,9 @@ export function CustomAppShell({
               <ActionIcon
                 onClick={() => toggleColorScheme()}
                 variant="subtle"
-                size="lg"
+                size={37.5}
                 color={colorScheme === "dark" ? "yellow" : "violet"}
-                radius="lg"
+                radius="sm"
                 aria-label="Toggle color scheme"
               >
                 {colorScheme === "dark" ? (
