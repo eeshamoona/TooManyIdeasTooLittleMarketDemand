@@ -64,13 +64,15 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         >
           View All
         </Button>
-        <ActionIcon
-          onClick={handleToggleStats}
-          color={!showAIParts ? "grape" : "gray"}
-          variant="light"
-        >
-          {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
-        </ActionIcon>
+        {data.metadata_stats.aiCallCount && (
+          <ActionIcon
+            onClick={handleToggleStats}
+            color={!showAIParts ? "grape" : "gray"}
+            variant="light"
+          >
+            {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
+          </ActionIcon>
+        )}
       </Box>
       <Title order={2}>{data.prompt}</Title>
       <Group justify="space-between" mt={"xs"} mb="md" align="center">

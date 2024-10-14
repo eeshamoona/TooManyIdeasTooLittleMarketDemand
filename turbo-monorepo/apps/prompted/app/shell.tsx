@@ -5,19 +5,111 @@ import {
   Group,
   UnstyledButton,
   Avatar,
-  Button,
   useMantineColorScheme,
   ActionIcon,
 } from "@mantine/core";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
-import { handleLogout } from "./logout/logoutClient";
 import { useRouter } from "next/navigation";
+import { SlBadge } from "react-icons/sl";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { IoExitOutline } from "react-icons/io5";
+import { HiChevronRight, HiChevronDown } from "react-icons/hi2";
 
 interface CustomAppShellProps {
   metadata: any;
   isLoggedIn: boolean;
   children: React.ReactNode;
+}
+
+import { forwardRef, useState } from "react";
+import { Menu } from "@mantine/core";
+import { handleLogout } from "./logout/logoutClient";
+
+interface UserButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+  name: string;
+  icon?: React.ReactNode;
+}
+
+const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
+  ({ name, icon, onClick, ...others }: UserButtonProps, ref) => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      setIsOpen(!isOpen);
+      if (onClick) onClick(e);
+    };
+
+    return (
+      <UnstyledButton
+        ref={ref}
+        style={{
+          color: "var(--mantine-color-text)",
+          borderRadius: "var(--mantine-radius-sm)",
+        }}
+        {...others}
+        onClick={handleClick}
+      >
+        <Group gap="4px" mr={"2px"}>
+          <Avatar key={name} name={name} color="initials" radius="xl" />
+          {icon ||
+            (isOpen ? (
+              <HiChevronDown size="1rem" />
+            ) : (
+              <HiChevronRight size="1rem" />
+            ))}
+        </Group>
+      </UnstyledButton>
+    );
+  }
+);
+
+function UserMenu({ username }: { username: string }) {
+  const [menuOpened, setMenuOpened] = useState(false);
+  const router = useRouter();
+
+  const handleMenuToggle = () => {
+    setMenuOpened((prev) => !prev);
+  };
+
+  return (
+    <Menu
+      position="bottom-end"
+      offset={-10}
+      withArrow
+      opened={menuOpened}
+      onClose={() => setMenuOpened(false)}
+    >
+      <Menu.Target>
+        <UserButton name={username} onClick={handleMenuToggle} />
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item
+          leftSection={<SlBadge style={{ width: "1rem", height: "1rem" }} />}
+          onClick={() => router.push("/read")}
+        >
+          View Badges
+        </Menu.Item>
+        <Menu.Item
+          leftSection={
+            <LuLayoutDashboard style={{ width: "1rem", height: "1rem" }} />
+          }
+          onClick={() => router.push("/read")}
+        >
+          My Entries
+        </Menu.Item>
+        <Menu.Item
+          color="red"
+          leftSection={
+            <IoExitOutline style={{ width: "1rem", height: "1rem" }} />
+          }
+          onClick={handleLogout}
+        >
+          Logout
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
 }
 
 export function CustomAppShell({
@@ -48,27 +140,21 @@ export function CustomAppShell({
                 Prompted
               </UnstyledButton>
             </Group>
-            <Group>
-              {isLoggedIn && (
-                <Group>
-                  <Avatar
-                    key={metadata.username}
-                    name={metadata.username}
-                    color="initials"
-                    radius="xl"
-                  />
-                  <Button variant="light" color="red" onClick={handleLogout}>
-                    Logout
-                  </Button>
-                </Group>
-              )}
+            <Group gap={"4px"}>
+              {isLoggedIn && <UserMenu username={metadata.username} />}
               <ActionIcon
                 onClick={() => toggleColorScheme()}
-                variant="default"
+                variant="subtle"
                 size="lg"
+                color={colorScheme === "dark" ? "yellow" : "violet"}
+                radius="lg"
                 aria-label="Toggle color scheme"
               >
-                {colorScheme === "dark" ? <FaSun /> : <FaMoon />}
+                {colorScheme === "dark" ? (
+                  <FaSun style={{ color: "var(--mantine-color-yellow-5)" }} />
+                ) : (
+                  <FaMoon style={{ color: "var(--mantine-color-indigo-9)" }} />
+                )}
               </ActionIcon>
             </Group>
           </Group>

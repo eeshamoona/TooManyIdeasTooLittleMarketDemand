@@ -31,6 +31,7 @@ export type StatsProps = {
   uniqueWordPercentage: number;
   totalWords: number;
   elapsedTime: number;
+  aiCallCount: number;
 };
 
 const data = (stats: StatsProps) =>

@@ -169,6 +169,7 @@ export default function TrackedTextarea({
     stats["totalWords"] = totalWords;
     stats["uniqueWordCount"] = uniqueWordCount;
     stats["uniqueWordPercentage"] = uniqueWordPercentage;
+    stats["aiCallCount"] = aiCallCount;
 
     //TODO: Call AI to get suggestions on high frequency words to get synonyms
 
