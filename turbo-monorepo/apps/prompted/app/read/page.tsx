@@ -18,7 +18,7 @@ export default async function Read() {
   }
 
   return (
-    <Container>
+    <Container size="lg">
       <DisplaySubmissions data={data} />
     </Container>
   );

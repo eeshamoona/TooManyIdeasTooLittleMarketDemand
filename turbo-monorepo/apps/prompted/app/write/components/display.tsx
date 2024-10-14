@@ -1,6 +1,5 @@
 "use client";
 import {
-  Container,
   Button,
   Select,
   Group,
@@ -18,6 +17,8 @@ import TrackedTextarea from "./tracked-textarea";
 import { PromptList } from "./prompt-list";
 import { FaCheck, FaCog } from "react-icons/fa";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { TbWriting } from "react-icons/tb";
+import { RxCross2 } from "react-icons/rx";
 
 export interface Prompt {
   text: string;
@@ -32,6 +33,7 @@ export default function Display({ prompts }: DisplayProps) {
   const router = useRouter();
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const { colorScheme } = useMantineColorScheme();
 
   const handleFilterChange = (value: string) => {
@@ -45,11 +47,31 @@ export default function Display({ prompts }: DisplayProps) {
 
   const handleRandomPrompt = () => {
     const randomIndex = Math.floor(Math.random() * filteredPrompts.length);
-    setRandomPrompt(filteredPrompts[randomIndex]);
+    const randomPrompt = filteredPrompts[randomIndex];
+    setSelectedCategory(randomPrompt.category);
+    setRandomPrompt(randomPrompt);
   };
 
   const clearRandomPrompt = () => {
+    setSelectedCategory(null);
     setRandomPrompt(null);
+  };
+
+  const leftSectionIcon = () => {
+    const category = NEW_PROMPT_CATEGORIES.find(
+      (cat) => cat.title === selectedCategory
+    );
+
+    const Icon = category?.icon;
+    const color = category?.color
+      ? `var(--mantine-color-${category?.color}-5)`
+      : "var(--mantine-color-dimmed)";
+
+    return (
+      <ActionIcon variant="transparent" color={color} size="lg">
+        {Icon ? <Icon /> : <TbWriting />}
+      </ActionIcon>
+    );
   };
 
   const renderSelectOption: SelectProps["renderOption"] = ({
@@ -57,7 +79,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -108,7 +130,7 @@ export default function Display({ prompts }: DisplayProps) {
   };
 
   return (
-    <Container>
+    <>
       <Group mt="xl" style={{ justifyContent: "flex-end" }} gap="0">
         <Button
           variant="subtle"
@@ -132,6 +154,8 @@ export default function Display({ prompts }: DisplayProps) {
       <Group my={"md"} align="center">
         <Select
           flex={1}
+          clearable={randomPrompt ? false : true}
+          defaultValue={null}
           placeholder="All prompts!"
           data={NEW_PROMPT_CATEGORIES.map((category) => ({
             value: category.title,
@@ -141,13 +165,22 @@ export default function Display({ prompts }: DisplayProps) {
           }))}
           renderOption={renderSelectOption}
           size="md"
-          onChange={handleFilterChange}
+          value={selectedCategory}
+          onChange={(value) => {
+            if (!randomPrompt || !randomPrompt.category) {
+              setSelectedCategory(value);
+              handleFilterChange(value);
+            }
+          }}
+          leftSection={leftSectionIcon()}
         />
         <Button
           color={randomPrompt ? "red" : "blue"}
           onClick={randomPrompt ? clearRandomPrompt : handleRandomPrompt}
+          variant={randomPrompt ? "subtle" : "filled"}
+          rightSection={randomPrompt ? <RxCross2 /> : null}
         >
-          {randomPrompt ? "Clear Random Prompt" : "Get Random Prompt"}
+          {randomPrompt ? "Reset Prompt" : "Get Random Prompt"}
         </Button>
       </Group>
       {randomPrompt ? (
@@ -161,6 +194,6 @@ export default function Display({ prompts }: DisplayProps) {
           <PromptList data={filteredPrompts} />
         </>
       )}
-    </Container>
+    </>
   );
 }

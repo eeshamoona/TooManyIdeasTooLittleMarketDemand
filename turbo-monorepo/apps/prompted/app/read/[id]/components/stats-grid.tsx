@@ -1,5 +1,5 @@
 "use client";
-import { Grid, Group, Paper, Text } from "@mantine/core";
+import { Grid, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import {
   FaUser,
   FaPercentage,
@@ -9,6 +9,7 @@ import {
   FaRobot,
   FaClock,
 } from "react-icons/fa";
+import { getPercentageColor } from "../../actions";
 
 const icons = {
   totalCharacters: FaFont,
@@ -30,12 +31,7 @@ export type StatsProps = {
   uniqueWordPercentage: number;
   totalWords: number;
   elapsedTime: number;
-};
-
-const getUserPercentageColor = (percentage: number) => {
-  if (percentage < 33) return "red";
-  if (percentage < 66) return "yellow";
-  return "green";
+  aiCallCount: number;
 };
 
 const data = (stats: StatsProps) =>
@@ -49,6 +45,7 @@ const data = (stats: StatsProps) =>
       title: "AI Characters",
       icon: "aiCharacters",
       value: stats.aiCharacters.toString(),
+      color: "grape",
     },
     {
       title: "User Characters",
@@ -59,7 +56,7 @@ const data = (stats: StatsProps) =>
       title: "User Percentage",
       icon: "userPercentage",
       value: `${stats.userPercentage}%`,
-      color: getUserPercentageColor(stats.userPercentage),
+      color: getPercentageColor(stats.userPercentage),
     },
     {
       title: "Total Words",
@@ -75,12 +72,13 @@ const data = (stats: StatsProps) =>
       title: "Uniqueness Percentage",
       icon: "uniqueWordPercentage",
       value: `${stats.uniqueWordPercentage.toFixed(2)}%`,
-      color: getUserPercentageColor(stats.uniqueWordPercentage),
+      color: getPercentageColor(stats.uniqueWordPercentage),
     },
   ] as const;
 
 export function StatsGrid3({ stats }: { stats: StatsProps }) {
   const statsData = data(stats);
+  const theme = useMantineTheme();
 
   return (
     <Grid mt="sm">
@@ -90,7 +88,24 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
 
         return (
           <Grid.Col key={stat.title} span={span}>
-            <Paper withBorder p="sm" radius="md">
+            <Paper
+              withBorder
+              p="sm"
+              radius="md"
+              shadow="xs"
+              style={{
+                transition: "box-shadow 150ms ease, transform 100ms ease",
+                boxShadow: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = theme.shadows.md;
+                e.currentTarget.style.transform = "scale(1.02)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
               <Group justify="space-between">
                 <Text size="xs" c="dimmed">
                   {stat.title}
@@ -103,7 +118,8 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
                   size="lg"
                   c={
                     stat.title === "Uniqueness Percentage" ||
-                    stat.title === "User Percentage"
+                    stat.title === "User Percentage" ||
+                    stat.title === "AI Characters"
                       ? stat.color
                       : undefined
                   }

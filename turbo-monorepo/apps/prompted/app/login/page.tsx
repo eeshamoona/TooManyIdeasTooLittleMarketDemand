@@ -4,7 +4,6 @@ import React from "react";
 import { login } from "./actions";
 import {
   Button,
-  Checkbox,
   Paper,
   PasswordInput,
   TextInput,
@@ -19,7 +18,7 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const router = useRouter();
   const handleLogin = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
@@ -56,7 +55,6 @@ export default function LoginPage() {
               name="password"
               required
             />
-            <Checkbox label="Keep me logged in" size="md" />
             <Button fullWidth size="md" onClick={handleLogin}>
               Login
             </Button>

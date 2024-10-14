@@ -4,7 +4,6 @@ import React from "react";
 import { signup } from "../login/actions";
 import {
   Button,
-  Checkbox,
   Paper,
   PasswordInput,
   TextInput,
@@ -64,7 +63,6 @@ export default function LoginPage() {
               name="password"
               required
             />
-            <Checkbox label="Keep me logged in" size="md" />
             <Button fullWidth size="md" onClick={handleSignup}>
               Sign up
             </Button>

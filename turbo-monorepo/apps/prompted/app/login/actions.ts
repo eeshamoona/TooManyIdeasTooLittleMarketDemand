@@ -21,7 +21,8 @@ export async function login(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  // Start the user on the write page
+  redirect("/write");
 }
 
 export async function signup(formData: FormData) {
@@ -76,5 +77,6 @@ export async function signup(formData: FormData) {
   console.log("SignUp successful, redirecting...");
 
   revalidatePath("/", "layout");
-  redirect("/");
+  //TODO: Redirect to a page that prompts the user to check their email
+  redirect("/login");
 }

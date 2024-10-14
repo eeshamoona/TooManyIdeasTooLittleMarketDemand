@@ -1,8 +1,10 @@
+import React, { Suspense } from "react";
 import "./globals.css";
 import Providers from "@repo/ui/mantineProvider";
 import { createClient } from "./utils/supabase/server";
 import { CustomAppShell } from "./shell";
 import "@mantine/core/styles.css";
+import Loading from "./loading";
 
 export default async function RootLayout({
   children,
@@ -19,9 +21,11 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <CustomAppShell metadata={metadata} isLoggedIn={isLoggedIn}>
-            {children}
-          </CustomAppShell>
+          <Suspense fallback={<Loading />}>
+            <CustomAppShell metadata={metadata} isLoggedIn={isLoggedIn}>
+              {children}
+            </CustomAppShell>
+          </Suspense>
         </Providers>
       </body>
     </html>

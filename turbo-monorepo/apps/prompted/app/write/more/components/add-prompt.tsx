@@ -14,12 +14,14 @@ import {
 import { NEW_PROMPT_CATEGORIES } from "../../interface";
 import { useRouter } from "next/navigation";
 import { FaCheck, FaPaperPlane } from "react-icons/fa";
+import { useDisclosure } from "@mantine/hooks";
 
 export const AddPromptForm = () => {
   const [promptText, setPromptText] = useState("");
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
   const router = useRouter();
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export const AddPromptForm = () => {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+    openSave();
     if (!promptText || !category) {
       setError("Please fill in all fields");
       return;
@@ -59,6 +61,7 @@ export const AddPromptForm = () => {
       setError("Failed to add prompt");
       setSuccess("");
     }
+    closeSave();
   }
 
   const renderSelectOption: SelectProps["renderOption"] = ({
@@ -66,7 +69,7 @@ export const AddPromptForm = () => {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -160,6 +163,7 @@ export const AddPromptForm = () => {
             px={"sm"}
             variant="light"
             color="blue"
+            loading={saveLoading}
           >
             <FaPaperPlane />
           </Button>

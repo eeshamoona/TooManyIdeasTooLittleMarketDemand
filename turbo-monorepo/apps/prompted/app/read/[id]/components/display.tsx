@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { StatsProps } from "./stats-grid";
 import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
+import { convertTimeToDescription } from "../../../write/actions";
 
 interface DisplayTextProps {
   data: {
@@ -27,6 +28,7 @@ interface DisplayTextProps {
     word_freq: { [key: string]: number };
     prompt: string;
     category: string;
+    created_at: string;
   };
   username: string;
 }
@@ -40,7 +42,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category,
+    (cat) => cat.title === data.category
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
@@ -62,23 +64,30 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         >
           View All
         </Button>
-        <ActionIcon
-          onClick={handleToggleStats}
-          color={!showAIParts ? "yellow" : "gray"}
-          variant="light"
-        >
-          {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
-        </ActionIcon>
+        {data.metadata_stats.aiCallCount && (
+          <ActionIcon
+            onClick={handleToggleStats}
+            color={!showAIParts ? "grape" : "gray"}
+            variant="light"
+          >
+            {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
+          </ActionIcon>
+        )}
       </Box>
       <Title order={2}>{data.prompt}</Title>
-      <Group justify="space-between" mt={"xs"} mb="md">
+      <Group justify="space-between" mt={"xs"} mb="md" align="center">
         <Group justify="start">
           <Text size="sm" c="dimmed">
             By {username}
           </Text>
           <Divider orientation="vertical" m={0} />
           <Text size="sm" c="dimmed">
-            Completed in {data.metadata_stats.elapsedTime}
+            {new Date(data.created_at).toLocaleDateString()}
+          </Text>
+          <Divider orientation="vertical" m={0} />
+          <Text size="sm" c="dimmed">
+            Completed in{" "}
+            {convertTimeToDescription(data.metadata_stats.elapsedTime)}
           </Text>
         </Group>
         {Icon && (
@@ -102,8 +111,14 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
               <span
                 key={index}
                 style={{
+                  color:
+                    char.type === "AI"
+                      ? "var(--mantine-color-grape-light-color)"
+                      : "",
                   backgroundColor:
-                    char.type === "AI" ? "yellow" : "transparent",
+                    char.type === "AI"
+                      ? "var(--mantine-color-grape-light-hover)"
+                      : "transparent",
                 }}
               >
                 {char.value}
