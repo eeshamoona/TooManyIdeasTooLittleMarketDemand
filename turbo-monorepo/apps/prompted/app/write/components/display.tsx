@@ -1,6 +1,5 @@
 "use client";
 import {
-  Container,
   Button,
   Select,
   Group,
@@ -60,10 +59,13 @@ export default function Display({ prompts }: DisplayProps) {
 
   const leftSectionIcon = () => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === selectedCategory,
+      (cat) => cat.title === selectedCategory
     );
+
     const Icon = category?.icon;
-    const color = category?.color || "dark"; // Default color if not specified
+    const color = category?.color
+      ? `var(--mantine-color-${category?.color}-5)`
+      : "var(--mantine-color-dimmed)";
 
     return (
       <ActionIcon variant="transparent" color={color} size="lg">
@@ -77,7 +79,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -128,7 +130,7 @@ export default function Display({ prompts }: DisplayProps) {
   };
 
   return (
-    <Container>
+    <>
       <Group mt="xl" style={{ justifyContent: "flex-end" }} gap="0">
         <Button
           variant="subtle"
@@ -192,6 +194,6 @@ export default function Display({ prompts }: DisplayProps) {
           <PromptList data={filteredPrompts} />
         </>
       )}
-    </Container>
+    </>
   );
 }

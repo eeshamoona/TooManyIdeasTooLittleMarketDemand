@@ -1,3 +1,5 @@
+import { TitleOrder } from "@mantine/core";
+
 export const convertTimeToDescription = (elapsedTime: number) => {
   // Convert elapsed time to a descriptive format
   let descriptiveTime: string;
@@ -10,3 +12,15 @@ export const convertTimeToDescription = (elapsedTime: number) => {
   }
   return descriptiveTime;
 };
+
+export function getTitleOrder(promptTextLength: number): TitleOrder {
+  if (promptTextLength > 90) {
+    return 5;
+  } else if (promptTextLength > 60) {
+    return 4;
+  } else if (promptTextLength > 30) {
+    return 3;
+  } else {
+    return 2;
+  }
+}

@@ -18,6 +18,7 @@ import DiffMatchPatch from "diff-match-patch";
 import { StatsGrid } from "./stats";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
+import { getTitleOrder } from "../actions";
 
 const dmp = new DiffMatchPatch();
 
@@ -43,7 +44,8 @@ export default function TrackedTextarea({
   const [showStats, setShowStats] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [aiCallCount, setAICallCount] = useState<number>(0);
-  const [loading, { open, close }] = useDisclosure();
+  const [aiLoading, { open: openAi, close: closeAi }] = useDisclosure();
+  const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
   const router = useRouter();
 
   //TODO: Debounce the user input for better performance
@@ -200,10 +202,10 @@ export default function TrackedTextarea({
   };
 
   const handleGenerateClick = async () => {
-    open();
+    openAi();
     try {
       const generatedSentence = await generateAIResponse(combinedResponse);
-      close();
+      closeAi();
       if (generatedSentence) {
         setAICallCount(aiCallCount + 1);
         const aiChars: Character[] = generatedSentence
@@ -239,10 +241,12 @@ export default function TrackedTextarea({
   };
 
   const handleSaveResponse = () => {
+    openSave();
     console.log("Saving response...");
 
     // TODO: Send the combined response and metadata to the backend here
     saveSubmission();
+    closeSave();
   };
 
   const handleSaveAndClearResponse = () => {
@@ -255,16 +259,7 @@ export default function TrackedTextarea({
 
   const promptTextLength = promptText.length;
 
-  let titleOrder: TitleOrder;
-  if (promptTextLength > 90) {
-    titleOrder = 5;
-  } else if (promptTextLength > 60) {
-    titleOrder = 4;
-  } else if (promptTextLength > 30) {
-    titleOrder = 3;
-  } else {
-    titleOrder = 2;
-  }
+  let titleOrder: TitleOrder = getTitleOrder(promptTextLength);
 
   return (
     <Stack style={{ width: "100%" }}>
@@ -311,7 +306,7 @@ export default function TrackedTextarea({
               transitionProps={{ transition: "fade" }}
             >
               <ActionIcon
-                loading={loading}
+                loading={aiLoading}
                 loaderProps={{ type: "dots", size: "xs" }}
                 onClick={handleGenerateClick}
                 disabled={combinedResponse.length <= 100}
@@ -370,6 +365,7 @@ export default function TrackedTextarea({
           Clear
         </Button>
         <Button
+          loading={saveLoading}
           variant="solid"
           onClick={handleSaveResponse}
           disabled={combinedResponse.trim() === ""}

@@ -15,11 +15,17 @@ export default function DisplaySubmissions({ data }) {
 
   return (
     <Stack
-      style={{ maxHeight: "85vh", display: "flex", flexDirection: "column" }}
+      mt="xl"
+      style={{
+        maxHeight: "85vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       <SearchHeader hasSubmissions={false} />
 
       <Box
+        p="sm"
         style={{
           flexGrow: 1,
           overflowY: "auto",

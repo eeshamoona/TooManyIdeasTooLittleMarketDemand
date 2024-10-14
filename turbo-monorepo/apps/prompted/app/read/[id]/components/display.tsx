@@ -73,7 +73,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         </ActionIcon>
       </Box>
       <Title order={2}>{data.prompt}</Title>
-      <Group justify="space-between" mt={"xs"} mb="md">
+      <Group justify="space-between" mt={"xs"} mb="md" align="center">
         <Group justify="start">
           <Text size="sm" c="dimmed">
             By {username}

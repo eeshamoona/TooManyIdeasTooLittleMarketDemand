@@ -57,7 +57,7 @@ export function CustomAppShell({
                     color="initials"
                     radius="xl"
                   />
-                  <Button variant="outline" color="red" onClick={handleLogout}>
+                  <Button variant="light" color="red" onClick={handleLogout}>
                     Logout
                   </Button>
                 </Group>

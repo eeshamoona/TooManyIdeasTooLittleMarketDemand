@@ -1,5 +1,5 @@
 "use client";
-import { Grid, Group, Paper, Text } from "@mantine/core";
+import { Grid, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import {
   FaUser,
   FaPercentage,
@@ -77,6 +77,7 @@ const data = (stats: StatsProps) =>
 
 export function StatsGrid3({ stats }: { stats: StatsProps }) {
   const statsData = data(stats);
+  const theme = useMantineTheme();
 
   return (
     <Grid mt="sm">
@@ -86,7 +87,24 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
 
         return (
           <Grid.Col key={stat.title} span={span}>
-            <Paper withBorder p="sm" radius="md">
+            <Paper
+              withBorder
+              p="sm"
+              radius="md"
+              shadow="xs"
+              style={{
+                transition: "box-shadow 150ms ease, transform 100ms ease",
+                boxShadow: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = theme.shadows.md;
+                e.currentTarget.style.transform = "scale(1.02)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            >
               <Group justify="space-between">
                 <Text size="xs" c="dimmed">
                   {stat.title}
