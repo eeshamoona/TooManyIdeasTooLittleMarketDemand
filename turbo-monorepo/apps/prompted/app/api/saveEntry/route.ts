@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     if (!text || !category || !metadata_stats || !prompt) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -29,14 +29,14 @@ export async function POST(request: Request) {
       console.error("User authentication error:", userError);
       return NextResponse.json(
         { error: "User not authenticated" },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
     console.log("User ID:", user.id);
 
     const { data, error } = await supabase
-      .from("submissions")
+      .from("entries")
       .insert([
         {
           text,
@@ -50,8 +50,8 @@ export async function POST(request: Request) {
       ])
       .select();
 
-    const [submission] = data;
-    const submissionId = submission.id;
+    const [entry] = data;
+    const entryId = entry.id;
 
     if (error) {
       console.error("Database insertion error:", error);
@@ -59,14 +59,14 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { message: "Prompt added successfully", submissionId },
-      { status: 200 },
+      { message: "Prompt added successfully", entryId },
+      { status: 200 }
     );
   } catch (err) {
     console.error("Unexpected error:", err);
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

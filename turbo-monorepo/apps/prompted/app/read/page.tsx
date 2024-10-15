@@ -1,12 +1,12 @@
 import { Container, Text } from "@mantine/core";
 import { createClient } from "../utils/supabase/server";
-import DisplaySubmissions from "./components/display";
+import DisplayEntries from "./components/display";
 
 export default async function Read() {
   const supabase = createClient();
 
-  console.log("Fetching data from submissions table...");
-  const { data, error } = await supabase.from("submissions").select();
+  console.log("Fetching data from entries table...");
+  const { data, error } = await supabase.from("entries").select();
 
   if (error) {
     console.error("Error fetching data:", error.message);
@@ -19,7 +19,7 @@ export default async function Read() {
 
   return (
     <Container size="lg">
-      <DisplaySubmissions data={data} />
+      <DisplayEntries data={data} />
     </Container>
   );
 }

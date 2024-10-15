@@ -11,10 +11,12 @@ import { TiPencil } from "react-icons/ti";
 import { useRouter } from "next/navigation";
 
 interface SearchHeaderProps {
-  hasSubmissions: boolean;
+  hasEntries: boolean;
 }
 
-const SearchHeader: React.FC<SearchHeaderProps> = ({ hasSubmissions }) => {
+const SearchHeader: React.FC<SearchHeaderProps> = ({
+  hasEntries,
+}: SearchHeaderProps) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
@@ -52,7 +54,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ hasSubmissions }) => {
         value={searchQuery}
         onChange={(event) => setSearchQuery(event.currentTarget.value)}
         style={{ flex: 1 }}
-        disabled={!hasSubmissions}
+        disabled={!hasEntries}
       />
       <Select
         placeholder="Select category"
@@ -63,7 +65,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ hasSubmissions }) => {
           { value: "category2", label: "Category 2" },
           { value: "category3", label: "Category 3" },
         ]}
-        disabled={!hasSubmissions}
+        disabled={!hasEntries}
       />
       <MultiSelect
         placeholder="Select tags"
@@ -74,9 +76,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({ hasSubmissions }) => {
           { value: "tag2", label: "Tag 2" },
           { value: "tag3", label: "Tag 3" },
         ]}
-        disabled={!hasSubmissions}
+        disabled={!hasEntries}
       />
-      <Button onClick={handleSearch} disabled={!hasSubmissions}>
+      <Button onClick={handleSearch} disabled={!hasEntries}>
         Search
       </Button>
       <Button

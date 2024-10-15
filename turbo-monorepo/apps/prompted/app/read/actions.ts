@@ -1,8 +1,8 @@
 import { MantineColorScheme } from "@mantine/core";
 
-export const getEntry = async (submission) => {
+export const getEntry = async (entries) => {
   // Convert to JavaScript Date object
-  const dateObj = new Date(submission.created_at);
+  const dateObj = new Date(entries.created_at);
 
   // Extract the date in YYYY-MM-DD format
   const year = dateObj.getFullYear();
@@ -27,12 +27,12 @@ export const getEntry = async (submission) => {
   const element = document.createElement("a");
   const file = new Blob(
     [
-      `Date: ${formattedCreatedAt} at ${formattedTime}\n\nCategory: ${submission.category}\n\nPrompt: ${submission.prompt}\n\nText: ${submission.text}`,
+      `Date: ${formattedCreatedAt} at ${formattedTime}\n\nCategory: ${entries.category}\n\nPrompt: ${entries.prompt}\n\nText: ${entries.text}`,
     ],
     { type: "text/plain" },
   );
   element.href = URL.createObjectURL(file);
-  element.download = `${formattedCreatedAt}-entry_${submission.id}.txt`;
+  element.download = `${formattedCreatedAt}-entry_${entries.id}.txt`;
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);

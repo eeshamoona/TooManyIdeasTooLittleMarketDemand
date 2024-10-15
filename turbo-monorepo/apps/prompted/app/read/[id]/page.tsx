@@ -11,16 +11,14 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
   const username = user?.user?.user_metadata?.username ?? null;
 
   const { data } = await supabase
-    .from("submissions")
+    .from("entries")
     .select()
     .eq("id", id)
     .single();
 
   //TODO: Determine the difference between no permission and no data when the error message is the same
   if (!data) {
-    return (
-      <Text c="red">You do not have permission to view this submission.</Text>
-    );
+    return <Text c="red">You do not have permission to view this entry.</Text>;
   }
 
   return (

@@ -42,7 +42,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category,
+    (cat) => cat.title === data.category
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
@@ -64,7 +64,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         >
           View All
         </Button>
-        {data.metadata_stats.aiCallCount && (
+        {data.metadata_stats.aiCallCount > 0 && (
           <ActionIcon
             onClick={handleToggleStats}
             color={!showAIParts ? "grape" : "gray"}

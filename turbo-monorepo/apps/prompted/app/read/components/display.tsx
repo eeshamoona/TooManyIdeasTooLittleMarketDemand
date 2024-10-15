@@ -1,14 +1,15 @@
 "use client";
-import { Box, Container, SimpleGrid, Stack, Text } from "@mantine/core";
-import { SubmissionCard } from "./card";
+import { Box, Container, SimpleGrid, Stack } from "@mantine/core";
+import { EntryCard } from "./card";
 import SearchHeader from "./header";
+import { EmptyState } from "./empty-state";
 
-export default function DisplaySubmissions({ data }) {
-  if (!data || data.length === 0) {
+export default function DisplayEntries({ data: entries }) {
+  if (!entries || entries.length === 0) {
     return (
       <Container>
-        <SearchHeader hasSubmissions={false} />
-        <Text c="red">No submissions found.</Text>
+        <SearchHeader hasEntries={false} />
+        <EmptyState />
       </Container>
     );
   }
@@ -22,7 +23,7 @@ export default function DisplaySubmissions({ data }) {
         flexDirection: "column",
       }}
     >
-      <SearchHeader hasSubmissions={false} />
+      <SearchHeader hasEntries={false} />
 
       <Box
         p="sm"
@@ -32,8 +33,8 @@ export default function DisplaySubmissions({ data }) {
         }}
       >
         <SimpleGrid cols={2} spacing="sm" verticalSpacing="sm">
-          {data.map((submission) => (
-            <SubmissionCard key={submission.id} submission={submission} />
+          {entries.map((entry) => (
+            <EntryCard key={entry.id} entry={entry} />
           ))}
         </SimpleGrid>
       </Box>

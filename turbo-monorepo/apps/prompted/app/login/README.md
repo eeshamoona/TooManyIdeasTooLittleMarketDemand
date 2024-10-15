@@ -68,7 +68,7 @@ export async function signup(formData: FormData) {
 
 #### 2. page.tsx
 
-The `page.tsx` file contains the client-side components for the login page. It includes form elements for user input and submission.
+The `page.tsx` file contains the client-side components for the login page. It includes form elements for user input and entry.
 
 ## TODO List
 

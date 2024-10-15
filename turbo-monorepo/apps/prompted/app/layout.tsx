@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import "./globals.css";
 import Providers from "@repo/ui/mantineProvider";
 import { createClient } from "./utils/supabase/server";
-import { CustomAppShell } from "./shell";
+import { CustomAppShell } from "./shell2";
 import "@mantine/core/styles.css";
 import Loading from "./loading";
 

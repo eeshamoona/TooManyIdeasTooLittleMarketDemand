@@ -93,7 +93,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -137,7 +137,7 @@ export default function TrackedTextarea({
 
     // Convert the dictionary to an array of tuples [word, frequency]
     const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
 
     // Convert back to an object and return
@@ -152,8 +152,7 @@ export default function TrackedTextarea({
     return { sortedWordFreqDict, totalWords, top10Words };
   };
 
-  const saveSubmission = async () => {
-    console.log("Saving submission...");
+  const saveEntry = async () => {
     const stats = generateCharacterStats(characters);
     //TODO: Split up the words into a frequency map for the AI to give better suggestions on high frequency words
     const { sortedWordFreqDict, totalWords, top10Words } =
@@ -178,7 +177,7 @@ export default function TrackedTextarea({
     stats["elapsedTime"] = elapsedTime;
 
     try {
-      const saveResponse = await fetch("/api/saveSubmission", {
+      const saveResponse = await fetch("/api/saveEntry", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -193,10 +192,10 @@ export default function TrackedTextarea({
         }),
       });
       const data = await saveResponse.json();
-      const submissionId = data.submissionId;
-      console.log("Route to submission page with ID:", submissionId);
-      //TODO: Re-route to the submission page
-      router.push(`/read/${submissionId}`);
+      const entry_id = data.entryId;
+      console.log("Route to entry page with ID:", entry_id);
+      //TODO: Re-route to the entry page
+      router.push(`/read/${entry_id}`);
     } catch (error) {
       console.error("Error calling API:", error);
     }
@@ -227,7 +226,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =
@@ -246,7 +245,7 @@ export default function TrackedTextarea({
     console.log("Saving response...");
 
     // TODO: Send the combined response and metadata to the backend here
-    saveSubmission();
+    saveEntry();
     closeSave();
   };
 
