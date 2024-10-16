@@ -3,17 +3,21 @@ import {
   AppShell,
   Burger,
   Group,
-  UnstyledButton,
   Avatar,
   useMantineColorScheme,
   ActionIcon,
+  Text,
+  Button,
+  Menu,
+  UnstyledButton,
 } from "@mantine/core";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
+import { LuAward, LuBookOpen, LuPencil, LuPlusCircle } from "react-icons/lu";
+import { handleLogout } from "./logout/logoutClient";
+import { forwardRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
-import { HiChevronDown, HiChevronLeft } from "react-icons/hi2";
-import { LuBookOpen, LuPlusCircle, LuPencil, LuAward } from "react-icons/lu";
 
 interface CustomAppShellProps {
   metadata: any;
@@ -21,17 +25,12 @@ interface CustomAppShellProps {
   children: React.ReactNode;
 }
 
-import { forwardRef, useState } from "react";
-import { Menu } from "@mantine/core";
-import { handleLogout } from "./logout/logoutClient";
-
 interface UserButtonProps extends React.ComponentPropsWithoutRef<"button"> {
   name: string;
-  icon?: React.ReactNode;
 }
 
 const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
-  ({ name, icon, onClick, ...others }: UserButtonProps, ref) => {
+  ({ name, onClick, ...others }: UserButtonProps, ref) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -51,16 +50,10 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
       >
         <Group gap="4px" mr={"2px"}>
           <Avatar key={name} name={name} color="initials" radius="sm" />
-          {icon ||
-            (isOpen ? (
-              <HiChevronDown size="1rem" />
-            ) : (
-              <HiChevronLeft size="1rem" />
-            ))}
         </Group>
       </UnstyledButton>
     );
-  },
+  }
 );
 
 function UserMenu({ username }: { username: string }) {
@@ -73,10 +66,10 @@ function UserMenu({ username }: { username: string }) {
 
   return (
     <Menu
-      position="bottom-end"
-      offset={0}
+      offset={7}
       withArrow
       opened={menuOpened}
+      radius={"sm"}
       onClose={() => setMenuOpened(false)}
     >
       <Menu.Target>
@@ -84,34 +77,12 @@ function UserMenu({ username }: { username: string }) {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Label>Actions</Menu.Label>
-
-        <Menu.Item
-          leftSection={<LuAward style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/progress")}
-        >
-          My Progress
-        </Menu.Item>
-        <Menu.Item
-          leftSection={<LuPencil style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/write")}
-        >
-          Write
-        </Menu.Item>
-        <Menu.Item
-          leftSection={
-            <LuPlusCircle style={{ width: "1rem", height: "1rem" }} />
-          }
-          onClick={() => router.push("/write/more")}
-        >
-          Add More
-        </Menu.Item>
         <Menu.Item
           leftSection={<LuBookOpen style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/read")}
+          onClick={() => router.push("/profile")}
         >
-          Read
+          Profile
         </Menu.Item>
-        <Menu.Divider />
 
         <Menu.Item
           color="red"
@@ -148,15 +119,59 @@ export function CustomAppShell({
     >
       <AppShell.Header>
         <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+          {isLoggedIn && (
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              hiddenFrom="sm"
+              size="sm"
+            />
+          )}
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Group gap={0} visibleFrom="sm">
-              <UnstyledButton onClick={() => router.push("/")}>
-                Prompted
-              </UnstyledButton>
-            </Group>
-            <Group gap={"4px"}>
+            <Text>Prompted</Text>
+            {isLoggedIn && (
+              <Group gap={"sm"} visibleFrom="sm">
+                <Button
+                  variant="subtle"
+                  leftSection={
+                    <LuPencil style={{ width: "1rem", height: "1rem" }} />
+                  }
+                  onClick={() => router.push("/write")}
+                >
+                  Write
+                </Button>
+                <Button
+                  variant="subtle"
+                  leftSection={
+                    <LuBookOpen style={{ width: "1rem", height: "1rem" }} />
+                  }
+                  onClick={() => router.push("/read")}
+                >
+                  Read
+                </Button>
+                <Button
+                  variant="subtle"
+                  leftSection={
+                    <LuPlusCircle style={{ width: "1rem", height: "1rem" }} />
+                  }
+                  onClick={() => router.push("/write/more")}
+                >
+                  Add
+                </Button>
+                <Button
+                  variant="subtle"
+                  leftSection={
+                    <LuAward style={{ width: "1rem", height: "1rem" }} />
+                  }
+                  onClick={() => router.push("/progress")}
+                >
+                  Progress
+                </Button>
+              </Group>
+            )}
+            <Group>
               {isLoggedIn && <UserMenu username={metadata.username} />}
+
               <ActionIcon
                 onClick={() => toggleColorScheme()}
                 variant="subtle"
@@ -175,6 +190,39 @@ export function CustomAppShell({
           </Group>
         </Group>
       </AppShell.Header>
+
+      <AppShell.Navbar py="md" px={4}>
+        <Button
+          variant="light"
+          leftSection={<LuPencil style={{ width: "1rem", height: "1rem" }} />}
+          onClick={() => router.push("/write")}
+        >
+          Write
+        </Button>
+        <Button
+          variant="light"
+          leftSection={<LuBookOpen style={{ width: "1rem", height: "1rem" }} />}
+          onClick={() => router.push("/read")}
+        >
+          Read
+        </Button>
+        <Button
+          variant="light"
+          leftSection={
+            <LuPlusCircle style={{ width: "1rem", height: "1rem" }} />
+          }
+          onClick={() => router.push("/write/more")}
+        >
+          Add
+        </Button>
+        <Button
+          variant="light"
+          leftSection={<LuAward style={{ width: "1rem", height: "1rem" }} />}
+          onClick={() => router.push("/progress")}
+        >
+          Progress
+        </Button>
+      </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>
     </AppShell>

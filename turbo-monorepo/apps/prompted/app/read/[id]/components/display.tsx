@@ -3,13 +3,14 @@ import {
   ActionIcon,
   Box,
   Button,
-  Container,
   Group,
   Paper,
   Title,
   Text,
   Divider,
   Badge,
+  Flex,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
@@ -19,10 +20,9 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { StatsProps } from "./stats-grid";
 import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 import { convertTimeToDescription } from "../../../write/actions";
-import { MdOutlineBubbleChart } from "react-icons/md";
+import { RiBubbleChartLine } from "react-icons/ri";
 import { RiBubbleChartFill } from "react-icons/ri";
-
-import WordBubbles from "./bubbles";
+import MatterCircles from "./bubbles";
 
 interface DisplayTextProps {
   data: {
@@ -41,6 +41,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
   const [showAIParts, setShowAIParts] = useState(false);
   const [showWordFreq, setShowWordFreq] = useState(false);
   const router = useRouter();
+  const { colorScheme } = useMantineColorScheme();
 
   const handleToggleStats = () => {
     if (showWordFreq) {
@@ -63,7 +64,7 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
   const color = `var(--mantine-color-${category?.color}-5)`;
 
   return (
-    <Container h="100%">
+    <Flex direction={"column"} style={{ height: "100%" }}>
       <Box
         my={"md"}
         style={{
@@ -79,22 +80,22 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         >
           View All
         </Button>
-        <ActionIcon.Group>
+        <ActionIcon.Group variant="subtle">
           {data.metadata_stats.aiCallCount > 0 && (
             <ActionIcon
               onClick={handleToggleStats}
               color={showAIParts ? "grape" : "gray"}
-              variant="light"
+              variant="subtle"
             >
-              {showAIParts ? <FaRegLightbulb /> : <FaLightbulb />}
+              {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
             </ActionIcon>
           )}
           <ActionIcon
             onClick={handleToggleWordFreq}
             color={!showWordFreq ? "gray" : "blue"}
-            variant="light"
+            variant="subtle"
           >
-            {showWordFreq ? <MdOutlineBubbleChart /> : <RiBubbleChartFill />}
+            {showWordFreq ? <RiBubbleChartFill /> : <RiBubbleChartLine />}
           </ActionIcon>
         </ActionIcon.Group>
       </Box>
@@ -126,35 +127,33 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
           </Badge>
         )}
       </Group>
-      <Box style={{ flex: 1, overflow: "auto", maxHeight: "70%" }}>
-        <Paper my="md" mb="lg" style={{ height: "100%", overflowY: "auto" }}>
-          {!showAIParts ? (
-            showWordFreq ? (
-              <WordBubbles word_freq={data.word_freq} />
-            ) : (
-              <div>{data.text}</div>
-            )
-          ) : (
-            data.character_data.map((char: Character, index: number) => (
-              <span
-                key={index}
-                style={{
-                  color:
-                    char.type === "AI"
-                      ? "var(--mantine-color-grape-light-color)"
-                      : "",
-                  backgroundColor:
-                    char.type === "AI"
-                      ? "var(--mantine-color-grape-light-hover)"
-                      : "transparent",
-                }}
-              >
-                {char.value}
-              </span>
-            ))
-          )}
-        </Paper>
+      <Box style={{ flex: 1, overflow: "auto" }}>
+        {showWordFreq ? (
+          <MatterCircles word_freq={data.word_freq} colorScheme={colorScheme} />
+        ) : (
+          <Paper style={{ height: "100%", overflowY: "auto" }}>
+            {!showAIParts
+              ? data.text
+              : data.character_data.map((char: Character, index: number) => (
+                  <span
+                    key={index}
+                    style={{
+                      color:
+                        char.type === "AI"
+                          ? "var(--mantine-color-grape-light-color)"
+                          : "",
+                      backgroundColor:
+                        char.type === "AI"
+                          ? "var(--mantine-color-grape-light-hover)"
+                          : "transparent",
+                    }}
+                  >
+                    {char.value}
+                  </span>
+                ))}
+          </Paper>
+        )}
       </Box>
-    </Container>
+    </Flex>
   );
 }
