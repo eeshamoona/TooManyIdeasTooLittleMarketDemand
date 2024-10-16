@@ -19,6 +19,10 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { StatsProps } from "./stats-grid";
 import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 import { convertTimeToDescription } from "../../../write/actions";
+import { MdOutlineBubbleChart } from "react-icons/md";
+import { RiBubbleChartFill } from "react-icons/ri";
+
+import WordBubbles from "./bubbles";
 
 interface DisplayTextProps {
   data: {
@@ -34,15 +38,26 @@ interface DisplayTextProps {
 }
 
 export default function DisplayText({ data, username }: DisplayTextProps) {
-  const [showAIParts, setShowAIParts] = useState(true);
+  const [showAIParts, setShowAIParts] = useState(false);
+  const [showWordFreq, setShowWordFreq] = useState(false);
   const router = useRouter();
 
   const handleToggleStats = () => {
+    if (showWordFreq) {
+      setShowWordFreq(false);
+    }
     setShowAIParts((prev) => !prev);
   };
 
+  const handleToggleWordFreq = () => {
+    if (showAIParts) {
+      setShowAIParts(false);
+    }
+    setShowWordFreq((prev) => !prev);
+  };
+
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category,
+    (cat) => cat.title === data.category
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
@@ -64,15 +79,24 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
         >
           View All
         </Button>
-        {data.metadata_stats.aiCallCount > 0 && (
+        <ActionIcon.Group>
+          {data.metadata_stats.aiCallCount > 0 && (
+            <ActionIcon
+              onClick={handleToggleStats}
+              color={showAIParts ? "grape" : "gray"}
+              variant="light"
+            >
+              {showAIParts ? <FaRegLightbulb /> : <FaLightbulb />}
+            </ActionIcon>
+          )}
           <ActionIcon
-            onClick={handleToggleStats}
-            color={!showAIParts ? "grape" : "gray"}
+            onClick={handleToggleWordFreq}
+            color={!showWordFreq ? "gray" : "blue"}
             variant="light"
           >
-            {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
+            {showWordFreq ? <MdOutlineBubbleChart /> : <RiBubbleChartFill />}
           </ActionIcon>
-        )}
+        </ActionIcon.Group>
       </Box>
       <Title order={2}>{data.prompt}</Title>
       <Group justify="space-between" mt={"xs"} mb="md" align="center">
@@ -104,8 +128,12 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
       </Group>
       <Box style={{ flex: 1, overflow: "auto", maxHeight: "70%" }}>
         <Paper my="md" mb="lg" style={{ height: "100%", overflowY: "auto" }}>
-          {showAIParts ? (
-            <div>{data.text}</div>
+          {!showAIParts ? (
+            showWordFreq ? (
+              <WordBubbles word_freq={data.word_freq} />
+            ) : (
+              <div>{data.text}</div>
+            )
           ) : (
             data.character_data.map((char: Character, index: number) => (
               <span
