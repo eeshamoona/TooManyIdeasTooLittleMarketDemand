@@ -38,7 +38,7 @@ export function EntryCard({ entry }) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === entry.category
+    (cat) => cat.title === entry.category,
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;

@@ -10,6 +10,7 @@ import {
   Text,
   Center,
   ActionIcon,
+  Stack,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../interface";
 import { useRouter } from "next/navigation";
@@ -63,6 +64,7 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
     if (res.ok) {
       setPromptText("");
       setCategory("");
+      onCategorySelected("");
       onPromptAdded();
       setSuccess("Prompt added successfully");
       setError("");
@@ -84,7 +86,7 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value
+      (cat) => cat.title === option.value,
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -96,8 +98,8 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
           padding: "0px", // Add padding for better spacing
           borderRadius: "8px", // Rounded corners for smoother edges
           cursor: "pointer", // Indicate interactivity
-          gap: "0px",
         }}
+        gap="sm"
       >
         {Icon && (
           <Center>
@@ -107,7 +109,6 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
           </Center>
         )}
         <Text
-          ml={"xs"}
           style={{
             fontWeight: "600", // Semi-bold for better readability
             fontSize: "14px", // Slightly larger for better legibility
@@ -142,18 +143,16 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
       my="md"
       bg="var(--mantine-color-gray-light-hover)"
     >
-      <Group>
+      <Stack gap={4} flex={1}>
         <TextInput
           label="Prompt"
           placeholder="Enter your prompt"
           value={promptText}
           onChange={(event) => setPromptText(event.currentTarget.value)}
           required
-          flex={1}
         />
         <Group>
           <Select
-            miw={"15rem"}
             label="Category"
             placeholder="Select a category"
             data={NEW_PROMPT_CATEGORIES.map((category) => ({
@@ -166,12 +165,13 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
             onChange={handleCategoryChange}
             required
             renderOption={renderSelectOption}
+            flex={4}
           />
+
           <Button
             onClick={handleSubmit}
             style={{
               alignSelf: "end",
-              display: "flex",
               alignItems: "center",
               gap: "0.5rem",
             }}
@@ -179,11 +179,13 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
             variant="light"
             color="blue"
             loading={saveLoading}
+            flex={1}
+            leftSection={<FaPaperPlane />}
           >
-            <FaPaperPlane />
+            Add Prompt
           </Button>
         </Group>
-      </Group>
+      </Stack>
       {error && (
         <Text
           c="red"

@@ -13,42 +13,44 @@ import { LiaHandshake } from "react-icons/lia";
 export const NEW_PROMPT_CATEGORIES = [
   {
     title: "Creative Spark",
-    description: "For imaginative prompts that stimulate creativity.",
+    description: "Quirky, imaginative prompts for creative thinking.",
     notes: "High creativity, low grounded, about fiction",
     icon: FaRegLightbulb,
     color: "orange",
   },
   {
     title: "Adventure Tales",
-    description: "For imaginative exploration or 'what if' adventures.",
+    description: "Story-driven adventures in imaginative worlds.",
     notes: "High creativity, medium grounded, about fiction",
     icon: FaRegCompass,
     color: "red",
   },
   {
     title: "Calm Vibes",
-    description: "For prompts that paint immersive, vivid scenes ",
+    description:
+      "Grounded, vivid scene-building for a calm, visual experience.",
     notes: "High creativity, medium grounded, about non/fiction",
     icon: IoLeafOutline,
     color: "green",
   },
   {
     title: "Brain Puzzles",
-    description: "For fun, problem-solving or critical thinking prompts.",
+    description:
+      "Challenge your wits with creative solutions and inventive designs.",
     notes: "High creativity, high grounded, about non-fiction",
     icon: IoExtensionPuzzleOutline,
     color: "blue",
   },
   {
-    title: "Playtime Ideas",
-    description: "For playful, fun, and whimsical writing prompts.",
+    title: "Playful Ideas",
+    description: "Whimsical prompts for playful scenarios and fun ideas.",
     notes: "Medium creativity, low grounded, about fiction",
     icon: IoGameControllerOutline,
     color: "pink",
   },
   {
     title: "Goal Inspiration",
-    description: "For light goal-setting and envisioning success.",
+    description: "Joy-based growth and personal development.",
     notes: "Medium creativity, medium grounded, about non-fiction",
     icon: GoTrophy,
     color: "teal",
@@ -56,7 +58,7 @@ export const NEW_PROMPT_CATEGORIES = [
   {
     title: "Future Dreams",
     description:
-      "For prompts about an imagined future or future possibilities.",
+      "Imagine ambitious future possibilities and your role in them.",
     notes: "Medium creativity, high grounded, about fiction",
     icon: IoRocketOutline,
     color: "violet",
@@ -64,14 +66,15 @@ export const NEW_PROMPT_CATEGORIES = [
   {
     title: "Empathy Challenge",
     description:
-      "For fun exercises in understanding others in a lighthearted way.",
+      "Lighthearted prompts for seeing life from others’ perspectives.",
     notes: "Medium creativity, high grounded, about non-fiction",
     icon: LiaHandshake,
     color: "cyan",
   },
   {
     title: "Inner Thoughts",
-    description: "For simple self-reflection and light personal musings.",
+    description:
+      "Self-reflective prompts to explore your thoughts and opinions.",
     notes: "Low creativity, low grounded, about non-fiction",
     icon: TfiThought,
     color: "indigo",
@@ -79,14 +82,14 @@ export const NEW_PROMPT_CATEGORIES = [
   {
     title: "Confidence Boost",
     description:
-      "For recognizing strengths and feeling empowered in a fun way.",
+      "Empowering prompts to lift your self-esteem and celebrate you.",
     notes: "Low creativity, medium grounded, about non-fiction",
     icon: FaRegStar,
     color: "yellow",
   },
   {
     title: "Gratitude Moments",
-    description: "For recognizing small, positive things in life.",
+    description: "Reflect on life's small, positive moments with gratitude.",
     notes: "Low creativity, high grounded, about non-fiction",
     icon: HiOutlineEmojiHappy,
     color: "grape",

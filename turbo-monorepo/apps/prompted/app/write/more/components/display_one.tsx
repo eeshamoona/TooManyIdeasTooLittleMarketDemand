@@ -10,10 +10,13 @@ export const Display = ({ prompts }: DisplayProps) => {
   const router = useRouter();
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
 
-  const handleCategorySelected = (category: string) => {
-    // filter prompts by category
-    const filtered = prompts.filter((prompt) => prompt.category === category);
-    setFilteredPrompts(filtered);
+  const handleCategorySelected = (category: string | null) => {
+    if (category === null) {
+      setFilteredPrompts(prompts);
+    } else {
+      const filtered = prompts.filter((prompt) => prompt.category === category);
+      setFilteredPrompts(filtered);
+    }
   };
 
   const handleOnPromptAdded = () => {

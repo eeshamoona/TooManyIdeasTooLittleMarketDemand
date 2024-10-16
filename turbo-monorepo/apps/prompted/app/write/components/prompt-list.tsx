@@ -45,12 +45,12 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
   };
 
   const filteredData = data.filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase())
+    item.text.toLowerCase().includes(search.toLowerCase()),
   );
 
   const rows = filteredData.map((row: Prompt) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === row.category
+      (cat) => cat.title === row.category,
     );
     const Icon = category?.icon;
     const color = `var(--mantine-color-${category?.color}-5)`;

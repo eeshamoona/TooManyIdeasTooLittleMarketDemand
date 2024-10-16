@@ -1,6 +1,6 @@
 import { Container } from "@mantine/core";
-import { Display } from "./components/display";
 import { createClient } from "../../utils/supabase/server";
+import { Shell } from "./components/shell";
 
 export default async function Write() {
   const supabase = createClient();
@@ -9,7 +9,7 @@ export default async function Write() {
 
   return (
     <Container>
-      <Display prompts={prompts} />
+      <Shell prompts={prompts} />
     </Container>
   );
 }

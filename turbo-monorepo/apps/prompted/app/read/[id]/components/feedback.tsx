@@ -35,8 +35,8 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
     Object.entries(feedbackData).sort(
       ([criteriaA], [criteriaB]) =>
         Object.keys(criteriaDescriptions).indexOf(criteriaA) -
-        Object.keys(criteriaDescriptions).indexOf(criteriaB)
-    )
+        Object.keys(criteriaDescriptions).indexOf(criteriaB),
+    ),
   );
 
   return (
@@ -82,7 +82,7 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
               </Card>
             </Grid.Col>
           );
-        }
+        },
       )}
     </Grid>
   );

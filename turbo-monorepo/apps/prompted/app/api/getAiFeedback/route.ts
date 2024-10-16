@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     console.log("Missing required fields:", { response, category, prompt });
     return NextResponse.json(
       { error: "Response and Prompt are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: `# Prompt: ${prompt}\n# Category: ${category}\n\n#User's Text: ${response}`,
+              text: `# Prompt: ${prompt}\n# Category: ${category}\n\n# User's Text: ${response}`,
             },
           ],
         },
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
     console.error("Error calling OpenAI API:", error);
     return NextResponse.json(
       { error: "Error generating summary" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

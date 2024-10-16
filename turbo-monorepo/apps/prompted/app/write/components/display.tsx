@@ -27,7 +27,6 @@ export interface Prompt {
 
 export interface DisplayProps {
   prompts: Prompt[];
-  
 }
 
 export default function Display({ prompts }: DisplayProps) {
@@ -61,7 +60,7 @@ export default function Display({ prompts }: DisplayProps) {
 
   const leftSectionIcon = () => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === selectedCategory
+      (cat) => cat.title === selectedCategory,
     );
 
     const Icon = category?.icon;
@@ -81,7 +80,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value
+      (cat) => cat.title === option.value,
     );
     const Icon = category?.icon;
     const color = category?.color;
