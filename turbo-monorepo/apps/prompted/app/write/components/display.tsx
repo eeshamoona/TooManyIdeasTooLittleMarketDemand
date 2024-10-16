@@ -27,6 +27,7 @@ export interface Prompt {
 
 export interface DisplayProps {
   prompts: Prompt[];
+  
 }
 
 export default function Display({ prompts }: DisplayProps) {
@@ -157,7 +158,7 @@ export default function Display({ prompts }: DisplayProps) {
           flex={1}
           clearable={randomPrompt ? false : true}
           defaultValue={null}
-          placeholder="All prompts!"
+          placeholder="Filter by category"
           data={NEW_PROMPT_CATEGORIES.map((category) => ({
             value: category.title,
             label: category.title,
@@ -181,7 +182,12 @@ export default function Display({ prompts }: DisplayProps) {
           variant={randomPrompt ? "subtle" : "filled"}
           rightSection={randomPrompt ? <RxCross2 /> : null}
         >
-          {randomPrompt ? "Reset Prompt" : "Get Random Prompt"}
+          {/* {randomPrompt ? "Reset Prompt" : "Get Random Prompt"} */}
+          {randomPrompt
+            ? "Reset Prompt"
+            : selectedCategory
+              ? `Get Random ${selectedCategory} Prompt`
+              : "Get Random Prompt"}
         </Button>
       </Group>
       {randomPrompt ? (

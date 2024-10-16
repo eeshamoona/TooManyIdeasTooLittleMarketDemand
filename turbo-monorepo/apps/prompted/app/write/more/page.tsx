@@ -8,7 +8,7 @@ export default async function Write() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    <Container size="lg">
+    <Container>
       <Display prompts={prompts} />
     </Container>
   );

@@ -16,7 +16,16 @@ import { useRouter } from "next/navigation";
 import { FaCheck, FaPaperPlane } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 
-export const AddPromptForm = () => {
+interface AddPromptFormProps {
+  // eslint-disable-next-line no-unused-vars
+  onCategorySelected: (category: string) => void;
+  onPromptAdded: () => void;
+}
+
+export const AddPromptForm: React.FC<AddPromptFormProps> = ({
+  onCategorySelected,
+  onPromptAdded,
+}) => {
   const [promptText, setPromptText] = useState("");
   const [category, setCategory] = useState("");
   const [error, setError] = useState("");
@@ -54,6 +63,7 @@ export const AddPromptForm = () => {
     if (res.ok) {
       setPromptText("");
       setCategory("");
+      onPromptAdded();
       setSuccess("Prompt added successfully");
       setError("");
       router.refresh();
@@ -64,12 +74,17 @@ export const AddPromptForm = () => {
     closeSave();
   }
 
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    onCategorySelected(value);
+  };
+
   const renderSelectOption: SelectProps["renderOption"] = ({
     option,
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -148,7 +163,7 @@ export const AddPromptForm = () => {
               icon: category.icon,
             }))}
             value={category}
-            onChange={setCategory}
+            onChange={handleCategoryChange}
             required
             renderOption={renderSelectOption}
           />

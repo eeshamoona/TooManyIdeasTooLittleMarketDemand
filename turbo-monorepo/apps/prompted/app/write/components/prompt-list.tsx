@@ -8,6 +8,7 @@ import {
   TextInput,
   rem,
   Badge,
+  Switch,
 } from "@mantine/core";
 import { FaSearch } from "react-icons/fa";
 import { Prompt } from "./display";
@@ -33,18 +34,23 @@ function Th({ children }) {
 
 export function PromptList({ data }: PromptListProps): JSX.Element {
   const [search, setSearch] = useState("");
+  const [showPrompts, setShowPrompts] = useState(true);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.currentTarget.value);
   };
 
+  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowPrompts(event.currentTarget.checked);
+  };
+
   const filteredData = data.filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase()),
+    item.text.toLowerCase().includes(search.toLowerCase())
   );
 
   const rows = filteredData.map((row: Prompt) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === row.category,
+      (cat) => cat.title === row.category
     );
     const Icon = category?.icon;
     const color = `var(--mantine-color-${category?.color}-5)`;
@@ -85,47 +91,56 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
 
   return (
     <div>
-      <TextInput
-        placeholder="Search for any prompt"
-        mb="md"
-        leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
-        value={search}
-        onChange={handleSearchChange}
-      />
+      <Group justify="space-between" mb="md">
+        <TextInput
+          flex={1}
+          placeholder="Search for any prompt"
+          leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
+          value={search}
+          onChange={handleSearchChange}
+        />
+        <Switch
+          label="Show Prompts"
+          checked={showPrompts}
+          onChange={handleToggleChange}
+        />
+      </Group>
 
-      <ScrollArea
-        h={"55vh"}
-        offsetScrollbars
-        scrollbarSize={8}
-        scrollHideDelay={0}
-      >
-        <Table
-          horizontalSpacing="xl"
-          verticalSpacing="md"
-          stickyHeader
-          highlightOnHover
+      {showPrompts && (
+        <ScrollArea
+          h={"55vh"}
+          offsetScrollbars
+          scrollbarSize={8}
+          scrollHideDelay={0}
         >
-          <Table.Thead>
-            <Table.Tr>
-              <Th>Category</Th>
-              <Th>Prompt</Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {rows.length > 0 ? (
-              rows
-            ) : (
+          <Table
+            horizontalSpacing="xl"
+            verticalSpacing="md"
+            stickyHeader
+            highlightOnHover
+          >
+            <Table.Thead>
               <Table.Tr>
-                <Table.Td colSpan={Object.keys(data[0]).length}>
-                  <Text fw={500} ta="center">
-                    Nothing found
-                  </Text>
-                </Table.Td>
+                <Th>Category</Th>
+                <Th>Prompt</Th>
               </Table.Tr>
-            )}
-          </Table.Tbody>
-        </Table>
-      </ScrollArea>
+            </Table.Thead>
+            <Table.Tbody>
+              {rows.length > 0 ? (
+                rows
+              ) : (
+                <Table.Tr>
+                  <Table.Td colSpan={Object.keys(data[0]).length}>
+                    <Text fw={500} ta="center">
+                      Nothing found
+                    </Text>
+                  </Table.Td>
+                </Table.Tr>
+              )}
+            </Table.Tbody>
+          </Table>
+        </ScrollArea>
+      )}
     </div>
   );
 }

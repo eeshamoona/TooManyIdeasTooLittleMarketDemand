@@ -1,28 +1,35 @@
 "use client";
-import { Button, Divider, Group } from "@mantine/core";
+import { Box, Divider } from "@mantine/core";
 import { PromptList } from "../../components/prompt-list";
 import { useRouter } from "next/navigation";
-import { DisplayProps } from "../../components/display";
+import { DisplayProps, Prompt } from "../../components/display";
 import { AddPromptForm } from "./add-prompt";
-import { FaArrowLeft } from "react-icons/fa";
+import { useState } from "react";
 
 export const Display = ({ prompts }: DisplayProps) => {
   const router = useRouter();
+  const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
+
+  const handleCategorySelected = (category: string) => {
+    // filter prompts by category
+    const filtered = prompts.filter((prompt) => prompt.category === category);
+    setFilteredPrompts(filtered);
+  };
+
+  const handleOnPromptAdded = () => {
+    // TODO: refresh prompts
+    router.refresh();
+    setFilteredPrompts(prompts);
+  };
 
   return (
-    <>
-      <Group mt="xl">
-        <Button
-          variant="outline"
-          leftSection={<FaArrowLeft />}
-          onClick={() => router.back()}
-        >
-          Back
-        </Button>
-      </Group>
-      <AddPromptForm />
+    <Box pt="xl">
+      <AddPromptForm
+        onCategorySelected={handleCategorySelected}
+        onPromptAdded={handleOnPromptAdded}
+      />
       <Divider my={12} />
-      <PromptList data={prompts} />
-    </>
+      <PromptList data={filteredPrompts} />
+    </Box>
   );
 };
