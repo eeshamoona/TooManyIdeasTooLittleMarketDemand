@@ -175,6 +175,32 @@ export default function TrackedTextarea({
     const elapsedTime = startTime ? (Date.now() - startTime) / 1000 : 0;
     setStartTime(null);
     stats["elapsedTime"] = elapsedTime;
+    let ai_feedback = {};
+
+    try {
+      const aiFeedbackData = await fetch("/api/getAiFeedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          response: combinedResponse,
+          category: categoryText,
+          prompt: promptText,
+        }),
+      });
+      const generatedJson = await aiFeedbackData.json();
+      console.log("Raw AI Feedback Data:", generatedJson);
+
+      try {
+        ai_feedback = JSON.parse(generatedJson["aiFeedback"]);
+        console.log("Parsed AI Feedback JSON:", ai_feedback);
+      } catch (error) {
+        console.error("Error parsing AI Feedback JSON:", error);
+      }
+    } catch (error) {
+      console.error("Error calling API:", error);
+    }
 
     try {
       const saveResponse = await fetch("/api/saveEntry", {
@@ -189,6 +215,7 @@ export default function TrackedTextarea({
           character_data: characters,
           metadata_stats: stats,
           word_freq: sortedWordFreqDict,
+          ai_feedback,
         }),
       });
       const data = await saveResponse.json();

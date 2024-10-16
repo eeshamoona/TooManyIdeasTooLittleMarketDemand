@@ -1,7 +1,7 @@
 import { Box, Container, Text } from "@mantine/core";
 import { createClient } from "../../utils/supabase/server";
 import DisplayText from "./components/display";
-import { StatsGrid3 } from "./components/stats-grid";
+import Info from "./components/info";
 
 export default async function ReadPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -39,11 +39,12 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
           username={username}
         />
       </Box>
-
-      {/* Stats grids at the bottom */}
-      <Box mt="md" style={{ flexShrink: 0 }}>
-        <StatsGrid3 stats={data.metadata_stats} />
-      </Box>
+      <Info
+        entry={{
+          metadata_stats: data.metadata_stats,
+          ai_feedback: data.ai_feedback,
+        }}
+      />
     </Container>
   );
 }

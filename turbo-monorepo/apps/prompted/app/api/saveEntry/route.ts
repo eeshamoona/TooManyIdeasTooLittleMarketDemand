@@ -10,6 +10,7 @@ export async function POST(request: Request) {
       word_freq,
       character_data,
       prompt,
+      ai_feedback,
     } = await request.json();
 
     if (!text || !category || !metadata_stats || !prompt) {
@@ -45,6 +46,7 @@ export async function POST(request: Request) {
           prompt,
           character_data,
           word_freq,
+          ai_feedback,
           user_id: user.id,
         },
       ])
