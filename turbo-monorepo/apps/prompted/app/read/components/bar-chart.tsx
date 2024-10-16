@@ -39,10 +39,12 @@ const StatProgress: React.FC<StatProgressProps> = ({
   return (
     <>
       <Flex mt="sm" gap={"sm"} align={"center"}>
-        <Text fw={"bold"}>Total Characters:</Text>
-        <Text>{totalCharacters}</Text>
+        <Text size="sm" fw={"bold"}>
+          Total Characters:
+        </Text>
+        <Text size="sm">{totalCharacters}</Text>
       </Flex>
-      <Progress.Root size="xl">
+      <Progress.Root size="lg">
         <Tooltip label={`${userCharacters} characters`} position="bottom">
           <Progress.Section
             value={userCharacters}
@@ -60,10 +62,12 @@ const StatProgress: React.FC<StatProgressProps> = ({
       </Progress.Root>
 
       <Flex mt="sm" gap={"sm"} align={"center"}>
-        <Text fw={"bold"}>Total Words:</Text>
-        <Text>{totalWords}</Text>
+        <Text size="sm" fw={"bold"}>
+          Total Words:
+        </Text>
+        <Text size="sm">{totalWords}</Text>
       </Flex>
-      <Progress.Root size="xl">
+      <Progress.Root size="lg">
         <Tooltip label={`${uniqueWordCount} unique words`} position="bottom">
           <Progress.Section
             value={uniqueWordPercentage}

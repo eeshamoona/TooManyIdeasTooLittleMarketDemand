@@ -13,8 +13,8 @@ import {
 } from "@mantine/core";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
-import { useRouter } from "next/navigation";
-import { LuAward, LuBookOpen, LuPencil, LuPlusCircle } from "react-icons/lu";
+import { useRouter, usePathname } from "next/navigation";
+import { LuAward, LuBookOpen, LuPencil, LuPlus } from "react-icons/lu";
 import { handleLogout } from "./logout/logoutClient";
 import { forwardRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
@@ -106,6 +106,9 @@ export function CustomAppShell({
   const [opened, { toggle }] = useDisclosure();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isActive = (path: string) => pathname === path;
 
   return (
     <AppShell
@@ -132,7 +135,7 @@ export function CustomAppShell({
             {isLoggedIn && (
               <Group gap={"sm"} visibleFrom="sm">
                 <Button
-                  variant="subtle"
+                  variant={isActive("/write") ? "light" : "subtle"}
                   leftSection={
                     <LuPencil style={{ width: "1rem", height: "1rem" }} />
                   }
@@ -141,7 +144,7 @@ export function CustomAppShell({
                   Write
                 </Button>
                 <Button
-                  variant="subtle"
+                  variant={isActive("/read") ? "light" : "subtle"}
                   leftSection={
                     <LuBookOpen style={{ width: "1rem", height: "1rem" }} />
                   }
@@ -149,23 +152,24 @@ export function CustomAppShell({
                 >
                   Read
                 </Button>
+
                 <Button
-                  variant="subtle"
-                  leftSection={
-                    <LuPlusCircle style={{ width: "1rem", height: "1rem" }} />
-                  }
-                  onClick={() => router.push("/write/more")}
-                >
-                  Add
-                </Button>
-                <Button
-                  variant="subtle"
+                  variant={isActive("/progress") ? "light" : "subtle"}
                   leftSection={
                     <LuAward style={{ width: "1rem", height: "1rem" }} />
                   }
                   onClick={() => router.push("/progress")}
                 >
                   Progress
+                </Button>
+                <Button
+                  variant={isActive("/write/more") ? "light" : "subtle"}
+                  leftSection={
+                    <LuPlus style={{ width: "1rem", height: "1rem" }} />
+                  }
+                  onClick={() => router.push("/write/more")}
+                >
+                  Add
                 </Button>
               </Group>
             )}
@@ -193,34 +197,32 @@ export function CustomAppShell({
 
       <AppShell.Navbar py="md" px={4}>
         <Button
-          variant="light"
+          variant={isActive("/write") ? "filled" : "light"}
           leftSection={<LuPencil style={{ width: "1rem", height: "1rem" }} />}
           onClick={() => router.push("/write")}
         >
           Write
         </Button>
         <Button
-          variant="light"
+          variant={isActive("/read") ? "filled" : "light"}
           leftSection={<LuBookOpen style={{ width: "1rem", height: "1rem" }} />}
           onClick={() => router.push("/read")}
         >
           Read
         </Button>
         <Button
-          variant="light"
-          leftSection={
-            <LuPlusCircle style={{ width: "1rem", height: "1rem" }} />
-          }
-          onClick={() => router.push("/write/more")}
-        >
-          Add
-        </Button>
-        <Button
-          variant="light"
+          variant={isActive("/progress") ? "filled" : "light"}
           leftSection={<LuAward style={{ width: "1rem", height: "1rem" }} />}
           onClick={() => router.push("/progress")}
         >
           Progress
+        </Button>
+        <Button
+          variant={isActive("/write/more") ? "filled" : "light"}
+          leftSection={<LuPlus style={{ width: "1rem", height: "1rem" }} />}
+          onClick={() => router.push("/write/more")}
+        >
+          Add
         </Button>
       </AppShell.Navbar>
 

@@ -4,7 +4,6 @@ import {
   Select,
   Group,
   Divider,
-  useMantineColorScheme,
   Center,
   SelectProps,
   Text,
@@ -15,7 +14,7 @@ import { useState } from "react";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import TrackedTextarea from "./tracked-textarea";
 import { PromptList } from "./prompt-list";
-import { FaCheck, FaCog } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { TbWriting } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
@@ -34,7 +33,6 @@ export default function Display({ prompts }: DisplayProps) {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { colorScheme } = useMantineColorScheme();
 
   const handleFilterChange = (value: string) => {
     const filtered = prompts.filter((prompt) => prompt.category === value);
@@ -60,7 +58,7 @@ export default function Display({ prompts }: DisplayProps) {
 
   const leftSectionIcon = () => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === selectedCategory,
+      (cat) => cat.title === selectedCategory
     );
 
     const Icon = category?.icon;
@@ -80,7 +78,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -132,23 +130,15 @@ export default function Display({ prompts }: DisplayProps) {
 
   return (
     <>
-      <Group mt="xl" style={{ justifyContent: "flex-end" }} gap="0">
+      <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0">
         <Button
-          variant="subtle"
+          variant="outline"
           px={"sm"}
           color={"blue"}
           onClick={() => router.push("read")}
           leftSection={<LuLayoutDashboard />}
         >
           View All
-        </Button>
-        <Button
-          variant="subtle"
-          px={"sm"}
-          color={colorScheme === "dark" ? "light" : "dark"}
-          onClick={() => router.push("write/more")}
-        >
-          <FaCog />
         </Button>
       </Group>
 
