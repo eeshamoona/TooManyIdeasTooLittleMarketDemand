@@ -48,7 +48,7 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
     item.text.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const rows = filteredData.map((row: Prompt) => {
+  const rows = filteredData.map((row: Prompt, index: number) => {
     const category = NEW_PROMPT_CATEGORIES.find(
       (cat) => cat.title === row.category,
     );
@@ -57,6 +57,7 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
 
     return (
       <Table.Tr key={row.text}>
+        <Table.Td>{index + 1}</Table.Td>
         <Table.Td
           style={{
             whiteSpace: "nowrap",
@@ -114,13 +115,14 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
           scrollHideDelay={0}
         >
           <Table
-            horizontalSpacing="xl"
-            verticalSpacing="md"
+            horizontalSpacing="sm" // Reduced horizontal spacing
+            verticalSpacing="sm" // Reduced vertical spacing
             stickyHeader
             highlightOnHover
           >
             <Table.Thead>
               <Table.Tr>
+                <Th>#</Th>
                 <Th>Category</Th>
                 <Th>Prompt</Th>
               </Table.Tr>
@@ -130,7 +132,7 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
                 rows
               ) : (
                 <Table.Tr>
-                  <Table.Td colSpan={Object.keys(data[0]).length}>
+                  <Table.Td colSpan={Object.keys(data[0]).length + 1}>
                     <Text fw={500} ta="center">
                       Nothing found
                     </Text>

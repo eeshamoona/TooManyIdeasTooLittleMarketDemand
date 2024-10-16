@@ -82,7 +82,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         Search
       </Button>
       <Button
-        variant="subtle"
+        variant="outline"
         leftSection={<TiPencil />}
         onClick={() => router.push("/write")}
       >

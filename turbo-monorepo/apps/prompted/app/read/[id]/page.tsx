@@ -1,4 +1,4 @@
-import { Box, Container, Text } from "@mantine/core";
+import { Container, Text } from "@mantine/core";
 import { createClient } from "../../utils/supabase/server";
 import DisplayText from "./components/display";
 import Info from "./components/info";
@@ -23,22 +23,25 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
 
   return (
     <Container
-      style={{ height: "85vh", display: "flex", flexDirection: "column" }}
+      style={{
+        width: "100vw",
+        height: "90vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
-      <Box style={{ flex: 1, overflow: "hidden" }}>
-        <DisplayText
-          data={{
-            text: data.text,
-            character_data: data.character_data,
-            prompt: data.prompt,
-            word_freq: data.word_freq,
-            metadata_stats: data.metadata_stats,
-            category: data.category,
-            created_at: data.created_at,
-          }}
-          username={username}
-        />
-      </Box>
+      <DisplayText
+        data={{
+          text: data.text,
+          character_data: data.character_data,
+          prompt: data.prompt,
+          word_freq: data.word_freq,
+          metadata_stats: data.metadata_stats,
+          category: data.category,
+          created_at: data.created_at,
+        }}
+        username={username}
+      />
       <Info
         entry={{
           metadata_stats: data.metadata_stats,
