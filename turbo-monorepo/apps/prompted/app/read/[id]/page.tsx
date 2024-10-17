@@ -1,7 +1,6 @@
 import { Container, Text } from "@mantine/core";
 import { createClient } from "../../utils/supabase/server";
 import DisplayText from "./components/display";
-import Info from "./components/info";
 
 export default async function ReadPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -25,7 +24,7 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
     <Container
       style={{
         width: "100vw",
-        height: "90vh",
+        height: "85vh",
         display: "flex",
         flexDirection: "column",
       }}
@@ -39,14 +38,9 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
           metadata_stats: data.metadata_stats,
           category: data.category,
           created_at: data.created_at,
-        }}
-        username={username}
-      />
-      <Info
-        entry={{
-          metadata_stats: data.metadata_stats,
           ai_feedback: data.ai_feedback,
         }}
+        username={username}
       />
     </Container>
   );

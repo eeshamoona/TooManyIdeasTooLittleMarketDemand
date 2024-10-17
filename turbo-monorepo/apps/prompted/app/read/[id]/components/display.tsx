@@ -1,16 +1,17 @@
 "use client";
 import {
   ActionIcon,
+  Badge,
   Box,
   Button,
+  Divider,
   Group,
-  Paper,
   Title,
   Text,
-  Divider,
-  Badge,
-  Flex,
   useMantineColorScheme,
+  Tooltip,
+  Flex,
+  Paper,
 } from "@mantine/core";
 import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
@@ -18,11 +19,12 @@ import { Character } from "../../../write/components/tracked-textarea";
 import { useRouter } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { StatsProps } from "./stats-grid";
-import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 import { convertTimeToDescription } from "../../../write/actions";
+import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 import { RiBubbleChartLine } from "react-icons/ri";
 import { RiBubbleChartFill } from "react-icons/ri";
 import MatterCircles from "./bubbles";
+import Info from "./info";
 
 interface DisplayTextProps {
   data: {
@@ -33,17 +35,18 @@ interface DisplayTextProps {
     prompt: string;
     category: string;
     created_at: string;
+    ai_feedback: any;
   };
   username: string;
 }
 
-export default function DisplayText({ data, username }: DisplayTextProps) {
+export default function DisplayText({ data }: DisplayTextProps) {
   const [showAIParts, setShowAIParts] = useState(false);
   const [showWordFreq, setShowWordFreq] = useState(false);
   const router = useRouter();
   const { colorScheme } = useMantineColorScheme();
 
-  const handleToggleStats = () => {
+  const handleToggleAiParts = () => {
     if (showWordFreq) {
       setShowWordFreq(false);
     }
@@ -58,56 +61,22 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category,
+    (cat) => cat.title === data.category
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
 
-  return (
-    <Flex direction={"column"} style={{ height: "100%" }}>
-      <Box
-        my={"md"}
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          variant="outline"
-          leftSection={<LuLayoutDashboard />}
-          onClick={() => router.push("/read")}
-        >
-          View All
-        </Button>
-        <ActionIcon.Group variant="subtle">
-          {data.metadata_stats.aiCallCount > 0 && (
-            <ActionIcon
-              onClick={handleToggleStats}
-              color={showAIParts ? "grape" : "gray"}
-              variant="subtle"
-            >
-              {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
-            </ActionIcon>
-          )}
-          <ActionIcon
-            onClick={handleToggleWordFreq}
-            color={!showWordFreq ? "gray" : "blue"}
-            variant="subtle"
-          >
-            {showWordFreq ? <RiBubbleChartFill /> : <RiBubbleChartLine />}
-          </ActionIcon>
-        </ActionIcon.Group>
-      </Box>
+  const Header = () => (
+    <>
       <Title order={2}>{data.prompt}</Title>
-      <Group justify="space-between" mt={"xs"} mb="md" align="center">
-        <Group justify="start">
+      <Group justify="space-between" my="sm" align="center">
+        <Group justify="start" align="center">
           <Text size="sm" c="dimmed">
-            By {username}
-          </Text>
-          <Divider orientation="vertical" m={0} />
-          <Text size="sm" c="dimmed">
-            {new Date(data.created_at).toLocaleDateString()}
+            {new Date(data.created_at).toLocaleDateString("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            })}
           </Text>
           <Divider orientation="vertical" m={0} />
           <Text size="sm" c="dimmed">
@@ -127,33 +96,112 @@ export default function DisplayText({ data, username }: DisplayTextProps) {
           </Badge>
         )}
       </Group>
-      <Box style={{ flex: 1, overflow: "auto" }}>
+    </>
+  );
+
+  const Body = () => {
+    return (
+      <>
         {showWordFreq ? (
           <MatterCircles word_freq={data.word_freq} colorScheme={colorScheme} />
         ) : (
-          <Paper style={{ height: "100%", overflowY: "auto" }}>
-            {!showAIParts
-              ? data.text
-              : data.character_data.map((char: Character, index: number) => (
-                  <span
-                    key={index}
-                    style={{
-                      color:
-                        char.type === "AI"
-                          ? "var(--mantine-color-grape-light-color)"
-                          : "",
-                      backgroundColor:
-                        char.type === "AI"
-                          ? "var(--mantine-color-grape-light-hover)"
-                          : "transparent",
-                    }}
-                  >
-                    {char.value}
-                  </span>
-                ))}
-          </Paper>
+          <Box
+            style={{ height: "100%", display: "flex", flexDirection: "column" }}
+          >
+            <Paper style={{ height: "100%", overflowY: "auto" }}>
+              {!showAIParts
+                ? data.text
+                : data.character_data.map((char, index) => (
+                    <span
+                      key={index}
+                      style={{
+                        color:
+                          char.type === "AI"
+                            ? "var(--mantine-color-grape-light-color)"
+                            : "",
+                        backgroundColor:
+                          char.type === "AI"
+                            ? "var(--mantine-color-grape-light-hover)"
+                            : "transparent",
+                      }}
+                    >
+                      {char.value}
+                    </span>
+                  ))}
+            </Paper>
+            <Box>
+              <Info
+                entry={{
+                  metadata_stats: data.metadata_stats,
+                  ai_feedback: data.ai_feedback,
+                }}
+              />
+            </Box>
+          </Box>
         )}
+      </>
+    );
+  };
+
+  return (
+    <>
+      <Box
+        mt={"md"}
+        mb="md"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "end",
+        }}
+      >
+        <Button
+          variant="outline"
+          leftSection={<LuLayoutDashboard />}
+          onClick={() => router.push("/read")}
+        >
+          View All
+        </Button>
+        <Group justify="end">
+          <ActionIcon.Group variant="subtle">
+            <Tooltip
+              label={
+                data.metadata_stats.aiCallCount <= 0
+                  ? "No AI to show!"
+                  : "Show AI parts"
+              }
+              position="left"
+            >
+              <ActionIcon
+                onClick={handleToggleAiParts}
+                disabled={data.metadata_stats.aiCallCount <= 0}
+                color={!showAIParts ? "gray" : "grape"}
+                variant="subtle"
+              >
+                {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}
+              </ActionIcon>
+            </Tooltip>
+
+            <ActionIcon
+              onClick={handleToggleWordFreq}
+              color={!showWordFreq ? "gray" : "orange"}
+              variant="subtle"
+            >
+              {showWordFreq ? <RiBubbleChartFill /> : <RiBubbleChartLine />}
+            </ActionIcon>
+          </ActionIcon.Group>
+        </Group>
       </Box>
-    </Flex>
+      <Header />
+      <Flex
+        style={{
+          display: "flex",
+          flex: 1,
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Body />
+      </Flex>
+    </>
   );
 }

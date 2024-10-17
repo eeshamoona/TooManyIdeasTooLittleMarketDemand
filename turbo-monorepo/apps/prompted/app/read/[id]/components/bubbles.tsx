@@ -44,7 +44,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       sceneRef.current.clientHeight / 2,
       THICCNESS,
       sceneRef.current.clientHeight,
-      { isStatic: true },
+      { isStatic: true }
     );
 
     const rightWall = Matter.Bodies.rectangle(
@@ -52,7 +52,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       sceneRef.current.clientHeight / 2,
       THICCNESS,
       sceneRef.current.clientHeight,
-      { isStatic: true },
+      { isStatic: true }
     );
 
     const ceiling = Matter.Bodies.rectangle(
@@ -60,16 +60,16 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       0 - THICCNESS / 2,
       sceneRef.current.clientWidth,
       THICCNESS,
-      { isStatic: true },
+      { isStatic: true }
     );
 
     const maxFreq = Math.max(...Object.values(word_freq));
 
-    const MIN_SIZE = 15; // Reduced minimum size for the circles
-    const MAX_SIZE = 75; // Reduced maximum size for the circles
+    // const MIN_SIZE = 15; // Reduced minimum size for the circles
+    // const MAX_SIZE = 75; // Reduced maximum size for the circles
 
     const circles = Object.entries(word_freq).map(([word, freq]) => {
-      const size = MIN_SIZE + (freq / maxFreq) * (MAX_SIZE - MIN_SIZE); // Normalize size
+      const size = (freq / maxFreq) * 80;
       const circle = Matter.Bodies.circle(
         Math.random() * sceneRef.current.clientWidth,
         Math.random() * sceneRef.current.clientHeight,
@@ -79,13 +79,13 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
           frictionAir: 0.0001,
           restitution: 0.8,
           render: {
-            fillStyle: colorScheme === "dark" ? "transparent" : "",
-            strokeStyle: colorScheme === "dark" ? "white" : "black",
-            lineWidth: 1,
+            fillStyle: colorScheme === "dark" ? "black" : "",
+            strokeStyle: colorScheme === "dark" ? "black" : "none",
+            lineWidth: 0,
           },
-        },
+        }
       );
-      circle.label = `${word} (${freq})`;
+      circle.label = `${word}`;
       return circle;
     });
 
@@ -94,7 +94,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       sceneRef.current.clientHeight + THICCNESS / 2,
       sceneRef.current.clientWidth,
       THICCNESS,
-      { isStatic: true },
+      { isStatic: true }
     );
 
     Matter.Composite.add(engine.world, [
@@ -114,15 +114,26 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       const context = render.context;
       context.fillStyle = colorScheme === "dark" ? "white" : "black";
 
+      const MIN_FONT_SIZE = 10;
+      const MAX_FONT_SIZE = 36;
+
+      const SLOPE = -4.5;
+      const calculateFontSize = (label: string): number => {
+        const length = label.length;
+        const x = SLOPE * length + MAX_FONT_SIZE;
+        return x < MIN_FONT_SIZE ? MIN_FONT_SIZE : x;
+      };
+
       circles.forEach((circle) => {
         const { position, label } = circle;
-        const fontSize = Math.max(8, 16 - label.length); // Minimum font size is 8px
+        const fontSize = calculateFontSize(label);
         context.font = `${fontSize}px Arial`;
         const textWidth = context.measureText(label).width;
+        const textHeight = fontSize; // Approximate text height as the font size
         context.fillText(
           label,
           position.x - textWidth / 2,
-          position.y + 8, // Adjusted to vertically center the text
+          position.y + textHeight / 4 // Adjusted to vertically center the text
         );
       });
     });
@@ -149,22 +160,22 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
         ground,
         Matter.Vector.create(
           sceneRef.current.clientWidth / 2,
-          sceneRef.current.clientHeight + THICCNESS / 2,
-        ),
+          sceneRef.current.clientHeight + THICCNESS / 2
+        )
       );
       Matter.Body.setPosition(
         leftWall,
         Matter.Vector.create(
           0 - THICCNESS / 2,
-          sceneRef.current.clientHeight / 2,
-        ),
+          sceneRef.current.clientHeight / 2
+        )
       );
       Matter.Body.setPosition(
         rightWall,
         Matter.Vector.create(
           sceneRef.current.clientWidth + THICCNESS / 2,
-          sceneRef.current.clientHeight / 2,
-        ),
+          sceneRef.current.clientHeight / 2
+        )
       );
       Matter.Render.setPixelRatio(render, window.devicePixelRatio);
     };
@@ -191,7 +202,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       ref={sceneRef}
       style={{
         width: "100%",
-        height: "75%",
+        height: "80%",
       }}
     />
   );
