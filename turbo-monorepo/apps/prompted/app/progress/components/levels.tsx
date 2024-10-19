@@ -38,7 +38,10 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
             <div>{PBadge.badges.description}</div>
             <Group align="center">
               <Text>{PBadge.progressInfo.lowThreshold}</Text>
-              <Tooltip label={`${PBadge.progress}`} withArrow>
+              <Tooltip
+                label={`${PBadge.progress} ${PBadge.badges.label}`}
+                withArrow
+              >
                 <Progress flex={1} value={PBadge.progressInfo.progressValue} />
               </Tooltip>
               <Text>{PBadge.progressInfo.highThreshold}</Text>

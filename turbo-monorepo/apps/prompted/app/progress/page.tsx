@@ -15,6 +15,7 @@ export default async function Read() {
       title,
       criteria,
       description,
+      label,
       thresholds,
       icon
     )
@@ -30,14 +31,22 @@ export default async function Read() {
     // Handle the error appropriately, e.g., show a message to the user
   }
 
-  // Go through each progress entry and calcaulte the progress and achievement
-  //First you need to join badges table with progress table
-  //Then you need to calculate the progress based on the criteria in the badges table
-  // Get progress data by evaluating the criteria function using data
   progressData.forEach(async (progress) => {
-    // Get the badge criteria
+    //Need to make sure entries array is called data
+    //Also need this variable beelow
+    // eslint-disable-next-line no-unused-vars
+    const timezoneOffset = new Date().getTimezoneOffset() / 60; // Gets timezone offset in hours
+
     const criteria = progress.badges.criteria;
-    const criteriaFunction = eval(`(${criteria})`);
+    let criteriaFunction = null;
+
+    try {
+      criteriaFunction = eval(`${criteria}`);
+    } catch (err) {
+      console.log("Criteria:", criteria);
+      console.error("Error evaluating criteria function:", err);
+      return;
+    }
 
     // Evaluate the criteria function using the progress data
     const progressValue = criteriaFunction;
@@ -45,8 +54,10 @@ export default async function Read() {
     let hasChanges = false;
 
     if (!progress.hasLevels) {
-      if (progressValue !== null && !progress.achieved) {
-        // Save the achievement as true for this progress entry
+      if (progressValue === null && progress.achieved === true) {
+        progress.achieved = false;
+        hasChanges = true;
+      } else if (progressValue !== null && progress.achieved === false) {
         progress.achieved = true;
         hasChanges = true;
       }
@@ -85,8 +96,6 @@ export default async function Read() {
       } catch (err) {
         console.error("Unexpected error:", err);
       }
-    } else {
-      // console.log("No changes detected for progress entry:", progress.id);
     }
   });
 

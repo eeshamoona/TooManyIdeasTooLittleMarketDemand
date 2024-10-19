@@ -7,6 +7,7 @@ export interface BadgeModel {
   title: string;
   description: string;
   criteria: string;
+  label: string;
   thresholds: any[] | null;
   hasLevels: boolean;
 }
