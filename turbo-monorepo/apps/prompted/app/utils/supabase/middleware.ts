@@ -5,8 +5,6 @@ import { NextResponse, type NextRequest } from "next/server";
 const publicRoutes = ["/", "/signup", "/login", "/error"];
 
 export async function updateSession(request: NextRequest) {
-  console.log("Middleware updateSession is being run");
-
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -21,17 +19,17 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
+            request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            supabaseResponse.cookies.set(name, value, options)
           );
         },
       },
-    },
+    }
   );
 
   // IMPORTANT: Avoid writing any logic between createServerClient and

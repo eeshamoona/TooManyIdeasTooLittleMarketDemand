@@ -79,20 +79,14 @@ export default async function Read() {
         hasLevels: progress.hasLevels,
       };
 
-      // Save the progress entry
-      console.log("Found changes:", savedProgress);
       // Update only the progress and achieved fields in the progress table for this progress entry
       try {
-        const { data, error } = await supabase
-          .from("progress")
-          .upsert(savedProgress);
+        const { error } = await supabase.from("progress").upsert(savedProgress);
 
         if (error) {
           console.error("Error upserting progress:", error);
           return;
         }
-
-        console.log("Progress upserted successfully:", data);
       } catch (err) {
         console.error("Unexpected error:", err);
       }

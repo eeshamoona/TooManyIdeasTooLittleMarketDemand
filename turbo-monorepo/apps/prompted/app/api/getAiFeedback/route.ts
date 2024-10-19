@@ -54,10 +54,8 @@ export async function POST(request: Request) {
       },
     });
 
-    console.log("Received response from OpenAI API:", openaiResponse);
 
     const aiFeedback = openaiResponse.choices[0].message.content.trim();
-    console.log("Generated sentence:", aiFeedback);
 
     return NextResponse.json({ aiFeedback }, { status: 200 });
   } catch (error) {

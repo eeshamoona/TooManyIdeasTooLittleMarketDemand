@@ -45,7 +45,8 @@ export default function TrackedTextarea({
   const [startTime, setStartTime] = useState<number | null>(null);
   const [aiCallCount, setAICallCount] = useState<number>(0);
   const [aiLoading, { open: openAi, close: closeAi }] = useDisclosure();
-  const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  // const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
   //TODO: Debounce the user input for better performance
@@ -93,7 +94,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -137,7 +138,7 @@ export default function TrackedTextarea({
 
     // Convert the dictionary to an array of tuples [word, frequency]
     const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
 
     // Convert back to an object and return
@@ -253,7 +254,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =
@@ -268,10 +269,9 @@ export default function TrackedTextarea({
   };
 
   const handleSaveResponse = () => {
-    openSave();
-    console.log("Saving response...");
+    setIsSaving(true);
     saveEntry();
-    closeSave();
+    setIsSaving(false);
   };
 
   const handleSaveAndClearResponse = () => {
@@ -390,7 +390,7 @@ export default function TrackedTextarea({
           Clear
         </Button>
         <Button
-          loading={saveLoading}
+          loading={isSaving}
           variant="solid"
           onClick={handleSaveResponse}
           disabled={combinedResponse.trim() === ""}

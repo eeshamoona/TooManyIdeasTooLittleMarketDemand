@@ -11,7 +11,10 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
     <Container>
       <Grid>
         {badges.map((badge) => (
-          <Grid.Col key={badge.id} span={4}>
+          <Grid.Col
+            key={badge.id}
+            span={{ base: 6, xs: 4, sm: 3, md: 3, lg: 3, xl: 3 }}
+          >
             <MilestoneBadge
               title={badge.badges.title}
               hidden={!badge.achieved}
