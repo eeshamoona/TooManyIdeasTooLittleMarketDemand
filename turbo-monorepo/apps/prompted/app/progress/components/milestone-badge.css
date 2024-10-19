@@ -5,7 +5,6 @@
   height: 8.66em; /* width * sqrt(3)/2 for a perfect hexagon */
   border-radius: 0.5em/0.25em;
   background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
-  color: #ffb300;
   transition:
     opacity 0.5s,
     box-shadow 150ms ease,
@@ -14,7 +13,6 @@
 }
 
 .hex:hover {
-  cursor: pointer;
   scale: 1.05;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Added slight shadow */
 }
@@ -32,14 +30,12 @@
 .hex:before {
   transform: rotate(60deg);
   background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
-  color: #ffb300;
   /* Slightly different gradient for design effect */
 }
 
 .hex:after {
   transform: rotate(-60deg);
   background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
-  color: #ffb300;
 }
 
 .new-icon-container {
@@ -50,23 +46,12 @@
   color: black;
   z-index: 2;
   align-items: center;
-  width: 4em;
+  width: 4.5em;
   top: 10%;
-  left: 12.5%;
+  left: 6%;
   background-color: white;
   aspect-ratio: 1;
   border-radius: 50%;
-}
-
-.title-container {
-  position: absolute;
-  top: 30%;
-  text-align: center;
-  color: #000;
-  z-index: 2;
-  width: 100%;
-  height: 70%;
-  align-content: center;
 }
 
 .ribbon {
@@ -75,7 +60,7 @@
   padding: 5px 5px 4px;
   width: 12em;
   z-index: 11;
-  bottom: 1.25em;
+  bottom: 1em;
   left: -55%;
   font-size: 14px;
   background-color: var(--app-shell-border-color);

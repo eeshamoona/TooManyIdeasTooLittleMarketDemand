@@ -1,5 +1,13 @@
 import React from "react";
-import { Progress, Group, Text, Tooltip, Card, Grid } from "@mantine/core"; // Using Mantine's ProgressBar component
+import {
+  Progress,
+  Group,
+  Text,
+  Tooltip,
+  Card,
+  Grid,
+  useMantineTheme,
+} from "@mantine/core";
 import { getProgressInfo, ProgressModel } from "../interface";
 import LevelBadge from "./level-badge";
 import { IoIosInfinite } from "react-icons/io";
@@ -11,11 +19,12 @@ interface LevelProgressPageProps {
 const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
   progressBadgeData,
 }) => {
+  const theme = useMantineTheme();
   const renderContent = () => {
     const enhancedProgressData = progressBadgeData.map((PBadge) => {
       const progressInfo = getProgressInfo(
         PBadge.progress,
-        PBadge.badges.thresholds
+        PBadge.badges.thresholds,
       );
       return {
         ...PBadge,
@@ -24,7 +33,7 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
     });
     enhancedProgressData.sort((a, b) => {
       if (a.progressInfo.level >= 6 || b.progressInfo.level >= 6) {
-        return 0; // Do not sort if either level is >= 6
+        return 0;
       }
       return b.progressInfo.progressValue - a.progressInfo.progressValue;
     });
@@ -34,7 +43,20 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
           key={PBadge.id}
           span={{ base: 8, xs: 6, sm: 4, md: 3, lg: 3, xl: 3 }}
         >
-          <Card shadow="md" padding="lg" radius="md" withBorder>
+          <Card
+            shadow="md"
+            padding="lg"
+            radius="md"
+            withBorder
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = theme.shadows.md;
+              e.currentTarget.style.transform = "scale(1.02)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
             <Group justify="center" align="center" gap="xs">
               {/* Level Badge with Icon */}
               <LevelBadge
@@ -51,23 +73,30 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
                 </Text>
               </div>
             </Group>
-
-            {/* Progress Bar with Tooltip */}
-            <Group align="center" mt="md" gap="xs">
+            <Group
+              align="center"
+              my="md"
+              gap="xs"
+              style={{
+                cursor: "pointer",
+              }}
+            >
               <Text size="sm" fw={500}>
                 {PBadge.progressInfo.lowThreshold}
               </Text>
               <Tooltip
+                bg={"transparent"}
                 label={`${PBadge.progress} ${PBadge.badges.label}`}
                 withArrow
+                color="gray"
+                position="bottom"
               >
-                <Progress
-                  flex={1}
-                  size="sm"
-                  value={PBadge.progressInfo.progressValue}
-                  color="blue"
-                  radius="sm"
-                />
+                <Progress.Root size={8} flex={1} radius="sm">
+                  <Progress.Section
+                    value={PBadge.progressInfo.progressValue}
+                    color="blue"
+                  ></Progress.Section>
+                </Progress.Root>
               </Tooltip>
               <Text size="sm" fw={500}>
                 {PBadge.progressInfo.highThreshold === Infinity ? (
@@ -77,6 +106,7 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
                 )}
               </Text>
             </Group>
+            {/* </Tooltip> */}
           </Card>
         </Grid.Col>
       );

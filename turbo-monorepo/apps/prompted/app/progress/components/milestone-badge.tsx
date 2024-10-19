@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { icon_map } from "../interface";
 import "./milestone-badge.css";
 import { FaQuestionCircle } from "react-icons/fa";
-import { Text, useMantineColorScheme } from "@mantine/core";
+import { Text } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 
 interface MilestoneBadgeProps {
   hidden?: boolean;
@@ -19,8 +20,7 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
   description,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { colorScheme } = useMantineColorScheme();
-  const textColor = colorScheme === "dark" ? "gray" : "dark";
+  const [debouncedHovered] = useDebouncedValue(isHovered, 10);
 
   let IconComponent = icon_map[icon];
 
@@ -54,7 +54,7 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleOnClick}
     >
-      {isHovered ? (
+      {debouncedHovered ? (
         <div className={`description-container ${hidden ? "hidden" : ""}`}>
           <Text span style={{ fontSize: "1em" }}>
             {hidden ? "Write more to unlock this!" : description}
@@ -66,7 +66,7 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
             {IconComponent && <IconComponent size={hidden ? 48 : 32} />}
           </div>
           <div className={`ribbon ${hidden ? "hidden" : ""}`}>
-            <Text c={textColor} span style={{ fontSize }}>
+            <Text span style={{ fontSize }}>
               {title}
             </Text>
           </div>

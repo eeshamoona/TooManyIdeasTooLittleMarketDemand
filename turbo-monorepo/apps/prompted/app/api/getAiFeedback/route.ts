@@ -54,7 +54,6 @@ export async function POST(request: Request) {
       },
     });
 
-
     const aiFeedback = openaiResponse.choices[0].message.content.trim();
 
     return NextResponse.json({ aiFeedback }, { status: 200 });

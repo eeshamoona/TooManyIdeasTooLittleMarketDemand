@@ -26,9 +26,9 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           acc[category.title] = { category: category.title, count: 0 };
           return acc;
         },
-        {} as Record<string, { category: string; count: number }>
-      )
-    )
+        {} as Record<string, { category: string; count: number }>,
+      ),
+    ),
   );
   return (
     <Container>

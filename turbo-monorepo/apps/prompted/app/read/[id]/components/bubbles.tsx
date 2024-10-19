@@ -44,7 +44,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       sceneRef.current.clientHeight / 2,
       THICCNESS,
       sceneRef.current.clientHeight,
-      { isStatic: true }
+      { isStatic: true },
     );
 
     const rightWall = Matter.Bodies.rectangle(
@@ -52,7 +52,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       sceneRef.current.clientHeight / 2,
       THICCNESS,
       sceneRef.current.clientHeight,
-      { isStatic: true }
+      { isStatic: true },
     );
 
     const ceiling = Matter.Bodies.rectangle(
@@ -60,7 +60,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       0 - THICCNESS / 2,
       sceneRef.current.clientWidth,
       THICCNESS,
-      { isStatic: true }
+      { isStatic: true },
     );
 
     const maxFreq = Math.max(...Object.values(word_freq));
@@ -83,7 +83,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
             strokeStyle: colorScheme === "dark" ? "black" : "none",
             lineWidth: 0,
           },
-        }
+        },
       );
       circle.label = `${word}`;
       return circle;
@@ -94,7 +94,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
       sceneRef.current.clientHeight + THICCNESS / 2,
       sceneRef.current.clientWidth,
       THICCNESS,
-      { isStatic: true }
+      { isStatic: true },
     );
 
     Matter.Composite.add(engine.world, [
@@ -133,7 +133,7 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
         context.fillText(
           label,
           position.x - textWidth / 2,
-          position.y + textHeight / 4 // Adjusted to vertically center the text
+          position.y + textHeight / 4, // Adjusted to vertically center the text
         );
       });
     });
@@ -160,22 +160,22 @@ const MatterCircles: React.FC<MatterCirclesProps> = ({
         ground,
         Matter.Vector.create(
           sceneRef.current.clientWidth / 2,
-          sceneRef.current.clientHeight + THICCNESS / 2
-        )
+          sceneRef.current.clientHeight + THICCNESS / 2,
+        ),
       );
       Matter.Body.setPosition(
         leftWall,
         Matter.Vector.create(
           0 - THICCNESS / 2,
-          sceneRef.current.clientHeight / 2
-        )
+          sceneRef.current.clientHeight / 2,
+        ),
       );
       Matter.Body.setPosition(
         rightWall,
         Matter.Vector.create(
           sceneRef.current.clientWidth + THICCNESS / 2,
-          sceneRef.current.clientHeight / 2
-        )
+          sceneRef.current.clientHeight / 2,
+        ),
       );
       Matter.Render.setPixelRatio(render, window.devicePixelRatio);
     };

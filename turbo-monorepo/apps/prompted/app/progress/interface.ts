@@ -1,5 +1,41 @@
-import { FaQuestionCircle } from "react-icons/fa";
+import {
+  FaDove,
+  FaQuestionCircle,
+  FaRegCompass,
+  FaRegLightbulb,
+  FaRegStar,
+} from "react-icons/fa";
 import { FaSpaceAwesome } from "react-icons/fa6";
+import { LuGem, LuShrink, LuWholeWord } from "react-icons/lu";
+import {
+  GiEagleHead,
+  GiFinch,
+  GiGems,
+  GiLeafSwirl,
+  GiMagicLamp,
+  GiMagicPalm,
+  GiOwl,
+  GiPuzzle,
+  GiTurtleShell,
+} from "react-icons/gi";
+import { BsSpeedometer } from "react-icons/bs";
+import {
+  TbBallpen,
+  TbLetterCaseUpper,
+  TbUserHexagon,
+  TbUserStar,
+} from "react-icons/tb";
+import { MdManageSearch, MdOutlineCelebration } from "react-icons/md";
+import {
+  IoExtensionPuzzleOutline,
+  IoGameControllerOutline,
+  IoLeafOutline,
+  IoRocketOutline,
+} from "react-icons/io5";
+import { GoTrophy } from "react-icons/go";
+import { LiaHandshake } from "react-icons/lia";
+import { TfiThought } from "react-icons/tfi";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 
 export interface BadgeModel {
   id: string;
@@ -40,8 +76,39 @@ export const getBadgeColor = (level: number) => {
 };
 
 export const icon_map = {
+  BsSpeedometer: BsSpeedometer,
+  FaDove: FaDove,
   FaQuestionCircle: FaQuestionCircle,
+  FaRegCompass: FaRegCompass,
+  FaRegLightbulb: FaRegLightbulb,
+  FaRegStar: FaRegStar,
   FaSpaceAwesome: FaSpaceAwesome,
+  GiEagleHead: GiEagleHead,
+  GiFinch: GiFinch,
+  GiGems: GiGems,
+  GiLeafSwirl: GiLeafSwirl,
+  GiMagicLamp: GiMagicLamp,
+  GiMagicPalm: GiMagicPalm,
+  GiOwl: GiOwl,
+  GiPuzzle: GiPuzzle,
+  GiTurtleShell: GiTurtleShell,
+  GoTrophy: GoTrophy,
+  HiOutlineEmojiHappy: HiOutlineEmojiHappy,
+  IoExtensionPuzzleOutline: IoExtensionPuzzleOutline,
+  IoGameControllerOutline: IoGameControllerOutline,
+  IoLeafOutline: IoLeafOutline,
+  IoRocketOutline: IoRocketOutline,
+  LiaHandshake: LiaHandshake,
+  LuGem: LuGem,
+  LuShrink: LuShrink,
+  LuWholeWord: LuWholeWord,
+  MdManageSearch: MdManageSearch,
+  MdOutlineCelebration: MdOutlineCelebration,
+  TbLetterCaseUpper: TbLetterCaseUpper,
+  TbUserHexagon: TbUserHexagon,
+  TbUserStar: TbUserStar,
+  TfiThought: TfiThought,
+  TbBallpen: TbBallpen,
 };
 
 export const getProgressInfo = (progress: number, thresholds: number[]) => {

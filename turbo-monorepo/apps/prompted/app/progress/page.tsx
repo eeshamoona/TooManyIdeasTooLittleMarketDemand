@@ -7,7 +7,7 @@ export default async function Read() {
 
   const { data, error } = await supabase.from("entries").select();
   const { data: progressData, error: progressError } = await supabase.from(
-    "progress"
+    "progress",
   ).select(`
     *,
     badges (

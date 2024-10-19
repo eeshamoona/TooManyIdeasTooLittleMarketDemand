@@ -61,7 +61,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category
+    (cat) => cat.title === data.category,
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
