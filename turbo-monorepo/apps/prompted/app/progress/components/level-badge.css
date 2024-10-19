@@ -30,8 +30,8 @@
 
 .level-text {
   position: absolute;
-  bottom: 20%;
-  font-size: 12px;
+  bottom: 25%;
+  font-size: 0.8rem;
   text-align: center;
   font-weight: bold;
 }
