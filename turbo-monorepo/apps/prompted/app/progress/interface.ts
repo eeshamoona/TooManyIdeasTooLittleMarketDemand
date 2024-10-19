@@ -25,17 +25,17 @@ export interface ProgressModel {
 export const getBadgeColor = (level: number) => {
   switch (level) {
     case 1:
-      return "#CE8946"; // Bronze
+      return "#F0F4FF"; // Lightest Blue (starting level)
     case 2:
-      return "#C0C0C0"; // Silver
+      return "#BBD2F6"; // Light Blue (progression)
     case 3:
-      return "#FFD700"; // Gold
+      return "#7FA3E9"; // Medium Blue (mid-level)
     case 4:
-      return "#E5E4E2"; // Platinum
+      return "#4A76D8"; // Darker Blue (higher)
     case 5:
-      return "#B9F2FF"; // Diamond
+      return "#2943A8"; // Deep Blue (advanced)
     default:
-      return "#e0115f"; // Ruby Red for levels 6+
+      return "#090f46"; // Dark Charcoal (highest mastery)
   }
 };
 
@@ -62,8 +62,14 @@ export const getProgressInfo = (progress: number, thresholds: number[]) => {
     }
   }
 
-  const progressValue =
-    ((progress - lowThreshold) / (highThreshold - lowThreshold)) * 100;
+  let progressValue = 0;
+  if (highThreshold === Infinity) {
+    progressValue =
+      ((progress - lowThreshold) / (progress + 100 - lowThreshold)) * 100;
+  } else {
+    progressValue =
+      ((progress - lowThreshold) / (highThreshold - lowThreshold)) * 100;
+  }
 
   return { lowThreshold, highThreshold, progressValue, level };
 };

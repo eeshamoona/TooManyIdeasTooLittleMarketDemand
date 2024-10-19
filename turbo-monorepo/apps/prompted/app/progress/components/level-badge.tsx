@@ -11,12 +11,24 @@ const LevelBadge: React.FC<LevelBadgeProps> = ({ level, icon }) => {
   const IconComponent = icon_map[icon];
   const badgeColor = getBadgeColor(level);
 
+  const blackWhiteThreshold = 4;
+
   return (
     <div className="badge-container" style={{ backgroundColor: badgeColor }}>
       <div className="icon-container">
-        {IconComponent && <IconComponent size={24} color="black" />}
+        {IconComponent && (
+          <IconComponent
+            size={24}
+            color={level < blackWhiteThreshold ? "black" : "white"}
+          />
+        )}
       </div>
-      <div className="level-text">Level {level}</div>
+      <div
+        style={{ color: level < blackWhiteThreshold ? "black" : "white" }}
+        className="level-text"
+      >
+        Level {level}
+      </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { icon_map } from "../interface";
 import "./milestone-badge.css";
 import { FaQuestionCircle } from "react-icons/fa";
+import { Text, useMantineColorScheme } from "@mantine/core";
 
 interface MilestoneBadgeProps {
   hidden?: boolean;
@@ -18,6 +19,8 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
   description,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { colorScheme } = useMantineColorScheme();
+  const textColor = colorScheme === "dark" ? "gray" : "dark";
 
   let IconComponent = icon_map[icon];
 
@@ -32,6 +35,18 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
     }
   };
 
+  // Function to determine font size based on title length
+  const getFontSize = (title: string) => {
+    if (title.length <= 5) return "1.5em";
+    if (title.length <= 10) return "1.3em";
+    if (title.length <= 15) return "1.1em";
+    if (title.length <= 20) return "1em";
+    if (title.length <= 20) return "0.9em";
+    if (title.length <= 25) return "0.8em";
+    return "0.7em";
+  };
+  const fontSize = getFontSize(title);
+
   return (
     <div
       className={`hex ${hidden ? "hidden" : ""}`}
@@ -41,15 +56,19 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
     >
       {isHovered ? (
         <div className={`description-container ${hidden ? "hidden" : ""}`}>
-          <span>{hidden ? "Write more to unlock this!" : description}</span>
+          <Text span style={{ fontSize: "1em" }}>
+            {hidden ? "Write more to unlock this!" : description}
+          </Text>
         </div>
       ) : (
         <>
-          <div className={`icon-container ${hidden ? "hidden" : ""}`}>
+          <div className={`new-icon-container ${hidden ? "hidden" : ""}`}>
             {IconComponent && <IconComponent size={hidden ? 48 : 32} />}
           </div>
-          <div className={`title-container ${hidden ? "hidden" : ""}`}>
-            <span>{title}</span>
+          <div className={`ribbon ${hidden ? "hidden" : ""}`}>
+            <Text c={textColor} span style={{ fontSize }}>
+              {title}
+            </Text>
           </div>
         </>
       )}

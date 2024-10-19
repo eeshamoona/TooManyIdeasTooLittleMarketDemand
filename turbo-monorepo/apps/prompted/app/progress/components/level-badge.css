@@ -16,11 +16,21 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.icon-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  z-index: 2;
+  align-items: center;
+  width: 5em;
+  top: 15%;
+}
 .level-text {
   position: absolute;
   bottom: 20%;
   font-size: 12px;
   text-align: center;
-  color: #000;
   font-weight: bold;
 }

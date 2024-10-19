@@ -1,12 +1,13 @@
 .hex {
   position: relative;
   margin: 0.5em auto;
-  width: 5em; /* Reduced width */
-  height: 8.66em; /* Reduced height (width * sqrt(3)/2 for a perfect hexagon) */
-  border-radius: 0.5em/0.25em; /* Adjusted border-radius */
-  background: orange;
-  transition: opacity 0.5s;
+  width: 5em;
+  height: 8.66em; /* width * sqrt(3)/2 for a perfect hexagon */
+  border-radius: 0.5em/0.25em;
+  background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
+  color: #ffb300;
   transition:
+    opacity 0.5s,
     box-shadow 150ms ease,
     transform 100ms ease;
   box-shadow: none;
@@ -24,29 +25,37 @@
   width: inherit;
   height: inherit;
   border-radius: inherit;
-  background: inherit;
+  background: inherit; /* Inherit gradient from .hex */
   content: "";
 }
 
 .hex:before {
-  -webkit-transform: rotate(60deg);
   transform: rotate(60deg);
+  background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
+  color: #ffb300;
+  /* Slightly different gradient for design effect */
 }
 
 .hex:after {
-  -webkit-transform: rotate(-60deg);
   transform: rotate(-60deg);
+  background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
+  color: #ffb300;
 }
 
-.icon-container {
+.new-icon-container {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
   z-index: 2;
-  width: 5em;
-  top: 15%;
+  align-items: center;
+  width: 4em;
+  top: 10%;
+  left: 12.5%;
+  background-color: white;
+  aspect-ratio: 1;
+  border-radius: 50%;
 }
 
 .title-container {
@@ -60,6 +69,24 @@
   align-content: center;
 }
 
+.ribbon {
+  position: absolute;
+  border-radius: 3px;
+  padding: 5px 5px 4px;
+  width: 12em;
+  z-index: 11;
+  bottom: 1.25em;
+  left: -55%;
+  font-size: 14px;
+  background-color: var(--app-shell-border-color);
+  transition:
+    opacity 0.5s,
+    box-shadow 150ms ease,
+    transform 100ms ease;
+  cursor: default;
+  text-align: center;
+}
+
 .description-container {
   position: absolute;
   text-align: center;
@@ -71,15 +98,31 @@
   align-content: center;
 }
 
+/* Correct hidden styles with neutral gradient and overriding yellow styles */
 .hex.hidden {
-  background-color: #d3d3d3; /* Lighter color for locked/disabled state */
+  background: linear-gradient(
+    to bottom right,
+    #e0e0e0 0%,
+    /* Light gray */ #b0b0b0 100% /* Darker gray */
+  );
+  color: #a0a0a0; /* Override yellow color with gray */
   opacity: 0.5; /* Dimmed effect for locked state */
 }
 
-.title-container.hidden {
+.hex.hidden:before,
+.hex.hidden:after {
+  background: linear-gradient(
+    to bottom right,
+    #e0e0e0 0%,
+    /* Light gray */ #b0b0b0 100% /* Darker gray */
+  ); /* Override the yellow gradients */
+  color: #a0a0a0; /* Ensure text color matches for locked state */
+}
+
+.ribbon.hidden {
   display: none; /* Hide the title when badge is locked */
 }
 
-.icon-container.hidden {
-  top: 30%;
+.new-icon-container.hidden {
+  top: 25%;
 }

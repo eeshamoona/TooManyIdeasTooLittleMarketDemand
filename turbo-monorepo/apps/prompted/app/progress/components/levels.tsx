@@ -2,6 +2,7 @@ import React from "react";
 import { Progress, Group, Text, Tooltip, Card, Grid } from "@mantine/core"; // Using Mantine's ProgressBar component
 import { getProgressInfo, ProgressModel } from "../interface";
 import LevelBadge from "./level-badge";
+import { IoIosInfinite } from "react-icons/io";
 
 interface LevelProgressPageProps {
   progressBadgeData: ProgressModel[];
@@ -21,11 +22,12 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
         progressInfo,
       };
     });
-
-    enhancedProgressData.sort(
-      (a, b) => b.progressInfo.progressValue - a.progressInfo.progressValue
-    );
-
+    enhancedProgressData.sort((a, b) => {
+      if (a.progressInfo.level >= 6 || b.progressInfo.level >= 6) {
+        return 0; // Do not sort if either level is >= 6
+      }
+      return b.progressInfo.progressValue - a.progressInfo.progressValue;
+    });
     return enhancedProgressData.map((PBadge) => {
       return (
         <Grid.Col
@@ -68,7 +70,11 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
                 />
               </Tooltip>
               <Text size="sm" fw={500}>
-                {PBadge.progressInfo.highThreshold}
+                {PBadge.progressInfo.highThreshold === Infinity ? (
+                  <IoIosInfinite />
+                ) : (
+                  PBadge.progressInfo.highThreshold
+                )}
               </Text>
             </Group>
           </Card>
