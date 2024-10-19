@@ -53,7 +53,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         </Group>
       </UnstyledButton>
     );
-  },
+  }
 );
 
 function UserMenu({ username }: { username: string }) {
@@ -107,6 +107,8 @@ export function CustomAppShell({
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
   const pathname = usePathname();
+
+  const backgroundColor = colorScheme === "dark" ? "yellow" : "indigo";
 
   const isActive = (path: string) => pathname === path;
 
@@ -175,13 +177,12 @@ export function CustomAppShell({
             )}
             <Group>
               {isLoggedIn && <UserMenu username={metadata.username} />}
-
               <ActionIcon
                 onClick={() => toggleColorScheme()}
-                variant="subtle"
+                variant="transparent"
                 size={37.5}
-                color={colorScheme === "dark" ? "yellow" : "violet"}
                 radius="sm"
+                c={backgroundColor}
                 aria-label="Toggle color scheme"
               >
                 {colorScheme === "dark" ? (

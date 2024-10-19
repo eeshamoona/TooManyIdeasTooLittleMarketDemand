@@ -1,14 +1,37 @@
+"use client";
 import { Tabs } from "@mantine/core";
+import Charts from "./charts";
+import MilestoneBadges from "./milestone";
+import LevelProgressPage from "./levels";
+import { ProgressModel } from "../interface";
 
-export default async function Read() {
+interface DisplayProps {
+  entries: any[];
+  progress: ProgressModel[];
+}
+
+export default function Display({ entries, progress }: DisplayProps) {
+  const level_badges = progress.filter((badge) => badge.hasLevels);
+  const milestone_badges = progress.filter((badge) => !badge.hasLevels);
+
   return (
     <>
       <Tabs defaultValue="first">
-        <Tabs.List justify="center">
-          <Tabs.Tab value="first">First tab</Tabs.Tab>
-          <Tabs.Tab value="second">Second tab</Tabs.Tab>
-          <Tabs.Tab value="third">Third tab</Tabs.Tab>
+        <Tabs.List justify="center" grow>
+          <Tabs.Tab value="levels">Levels</Tabs.Tab>
+          <Tabs.Tab value="milestones">Milestones</Tabs.Tab>
+          <Tabs.Tab value="charts">Charts</Tabs.Tab>
         </Tabs.List>
+
+        <Tabs.Panel value="levels" pt="xs">
+          <LevelProgressPage progressBadgeData={level_badges} />
+        </Tabs.Panel>
+        <Tabs.Panel value="milestones" pt="xs">
+          <MilestoneBadges badges={milestone_badges} />
+        </Tabs.Panel>
+        <Tabs.Panel value="charts" pt="xs">
+          <Charts entries={entries} />
+        </Tabs.Panel>
       </Tabs>
     </>
   );
