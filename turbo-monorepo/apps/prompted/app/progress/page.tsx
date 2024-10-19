@@ -34,7 +34,7 @@ export default async function Read() {
   //First you need to join badges table with progress table
   //Then you need to calculate the progress based on the criteria in the badges table
   // Get progress data by evaluating the criteria function using data
-  progressData.forEach((progress) => {
+  progressData.forEach(async (progress) => {
     // Get the badge criteria
     const criteria = progress.badges.criteria;
     const criteriaFunction = eval(`(${criteria})`);
@@ -42,18 +42,52 @@ export default async function Read() {
     // Evaluate the criteria function using the progress data
     const progressValue = criteriaFunction;
 
+    let hasChanges = false;
+
     if (!progress.hasLevels) {
-      if (progressValue !== null) {
+      if (progressValue !== null && !progress.achieved) {
         // Save the achievement as true for this progress entry
         progress.achieved = true;
+        hasChanges = true;
       }
     } else {
-      // Save the progress value for this progress entry
-      progress.progress = progressValue;
+      if (progress.progress !== progressValue) {
+        // Save the progress value for this progress entry
+        progress.progress = progressValue;
+        hasChanges = true;
+      }
     }
 
-    // Save the progress entry
-    supabase.from("progress").upsert(progress);
+    if (hasChanges) {
+      const savedProgress = {
+        id: progress.id,
+        user_id: progress.user_id,
+        badge_id: progress.badge_id,
+        progress: progress.progress,
+        achieved: progress.achieved,
+        hasLevels: progress.hasLevels,
+      };
+
+      // Save the progress entry
+      console.log("Found changes:", savedProgress);
+      // Update only the progress and achieved fields in the progress table for this progress entry
+      try {
+        const { data, error } = await supabase
+          .from("progress")
+          .upsert(savedProgress);
+
+        if (error) {
+          console.error("Error upserting progress:", error);
+          return;
+        }
+
+        console.log("Progress upserted successfully:", data);
+      } catch (err) {
+        console.error("Unexpected error:", err);
+      }
+    } else {
+      // console.log("No changes detected for progress entry:", progress.id);
+    }
   });
 
   return (
