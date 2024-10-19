@@ -16,7 +16,7 @@ export default function Display({ entries, progress }: DisplayProps) {
 
   return (
     <>
-      <Tabs defaultValue="first">
+      <Tabs defaultValue="levels">
         <Tabs.List justify="center" grow>
           <Tabs.Tab value="levels">Levels</Tabs.Tab>
           <Tabs.Tab value="milestones">Milestones</Tabs.Tab>

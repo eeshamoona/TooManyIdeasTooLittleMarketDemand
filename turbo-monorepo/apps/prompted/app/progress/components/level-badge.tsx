@@ -1,19 +1,22 @@
 import React from "react";
-import { icon_map } from "../interface";
+import { getBadgeColor, icon_map } from "../interface";
+import "./level-badge.css";
 
-interface LevelProgressPageProps {
+interface LevelBadgeProps {
   level: number;
   icon: string;
 }
 
-//Based on the level and icon, render a badge of the level color and icon
-
-const LevelBadge: React.FC<LevelProgressPageProps> = ({ level, icon }) => {
+const LevelBadge: React.FC<LevelBadgeProps> = ({ level, icon }) => {
   const IconComponent = icon_map[icon];
+  const badgeColor = getBadgeColor(level);
+
   return (
-    <div>
-      <div>Level {level}</div>
-      <div>{IconComponent && <IconComponent size={24} />}</div>
+    <div className="badge-container" style={{ backgroundColor: badgeColor }}>
+      <div className="icon-container">
+        {IconComponent && <IconComponent size={24} color="black" />}
+      </div>
+      <div className="level-text">Level {level}</div>
     </div>
   );
 };

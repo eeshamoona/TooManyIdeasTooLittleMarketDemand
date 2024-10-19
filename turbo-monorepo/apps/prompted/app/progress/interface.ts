@@ -21,6 +21,23 @@ export interface ProgressModel {
   badges: BadgeModel;
 }
 
+export const getBadgeColor = (level: number) => {
+  switch (level) {
+    case 1:
+      return "#CE8946"; // Bronze
+    case 2:
+      return "#C0C0C0"; // Silver
+    case 3:
+      return "#FFD700"; // Gold
+    case 4:
+      return "#E5E4E2"; // Platinum
+    case 5:
+      return "#B9F2FF"; // Diamond
+    default:
+      return "#e0115f"; // Ruby Red for levels 6+
+  }
+};
+
 export const icon_map = {
   FaQuestionCircle: FaQuestionCircle,
   FaSpaceAwesome: FaSpaceAwesome,
