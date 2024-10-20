@@ -247,26 +247,24 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
           : "var(--mantine-color-gray-0)"
       }
     >
-      <Stack gap={4} flex={1}>
-        <Group>
-          <Select
-            label="Category"
-            placeholder="Select a category"
-            data={NEW_PROMPT_CATEGORIES.map((category) => ({
-              value: category.title,
-              label: category.title,
-              description: category.description,
-              icon: category.icon,
-            }))}
-            value={category}
-            onChange={handleCategoryChange}
-            required
-            renderOption={renderSelectOption}
-            flex={4}
-            disabled={promptsLoading}
-          />
-        </Group>
-        <Group flex={1} align="center">
+      <Stack flex={1}>
+        <Select
+          label="Category"
+          placeholder="Select a category"
+          data={NEW_PROMPT_CATEGORIES.map((category) => ({
+            value: category.title,
+            label: category.title,
+            description: category.description,
+            icon: category.icon,
+          }))}
+          value={category}
+          onChange={handleCategoryChange}
+          required
+          renderOption={renderSelectOption}
+          flex={4}
+          disabled={promptsLoading}
+        />
+        <Group mt={"sm"} flex={1} align="center">
           {promptsLoading ? (
             <Loader color="pink" type="dots" />
           ) : (
@@ -276,7 +274,6 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
               <Text
                 style={{
                   flex: "1",
-                  fontWeight: "600",
                   fontSize: "14px",
                 }}
               >

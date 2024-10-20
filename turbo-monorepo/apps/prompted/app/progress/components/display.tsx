@@ -16,7 +16,7 @@ export default function Display({ entries, progress }: DisplayProps) {
 
   return (
     <>
-      <Tabs mt="xl" defaultValue="levels" variant="pills">
+      <Tabs mt="xl" defaultValue="levels">
         <Tabs.List justify="center" grow mb="md">
           <Tabs.Tab value="levels">Levels</Tabs.Tab>
           <Tabs.Tab value="milestones">Milestones</Tabs.Tab>
@@ -33,15 +33,17 @@ export default function Display({ entries, progress }: DisplayProps) {
         >
           <LevelProgressPage progressBadgeData={level_badges} />
         </Tabs.Panel>
-        <Tabs.Panel
-          value="milestones"
-          style={{
-            height: "75vh",
-            overflowY: "scroll",
-            overflowX: "hidden",
-          }}
-        >
-          <MilestoneBadges badges={milestone_badges} />
+        <Tabs.Panel value="milestones">
+          <Container
+            fluid
+            style={{
+              height: "75vh",
+              overflowY: "scroll",
+              overflowX: "hidden",
+            }}
+          >
+            <MilestoneBadges badges={milestone_badges} />
+          </Container>
         </Tabs.Panel>
         <Tabs.Panel value="charts">
           <Container
