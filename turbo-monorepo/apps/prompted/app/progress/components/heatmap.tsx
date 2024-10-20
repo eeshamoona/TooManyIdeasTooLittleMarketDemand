@@ -47,7 +47,7 @@ const Heatmap: React.FC<HeatmapProps> = ({ data }) => {
         >
           Previous Year
         </Button>
-        <Text>{year}</Text>
+        <Text fw="bold">{year}</Text>
         <Button
           variant="outline"
           onClick={handleNextYear}

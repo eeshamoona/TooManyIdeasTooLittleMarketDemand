@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { icon_map } from "../interface";
 import "./milestone-badge.css";
 import { FaQuestionCircle } from "react-icons/fa";
-import { Text } from "@mantine/core";
+import { Text, Tooltip } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 
 interface MilestoneBadgeProps {
@@ -35,43 +35,43 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
     }
   };
 
-  // Function to determine font size based on title length
-  const getFontSize = (title: string) => {
-    if (title.length <= 5) return "1.5em";
-    if (title.length <= 10) return "1.3em";
-    if (title.length <= 15) return "1.1em";
-    if (title.length <= 20) return "1em";
-    if (title.length <= 20) return "0.9em";
-    if (title.length <= 25) return "0.8em";
-    return "0.7em";
-  };
-  const fontSize = getFontSize(title);
-
   return (
-    <div
-      className={`hex ${hidden ? "hidden" : ""}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleOnClick}
-    >
-      {debouncedHovered ? (
-        <div className={`description-container ${hidden ? "hidden" : ""}`}>
-          <Text span style={{ fontSize: "1em" }}>
-            {hidden ? "Write more to unlock this!" : description}
-          </Text>
+    <div>
+      <Tooltip
+        disabled={hidden}
+        label={description}
+        position="right"
+        multiline
+        w="auto"
+        maw={150}
+        offset={8}
+        transitionProps={{ transition: "pop" }}
+        openDelay={300}
+      >
+        <div
+          className={`hex ${hidden ? "hidden" : ""}`}
+          style={{
+            cursor: "pointer",
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={handleOnClick}
+        >
+          {debouncedHovered && hidden ? (
+            <div className={`description-container ${hidden ? "hidden" : ""}`}>
+              <Text style={{ fontSize: "1em" }}>
+                {"Write more to unlock this!"}
+              </Text>
+            </div>
+          ) : (
+            <>
+              <div className={`new-icon-container ${hidden ? "hidden" : ""}`}>
+                {IconComponent && <IconComponent size={hidden ? 50 : 36} />}
+              </div>
+            </>
+          )}
         </div>
-      ) : (
-        <>
-          <div className={`new-icon-container ${hidden ? "hidden" : ""}`}>
-            {IconComponent && <IconComponent size={hidden ? 48 : 32} />}
-          </div>
-          <div className={`ribbon ${hidden ? "hidden" : ""}`}>
-            <Text span style={{ fontSize }}>
-              {title}
-            </Text>
-          </div>
-        </>
-      )}
+      </Tooltip>
     </div>
   );
 };

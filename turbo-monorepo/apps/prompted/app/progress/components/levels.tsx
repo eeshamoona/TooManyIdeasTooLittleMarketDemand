@@ -26,7 +26,7 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
     const enhancedProgressData = progressBadgeData.map((PBadge) => {
       const progressInfo = getProgressInfo(
         PBadge.progress,
-        PBadge.badges.thresholds
+        PBadge.badges.thresholds,
       );
       return {
         ...PBadge,
@@ -118,11 +118,7 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
     });
   };
 
-  return (
-    <Grid mt="lg" justify="center">
-      {renderContent()}
-    </Grid>
-  );
+  return <Grid mt="md">{renderContent()}</Grid>;
 };
 
 export default LevelProgressPage;

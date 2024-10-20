@@ -297,53 +297,50 @@ export default function TrackedTextarea({
         <Title m={4} flex={1} order={titleOrder}>
           {promptText}
         </Title>
-        {combinedResponse.length > 0 ? (
-          <>
-            {aiCallCount > 0 && (
-              <Tooltip
-                label="AI-generated text highlighted"
-                aria-label="Character stats tooltip"
-                position="top"
-                withArrow
-                color="gray"
-                transitionProps={{ transition: "fade" }}
-              >
-                <ActionIcon
-                  onMouseEnter={handleStatsMouseDown}
-                  onMouseLeave={handleStatsMouseUp}
-                  color={showStats ? "grape" : "gray"}
-                  variant="light"
-                  size="lg"
-                >
-                  {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-                </ActionIcon>
-              </Tooltip>
-            )}
-            <Tooltip
-              label={
-                combinedResponse.length > 100
-                  ? "Generate AI text"
-                  : "At least 100 characters required"
-              }
-              position="right"
-              withArrow
-              color={combinedResponse.length > 100 ? "grape" : "gray"}
-              transitionProps={{ transition: "fade" }}
+        <>
+          <Tooltip
+            label="Show Stats"
+            aria-label="Character stats tooltip"
+            position="left"
+            withArrow
+            color="gray"
+            transitionProps={{ transition: "fade" }}
+          >
+            <ActionIcon
+              onMouseEnter={handleStatsMouseDown}
+              onMouseLeave={handleStatsMouseUp}
+              color={showStats ? "grape" : "gray"}
+              disabled={characters.length === 0}
+              variant="light"
+              size="lg"
             >
-              <ActionIcon
-                loading={aiLoading}
-                loaderProps={{ type: "dots", size: "xs" }}
-                onClick={handleGenerateClick}
-                disabled={combinedResponse.length <= 100}
-                variant={"filled"}
-                color="grape"
-                size="lg"
-              >
-                <FaWandMagicSparkles />
-              </ActionIcon>
-            </Tooltip>
-          </>
-        ) : null}
+              {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip
+            label={
+              combinedResponse.length > 100
+                ? "Generate AI text"
+                : "At least 100 characters required"
+            }
+            position="right"
+            withArrow
+            color={combinedResponse.length > 100 ? "grape" : "gray"}
+            transitionProps={{ transition: "fade" }}
+          >
+            <ActionIcon
+              loading={aiLoading}
+              loaderProps={{ type: "dots", size: "xs" }}
+              onClick={handleGenerateClick}
+              disabled={combinedResponse.length <= 100}
+              variant={"filled"}
+              color="grape"
+              size="lg"
+            >
+              <FaWandMagicSparkles />
+            </ActionIcon>
+          </Tooltip>
+        </>
       </Group>
 
       <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>

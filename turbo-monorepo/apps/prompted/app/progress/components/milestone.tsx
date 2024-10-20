@@ -1,4 +1,4 @@
-import { Grid } from "@mantine/core";
+import { Grid, Text } from "@mantine/core";
 import { ProgressModel } from "../interface";
 import MilestoneBadge from "./milestone-badge";
 
@@ -7,13 +7,29 @@ interface MilestoneBadgesProps {
 }
 
 const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
+  const sortByAchieved = (a: ProgressModel, b: ProgressModel) => {
+    if (a.achieved && !b.achieved) {
+      return -1;
+    }
+    if (!a.achieved && b.achieved) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const sortedBadges = badges.sort(sortByAchieved);
+
   return (
     <>
-      <Grid mt="lg">
-        {badges.map((badge) => (
+      <Grid mt="md" justify="start">
+        {sortedBadges.map((badge) => (
           <Grid.Col
             key={badge.id}
-            span={{ base: 6, xs: 4, sm: 3, md: 3, lg: 3, xl: 3 }}
+            style={{
+              maxWidth: "150px",
+              minHeight: "180px",
+              height: "full",
+            }}
           >
             <MilestoneBadge
               title={badge.badges.title}
@@ -21,6 +37,11 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
               icon={badge.badges.icon}
               description={badge.badges.description}
             />
+            {badge.achieved && (
+              <Text ta="center" size="md">
+                {badge.badges.title}
+              </Text>
+            )}
           </Grid.Col>
         ))}
       </Grid>

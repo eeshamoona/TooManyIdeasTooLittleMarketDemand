@@ -8,7 +8,7 @@ import { DisplayProps } from "../../components/display";
 
 export const Shell = ({ prompts }: DisplayProps) => {
   return (
-    <Tabs mt="xl" mb="lg" variant="pills" defaultValue="gallery">
+    <Tabs mt="xl" mb="lg" variant="outline" defaultValue="gallery">
       <Tabs.List grow>
         <Tabs.Tab value="gallery" leftSection={<TbFileArrowRight />}>
           Manual

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Group, Paper, useMantineColorScheme } from "@mantine/core";
+import { Group, Paper, useMantineColorScheme, Text } from "@mantine/core";
 import { CompositeChart, DonutChart, RadarChart } from "@mantine/charts";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 import Heatmap from "./heatmap";
@@ -26,9 +26,9 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           acc[category.title] = { category: category.title, count: 0 };
           return acc;
         },
-        {} as Record<string, { category: string; count: number }>
-      )
-    )
+        {} as Record<string, { category: string; count: number }>,
+      ),
+    ),
   );
 
   // Extract data for heatmap
@@ -48,8 +48,8 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           }
           return acc;
         },
-        {} as Record<string, { date: string; count: number }>
-      )
+        {} as Record<string, { date: string; count: number }>,
+      ),
     );
 
   const stackedChartData = entries.map((entry) => {
@@ -95,7 +95,7 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
       [
         { name: "Human Words", color: "blue", value: 0 },
         { name: "AI Words", color: "grape", value: 0 },
-      ]
+      ],
     );
 
   const totalValues = donutChartData[0].value + donutChartData[1].value;
@@ -110,7 +110,8 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
       <Paper
         radius="sm"
         p="md"
-        my="lg"
+        mt="md"
+        mb="lg"
         bg={
           colorScheme === "dark"
             ? "var(--mantine-color-dark-7)"
@@ -143,7 +144,7 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           ]}
         />
       </div>
-      <Group justify="space-between" w={"100%"}>
+      <Group justify="space-between" align="center" w={"100%"}>
         <RadarChart
           h={300}
           data={numberOfEntriesInEachCategory}
@@ -151,18 +152,31 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           series={[{ name: "count", color: "blue.4", opacity: 0.5 }]}
           withPolarAngleAxis
           withPolarRadiusAxis={false}
-          flex={1}
+          flex={2}
         />
-        <DonutChart
-          withLabelsLine
-          withLabels
-          data={finalDonutChartData}
-          startAngle={180}
-          endAngle={0}
-          size={250}
-          thickness={20}
-          chartLabel={`${totalWords} Total Words`}
-        />
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Text ta="center" size="xl">
+            {entries.length} Entries
+          </Text>
+          <DonutChart
+            withLabelsLine
+            withLabels
+            data={finalDonutChartData}
+            startAngle={180}
+            endAngle={0}
+            size={250}
+            thickness={20}
+            h={300}
+            chartLabel={`${totalWords} Total Words`}
+          />
+        </div>
       </Group>
     </>
   );

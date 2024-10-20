@@ -1,5 +1,5 @@
 "use client";
-import { Tabs } from "@mantine/core";
+import { Container, Tabs } from "@mantine/core";
 import Charts from "./charts";
 import MilestoneBadges from "./milestone";
 import LevelProgressPage from "./levels";
@@ -17,20 +17,43 @@ export default function Display({ entries, progress }: DisplayProps) {
   return (
     <>
       <Tabs mt="xl" defaultValue="levels" variant="pills">
-        <Tabs.List justify="center" grow>
+        <Tabs.List justify="center" grow mb="md">
           <Tabs.Tab value="levels">Levels</Tabs.Tab>
           <Tabs.Tab value="milestones">Milestones</Tabs.Tab>
           <Tabs.Tab value="charts">Charts</Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Panel value="levels" pt="xs">
+        <Tabs.Panel
+          value="levels"
+          style={{
+            height: "75vh",
+            overflowY: "scroll",
+            overflowX: "hidden",
+          }}
+        >
           <LevelProgressPage progressBadgeData={level_badges} />
         </Tabs.Panel>
-        <Tabs.Panel value="milestones" pt="xs">
+        <Tabs.Panel
+          value="milestones"
+          style={{
+            height: "75vh",
+            overflowY: "scroll",
+            overflowX: "hidden",
+          }}
+        >
           <MilestoneBadges badges={milestone_badges} />
         </Tabs.Panel>
-        <Tabs.Panel value="charts" pt="xs">
-          <Charts entries={entries} />
+        <Tabs.Panel value="charts">
+          <Container
+            fluid
+            style={{
+              height: "75vh",
+              overflowY: "scroll",
+              overflowX: "hidden",
+            }}
+          >
+            <Charts entries={entries} />
+          </Container>
         </Tabs.Panel>
       </Tabs>
     </>

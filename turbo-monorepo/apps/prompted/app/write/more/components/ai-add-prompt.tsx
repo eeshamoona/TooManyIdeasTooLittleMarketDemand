@@ -95,7 +95,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
   const getPromptSuggestions = async (category: string) => {
     openPrompts();
     const filteredPrompts = prompts.filter(
-      (prompt) => prompt.category === category
+      (prompt) => prompt.category === category,
     );
     console.log("Filtered Prompts:", filteredPrompts);
 
@@ -106,7 +106,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
     console.log("Random Prompts:", randomPrompts);
 
     const categoryDescription = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === category
+      (cat) => cat.title === category,
     )?.description;
     console.log("Category Description:", categoryDescription);
     try {
@@ -151,7 +151,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
     } else {
       setPromptSuggestions([]);
       console.log(
-        "Category value is null or empty, skipping getPromptSuggestions"
+        "Category value is null or empty, skipping getPromptSuggestions",
       );
     }
 
@@ -186,7 +186,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value
+      (cat) => cat.title === option.value,
     );
     const Icon = category?.icon;
     const color = category?.color;

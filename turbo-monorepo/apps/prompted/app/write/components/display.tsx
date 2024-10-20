@@ -9,13 +9,11 @@ import {
   Text,
   ActionIcon,
 } from "@mantine/core";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import TrackedTextarea from "./tracked-textarea";
 import { PromptList } from "./prompt-list";
 import { FaCheck } from "react-icons/fa";
-import { LuLayoutDashboard } from "react-icons/lu";
 import { TbWriting } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 
@@ -29,7 +27,6 @@ export interface DisplayProps {
 }
 
 export default function Display({ prompts }: DisplayProps) {
-  const router = useRouter();
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -131,7 +128,7 @@ export default function Display({ prompts }: DisplayProps) {
   return (
     <>
       <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0">
-        <Button
+        {/* <Button
           variant="outline"
           px={"sm"}
           color={"blue"}
@@ -139,7 +136,7 @@ export default function Display({ prompts }: DisplayProps) {
           leftSection={<LuLayoutDashboard />}
         >
           View All
-        </Button>
+        </Button> */}
       </Group>
 
       <Group my={"md"} align="center">

@@ -1,15 +1,20 @@
 .hex {
   position: relative;
   margin: 0.5em auto;
-  width: 5em;
-  height: 8.66em; /* width * sqrt(3)/2 for a perfect hexagon */
+  width: 3.5em;
+  height: 6.06em; /* width * sqrt(3)/2 for a perfect hexagon */
   border-radius: 0.5em/0.25em;
-  background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-yellow-4) 0%,
+    var(--mantine-color-yellow-6) 100%
+  );
   transition:
     opacity 0.5s,
     box-shadow 150ms ease,
     transform 100ms ease;
   box-shadow: none;
+  animation: gradientShimmer 8s ease infinite;
 }
 
 .hex:hover {
@@ -29,13 +34,21 @@
 
 .hex:before {
   transform: rotate(60deg);
-  background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-yellow-6) 0%,
+    var(--mantine-color-yellow-4) 100%
+  );
   /* Slightly different gradient for design effect */
 }
 
 .hex:after {
   transform: rotate(-60deg);
-  background: linear-gradient(to bottom right, #ffeb3b 0%, #fbc02d 100%);
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-yellow-6) 0%,
+    var(--mantine-color-yellow-4) 100%
+  );
 }
 
 .new-icon-container {
@@ -43,15 +56,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: black;
+  color: var(--mantine-color-yellow-7);
   z-index: 2;
   align-items: center;
-  width: 4.5em;
-  top: 10%;
-  left: 6%;
+  width: 4em;
+  top: 15%;
+  left: -5%;
   background-color: white;
   aspect-ratio: 1;
   border-radius: 50%;
+  border: 5px solid var(--mantine-color-yellow-3);
 }
 
 .ribbon {
@@ -87,20 +101,27 @@
 .hex.hidden {
   background: linear-gradient(
     to bottom right,
-    #e0e0e0 0%,
-    /* Light gray */ #b0b0b0 100% /* Darker gray */
+    var(--mantine-color-gray-5) 0%,
+    var(--mantine-color-gray-4) 100%
   );
   color: #a0a0a0; /* Override yellow color with gray */
   opacity: 0.5; /* Dimmed effect for locked state */
 }
 
-.hex.hidden:before,
+.hex.hidden:before {
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-gray-4) 0%,
+    var(--mantine-color-gray-5) 100%
+  );
+  /* Slightly different gradient for design effect */
+}
 .hex.hidden:after {
   background: linear-gradient(
     to bottom right,
-    #e0e0e0 0%,
-    /* Light gray */ #b0b0b0 100% /* Darker gray */
-  ); /* Override the yellow gradients */
+    var(--mantine-color-gray-4) 0%,
+    var(--mantine-color-gray-5) 100%
+  );
   color: #a0a0a0; /* Ensure text color matches for locked state */
 }
 
@@ -109,5 +130,9 @@
 }
 
 .new-icon-container.hidden {
-  top: 25%;
+  width: 115%;
+  top: 15%;
+  left: -7%;
+  border: none;
+  color: black;
 }
