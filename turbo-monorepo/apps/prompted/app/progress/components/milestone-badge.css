@@ -1,0 +1,138 @@
+.hex {
+  position: relative;
+  margin: 0.5em auto;
+  width: 3.5em;
+  height: 6.06em; /* width * sqrt(3)/2 for a perfect hexagon */
+  border-radius: 0.5em/0.25em;
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-yellow-4) 0%,
+    var(--mantine-color-yellow-6) 100%
+  );
+  transition:
+    opacity 0.5s,
+    box-shadow 150ms ease,
+    transform 100ms ease;
+  box-shadow: none;
+  animation: gradientShimmer 8s ease infinite;
+}
+
+.hex:hover {
+  scale: 1.05;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Added slight shadow */
+}
+
+.hex:before,
+.hex:after {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  background: inherit; /* Inherit gradient from .hex */
+  content: "";
+}
+
+.hex:before {
+  transform: rotate(60deg);
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-yellow-6) 0%,
+    var(--mantine-color-yellow-4) 100%
+  );
+  /* Slightly different gradient for design effect */
+}
+
+.hex:after {
+  transform: rotate(-60deg);
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-yellow-6) 0%,
+    var(--mantine-color-yellow-4) 100%
+  );
+}
+
+.new-icon-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--mantine-color-yellow-7);
+  z-index: 2;
+  align-items: center;
+  width: 4em;
+  top: 15%;
+  left: -5%;
+  background-color: white;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 5px solid var(--mantine-color-yellow-3);
+}
+
+.ribbon {
+  position: absolute;
+  border-radius: 3px;
+  padding: 5px 5px 4px;
+  width: 12em;
+  z-index: 11;
+  bottom: 1em;
+  left: -55%;
+  font-size: 14px;
+  background-color: var(--app-shell-border-color);
+  transition:
+    opacity 0.5s,
+    box-shadow 150ms ease,
+    transform 100ms ease;
+  cursor: default;
+  text-align: center;
+}
+
+.description-container {
+  position: absolute;
+  text-align: center;
+  color: #000;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  font-size: small;
+  align-content: center;
+}
+
+/* Correct hidden styles with neutral gradient and overriding yellow styles */
+.hex.hidden {
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-gray-5) 0%,
+    var(--mantine-color-gray-4) 100%
+  );
+  color: #a0a0a0; /* Override yellow color with gray */
+  opacity: 0.5; /* Dimmed effect for locked state */
+}
+
+.hex.hidden:before {
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-gray-4) 0%,
+    var(--mantine-color-gray-5) 100%
+  );
+  /* Slightly different gradient for design effect */
+}
+.hex.hidden:after {
+  background: linear-gradient(
+    to bottom right,
+    var(--mantine-color-gray-4) 0%,
+    var(--mantine-color-gray-5) 100%
+  );
+  color: #a0a0a0; /* Ensure text color matches for locked state */
+}
+
+.ribbon.hidden {
+  display: none; /* Hide the title when badge is locked */
+}
+
+.new-icon-container.hidden {
+  width: 115%;
+  top: 15%;
+  left: -7%;
+  border: none;
+  color: black;
+}

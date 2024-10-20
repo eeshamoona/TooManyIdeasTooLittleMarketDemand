@@ -1,5 +1,5 @@
 "use client";
-import { Box } from "@mantine/core";
+import { Box, Divider } from "@mantine/core";
 import { PromptList } from "../../components/prompt-list";
 import { DisplayProps, Prompt } from "../../components/display";
 import { useState } from "react";
@@ -18,11 +18,13 @@ export const Display2 = ({ prompts }: DisplayProps) => {
   };
 
   return (
-    <Box pt="xl">
+    <Box>
       <AiAddPromptForm
         onCategorySelected={handleCategorySelected}
         prompts={prompts}
       />
+      <Divider my={11} />
+
       <PromptList data={filteredPrompts} />
     </Box>
   );

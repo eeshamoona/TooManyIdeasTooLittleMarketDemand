@@ -26,7 +26,7 @@ export const Display = ({ prompts }: DisplayProps) => {
   };
 
   return (
-    <Box pt="xl">
+    <Box>
       <AddPromptForm
         onCategorySelected={handleCategorySelected}
         onPromptAdded={handleOnPromptAdded}

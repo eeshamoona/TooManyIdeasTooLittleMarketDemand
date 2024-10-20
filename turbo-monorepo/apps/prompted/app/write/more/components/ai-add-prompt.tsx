@@ -12,6 +12,7 @@ import {
   Stack,
   LoadingOverlay,
   Loader,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../interface";
 import { FaCheck, FaPaperPlane } from "react-icons/fa";
@@ -38,6 +39,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
   const [success, setSuccess] = useState("");
   const [addedIndex, setAddedIndex] = useState<number | null>(null);
   const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  const { colorScheme } = useMantineColorScheme();
   const [promptsLoading, { open: openPrompts, close: closePrompts }] =
     useDisclosure();
 
@@ -239,28 +241,30 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
       radius="sm"
       p="md"
       my="md"
-      bg="var(--mantine-color-gray-light-hover)"
+      bg={
+        colorScheme === "dark"
+          ? "var(--mantine-color-dark-5)"
+          : "var(--mantine-color-gray-0)"
+      }
     >
-      <Stack gap={4} flex={1}>
-        <Group>
-          <Select
-            label="Category"
-            placeholder="Select a category"
-            data={NEW_PROMPT_CATEGORIES.map((category) => ({
-              value: category.title,
-              label: category.title,
-              description: category.description,
-              icon: category.icon,
-            }))}
-            value={category}
-            onChange={handleCategoryChange}
-            required
-            renderOption={renderSelectOption}
-            flex={4}
-            disabled={promptsLoading}
-          />
-        </Group>
-        <Group flex={1} align="center">
+      <Stack flex={1}>
+        <Select
+          label="Category"
+          placeholder="Select a category"
+          data={NEW_PROMPT_CATEGORIES.map((category) => ({
+            value: category.title,
+            label: category.title,
+            description: category.description,
+            icon: category.icon,
+          }))}
+          value={category}
+          onChange={handleCategoryChange}
+          required
+          renderOption={renderSelectOption}
+          flex={4}
+          disabled={promptsLoading}
+        />
+        <Group mt={"sm"} flex={1} align="center">
           {promptsLoading ? (
             <Loader color="pink" type="dots" />
           ) : (
@@ -270,7 +274,6 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
               <Text
                 style={{
                   flex: "1",
-                  fontWeight: "600",
                   fontSize: "14px",
                 }}
               >

@@ -5,8 +5,6 @@ import { NextResponse, type NextRequest } from "next/server";
 const publicRoutes = ["/", "/signup", "/login", "/error"];
 
 export async function updateSession(request: NextRequest) {
-  console.log("Middleware updateSession is being run");
-
   let supabaseResponse = NextResponse.next({
     request,
   });

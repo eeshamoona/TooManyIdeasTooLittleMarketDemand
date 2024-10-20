@@ -9,6 +9,7 @@ import {
   rem,
   Badge,
   Switch,
+  Space,
 } from "@mantine/core";
 import { FaSearch } from "react-icons/fa";
 import { Prompt } from "./display";
@@ -92,14 +93,21 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
 
   return (
     <div>
-      <Group justify="space-between" mb="md">
-        <TextInput
-          flex={1}
-          placeholder="Search for any prompt"
-          leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
+      <Group mb="md" w="100%">
+        {showPrompts ? (
+          <TextInput
+            flex={1}
+            w={"100%"}
+            placeholder="Search for any prompt"
+            leftSection={
+              <FaSearch style={{ width: rem(16), height: rem(16) }} />
+            }
+            value={search}
+            onChange={handleSearchChange}
+          />
+        ) : (
+          <Space h={rem(36)} flex={1} />
+        )}
         <Switch
           label="Show Prompts"
           checked={showPrompts}

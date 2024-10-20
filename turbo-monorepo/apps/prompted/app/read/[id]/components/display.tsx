@@ -10,8 +10,8 @@ import {
   Text,
   useMantineColorScheme,
   Tooltip,
-  Flex,
   Paper,
+  Switch,
 } from "@mantine/core";
 import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
@@ -39,10 +39,51 @@ interface DisplayTextProps {
   };
   username: string;
 }
+const STOP_WORDS = [
+  "a",
+  "an",
+  "the",
+  "and",
+  "or",
+  "but",
+  "of",
+  "in",
+  "on",
+  "with",
+  "at",
+  "for",
+  "to",
+  "from",
+  "by",
+  "this",
+  "that",
+  "these",
+  "those",
+];
 
 export default function DisplayText({ data }: DisplayTextProps) {
   const [showAIParts, setShowAIParts] = useState(false);
   const [showWordFreq, setShowWordFreq] = useState(false);
+  const [showCleanWordFreq, setShowCleanWordFreq] = useState<boolean>(false);
+
+  // Function to filter out useless words
+  function cleanWordFreq(wordFreq: { [key: string]: number }): {
+    [key: string]: number;
+  } {
+    const minLength = 4; // Set a minimum word length
+
+    return Object.keys(wordFreq)
+      .filter(
+        (word) =>
+          !STOP_WORDS.includes(word.toLowerCase()) && // Remove stop words
+          word.length >= minLength, // Remove short words
+      )
+      .reduce((filtered: { [key: string]: number }, word) => {
+        filtered[word] = wordFreq[word]; // Rebuild filtered word frequency object
+        return filtered;
+      }, {});
+  }
+
   const router = useRouter();
   const { colorScheme } = useMantineColorScheme();
 
@@ -61,7 +102,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category
+    (cat) => cat.title === data.category,
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
@@ -99,11 +140,39 @@ export default function DisplayText({ data }: DisplayTextProps) {
     </>
   );
 
+  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShowCleanWordFreq(event.currentTarget.checked);
+  };
+
+  const getWordFreq = showCleanWordFreq
+    ? cleanWordFreq(data.word_freq)
+    : data.word_freq;
+
   const Body = () => {
     return (
       <>
         {showWordFreq ? (
-          <MatterCircles word_freq={data.word_freq} colorScheme={colorScheme} />
+          <div
+            style={{
+              height: "100%",
+              marginTop: "1rem",
+            }}
+          >
+            <MatterCircles word_freq={getWordFreq} colorScheme={colorScheme} />
+
+            <Switch
+              label={
+                showCleanWordFreq ? "Show All Words" : "Show Interesting Words"
+              }
+              checked={showCleanWordFreq}
+              onChange={handleToggleChange}
+              mt="sm"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            />
+          </div>
         ) : (
           <Box
             style={{ height: "100%", display: "flex", flexDirection: "column" }}
@@ -192,16 +261,8 @@ export default function DisplayText({ data }: DisplayTextProps) {
         </Group>
       </Box>
       <Header />
-      <Flex
-        style={{
-          display: "flex",
-          flex: 1,
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <Body />
-      </Flex>
+
+      <Body />
     </>
   );
 }

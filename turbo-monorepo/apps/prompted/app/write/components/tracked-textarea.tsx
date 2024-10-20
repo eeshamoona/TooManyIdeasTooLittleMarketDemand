@@ -45,7 +45,8 @@ export default function TrackedTextarea({
   const [startTime, setStartTime] = useState<number | null>(null);
   const [aiCallCount, setAICallCount] = useState<number>(0);
   const [aiLoading, { open: openAi, close: closeAi }] = useDisclosure();
-  const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  // const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
   //TODO: Debounce the user input for better performance
@@ -268,10 +269,9 @@ export default function TrackedTextarea({
   };
 
   const handleSaveResponse = () => {
-    openSave();
-    console.log("Saving response...");
+    setIsSaving(true);
     saveEntry();
-    closeSave();
+    setIsSaving(false);
   };
 
   const handleSaveAndClearResponse = () => {
@@ -297,53 +297,50 @@ export default function TrackedTextarea({
         <Title m={4} flex={1} order={titleOrder}>
           {promptText}
         </Title>
-        {combinedResponse.length > 0 ? (
-          <>
-            {aiCallCount > 0 && (
-              <Tooltip
-                label="AI-generated text highlighted"
-                aria-label="Character stats tooltip"
-                position="top"
-                withArrow
-                color="gray"
-                transitionProps={{ transition: "fade" }}
-              >
-                <ActionIcon
-                  onMouseEnter={handleStatsMouseDown}
-                  onMouseLeave={handleStatsMouseUp}
-                  color={showStats ? "grape" : "gray"}
-                  variant="light"
-                  size="lg"
-                >
-                  {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-                </ActionIcon>
-              </Tooltip>
-            )}
-            <Tooltip
-              label={
-                combinedResponse.length > 100
-                  ? "Generate AI text"
-                  : "At least 100 characters required"
-              }
-              position="right"
-              withArrow
-              color={combinedResponse.length > 100 ? "grape" : "gray"}
-              transitionProps={{ transition: "fade" }}
+        <>
+          <Tooltip
+            label="Show Stats"
+            aria-label="Character stats tooltip"
+            position="left"
+            withArrow
+            color="gray"
+            transitionProps={{ transition: "fade" }}
+          >
+            <ActionIcon
+              onMouseEnter={handleStatsMouseDown}
+              onMouseLeave={handleStatsMouseUp}
+              color={showStats ? "grape" : "gray"}
+              disabled={characters.length === 0}
+              variant="light"
+              size="lg"
             >
-              <ActionIcon
-                loading={aiLoading}
-                loaderProps={{ type: "dots", size: "xs" }}
-                onClick={handleGenerateClick}
-                disabled={combinedResponse.length <= 100}
-                variant={"filled"}
-                color="grape"
-                size="lg"
-              >
-                <FaWandMagicSparkles />
-              </ActionIcon>
-            </Tooltip>
-          </>
-        ) : null}
+              {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip
+            label={
+              combinedResponse.length > 100
+                ? "Generate AI text"
+                : "At least 100 characters required"
+            }
+            position="right"
+            withArrow
+            color={combinedResponse.length > 100 ? "grape" : "gray"}
+            transitionProps={{ transition: "fade" }}
+          >
+            <ActionIcon
+              loading={aiLoading}
+              loaderProps={{ type: "dots", size: "xs" }}
+              onClick={handleGenerateClick}
+              disabled={combinedResponse.length <= 100}
+              variant={"filled"}
+              color="grape"
+              size="lg"
+            >
+              <FaWandMagicSparkles />
+            </ActionIcon>
+          </Tooltip>
+        </>
       </Group>
 
       <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
@@ -390,7 +387,7 @@ export default function TrackedTextarea({
           Clear
         </Button>
         <Button
-          loading={saveLoading}
+          loading={isSaving}
           variant="solid"
           onClick={handleSaveResponse}
           disabled={combinedResponse.trim() === ""}

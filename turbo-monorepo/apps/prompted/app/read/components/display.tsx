@@ -21,6 +21,7 @@ export default function DisplayEntries({ data: entries }) {
         maxHeight: "85vh",
         display: "flex",
         flexDirection: "column",
+        width: "100%",
       }}
     >
       <SearchHeader hasEntries={false} />

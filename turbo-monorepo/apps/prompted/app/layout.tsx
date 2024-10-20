@@ -1,10 +1,13 @@
 import React, { Suspense } from "react";
 import "./globals.css";
-import Providers from "@repo/ui/mantineProvider";
 import { createClient } from "./utils/supabase/server";
 import { CustomAppShell } from "./shell";
 import "@mantine/core/styles.css";
+import "@mantine/charts/styles.css";
+import "react-calendar-heatmap/dist/styles.css";
+import "react-tooltip/dist/react-tooltip.css";
 import Loading from "./loading";
+import { MantineProvider } from "@mantine/core";
 
 export default async function RootLayout({
   children,
@@ -20,13 +23,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
+        <MantineProvider>
           <Suspense fallback={<Loading />}>
             <CustomAppShell metadata={metadata} isLoggedIn={isLoggedIn}>
               {children}
             </CustomAppShell>
           </Suspense>
-        </Providers>
+        </MantineProvider>
       </body>
     </html>
   );
