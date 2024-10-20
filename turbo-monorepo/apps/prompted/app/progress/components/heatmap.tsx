@@ -4,12 +4,11 @@ import React, { useState } from "react";
 import "./heatmap.css";
 import CustomHeatmap from "./heatmap2";
 
-import dynamic from "next/dynamic";
-import { TooltipDataAttrs } from "react-calendar-heatmap";
+// import dynamic from "next/dynamic";
 
-const CalendarHeatmap = dynamic(() => import("react-calendar-heatmap"), {
-  ssr: false,
-});
+// const CalendarHeatmap = dynamic(() => import("react-calendar-heatmap"), {
+//   ssr: false,
+// });
 
 interface HeatmapProps {
   data: { date: string; count: number }[];
@@ -27,7 +26,13 @@ const Heatmap: React.FC<HeatmapProps> = ({ data }) => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: "1em",
+      }}
+    >
       <div
         style={{
           display: "flex",

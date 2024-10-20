@@ -3,7 +3,7 @@ import React from "react";
 import { Container } from "@mantine/core";
 import { AreaChart, RadarChart } from "@mantine/charts";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
-import CustomHeatmap from "./heatmap";
+import Heatmap from "./heatmap";
 
 interface StatChartsProps {
   // heatmapData: any;
@@ -37,7 +37,12 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
     Object.values(
       entries.reduce(
         (acc, entry) => {
-          const date = new Date(entry.created_at).toISOString().split("T")[0];
+          const date = new Date(entry.created_at).toLocaleDateString("en-CA", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+          });
+          console.log("date", date);
           if (!acc[date]) {
             acc[date] = { date, count: 1 };
           } else {
@@ -50,7 +55,10 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
     );
 
   const stackedChartData = entries.map((entry) => {
-    const date = new Date(entry.created_at).toISOString().split("T")[0];
+    const date = new Date(entry.created_at).toLocaleDateString("en-CA", {
+      month: "short",
+      day: "2-digit",
+    });
     return {
       date,
       "AI Characters": entry.metadata_stats?.aiCharacters,
@@ -61,7 +69,7 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
   return (
     <Container>
       <div>
-        <CustomHeatmap data={heatmapData} />
+        <Heatmap data={heatmapData} />
       </div>
 
       <div>
