@@ -1,8 +1,8 @@
 "use client";
 import { Button, Text } from "@mantine/core";
 import React, { useState } from "react";
-import "./heatmap.css";
-import CustomHeatmap from "./heatmap2";
+import CustomHeatmap from "./custom-calendar";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 // import dynamic from "next/dynamic";
 
@@ -40,11 +40,19 @@ const Heatmap: React.FC<HeatmapProps> = ({ data }) => {
           marginBottom: "1em",
         }}
       >
-        <Button variant="light" onClick={handlePreviousYear}>
+        <Button
+          variant="outline"
+          onClick={handlePreviousYear}
+          leftSection={<FaArrowLeft />}
+        >
           Previous Year
         </Button>
         <Text>{year}</Text>
-        <Button variant="light" onClick={handleNextYear}>
+        <Button
+          variant="outline"
+          onClick={handleNextYear}
+          rightSection={<FaArrowRight />}
+        >
           Next Year
         </Button>
       </div>

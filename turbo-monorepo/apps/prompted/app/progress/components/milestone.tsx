@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import { ProgressModel } from "../interface";
 import MilestoneBadge from "./milestone-badge";
 
@@ -8,8 +8,8 @@ interface MilestoneBadgesProps {
 
 const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
   return (
-    <Container>
-      <Grid>
+    <>
+      <Grid mt="lg">
         {badges.map((badge) => (
           <Grid.Col
             key={badge.id}
@@ -24,7 +24,7 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
           </Grid.Col>
         ))}
       </Grid>
-    </Container>
+    </>
   );
 };
 
