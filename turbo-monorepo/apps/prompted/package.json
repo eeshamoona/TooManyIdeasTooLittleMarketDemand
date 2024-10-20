@@ -10,6 +10,7 @@
     "ci": "rm -rf node_modules && rm -rf .next && npm install"
   },
   "dependencies": {
+    "@freecodecamp/react-calendar-heatmap": "^1.1.0",
     "@mantine/charts": "^7.13.3",
     "@mantine/core": "^7.13.3",
     "@mantine/hooks": "^7.13.3",
@@ -25,11 +26,13 @@
     "npm": "^10.9.0",
     "openai": "^4.67.3",
     "react": "18.3.1",
+    "react-calendar-heatmap": "^1.9.0",
     "react-dom": "18.3.1",
     "react-icons": "^4.12.0",
     "react-native-blob-util": "^0.19.11",
     "react-native-fetch-blob": "^0.10.8",
     "react-native-fs": "^2.20.0",
+    "react-tooltip": "^5.28.0",
     "recharts": "^2.13.0"
   },
   "devDependencies": {
@@ -38,6 +41,7 @@
     "@types/matter-js": "^0.19.7",
     "@types/node": "^20",
     "@types/react": "^18",
+    "@types/react-calendar-heatmap": "^1.9.0",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.6",

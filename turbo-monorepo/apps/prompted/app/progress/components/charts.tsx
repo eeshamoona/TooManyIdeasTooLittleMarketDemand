@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
-import { Title, Container } from "@mantine/core";
-import { RadarChart } from "@mantine/charts";
+import { Container } from "@mantine/core";
+import { AreaChart, RadarChart } from "@mantine/charts";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
+import CustomHeatmap from "./heatmap";
 
 interface StatChartsProps {
   // heatmapData: any;
@@ -26,25 +27,66 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           acc[category.title] = { category: category.title, count: 0 };
           return acc;
         },
-        {} as Record<string, { category: string; count: number }>,
-      ),
-    ),
+        {} as Record<string, { category: string; count: number }>
+      )
+    )
   );
+
+  // Extract data for heatmap
+  const heatmapData: { date: string; count: number; tooltip: string }[] =
+    Object.values(
+      entries.reduce(
+        (acc, entry) => {
+          const date = new Date(entry.created_at).toISOString().split("T")[0];
+          if (!acc[date]) {
+            acc[date] = { date, count: 1 };
+          } else {
+            acc[date].count += 1;
+          }
+          return acc;
+        },
+        {} as Record<string, { date: string; count: number }>
+      )
+    );
+
+  const stackedChartData = entries.map((entry) => {
+    const date = new Date(entry.created_at).toISOString().split("T")[0];
+    return {
+      date,
+      "AI Characters": entry.metadata_stats?.aiCharacters,
+      "User Characters": entry.metadata_stats?.userCharacters,
+    };
+  });
+
   return (
     <Container>
       <div>
-        <Title order={3}>Submission Frequency</Title>
-        {/* Heatmap component goes here */}
+        <CustomHeatmap data={heatmapData} />
       </div>
 
       <div>
-        <Title order={3}>Prompt Categories</Title>
+        <AreaChart
+          h={300}
+          data={stackedChartData}
+          dataKey="date"
+          type="stacked"
+          xAxisLabel="Date"
+          yAxisLabel=" Total Character Count"
+          series={[
+            { name: "AI Characters", color: "grape.6" },
+            { name: "User Characters", color: "blue.7" },
+          ]}
+        />
+      </div>
+      <div>
         <RadarChart
           h={300}
+          w={700}
           data={numberOfEntriesInEachCategory}
           dataKey="category"
-          withPolarRadiusAxis
           series={[{ name: "count", color: "blue.4", opacity: 0.5 }]}
+          withPolarAngleAxis
+          withPolarRadiusAxis={false}
         />
       </div>
     </Container>

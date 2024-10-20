@@ -12,6 +12,7 @@ import {
   Stack,
   LoadingOverlay,
   Loader,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../interface";
 import { FaCheck, FaPaperPlane } from "react-icons/fa";
@@ -38,6 +39,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
   const [success, setSuccess] = useState("");
   const [addedIndex, setAddedIndex] = useState<number | null>(null);
   const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  const { colorScheme } = useMantineColorScheme();
   const [promptsLoading, { open: openPrompts, close: closePrompts }] =
     useDisclosure();
 
@@ -93,7 +95,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
   const getPromptSuggestions = async (category: string) => {
     openPrompts();
     const filteredPrompts = prompts.filter(
-      (prompt) => prompt.category === category,
+      (prompt) => prompt.category === category
     );
     console.log("Filtered Prompts:", filteredPrompts);
 
@@ -104,7 +106,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
     console.log("Random Prompts:", randomPrompts);
 
     const categoryDescription = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === category,
+      (cat) => cat.title === category
     )?.description;
     console.log("Category Description:", categoryDescription);
     try {
@@ -149,7 +151,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
     } else {
       setPromptSuggestions([]);
       console.log(
-        "Category value is null or empty, skipping getPromptSuggestions",
+        "Category value is null or empty, skipping getPromptSuggestions"
       );
     }
 
@@ -184,7 +186,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -239,7 +241,11 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
       radius="sm"
       p="md"
       my="md"
-      bg="var(--mantine-color-gray-light-hover)"
+      bg={
+        colorScheme === "dark"
+          ? "var(--mantine-color-dark-5)"
+          : "var(--mantine-color-gray-0)"
+      }
     >
       <Stack gap={4} flex={1}>
         <Group>

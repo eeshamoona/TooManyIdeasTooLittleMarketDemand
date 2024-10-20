@@ -7,6 +7,7 @@ import {
   Card,
   Grid,
   useMantineTheme,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { getProgressInfo, ProgressModel } from "../interface";
 import LevelBadge from "./level-badge";
@@ -20,11 +21,12 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
   progressBadgeData,
 }) => {
   const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
   const renderContent = () => {
     const enhancedProgressData = progressBadgeData.map((PBadge) => {
       const progressInfo = getProgressInfo(
         PBadge.progress,
-        PBadge.badges.thresholds,
+        PBadge.badges.thresholds
       );
       return {
         ...PBadge,
@@ -73,39 +75,42 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
                 </Text>
               </div>
             </Group>
-            <Group
-              align="center"
-              my="md"
-              gap="xs"
-              style={{
-                cursor: "pointer",
-              }}
+            <Tooltip
+              bg={"transparent"}
+              label={`${PBadge.progress} ${PBadge.badges.label}`}
+              withArrow
+              c={colorScheme === "dark" ? "gray" : "dark"}
+              position="bottom"
+              offset={-5}
             >
-              <Text size="sm" fw={500}>
-                {PBadge.progressInfo.lowThreshold}
-              </Text>
-              <Tooltip
-                bg={"transparent"}
-                label={`${PBadge.progress} ${PBadge.badges.label}`}
-                withArrow
-                color="gray"
-                position="bottom"
+              <Group
+                align="center"
+                my="md"
+                gap="xs"
+                style={{
+                  cursor: "pointer",
+                }}
               >
+                <Text size="sm" fw={500}>
+                  {PBadge.progressInfo.lowThreshold}
+                </Text>
+
                 <Progress.Root size={8} flex={1} radius="sm">
                   <Progress.Section
                     value={PBadge.progressInfo.progressValue}
                     color="blue"
                   ></Progress.Section>
                 </Progress.Root>
-              </Tooltip>
-              <Text size="sm" fw={500}>
-                {PBadge.progressInfo.highThreshold === Infinity ? (
-                  <IoIosInfinite />
-                ) : (
-                  PBadge.progressInfo.highThreshold
-                )}
-              </Text>
-            </Group>
+                <Text size="sm" fw={500}>
+                  {PBadge.progressInfo.highThreshold === Infinity ? (
+                    <IoIosInfinite />
+                  ) : (
+                    PBadge.progressInfo.highThreshold
+                  )}
+                </Text>
+              </Group>
+            </Tooltip>
+
             {/* </Tooltip> */}
           </Card>
         </Grid.Col>

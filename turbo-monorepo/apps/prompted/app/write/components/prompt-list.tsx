@@ -9,6 +9,7 @@ import {
   rem,
   Badge,
   Switch,
+  Space,
 } from "@mantine/core";
 import { FaSearch } from "react-icons/fa";
 import { Prompt } from "./display";
@@ -34,7 +35,7 @@ function Th({ children }) {
 
 export function PromptList({ data }: PromptListProps): JSX.Element {
   const [search, setSearch] = useState("");
-  const [showPrompts, setShowPrompts] = useState(true);
+  const [showPrompts, setShowPrompts] = useState(false);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.currentTarget.value);
@@ -45,12 +46,12 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
   };
 
   const filteredData = data.filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase()),
+    item.text.toLowerCase().includes(search.toLowerCase())
   );
 
   const rows = filteredData.map((row: Prompt, index: number) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === row.category,
+      (cat) => cat.title === row.category
     );
     const Icon = category?.icon;
     const color = `var(--mantine-color-${category?.color}-5)`;
@@ -92,14 +93,21 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
 
   return (
     <div>
-      <Group justify="space-between" mb="md">
-        <TextInput
-          flex={1}
-          placeholder="Search for any prompt"
-          leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
+      <Group mb="md" w="100%">
+        {showPrompts ? (
+          <TextInput
+            flex={1}
+            w={"100%"}
+            placeholder="Search for any prompt"
+            leftSection={
+              <FaSearch style={{ width: rem(16), height: rem(16) }} />
+            }
+            value={search}
+            onChange={handleSearchChange}
+          />
+        ) : (
+          <Space h={rem(36)} flex={1} />
+        )}
         <Switch
           label="Show Prompts"
           checked={showPrompts}

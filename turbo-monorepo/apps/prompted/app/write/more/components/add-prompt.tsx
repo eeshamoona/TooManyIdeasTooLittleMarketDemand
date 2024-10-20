@@ -11,6 +11,7 @@ import {
   Center,
   ActionIcon,
   Stack,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../interface";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,7 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
+  const { colorScheme } = useMantineColorScheme();
   const router = useRouter();
 
   useEffect(() => {
@@ -86,7 +88,7 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -141,7 +143,11 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
       radius="sm"
       p="md"
       my="md"
-      bg="var(--mantine-color-gray-light-hover)"
+      bg={
+        colorScheme === "dark"
+          ? "var(--mantine-color-dark-5)"
+          : "var(--mantine-color-gray-0)"
+      }
     >
       <Stack gap={4} flex={1}>
         <TextInput
