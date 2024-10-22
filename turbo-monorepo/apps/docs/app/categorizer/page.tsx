@@ -16,7 +16,7 @@ import { data } from "./data";
 interface DataItem {
   title: string;
   description: string;
-  items: string[];
+  indices: string[];
 }
 
 const fetchCategorizedData = async (data: string[]): Promise<DataItem[]> => {
@@ -57,6 +57,24 @@ const CategorizedDataPage: React.FC<{}> = () => {
     setLoading(false);
   };
 
+  // determine if the categorizedData has every single index in the data array and no duplicates
+  // log whether the categorizedData has every single index and if not log the missing indices
+  const categorizedIndices = new Set(
+    categorizedData.reduce((acc, item) => acc.concat(item.indices), [])
+  );
+
+  const dataIndices = data.map((_, index) => index); // Map data array to its indices
+  const missingIndices = dataIndices.filter(
+    (index) => !categorizedIndices.has(index)
+  );
+
+  console.log(
+    `Categorized data has all indices: ${missingIndices.length === 0 ? "Yes" : "No"}`
+  );
+  if (missingIndices.length > 0) {
+    console.log("Missing indices:", missingIndices.toString());
+  }
+
   return (
     <Container maxW="container.lg" py={8}>
       <Heading as="h1" size="xl" textAlign="center" mb={8}>
@@ -84,8 +102,8 @@ const CategorizedDataPage: React.FC<{}> = () => {
               <Text fontSize="lg">{item.title}</Text>
               <Badge colorScheme="purple">{item.description}</Badge>
               <VStack align="start" mt={4}>
-                {item.items.map((item) => (
-                  <Text key={item}>{item}</Text>
+                {item.indices.map((item) => (
+                  <Text key={item}>{data[item]}</Text>
                 ))}
               </VStack>
             </VStack>

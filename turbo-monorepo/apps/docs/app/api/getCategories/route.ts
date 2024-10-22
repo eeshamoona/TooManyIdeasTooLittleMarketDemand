@@ -38,6 +38,7 @@ export async function POST(request: Request) {
       presence_penalty: 0,
     });
     let categorizedData = openaiResponse.choices[0].message.content.trim();
+    console.log("Categorized Data:", categorizedData);
     // Remove JSON beginning and end markers
     if (categorizedData.startsWith("```json")) {
       categorizedData = categorizedData.slice(7);
