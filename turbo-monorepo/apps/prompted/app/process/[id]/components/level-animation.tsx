@@ -41,10 +41,10 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
 }) => {
   const { colorScheme } = useMantineColorScheme();
   const [progress, setProgress] = useState(
-    animated ? levelInfo.startProgressValue : levelInfo.endProgressValue
+    animated ? levelInfo.startProgressValue : levelInfo.endProgressValue,
   );
   const [currentLevel, setCurrentLevel] = useState(
-    animated ? levelInfo.startLevel : levelInfo.endLevel
+    animated ? levelInfo.startLevel : levelInfo.endLevel,
   );
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);

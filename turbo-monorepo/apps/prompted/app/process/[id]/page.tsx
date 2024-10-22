@@ -30,7 +30,7 @@ export default async function ProcessPage({
     .from("entries")
     .select();
   const { data: progressData, error: progressError } = await supabase.from(
-    "progress"
+    "progress",
   ).select(`
     *,
     badges (
@@ -57,23 +57,15 @@ export default async function ProcessPage({
   // Set current and previous entries
   const currentEntries = entriesData;
   const previousEntries = currentEntries.filter(
-    (entry) => entry.id !== Number(id)
+    (entry) => entry.id !== Number(id),
   );
-  
-  console.log("ID:", id);
 
-  
-  if (JSON.stringify(currentEntries) === JSON.stringify(previousEntries)) {
-    console.log("Previous entries are the same as current entries.");
-  } else {
-    console.log("Previous entries are different from current entries.");
-  }
   // Function to calculate progress
   const calculateProgress = (
     criteria: string,
     data: any[],
     hasLevels: boolean,
-    thresholds: number[]
+    thresholds: number[],
   ): LevelProgress | MilestoneProgress => {
     let criteriaFunction = null;
 
@@ -99,7 +91,7 @@ export default async function ProcessPage({
     } else {
       return {
         progressValue: progressValue,
-        achieved: progressValue !== null,
+        achieved: Number(progressValue) === Number(id),
       };
     }
   };
@@ -125,13 +117,13 @@ export default async function ProcessPage({
               progress.badges.criteria,
               previousEntries,
               progress.hasLevels,
-              progress.badges.thresholds
+              progress.badges.thresholds,
             );
             const currentProgress = calculateProgress(
               progress.badges.criteria,
               currentEntries,
               progress.hasLevels,
-              progress.badges.thresholds
+              progress.badges.thresholds,
             );
             if (progress.hasLevels) {
               const temp = previousProgress as LevelProgress;
@@ -167,7 +159,7 @@ export default async function ProcessPage({
                 console.log(
                   "Found milestone change:",
                   temp.achieved,
-                  temp2.achieved
+                  temp2.achieved,
                 );
                 return {
                   badgeId: progress.badges.id,
@@ -183,7 +175,7 @@ export default async function ProcessPage({
             }
           }
           return null;
-        }
+        },
       )
       .filter(Boolean);
   };

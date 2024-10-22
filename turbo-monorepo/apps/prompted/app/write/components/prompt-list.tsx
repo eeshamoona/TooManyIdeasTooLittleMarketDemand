@@ -9,14 +9,17 @@ import {
   rem,
   Badge,
   Switch,
-  Space,
+  ActionIcon,
 } from "@mantine/core";
 import { FaSearch } from "react-icons/fa";
 import { Prompt } from "./display";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
+import { RiArrowRightCircleLine } from "react-icons/ri";
 
 interface PromptListProps {
   data: Prompt[];
+  // eslint-disable-next-line no-unused-vars
+  onSelectPrompt?: (prompt: Prompt) => void;
 }
 
 function Th({ children }) {
@@ -33,7 +36,10 @@ function Th({ children }) {
   );
 }
 
-export function PromptList({ data }: PromptListProps): JSX.Element {
+export function PromptList({
+  data,
+  onSelectPrompt,
+}: PromptListProps): JSX.Element {
   const [search, setSearch] = useState("");
   const [showPrompts, setShowPrompts] = useState(true);
 
@@ -55,6 +61,10 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
     );
     const Icon = category?.icon;
     const color = `var(--mantine-color-${category?.color}-5)`;
+
+    const handleOnClick = () => {
+      onSelectPrompt && onSelectPrompt(row);
+    };
 
     return (
       <Table.Tr key={row.text}>
@@ -87,27 +97,27 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
         >
           {row.text}
         </Table.Td>
+        {onSelectPrompt && (
+          <Table.Td>
+            <ActionIcon variant="subtle" size={"lg"} onClick={handleOnClick}>
+              <RiArrowRightCircleLine size={20} />
+            </ActionIcon>
+          </Table.Td>
+        )}
       </Table.Tr>
     );
   });
 
   return (
     <div>
-      <Group mb="md" w="100%">
-        {showPrompts ? (
-          <TextInput
-            flex={1}
-            w={"100%"}
-            placeholder="Search for any prompt"
-            leftSection={
-              <FaSearch style={{ width: rem(16), height: rem(16) }} />
-            }
-            value={search}
-            onChange={handleSearchChange}
-          />
-        ) : (
-          <Space h={rem(36)} flex={1} />
-        )}
+      <Group justify="space-between" mb="md">
+        <TextInput
+          flex={1}
+          placeholder="Search for any prompt"
+          leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
+          value={search}
+          onChange={handleSearchChange}
+        />
         <Switch
           label="Show Prompts"
           checked={showPrompts}
@@ -123,16 +133,17 @@ export function PromptList({ data }: PromptListProps): JSX.Element {
           scrollHideDelay={0}
         >
           <Table
-            horizontalSpacing="sm" // Reduced horizontal spacing
-            verticalSpacing="sm" // Reduced vertical spacing
+            horizontalSpacing="sm"
+            verticalSpacing="sm"
             stickyHeader
-            highlightOnHover
+            highlightOnHover={onSelectPrompt ? false : true}
           >
             <Table.Thead>
               <Table.Tr>
                 <Th>#</Th>
                 <Th>Category</Th>
                 <Th>Prompt</Th>
+                {onSelectPrompt && <Th>{undefined}</Th>}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>

@@ -1,4 +1,4 @@
-import { useMantineColorScheme, useMantineTheme } from "@mantine/core";
+import { Tooltip, useMantineColorScheme, useMantineTheme } from "@mantine/core";
 import React from "react";
 
 type CustomHeatmapProps = {
@@ -109,26 +109,28 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
               const color = getColorFromIntensity(intensity);
 
               return (
-                <span
+                <Tooltip
                   key={day}
-                  style={{
-                    display: "inline-block",
-                    width: "16px",
-                    height: "16px",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    backgroundColor: `${
-                      entryCount === 0
-                        ? colorScheme === "dark"
-                          ? "var(--mantine-color-dark-5)"
-                          : "var(--mantine-color-gray-3)"
-                        : String(color)
-                    }`,
-                  }}
-                  title={`${entryCount} entr${
-                    entryCount === 1 ? "y" : "ies"
-                  } on ${formattedDay}`}
-                />
+                  label={`${entryCount} entr${entryCount === 1 ? "y" : "ies"} on ${formattedDay}`}
+                  openDelay={100}
+                >
+                  <span
+                    style={{
+                      display: "inline-block",
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      backgroundColor: `${
+                        entryCount === 0
+                          ? colorScheme === "dark"
+                            ? "var(--mantine-color-dark-5)"
+                            : "var(--mantine-color-gray-3)"
+                          : String(color)
+                      }`,
+                    }}
+                  />
+                </Tooltip>
               );
             })}
           </div>

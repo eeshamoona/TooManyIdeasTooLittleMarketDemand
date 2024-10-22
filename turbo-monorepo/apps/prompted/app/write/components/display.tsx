@@ -47,6 +47,11 @@ export default function Display({ prompts }: DisplayProps) {
     setRandomPrompt(randomPrompt);
   };
 
+  const handleSelectSinglePrompt = (prompt: Prompt) => {
+    setSelectedCategory(prompt.category);
+    setRandomPrompt(prompt);
+  };
+
   const clearRandomPrompt = () => {
     setFilteredPrompts(prompts);
     setSelectedCategory(null);
@@ -184,7 +189,10 @@ export default function Display({ prompts }: DisplayProps) {
       ) : (
         <>
           <Divider my="md" />
-          <PromptList data={filteredPrompts} />
+          <PromptList
+            data={filteredPrompts}
+            onSelectPrompt={handleSelectSinglePrompt}
+          />
         </>
       )}
     </>

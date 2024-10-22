@@ -17,7 +17,7 @@ const MilestoneProgressAnimation: React.FC<MilestoneProgressAnimationProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(animated ? false : true);
   const [showDescription, setShowDescription] = useState(
-    animated ? false : true
+    animated ? false : true,
   );
   const [showTitle, setShowTitle] = useState(animated ? false : true);
 
