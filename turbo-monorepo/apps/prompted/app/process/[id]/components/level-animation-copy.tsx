@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import LevelBadge from "../../../progress/components/level-badge";
-import { Progress, Text } from "@mantine/core";
+import {
+  Group,
+  Progress,
+  Text,
+  Tooltip,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { IoIosInfinite } from "react-icons/io";
 
 export interface LevelInformation {
@@ -19,6 +25,7 @@ export interface LevelProgressAnimationProps {
   title: string;
   description: string;
   icon: string;
+  label: string;
 }
 
 const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
@@ -26,40 +33,56 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
   title,
   description,
   icon,
+  label,
 }) => {
+  const { colorScheme } = useMantineColorScheme();
   const [progress, setProgress] = useState(levelInfo.startProgressValue);
   const [currentLevel, setCurrentLevel] = useState(levelInfo.startLevel);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Animate the progress bar filling up to 100%, then reset and continue with next phase.
+  // Incremental progress update for smooth animation
   useEffect(() => {
-    let animationTimeout: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
 
     // Stage 1: Animate the progress to 100%
     if (!isTransitioning) {
-      animationTimeout = setTimeout(() => {
-        setProgress(levelInfo.startHighValue); // Complete first progress bar phase
-        setIsTransitioning(true); // Move to next phase
-      }, 1000); // Time to fill progress bar to 100% (can adjust for animation speed)
+      setTimeout(() => {
+        timer = setInterval(() => {
+          setProgress((prevProgress) => {
+            const newProgress = prevProgress + 1;
+            if (newProgress >= levelInfo.startHighValue) {
+              setProgress(levelInfo.startHighValue); // Ensure it stops exactly at 100%
+              setIsTransitioning(true); // Move to the next phase
+              clearInterval(timer);
+            }
+            return newProgress;
+          });
+        }, 50);
+      }, 1000);
     }
 
     // Stage 2: Reset and animate the progress from endLowValue to endProgressValue
     if (isTransitioning) {
-      animationTimeout = setTimeout(() => {
-        setProgress(levelInfo.endProgressValue); // Animate to the final progress value
-        if (currentLevel < levelInfo.endLevel) {
-          setCurrentLevel(levelInfo.endLevel); // Set the final level
-        }
-      }, 1000); // Time delay before starting the second phase animation
+      setProgress(levelInfo.endLowValue); // Reset the progress bar for second phase
+      timer = setInterval(() => {
+        setProgress((prevProgress) => {
+          const newProgress = prevProgress + 1;
+          if (newProgress >= levelInfo.endProgressValue) {
+            setProgress(levelInfo.endProgressValue);
+            clearInterval(timer);
+          }
+          return newProgress;
+        });
+      }, 50);
+
+      // Update level once the transition starts
+      if (currentLevel < levelInfo.endLevel) {
+        setCurrentLevel(levelInfo.endLevel);
+      }
     }
 
-    return () => clearTimeout(animationTimeout); // Cleanup timeout
-  }, [
-    isTransitioning,
-    currentLevel,
-    levelInfo.endProgressValue,
-    levelInfo.endLevel,
-  ]);
+    return () => clearInterval(timer); // Cleanup interval
+  }, [isTransitioning, currentLevel, levelInfo]);
 
   // Calculate progress percentage based on the stage
   const endHighValue =
@@ -74,6 +97,7 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
     : ((progress - levelInfo.startLowValue) /
         (levelInfo.startHighValue - levelInfo.startLowValue)) *
       100;
+
   return (
     <div
       style={{
@@ -93,50 +117,66 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
         <div>
           <h3>{title}</h3>
           <p>{description}</p>
-          <p>
-            Level {currentLevel} → Level {levelInfo.endLevel}
-          </p>
         </div>
       </div>
 
-      <div style={{ textAlign: "right", marginTop: "5px" }}>
-        {!isTransitioning ? (
-          <>
-            <Text size="sm" fw={500}>
-              {levelInfo.startLowValue}
-            </Text>
-            <Progress.Root size={8} flex={1} radius="sm">
-              <Progress.Section
-                value={progress}
-                color="blue"
-              ></Progress.Section>
-            </Progress.Root>
-            <Text size="sm" fw={500}>
-              {levelInfo.startHighValue}
-            </Text>
-          </>
-        ) : (
-          // End Progress
-          <>
-            <Text size="sm" fw={500}>
-              {levelInfo.endLowValue}
-            </Text>
-            <Progress.Root size={8} flex={1} radius="sm">
-              <Progress.Section
-                value={progress}
-                color="blue"
-              ></Progress.Section>
-            </Progress.Root>
-            <Text size="sm" fw={500}>
-              {levelInfo.endHighValue === "Infinity" ? (
-                <IoIosInfinite />
-              ) : (
-                levelInfo.endHighValue
-              )}
-            </Text>
-          </>
-        )}
-      </div>
+      <Tooltip
+        bg={"transparent"}
+        label={`${progress} ${label}`}
+        withArrow
+        c={colorScheme === "dark" ? "gray" : "dark"}
+        position="bottom"
+        offset={-5}
+        opened={true} // Always show the tooltip
+      >
+        <Group
+          align="center"
+          my="md"
+          gap="xs"
+          style={{
+            cursor: "pointer",
+          }}
+        >
+          {!isTransitioning ? (
+            <>
+              <Text size="sm" fw={500}>
+                {levelInfo.startLowValue}
+              </Text>
+              <Progress.Root flex={1} radius="sm">
+                <Progress.Section
+                  key="start-progress"
+                  value={progressPercentage}
+                  color="blue"
+                ></Progress.Section>
+              </Progress.Root>
+              <Text size="sm" fw={500}>
+                {levelInfo.startHighValue}
+              </Text>
+            </>
+          ) : (
+            // End Progress
+            <>
+              <Text size="sm" fw={500}>
+                {levelInfo.endLowValue}
+              </Text>
+              <Progress.Root flex={1} radius="sm">
+                <Progress.Section
+                  key="end-progress"
+                  value={progressPercentage}
+                  color="blue"
+                ></Progress.Section>
+              </Progress.Root>
+              <Text size="sm" fw={500}>
+                {levelInfo.endHighValue === "Infinity" ? (
+                  <IoIosInfinite />
+                ) : (
+                  levelInfo.endHighValue
+                )}
+              </Text>
+            </>
+          )}
+        </Group>
+      </Tooltip>
     </div>
   );
 };

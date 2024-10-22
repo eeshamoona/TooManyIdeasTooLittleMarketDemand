@@ -59,7 +59,15 @@ export default async function ProcessPage({
   const previousEntries = currentEntries.filter(
     (entry) => entry.id !== Number(id)
   );
+  
+  console.log("ID:", id);
 
+  
+  if (JSON.stringify(currentEntries) === JSON.stringify(previousEntries)) {
+    console.log("Previous entries are the same as current entries.");
+  } else {
+    console.log("Previous entries are different from current entries.");
+  }
   // Function to calculate progress
   const calculateProgress = (
     criteria: string,
@@ -91,7 +99,7 @@ export default async function ProcessPage({
     } else {
       return {
         progressValue: progressValue,
-        achieved: progressValue === 1,
+        achieved: progressValue !== null,
       };
     }
   };
@@ -186,7 +194,7 @@ export default async function ProcessPage({
 
   return (
     <Container size="lg">
-      <Display badgeProgress={badgeProgress} />
+      <Display badgeProgress={badgeProgress} entryId={Number(id)} />
     </Container>
   );
 }
