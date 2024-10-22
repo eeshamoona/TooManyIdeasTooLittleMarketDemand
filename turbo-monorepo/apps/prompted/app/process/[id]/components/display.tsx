@@ -35,7 +35,7 @@ interface DisplayProps {
 export default function Display({ badgeProgress, entryId }: DisplayProps) {
   const [currentIndex, setCurrentIndex] = useState(0); // Track current animation
   const [showAll, setShowAll] = useState(false); // Show all animations after sequence
-  const [timer, setTimer] = useState(10); // Countdown timer
+  const [timer, setTimer] = useState(30); // Countdown timer
   const router = useRouter();
 
   useEffect(() => {
@@ -70,7 +70,6 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
           return prevTimer - 1;
         });
       }, 1000); // Decrement every second
-
       return () => clearInterval(countdownTimer);
     }
   }, [showAll, entryId, router]);
@@ -141,9 +140,11 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
   const renderAllBadges = () => {
     const levelBadges = badgeProgress.filter((badge) => badge.level);
     const milestoneBadges = badgeProgress.filter((badge) => !badge.level);
+    const columns =
+      levelBadges.length > 0 && milestoneBadges.length > 0 ? 2 : 1;
 
     return (
-      <SimpleGrid cols={2} spacing="lg">
+      <SimpleGrid cols={columns} spacing="lg">
         <Flex
           gap="sm"
           justify="center"
@@ -169,14 +170,7 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
             </Box>
           ))}
         </Flex>
-        <Flex
-          gap="sm"
-          justify="center"
-          align="center"
-          direction="row"
-          wrap="wrap"
-          mt="md"
-        >
+        <Flex gap="sm" justify="center" direction="row" wrap="wrap" mt="md">
           {milestoneBadges?.map((badge) => (
             <Box
               key={badge.badgeId}
@@ -207,12 +201,12 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
             onClick={goToReadPage}
             rightSection={
               <RingProgress
-                size={30}
-                thickness={4}
+                size={33}
+                thickness={3}
                 roundCaps
-                sections={[{ value: (timer / 10) * 100, color: "blue" }]}
+                sections={[{ value: (timer / 30) * 100, color: "blue" }]}
                 label={
-                  <Text c="blue" fw={700} ta="center" size="xs">
+                  <Text c="blue" ta="center" size="xs">
                     {timer}
                   </Text>
                 }
@@ -226,7 +220,7 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
       {/* Skip button to skip animation */}
       {!showAll && (
         <div style={{ justifyContent: "end", display: "flex" }}>
-          <Button variant="subtle" color="red" onClick={skipAnimations}>
+          <Button variant="outline" color="red" onClick={skipAnimations}>
             Skip Animations
           </Button>
         </div>
