@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   Center,
   Flex,
+  RingProgress,
 } from "@mantine/core";
 import { LevelInformation } from "./level-animation";
 import LevelProgressAnimation from "./level-animation";
@@ -61,7 +62,9 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
       const countdownTimer = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer === 1) {
-            goToReadPage();
+            setTimeout(() => {
+              goToReadPage();
+            }, 0); // Delay routing until after render cycle completes
             clearInterval(countdownTimer);
           }
           return prevTimer - 1;
@@ -198,8 +201,25 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
     <div>
       {showAll && (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Button variant="light" fullWidth onClick={goToReadPage}>
-            View Read Page in... {timer}
+          <Button
+            variant="light"
+            fullWidth
+            onClick={goToReadPage}
+            rightSection={
+              <RingProgress
+                size={30}
+                thickness={4}
+                roundCaps
+                sections={[{ value: (timer / 10) * 100, color: "blue" }]}
+                label={
+                  <Text c="blue" fw={700} ta="center" size="xs">
+                    {timer}
+                  </Text>
+                }
+              />
+            }
+          >
+            Go to Read Page
           </Button>
         </div>
       )}
