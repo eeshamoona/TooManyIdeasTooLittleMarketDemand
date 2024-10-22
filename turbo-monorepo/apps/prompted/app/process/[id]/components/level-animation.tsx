@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import LevelBadge from "../../../progress/components/level-badge";
 import {
+  Card,
   Group,
   Progress,
   Text,
@@ -8,7 +9,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { IoIosInfinite } from "react-icons/io";
-import Confetti from "react-confetti"; // Import Confetti
+import Confetti from "react-confetti";
 
 export interface LevelInformation {
   startLevel: number;
@@ -27,6 +28,7 @@ export interface LevelProgressAnimationProps {
   description: string;
   icon: string;
   label: string;
+  animated: boolean;
 }
 
 const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
@@ -35,18 +37,31 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
   description,
   icon,
   label,
+  animated,
 }) => {
   const { colorScheme } = useMantineColorScheme();
-  const [progress, setProgress] = useState(levelInfo.startProgressValue);
-  const [currentLevel, setCurrentLevel] = useState(levelInfo.startLevel);
+  const [progress, setProgress] = useState(
+    animated ? levelInfo.startProgressValue : levelInfo.endProgressValue
+  );
+  const [currentLevel, setCurrentLevel] = useState(
+    animated ? levelInfo.startLevel : levelInfo.endLevel
+  );
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false); // Confetti state
+  const [showConfetti, setShowConfetti] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
 
   // Incremental progress update for smooth animation
   useEffect(() => {
+    if (!animated) {
+      // If animation is disabled, skip to the end state
+      setProgress(levelInfo.endProgressValue);
+      setCurrentLevel(levelInfo.endLevel);
+      setIsTransitioning(true);
+      return;
+    }
+
     let timer: ReturnType<typeof setTimeout>;
 
     // Get the container width
@@ -92,12 +107,12 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
         setCurrentLevel(levelInfo.endLevel);
 
         // Trigger confetti when the level changes
-        setTimeout(() => setShowConfetti(false), 3000); // Show confetti for 3 seconds
+        setTimeout(() => setShowConfetti(false), 2000); // Show confetti for 3 seconds
       }
     }
 
     return () => clearInterval(timer); // Cleanup interval
-  }, [isTransitioning, currentLevel, levelInfo]);
+  }, [isTransitioning, currentLevel, levelInfo, animated]);
 
   // Calculate progress percentage based on the stage
   const endHighValue =
@@ -114,13 +129,14 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
       100;
 
   return (
-    <div
+    <Card
+      withBorder
       ref={containerRef}
       style={{
         margin: "20px",
         padding: "20px",
-        border: "1px solid #ddd",
         borderRadius: "10px",
+        height: "fit-content",
         position: "relative", // Ensure relative positioning for confetti
       }}
     >
@@ -135,10 +151,7 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
 
       <Group justify="center" align="center" gap="xs">
         {/* Level Badge with Icon */}
-        <LevelBadge
-          level={isTransitioning ? levelInfo.endLevel : currentLevel}
-          icon={icon}
-        />
+        <LevelBadge level={currentLevel} icon={icon} />
         {/* Title and Description */}
         <div style={{ textAlign: "center" }}>
           <Text fw={"bold"} size="lg">
@@ -172,7 +185,7 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
               <Text size="sm" fw={500}>
                 {levelInfo.startLowValue}
               </Text>
-              <Progress.Root flex={1} radius="sm">
+              <Progress.Root size={10} flex={1} radius="sm">
                 <Progress.Section
                   key="start-progress"
                   value={progressPercentage}
@@ -184,12 +197,11 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
               </Text>
             </>
           ) : (
-            // End Progress
             <>
               <Text size="sm" fw={500}>
                 {levelInfo.endLowValue}
               </Text>
-              <Progress.Root flex={1} radius="sm">
+              <Progress.Root size={10} flex={1} radius="sm">
                 <Progress.Section
                   key="end-progress"
                   value={progressPercentage}
@@ -207,7 +219,7 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
           )}
         </Group>
       </Tooltip>
-    </div>
+    </Card>
   );
 };
 

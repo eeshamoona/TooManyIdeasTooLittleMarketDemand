@@ -1,26 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { Text } from "@mantine/core";
+import { Text, Transition } from "@mantine/core";
 import MilestoneBadge from "../../../progress/components/milestone-badge";
 
 export interface MilestoneProgressAnimationProps {
   title: string;
   description: string;
   icon: string;
+  animated: boolean;
 }
 
 const MilestoneProgressAnimation: React.FC<MilestoneProgressAnimationProps> = ({
   title,
   description,
   icon,
+  animated,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(animated ? false : true);
+  const [showDescription, setShowDescription] = useState(
+    animated ? false : true
+  );
+  const [showTitle, setShowTitle] = useState(animated ? false : true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 2000);
+    if (animated) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 500);
 
-    return () => clearTimeout(timer);
+      const titleTimer = setTimeout(() => {
+        setShowTitle(true);
+      }, 1000);
+
+      const descriptionTimer = setTimeout(() => {
+        setShowDescription(true);
+      }, 2000);
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(titleTimer);
+        clearTimeout(descriptionTimer);
+      };
+    }
   }, []);
 
   return (
@@ -31,9 +51,30 @@ const MilestoneProgressAnimation: React.FC<MilestoneProgressAnimationProps> = ({
         icon={icon}
         description={description}
       />
-      <Text ta="center" size="md">
-        {title}
-      </Text>
+      <Transition
+        mounted={showTitle}
+        transition="fade-down"
+        duration={400}
+        timingFunction="ease"
+      >
+        {(styles) => (
+          <Text fw="bold" ta="center" size="md">
+            {title}
+          </Text>
+        )}
+      </Transition>
+      <Transition
+        mounted={showDescription}
+        transition="slide-up"
+        duration={400}
+        timingFunction="ease"
+      >
+        {(styles) => (
+          <Text ta="center" size="md">
+            {description}
+          </Text>
+        )}
+      </Transition>
     </>
   );
 };
