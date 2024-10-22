@@ -94,7 +94,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -138,7 +138,7 @@ export default function TrackedTextarea({
 
     // Convert the dictionary to an array of tuples [word, frequency]
     const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
 
     // Convert back to an object and return
@@ -154,6 +154,7 @@ export default function TrackedTextarea({
   };
 
   const saveEntry = async () => {
+    setIsSaving(true);
     const stats = generateCharacterStats(characters);
     //TODO: Split up the words into a frequency map for the AI to give better suggestions on high frequency words
     const { sortedWordFreqDict, totalWords, top10Words } =
@@ -222,10 +223,12 @@ export default function TrackedTextarea({
       const data = await saveResponse.json();
       const entry_id = data.entryId;
       console.log("Route to entry page with ID:", entry_id);
-      //TODO: Re-route to the entry page
-      router.push(`/read/${entry_id}`);
+      //TODO: Re-route to process entry
+      router.push(`/process/${entry_id}`);
     } catch (error) {
       console.error("Error calling API:", error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -254,7 +257,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =
@@ -266,12 +269,6 @@ export default function TrackedTextarea({
       userCharacters,
       userPercentage: parseFloat(userPercentage.toFixed(2)),
     };
-  };
-
-  const handleSaveResponse = () => {
-    setIsSaving(true);
-    saveEntry();
-    setIsSaving(false);
   };
 
   const handleSaveAndClearResponse = () => {
@@ -389,7 +386,7 @@ export default function TrackedTextarea({
         <Button
           loading={isSaving}
           variant="solid"
-          onClick={handleSaveResponse}
+          onClick={saveEntry}
           disabled={combinedResponse.trim() === ""}
         >
           Save Response
