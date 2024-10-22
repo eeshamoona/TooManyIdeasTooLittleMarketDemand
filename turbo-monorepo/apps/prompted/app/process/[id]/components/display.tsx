@@ -34,6 +34,7 @@ interface DisplayProps {
 export default function Display({ badgeProgress, entryId }: DisplayProps) {
   const [currentIndex, setCurrentIndex] = useState(0); // Track current animation
   const [showAll, setShowAll] = useState(false); // Show all animations after sequence
+  const [timer, setTimer] = useState(10); // Countdown timer
   const router = useRouter();
 
   useEffect(() => {
@@ -45,14 +46,31 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
   // Automatically progress to next animation in the sequence
   useEffect(() => {
     if (!showAll && currentIndex < badgeProgress.length) {
-      const timer = setTimeout(() => {
+      const animationTimer = setTimeout(() => {
         setCurrentIndex((prevIndex) => prevIndex + 1);
-      }, 5000); // 3 seconds per animation
-      return () => clearTimeout(timer);
+      }, 5000); // 5 seconds per animation
+      return () => clearTimeout(animationTimer);
     } else {
       skipAnimations();
     }
   }, [currentIndex, showAll, badgeProgress.length]);
+
+  // Countdown timer for routing to read page
+  useEffect(() => {
+    if (showAll) {
+      const countdownTimer = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer === 1) {
+            goToReadPage();
+            clearInterval(countdownTimer);
+          }
+          return prevTimer - 1;
+        });
+      }, 1000); // Decrement every second
+
+      return () => clearInterval(countdownTimer);
+    }
+  }, [showAll, entryId, router]);
 
   const skipAnimations = () => {
     setShowAll(true);
@@ -181,7 +199,7 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
       {showAll && (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <Button variant="light" fullWidth onClick={goToReadPage}>
-            View Read Page in... 
+            View Read Page in... {timer}
           </Button>
         </div>
       )}
