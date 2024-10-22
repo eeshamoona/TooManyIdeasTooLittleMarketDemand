@@ -34,18 +34,11 @@ interface DisplayProps {
 export default function Display({ badgeProgress, entryId }: DisplayProps) {
   const [currentIndex, setCurrentIndex] = useState(0); // Track current animation
   const [showAll, setShowAll] = useState(false); // Show all animations after sequence
-  const [showButton, setShowButton] = useState(false); // Show 'View Read Page' button
   const router = useRouter();
 
   useEffect(() => {
     if (badgeProgress.length === 0) {
       router.push(`/read/${entryId}`);
-    } else {
-      const timer = setTimeout(() => {
-        setShowButton(true);
-      }, 2000);
-
-      return () => clearTimeout(timer);
     }
   }, [badgeProgress, entryId, router]);
 
@@ -63,7 +56,6 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
 
   const skipAnimations = () => {
     setShowAll(true);
-    setShowButton(true); // Show the button after skipping animations
   };
 
   const goToReadPage = () => {
@@ -184,67 +176,15 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
     );
   };
 
-  // Render all animations in a grid layout
-  // const renderAllAnimations = () => {
-  //   return (
-  //     <SimpleGrid cols={2} spacing="lg">
-  //       {badgeProgress.map((badge) => {
-  //         if (badge.level) {
-  //           return (
-  //             <Box
-  //               key={badge.badgeId}
-  //               style={{
-  //                 maxWidth: "300px",
-  //                 margin: "0 auto",
-  //                 textAlign: "center",
-  //               }}
-  //             >
-  //               <LevelProgressAnimation
-  //                 levelInfo={badge.level!}
-  //                 title={badge.badgeTitle}
-  //                 description={badge.badgeDescription}
-  //                 icon={badge.badgeIcon}
-  //                 label={badge.badgeLabel}
-  //               />
-  //             </Box>
-  //           );
-  //         } else {
-  //           return (
-  //             <Box
-  //               key={badge.badgeId}
-  //               style={{
-  //                 maxWidth: "300px",
-  //               }}
-  //             >
-  //               <MilestoneProgressAnimation
-  //                 title={badge.badgeTitle}
-  //                 description={badge.badgeDescription}
-  //                 icon={badge.badgeIcon}
-  //                 animated={false}
-  //               />
-  //             </Box>
-  //           );
-  //         }
-  //       })}
-  //     </SimpleGrid>
-  //   );
-  // };
   return (
     <div>
-      {!showAll && currentIndex < badgeProgress.length && (
-        <div>{renderCurrentAnimation()}</div>
-      )}
-
       {showAll && (
         <div style={{ textAlign: "center", marginTop: "20px" }}>
           <Button variant="light" fullWidth onClick={goToReadPage}>
-            View Read Page
+            View Read Page in... 
           </Button>
         </div>
       )}
-
-      {showAll && <div>{renderAllBadges()}</div>}
-
       {/* Skip button to skip animation */}
       {!showAll && (
         <div style={{ justifyContent: "end", display: "flex" }}>
@@ -253,12 +193,12 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
           </Button>
         </div>
       )}
-      {/* Show the button after animations or skipping */}
-      {/* {showButton && (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Button onClick={goToReadPage}>View Read Page</Button>
-        </div>
-      )} */}
+
+      {!showAll && currentIndex < badgeProgress.length && (
+        <div>{renderCurrentAnimation()}</div>
+      )}
+
+      {showAll && <div>{renderAllBadges()}</div>}
     </div>
   );
 }

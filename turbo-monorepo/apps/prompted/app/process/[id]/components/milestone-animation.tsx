@@ -41,7 +41,7 @@ const MilestoneProgressAnimation: React.FC<MilestoneProgressAnimationProps> = ({
         clearTimeout(descriptionTimer);
       };
     }
-  }, []);
+  }, [animated]);
 
   return (
     <>
@@ -58,19 +58,19 @@ const MilestoneProgressAnimation: React.FC<MilestoneProgressAnimationProps> = ({
         timingFunction="ease"
       >
         {(styles) => (
-          <Text fw="bold" ta="center" size="md">
+          <Text fw="bold" ta="center" size="md" style={styles}>
             {title}
           </Text>
         )}
       </Transition>
       <Transition
         mounted={showDescription}
-        transition="slide-up"
+        transition="fade-down"
         duration={400}
         timingFunction="ease"
       >
         {(styles) => (
-          <Text ta="center" size="md">
+          <Text ta="center" size="md" style={styles}>
             {description}
           </Text>
         )}
