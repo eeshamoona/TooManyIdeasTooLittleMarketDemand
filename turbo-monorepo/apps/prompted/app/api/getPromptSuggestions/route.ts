@@ -9,13 +9,11 @@ const openai = new OpenAI({
 export async function POST(request: Request) {
   const { category, description, prompts } = await request.json();
 
-  console.log("Received request data:", { category, description, prompts });
-
   if (!prompts || !description || !category) {
     console.log("Missing required fields:", { category, description, prompts });
     return NextResponse.json(
       { error: "Response and Prompt are required" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -81,7 +79,7 @@ export async function POST(request: Request) {
     console.error("Error calling OpenAI API:", error);
     return NextResponse.json(
       { error: "Error generating summary" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

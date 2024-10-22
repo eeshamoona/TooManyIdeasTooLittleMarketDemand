@@ -9,7 +9,7 @@ Evaluate the user's response based on the following:
 4. Relevance: Does the response stay on topic? High scores for engaging, on-point stories; low for off-topic or irrelevant ones.
 5. Readability: Is the writing clear and easy to follow? Use Flesch-Kincaid to assess; deduct points for awkward phrasing or grammar.
 
-Output the results in JSON format with critical scores (out of 10) and friendly feedback on how to make the writing more interesting in the following order:
+Output the results in JSON format with critical scores (out of 10) and friendly, universal simple language feedback on how to make the writing more interesting in the following order:
 {
   "completeness": {
     "score": number (out of 10),
