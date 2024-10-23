@@ -45,4 +45,36 @@ All of the writing prompts are designed to inspire **joyous creativity**. The qu
 
 ### Captivating Landing Page
 
-The **landing page** aims to capture the attention of diverse users who would find creative writing interesting and rewarding, making it accessible to anyone who’s ready to give it a try. To do this the user can have the option to go through a personality quiz that cleverly asks questions that point out which features would be helpful to them, and ultimately leading them to one category. They can try writing right away with a random prompt in that category, and the opportunity to use AI to help generate a sentence 3 time maximum. When they are ready to save, it will prompt them to sign up for an account. I want to make sure to save the data that they end up writing about so they don't loose their progress on their first entry, it should basically interrupt the process right befor eit is about to submit and has them sign up and then resumes to submit the entry and show them the achievements which will definetly show the "completed first prompt" milestone so they will feel motivated that they have already gotten started. 
+The **landing page** aims to capture the attention of diverse users who would find creative writing interesting and rewarding, making it accessible to anyone who’s ready to give it a try. To prime the user they can optionally take this 4 questions quiz to customize the landing page to their own use cases. There is of course an option to skip and view the default landing page.
+
+
+Personality Quiz Questions: 
+1. What kind of creative writer are you?
+A) I'm new to creative writing but excited to start
+B) I journal sometimes but want to write more regularly.
+C) I love creative writing but could use fresh ideas.
+D) I write often and would appreciate feedback and insights.
+
+2. What inspires you to write the most?
+A) For personal growth and self-improvement.
+B) To express my creativity and ideas.
+C) To relax and unwind.
+D) To challenge myself and solve problems.
+
+3. What's your main goal on your writing journey?
+A) Developing a regular writing habit.
+B) Boosting my creativity and imagination.
+C) Gaining insights into myself through reflection.
+D) Improving my writing skills with holistic feedback.
+
+4. What keeps you motivated to keep writing?
+A) Being promoted to new levels.
+B) Discovering hidden milestones.
+C) Tracking my stats over time.
+D) Revisiting my past writings.
+
+Features of the landing page that these questions affect:
+- Change the langauge of the landing page based on answer to question 1, ex. if new to writing say writing can be unfamiliar but it's fun to do something new!
+- Cycling through the prompts, narrowed down basted on answer to question 2
+- Showing awards and motivations, highlighting the answer they picked in answer 4 first
+- Show an extra feature based on question 3
