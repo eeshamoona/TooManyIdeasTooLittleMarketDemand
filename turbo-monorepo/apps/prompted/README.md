@@ -73,8 +73,138 @@ B) Discovering hidden milestones.
 C) Tracking my stats over time.
 D) Revisiting my past writings.
 
-Features of the landing page that these questions affect:
-- Change the langauge of the landing page based on answer to question 1, ex. if new to writing say writing can be unfamiliar but it's fun to do something new!
-- Cycling through the prompts, narrowed down basted on answer to question 2
-- Showing awards and motivations, highlighting the answer they picked in answer 4 first
-- Show an extra feature based on question 3
+# Landing Page Features Affected by Quiz Questions
+## Overview
+Your landing page will dynamically adjust based on the user's responses to the quiz questions. This personalization aims to make users feel seen and heard, increasing engagement and the likelihood of sign-up. The features affected by the quiz questions are:
+
+Question 1 (Q1): Personalize the subtext under the app name based on the user's writing experience.
+Question 2 (Q2): Display a typewriter animation showcasing prompts filtered according to the user's writing inspiration.
+Question 3 (Q3): Highlight an extra feature (from the backlog) that aligns with the user's interests.
+Question 4 (Q4): Showcase motivational features, emphasizing the one that resonates most with the user.
+## Detailed Breakdown
+### Q1: Personalized Subtext Under App Name
+#### Implementation:
+Location: Directly beneath the app name "Prompted."
+Content: Change the subtext based on the user's answer to Q1.
+Option A: "Writing can be unfamiliar, but it's fun to try something new!"
+Option B: "Turn your occasional journaling into a rewarding habit!"
+Option C: "Fuel your creativity with fresh and inspiring prompts!"
+Option D: "Take your writing to the next level with feedback and insights!"
+Default: If no quiz data is available, display the app's slogan: "Write more, worry less."
+### Q2: Typewriter Animation with Filtered Prompts
+#### Implementation:
+Location: Below the subtext or hero section.
+Effect: Use a typewriter animation to display prompts being typed out quickly.
+Content Filtering:
+Option A: Show prompts related to personal growth and self-improvement.
+Option B: Display prompts that encourage expressing creativity and ideas.
+Option C: Present prompts aimed at relaxation and unwinding.
+Option D: Use prompts that challenge problem-solving skills.
+Default: If no quiz data is available, randomize prompts from all categories.
+### Q3: Displaying Extra Features (Backlog Items)
+#### Implementation:
+Location: In a section labeled "Coming Soon" or "Future Features."
+Features to Highlight:
+Option A (Streaks): Track consecutive days of writing to build a habit.
+Option B (Additional Sparks): A button providing extra inspiration or starting ideas.
+Option C (Self-Reflection Space): An area for personal thoughts after submitting an entry.
+Option D (Personalized AI Feedback Tone): Customize the tone of AI feedback in the user's profile.
+Display Logic: Show the feature corresponding to the user's answer to Q3 first.
+### Q4: Highlighting Motivational Features
+#### Implementation:
+Location: Prominently on the landing page, possibly as a feature highlight.
+Features to Showcase (Implemented and Looking Awesome):
+Option A (Stat Charts): Show a screenshot of writing statistics.
+Option B (Level Badges): Display an animation of leveling up with confetti.
+Option C (Milestone Badges): Reveal a hidden milestone badge.
+Option D (Search and Sort Entries): Show a GIF demonstrating how to narrow down entries.
+Display Logic: Highlight the feature corresponding to the user's answer to Q4 first.
+## Additional Landing Page Content
+1. Value Proposition Statement
+Purpose: Clearly communicate the core benefits of the app.
+Example: "Unlock your creativity and make writing a fun, rewarding habit with Prompted."
+2. How It Works Section
+Purpose: Explain the app's functionality without overlapping other features.
+Structure:
+Choose a Prompt: Select from a variety of prompts tailored to your interests.
+Start Writing: Use our simple text editor to express your thoughts.
+AI Assistance: Get help generating the next sentence if you get stuck.
+Submit and Achieve: Earn badges and level up as you write.
+Review and Reflect: Access detailed stats and feedback on your writing.
+3. Call to Action Sign-Up Button
+Placement: Strategically throughout the page—after the hero section, feature highlights, and at the end.
+Design: Bold and contrasting color with clear text.
+Copy Ideas:
+"Start Your Writing Journey"
+"Unlock Your Creativity Now"
+"Join Prompted Today"
+4. FAQ Section
+Purpose: Address common questions to alleviate user concerns.
+Example Questions:
+Q: Is Prompted suitable for beginners?
+A: Absolutely! Whether you're new to writing or a seasoned pro, Prompted is designed to inspire and assist you on your journey.
+Q: How does the AI assistance work?
+A: If you get stuck, our AI can suggest the next sentence to keep your writing flowing.
+## Sample Structure and Flow of the Landing Page
+1. Hero Section
+App Name and Personalized Subtext:
+Display "Prompted" with the subtext customized based on Q1.
+Example for Option A: "Prompted"
+"Writing can be unfamiliar, but it's fun to try something new!"
+Call to Action Button:
+"Start Your Writing Journey"
+2. Typewriter Animation with Prompts
+Description: Dynamic typewriter effect showcasing prompts filtered based on Q2.
+Purpose: Immediately engage users with content that resonates with their interests.
+3. Value Proposition Statement
+Content: A concise statement highlighting the app's main benefits.
+Example: "Unlock your creativity and make writing a fun, rewarding habit with Prompted."
+4. Motivational Feature Highlight
+Feature Displayed: Based on the user's answer to Q4.
+Example for Option B (Level Badges):
+Visual: Animation of leveling up with confetti.
+Caption: "Earn badges and level up as you write."
+5. How It Works Section
+Steps:
+a. Choose a Prompt
+b. Start Writing
+c. AI Assistance
+d. Submit and Achieve
+e. Review and Reflect
+Design: Use icons or illustrations for each step to enhance visual appeal.
+6. Extra Feature Highlight (From Q3)
+Feature Displayed: Based on the user's answer to Q3.
+Example for Option A (Streaks):
+Heading: "Coming Soon: Build Your Writing Streaks"
+Description: "Stay motivated by tracking your consecutive days of writing."
+7. Additional Features Overview
+Include Other Key Features:
+AI Assistance
+Diverse Writing Prompts
+Entry Management
+Design: Use a clean layout with brief descriptions and icons.
+9. Secondary Call to Action
+Placement: After the features and testimonials.
+Copy: "Join Prompted Today and Start Writing!"
+10. FAQ Section
+Content: Address any remaining questions or concerns.
+11. Footer
+Links: Privacy Policy, Terms of Service, Contact Information.
+Social Media Icons: If applicable.
+## Ideas for Copy and Content
+- Engaging Headlines
+"Unleash Your Inner Writer"
+"Begin Your Creative Journey"
+"Write More, Worry Less"
+- Benefit Statements
+"Overcome writer's block with AI assistance."
+"Track your progress and celebrate achievements."
+"Make writing a fun and rewarding habit."
+- Call to Action Phrases
+"Start Writing Now"
+"Unlock Your Creativity"
+"Get Started Today"
+- Feature Highlights
+AI Assistance: "Your creative companion when you need a nudge."
+Achievements: "Level up and earn badges as you write."
+Writing Stats: "Visualize your progress over time."
