@@ -21,7 +21,7 @@ interface HeroPageProps {
   scrollToCallback: () => void;
   goToLoginCallback: () => void;
 }
-export function HeroPage({
+export default function HeroPage({
   answerQ1,
   scrollToCallback,
   goToLoginCallback,

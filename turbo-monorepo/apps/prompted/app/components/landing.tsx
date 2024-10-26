@@ -1,32 +1,19 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Button, Container, Stack, Title } from "@mantine/core";
-import { FaqWithImage } from "./faq";
-import Footer from "./footer";
-import { HeroPage } from "./hero";
-import { HowItWorks } from "./how2";
-import FeatureHighlight from "./motivation";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { TypewriterArray } from "./typewriter";
 import { usePrompts } from "../context/PromptContext";
 
+// Lazy load the components
+const HeroPage = React.lazy(() => import("./hero"));
+const HowItWorks = React.lazy(() => import("./how"));
+const FeatureHighlight = React.lazy(() => import("./motivation"));
+const FaqWithImage = React.lazy(() => import("./faq"));
+const Footer = React.lazy(() => import("./footer"));
+
 const LandingPage: React.FC = () => {
   const router = useRouter();
-  // const [answerQ1, setAnswerQ1] = useState<string | null>(null);
-  // const [answerQ2, setAnswerQ2] = useState<string | null>(null);
-  // const [answerQ3, setAnswerQ3] = useState<string | null>(null);
-  // const [answerQ4, setAnswerQ4] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   const quizAnswers = localStorage.getItem("quizAnswers");
-  //   if (quizAnswers) {
-  //     const answers = JSON.parse(quizAnswers);
-  //     setAnswerQ1(answers?.Q1 || null);
-  //     setAnswerQ2(answers?.Q2 || null);
-  //     // setAnswerQ3(answers?.Q3 || null);
-  //     setAnswerQ4(answers?.Q4 || null);
-  //   }
-  // }, []);
 
   const scrollToHowItWorks = () => {
     const element = document.getElementById("how-it-works");
@@ -51,55 +38,57 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <FullHeightSection>
-        <HeroPage
-          scrollToCallback={scrollToHowItWorks}
-          goToLoginCallback={goToLogin}
-        />
-      </FullHeightSection>
+      <Suspense fallback={<div>Loading...</div>}>
+        <FullHeightSection>
+          <HeroPage
+            scrollToCallback={scrollToHowItWorks}
+            goToLoginCallback={goToLogin}
+          />
+        </FullHeightSection>
 
-      <Stack
-        gap="sm"
-        align="center"
-        style={{
-          textAlign: "center",
-          padding: "2rem",
-        }}
-      >
-        <Title ta="center">Get inspired with prompts like...</Title>
-        <TypewriterArray strings={displayPrompts} />
-      </Stack>
-
-      <FullHeightSection id="how-it-works">
-        <HowItWorks />
-      </FullHeightSection>
-
-      <FullHeightSection
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-        }}
-      >
-        <FeatureHighlight />
-        <Button
-          size="lg"
-          variant="light"
-          color="blue"
-          rightSection={<FaArrowRight />}
-          onClick={goToLogin}
+        <Stack
+          gap="sm"
+          align="center"
+          style={{
+            textAlign: "center",
+            padding: "2rem",
+          }}
         >
-          Sign up for free and get started today
-        </Button>
-      </FullHeightSection>
+          <Title ta="center">Get inspired with prompts like...</Title>
+          <TypewriterArray strings={displayPrompts} />
+        </Stack>
 
-      <FullHeightSection>
-        <FaqWithImage />
-      </FullHeightSection>
+        <FullHeightSection id="how-it-works">
+          <HowItWorks />
+        </FullHeightSection>
 
-      <footer>
-        <Footer />
-      </footer>
+        <FullHeightSection
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+          }}
+        >
+          <FeatureHighlight />
+          <Button
+            size="lg"
+            variant="light"
+            color="blue"
+            rightSection={<FaArrowRight />}
+            onClick={goToLogin}
+          >
+            Sign up for free and get started today
+          </Button>
+        </FullHeightSection>
+
+        <FullHeightSection>
+          <FaqWithImage />
+        </FullHeightSection>
+
+        <footer>
+          <Footer />
+        </footer>
+      </Suspense>
     </>
   );
 };

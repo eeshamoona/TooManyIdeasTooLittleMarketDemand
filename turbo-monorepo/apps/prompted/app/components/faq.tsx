@@ -40,7 +40,7 @@ const faqData = [
   },
 ];
 
-export function FaqWithImage() {
+export default function FaqWithImage() {
   return (
     <Container pt="xl" mt="lg">
       <Grid id="faq-grid" gutter={50} align="center">
