@@ -1,3 +1,5 @@
+_If you have feedback, please create an issue and select Prompted as the project. Thanks!_
+
 **Overview of the Creative Writing App**
 
 This app is designed to help users explore creative writing with ease and enjoyment. Here’s a look at how it works and what features it offers:
@@ -43,7 +45,31 @@ There are two types of badges to motivate your progress: **level badges** and **
 
 All of the writing prompts are designed to inspire **joyous creativity**. The questions are crafted to help you be **inquisitive, descriptive**, and **imaginative**. They can also support **visualization** and **grounding**, with prompts that are specific enough to inspire **short, focused responses**.
 
-### Captivating Landing Page
+### Landing Page
+
+Header
+Subtext Q1
+
+Call to Action OR How it Works button
+
+Generate Prompts with typewriter effect Q2 asking questions to the user essentially
+
+How to section
+gif displays with vertical tabs on the right for the 4 steps: 1. Pick a prompt 2. Write 3. Get AI assistance when you get stuck 4. See Stats, AI Feedback, Word Freq 
+
+Gamification Features Q4
+Motivational Feature Highlight with the users pick first
+
+Upcoming Features
+Extra Feature Highlight (From Q3) with the rest of the features in a horizontal caroseoul 
+
+Call to Action
+
+FAQ Section 
+
+Footer
+
+### Captivating Landing Page [DEPRECATED]
 
 The **landing page** aims to capture the attention of diverse users who would find creative writing interesting and rewarding, making it accessible to anyone who’s ready to give it a try. To prime the user they can optionally take this 4 questions quiz to customize the landing page to their own use cases. There is of course an option to skip and view the default landing page.
 
@@ -208,26 +234,3 @@ Social Media Icons: If applicable.
 AI Assistance: "Your creative companion when you need a nudge."
 Achievements: "Level up and earn badges as you write."
 Writing Stats: "Visualize your progress over time."
-
-
-Header
-Subtext Q1
-
-Call to Action OR How it Works button
-
-Generate Prompts with typewriter effect Q2 asking questions to the user essentially
-
-How to section
-gif displays with vertical tabs on the right for the 4 steps: 1. Pick a prompt 2. Write 3. Get AI assistance when you get stuck 4. See Stats, AI Feedback, Word Freq 
-
-Gamification Features Q4
-Motivational Feature Highlight with the users pick first
-
-Upcoming Features
-Extra Feature Highlight (From Q3) with the rest of the features in a horizontal caroseoul 
-
-Call to Action
-
-FAQ Section 
-
-Footer
