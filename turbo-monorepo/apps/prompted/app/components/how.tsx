@@ -11,7 +11,7 @@ import {
 } from "react-icons/pi";
 
 interface HowItWorksProps {
-  answerQ2: string;
+  answerQ2?: string;
 }
 
 export function HowItWorks({ answerQ2 }: HowItWorksProps) {
@@ -46,7 +46,7 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
     <Container size="lg" content="center">
       <Stack
         gap="sm"
-        mb="8rem"
+        mb="xl"
         align="center"
         style={{
           textAlign: "center",
@@ -56,12 +56,7 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
         <Title ta="center">Get inspired with questions like...</Title>
         <TypewriterArray strings={displayPrompts} />
       </Stack>
-      <Tabs
-        orientation="horizontal"
-        variant="outline"
-        value={activeTab}
-        onChange={setActiveTab}
-      >
+      <Tabs orientation="horizontal" value={activeTab} onChange={setActiveTab}>
         <Tabs.List mb={"lg"} grow>
           <Tabs.Tab
             value="pick-a-prompt"

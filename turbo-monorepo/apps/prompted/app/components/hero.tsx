@@ -17,7 +17,7 @@ import { FaCheck } from "react-icons/fa";
 import { subtext } from "./data";
 
 interface HeroPageProps {
-  answerQ1: string;
+  answerQ1?: string;
   scrollToCallback: () => void;
   goToLoginCallback: () => void;
 }
@@ -45,7 +45,7 @@ export function HeroPage({
     <Container size="lg" pt={"5rem"}>
       <Grid gutter="xl" align="center">
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <Text size="md">Welcome to your creative space for</Text>
+          <Text size="md">Welcome to your space for</Text>
           <Title order={1}> Effortless Writing, Creativity, and Growth</Title>
           <Flex
             direction={{ base: "column", sm: "row" }}
@@ -72,7 +72,7 @@ export function HeroPage({
               <b>Completely Free</b> – No hidden fees, no premium features.
             </List.Item>
             <List.Item>
-              <b>AI Powered</b> – Openai's GPT-4o-mini will help you when you
+              <b>AI Powered</b> – OpenAI's GPT-4o Mini will help you when you
               get stuck.
             </List.Item>
             <List.Item>

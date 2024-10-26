@@ -10,6 +10,7 @@ import {
   Button,
   Menu,
   UnstyledButton,
+  useMantineTheme,
 } from "@mantine/core";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
@@ -106,7 +107,9 @@ export function CustomAppShell({
   const [opened, { toggle }] = useDisclosure();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
+  const theme = useMantineTheme();
   const pathname = usePathname();
+  const [textColor, setTextColor] = useState("");
 
   const backgroundColor = colorScheme === "dark" ? "yellow" : "indigo";
 
@@ -133,7 +136,16 @@ export function CustomAppShell({
             />
           )}
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Text>Prompted</Text>
+            <Group
+              onClick={() => router.push("/")}
+              onMouseEnter={() => setTextColor(theme.colors.blue[7])}
+              onMouseLeave={() => setTextColor("")}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              <Text style={{ color: textColor }}>Prompted</Text>
+            </Group>
             {isLoggedIn && (
               <Group gap={"sm"} visibleFrom="sm">
                 <Button

@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import { createElement, useState, useEffect, useRef } from "react";
 import {
   Container,
-  Grid,
-  Card,
-  Text,
-  Title,
   Stack,
+  Card,
   Center,
   Group,
+  Title,
+  Grid,
+  Text,
+  useMantineTheme,
+  Divider,
 } from "@mantine/core";
+import React from "react";
+import { FaIdBadge, FaMedal, FaSearch } from "react-icons/fa";
+import { FaBarsProgress } from "react-icons/fa6";
 import LevelProgressAnimation from "../process/[id]/components/level-animation";
 import MilestoneProgressAnimation from "../process/[id]/components/milestone-animation";
-import { FaBarsProgress } from "react-icons/fa6";
-import { FaIdBadge, FaMedal, FaSearch } from "react-icons/fa";
 
 export const featureDescriptions = {
   A: {
@@ -24,7 +28,7 @@ export const featureDescriptions = {
         Image here for Stat Charts
       </div>
     ),
-    icon: <FaBarsProgress size={40} />,
+    icon: FaBarsProgress,
   },
   B: {
     title: "Earn Level Badges",
@@ -49,7 +53,7 @@ export const featureDescriptions = {
         animated={true}
       />
     ),
-    icon: <FaIdBadge size={40} />,
+    icon: FaIdBadge,
   },
   C: {
     title: "Achieve Milestones",
@@ -59,6 +63,7 @@ export const featureDescriptions = {
       <Card
         withBorder
         key={"badgeId"}
+        radius={"md"}
         style={{
           minWidth: "14rem",
           minHeight: "15rem",
@@ -78,7 +83,7 @@ export const featureDescriptions = {
         />
       </Card>
     ),
-    icon: <FaMedal size={40} />,
+    icon: FaMedal,
   },
   D: {
     title: "Browse Past Entries",
@@ -89,64 +94,111 @@ export const featureDescriptions = {
         Image here for Search and Sort Entries
       </div>
     ),
-    icon: <FaSearch size={40} />,
+    icon: FaSearch,
   },
 };
 
-const FeatureHighlight: React.FC<{ answerQ4: string }> = ({ answerQ4 }) => {
-  const featureKeys = Object.keys(featureDescriptions);
-  const initialOrder = featureKeys.includes(answerQ4)
-    ? [answerQ4, ...featureKeys.filter((key) => key !== answerQ4)]
-    : featureKeys;
-  const [orderedFeatures, setOrderedFeatures] =
-    useState<string[]>(initialOrder);
+interface FeatureHighlightProps {
+  answerQ4?: string;
+}
 
-  useEffect(() => {
-    setOrderedFeatures(initialOrder);
-  }, [answerQ4]);
+const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
+  const theme = useMantineTheme();
+  const [selectedFeature, setSelectedFeature] = useState(answerQ4 || "A");
+  // eslint-disable-next-line no-undef
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const rotateFeatures = (clickedKey: string) => {
-    const clickedIndex = orderedFeatures.indexOf(clickedKey);
-    if (clickedIndex > -1) {
-      // Rotate the array to bring the clicked element to the front
-      const newOrder = [
-        ...orderedFeatures.slice(clickedIndex),
-        ...orderedFeatures.slice(0, clickedIndex),
-      ];
-      setOrderedFeatures(newOrder);
-    }
+    setSelectedFeature(clickedKey);
+    resetInterval();
   };
 
-  if (orderedFeatures.length === 0) {
-    return null; // or a loading spinner
-  }
+  const resetInterval = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    intervalRef.current = setInterval(() => {
+      setSelectedFeature((prev) => {
+        const featureKeys = Object.keys(featureDescriptions);
+        const currentIndex = featureKeys.indexOf(prev);
+        const nextIndex = (currentIndex + 1) % featureKeys.length;
+        return featureKeys[nextIndex];
+      });
+    }, 8000); // Rotate every 8 seconds
+  };
+
+  useEffect(() => {
+    resetInterval();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
 
   return (
-    <Container size="xl" p="xl">
+    <Container size="xl">
+      <Group>
+        <Divider flex={1} />
+        <Title ta="center" order={1}>
+          Keep the Momentum Going
+        </Title>
+        <Divider flex={1} />
+      </Group>
+
+      <Text ta="center" c="dimmed" mb="xl">
+        Discover more ways to stay motivated and inspired
+      </Text>
       <Grid gutter={30}>
         {/* Left Column: Main and Secondary Features */}
         <Grid.Col span={8}>
           <Stack gap="lg">
             {/* Main Feature */}
-            <Card withBorder padding="lg">
-              <Center>
-                {featureDescriptions[orderedFeatures[0]].mainContent}
+            <Card
+              padding="lg"
+              style={{ height: "18rem", backgroundColor: "transparent" }}
+            >
+              <Center style={{ height: "100%" }}>
+                {featureDescriptions[selectedFeature].mainContent}
               </Center>
             </Card>
 
             {/* Secondary Features */}
             <Grid gutter={20} align="center">
-              {orderedFeatures.slice(1).map((key) => (
-                <Grid.Col span={4} key={key}>
+              {Object.entries(featureDescriptions).map(([key, feature]) => (
+                <Grid.Col span={3} key={key}>
                   <Card
                     withBorder
                     padding="md"
-                    style={{ textAlign: "center", cursor: "pointer" }}
+                    h={100}
                     onClick={() => rotateFeatures(key)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-3px)";
+                      e.currentTarget.style.boxShadow = theme.shadows.md;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                    style={{
+                      textAlign: "center",
+                      cursor: "pointer",
+                      backgroundColor:
+                        selectedFeature === key
+                          ? "var(--mantine-color-blue-light-hover)"
+                          : "",
+                      borderColor:
+                        selectedFeature === key
+                          ? "var(--mantine-color-blue-light-color)"
+                          : "",
+                      borderWidth: selectedFeature === key ? "1px" : "",
+                      borderStyle: "solid",
+                    }}
                   >
-                    <Stack align="center" gap="sm">
-                      {featureDescriptions[key].icon}
-                      <Title order={5}>{featureDescriptions[key].title}</Title>
+                    <Stack justify="end" align="center" h={"100%"} gap="sm">
+                      {feature?.icon &&
+                        createElement(feature.icon, { size: 20 })}
+                      <Text size="sm">{feature.title}</Text>
                     </Stack>
                   </Card>
                 </Grid.Col>
@@ -158,13 +210,16 @@ const FeatureHighlight: React.FC<{ answerQ4: string }> = ({ answerQ4 }) => {
         <Grid.Col span={4}>
           <Stack gap="sm" pt={"xl"}>
             <Group w="full" align="center" gap="sm">
-              {featureDescriptions[orderedFeatures[0]].icon}
+              {featureDescriptions[selectedFeature]?.icon &&
+                createElement(featureDescriptions[selectedFeature].icon, {
+                  size: 20,
+                })}
               <Title order={2} w="full">
-                {featureDescriptions[orderedFeatures[0]].title}
+                {featureDescriptions[selectedFeature].title}
               </Title>
             </Group>
             <Text c="dimmed">
-              {featureDescriptions[orderedFeatures[0]].description}
+              {featureDescriptions[selectedFeature].description}
             </Text>
           </Stack>
         </Grid.Col>

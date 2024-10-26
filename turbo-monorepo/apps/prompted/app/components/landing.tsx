@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Container } from "@mantine/core";
 import { FaqWithImage } from "./faq";
 import Footer from "./footer";
 import { HeroPage } from "./hero";
 import { HowItWorks } from "./how";
-import FeatureHighlight from "./motivation2";
+import FeatureHighlight from "./motivation";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
-  const [answerQ1, setAnswerQ1] = useState<string | null>(null);
-  const [answerQ2, setAnswerQ2] = useState<string | null>(null);
-  const [answerQ3, setAnswerQ3] = useState<string | null>(null);
-  const [answerQ4, setAnswerQ4] = useState<string | null>(null);
+  // const [answerQ1, setAnswerQ1] = useState<string | null>(null);
+  // const [answerQ2, setAnswerQ2] = useState<string | null>(null);
+  // const [answerQ3, setAnswerQ3] = useState<string | null>(null);
+  // const [answerQ4, setAnswerQ4] = useState<string | null>(null);
 
-  useEffect(() => {
-    const quizAnswers = localStorage.getItem("quizAnswers");
-    if (quizAnswers) {
-      const answers = JSON.parse(quizAnswers);
-      setAnswerQ1(answers?.Q1 || null);
-      setAnswerQ2(answers?.Q2 || null);
-      setAnswerQ3(answers?.Q3 || null);
-      setAnswerQ4(answers?.Q4 || null);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const quizAnswers = localStorage.getItem("quizAnswers");
+  //   if (quizAnswers) {
+  //     const answers = JSON.parse(quizAnswers);
+  //     setAnswerQ1(answers?.Q1 || null);
+  //     setAnswerQ2(answers?.Q2 || null);
+  //     // setAnswerQ3(answers?.Q3 || null);
+  //     setAnswerQ4(answers?.Q4 || null);
+  //   }
+  // }, []);
 
   const scrollToHowItWorks = () => {
     const element = document.getElementById("how-it-works");
@@ -48,14 +48,13 @@ const LandingPage: React.FC = () => {
     <>
       <FullHeightSection>
         <HeroPage
-          answerQ1={answerQ1}
           scrollToCallback={scrollToHowItWorks}
           goToLoginCallback={goToLogin}
         />
       </FullHeightSection>
 
       <FullHeightSection id="how-it-works">
-        <HowItWorks answerQ2={answerQ2} />
+        <HowItWorks />
       </FullHeightSection>
 
       <FullHeightSection
@@ -65,7 +64,7 @@ const LandingPage: React.FC = () => {
           justifyContent: "space-around",
         }}
       >
-        <FeatureHighlight answerQ4={answerQ4} />
+        <FeatureHighlight />
         <Button
           size="lg"
           variant="light"

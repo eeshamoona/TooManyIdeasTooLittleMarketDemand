@@ -2,7 +2,6 @@
 import React from "react";
 import Typewriter from "typewriter-effect";
 
-// Props for flexibility in string input and loop control
 interface TypewriterArrayProps {
   strings: string[];
   loop?: boolean;
@@ -14,15 +13,25 @@ export const TypewriterArray: React.FC<TypewriterArrayProps> = ({
   loop = true,
   delay = 30, // faster typing speed
 }) => {
+  // Define responsive font sizes
+  const responsiveFontSize = {
+    fontSize: "1.8rem", // This scales with viewport width
+    width: "100%",
+    fontWeight: 300,
+    minHeight: "5rem",
+  };
+
   return (
-    <Typewriter
-      options={{
-        strings: strings,
-        autoStart: true,
-        loop: loop,
-        deleteSpeed: 20, // faster delete speed
-        delay: delay,
-      }}
-    />
+    <div style={responsiveFontSize}>
+      <Typewriter
+        options={{
+          strings: strings,
+          autoStart: true,
+          loop: loop,
+          deleteSpeed: 20, // faster delete speed
+          delay: delay,
+        }}
+      />
+    </div>
   );
 };
