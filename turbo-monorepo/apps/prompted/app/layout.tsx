@@ -4,7 +4,6 @@ import { createClient } from "./utils/supabase/server";
 import { CustomAppShell } from "./shell";
 import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
-import "@mantine/carousel/styles.css";
 import "react-calendar-heatmap/dist/styles.css";
 import "react-tooltip/dist/react-tooltip.css";
 import Loading from "./loading";

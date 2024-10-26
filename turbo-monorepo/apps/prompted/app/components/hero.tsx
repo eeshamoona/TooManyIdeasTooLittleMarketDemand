@@ -11,13 +11,9 @@ import {
   Grid,
   rem,
   Flex,
-  Tooltip,
-  ActionIcon,
 } from "@mantine/core";
 import image from "../../public/Creative writing-pana.png";
 import { FaCheck } from "react-icons/fa";
-import { MdOutlineQuiz } from "react-icons/md";
-import { useRouter } from "next/navigation";
 import { subtext } from "./data";
 
 interface HeroPageProps {
@@ -30,12 +26,6 @@ export function HeroPage({
   scrollToCallback,
   goToLoginCallback,
 }: HeroPageProps) {
-  const router = useRouter();
-  const customizeLandingPage = () => {
-    localStorage.removeItem("quizAnswers");
-    router.refresh();
-  };
-
   const getSubtext = () => {
     switch (answerQ1) {
       case "A":
@@ -66,18 +56,6 @@ export function HeroPage({
             <Text size="md" c="dimmed" mt="md">
               {getSubtext()}
             </Text>
-
-            <Tooltip label="Customize Landing Page" position="right" withArrow>
-              <ActionIcon
-                variant="subtle"
-                color="blue"
-                radius="sm"
-                size="lg"
-                onClick={customizeLandingPage}
-              >
-                <MdOutlineQuiz />
-              </ActionIcon>
-            </Tooltip>
           </Flex>
 
           <List
