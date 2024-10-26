@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { Tabs, Text, Grid, Container, Title, Stack } from "@mantine/core";
-import { FaFeather, FaLightbulb, FaRobot, FaChartLine } from "react-icons/fa";
 import { TypewriterArray } from "./typewriter";
 import { usePrompts } from "../context/PromptContext";
 import { NEW_PROMPT_CATEGORIES } from "../write/interface";
+import {
+  PiNumberFourBold,
+  PiNumberOneBold,
+  PiNumberThreeBold,
+  PiNumberTwoBold,
+} from "react-icons/pi";
 
 interface HowItWorksProps {
   answerQ2: string;
@@ -37,8 +42,6 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
           .map((prompt) => prompt.text) // Extract the text from the prompts
       : prompts.map((prompt) => prompt.text); // Fallback to default prompts if no match
 
-  console.log("Filtered Categories:", filteredCategories);
-
   return (
     <Container size="lg" content="center" style={{ marginTop: "40px" }}>
       <Stack
@@ -59,27 +62,35 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
         value={activeTab}
         onChange={setActiveTab}
       >
-        <Tabs.List grow>
-          <Tabs.Tab value="pick-a-prompt" leftSection={<FaFeather size={16} />}>
+        <Tabs.List mb={"lg"} grow>
+          <Tabs.Tab
+            value="pick-a-prompt"
+            leftSection={<PiNumberOneBold size={16} />}
+          >
             Pick a Prompt
           </Tabs.Tab>
           <Tabs.Tab
             value="start-writing"
-            leftSection={<FaLightbulb size={16} />}
+            leftSection={<PiNumberTwoBold size={16} />}
           >
             Start Writing
           </Tabs.Tab>
-          <Tabs.Tab value="get-assistance" leftSection={<FaRobot size={16} />}>
+          <Tabs.Tab
+            value="get-assistance"
+            leftSection={<PiNumberThreeBold size={16} />}
+          >
             Get AI Assistance
           </Tabs.Tab>
-          <Tabs.Tab value="see-stats" leftSection={<FaChartLine size={16} />}>
+          <Tabs.Tab
+            value="see-stats"
+            leftSection={<PiNumberFourBold size={16} />}
+          >
             See Your Progress
           </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="pick-a-prompt" pl="md">
           <Grid gutter={50} align="center">
-            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Title order={3}>Pick a Prompt</Title>
               <Text mt="md" c="dimmed">
@@ -88,12 +99,12 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
                 your ideas.
               </Text>
             </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
           </Grid>
         </Tabs.Panel>
 
         <Tabs.Panel value="start-writing" pl="md">
           <Grid gutter={50} align="center">
-            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Title order={3}>Start Writing</Title>
               <Text mt="md" c="dimmed">
@@ -102,12 +113,12 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
                 words flow without distractions.
               </Text>
             </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
           </Grid>
         </Tabs.Panel>
 
         <Tabs.Panel value="get-assistance" pl="md">
           <Grid gutter={50} align="center">
-            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Title order={3}>Get AI Assistance</Title>
               <Text mt="md" c="dimmed">
@@ -116,20 +127,21 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
                 stay inspired.
               </Text>
             </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
           </Grid>
         </Tabs.Panel>
 
         <Tabs.Panel value="see-stats" pl="md">
           <Grid gutter={50} align="center">
-            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Title order={3}>See Your Progress</Title>
               <Text mt="md" c="dimmed">
-                Watch your growth unfold! Track your unique word count, see your
-                writing stats, and enjoy milestones that keep you motivated to
-                keep creating.
+                Submit your writing to unlock insightful stats, AI-powered
+                feedback, and engaging interactive tools that keep you inspired
+                and motivated on your creative journey.
               </Text>
             </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
           </Grid>
         </Tabs.Panel>
       </Tabs>

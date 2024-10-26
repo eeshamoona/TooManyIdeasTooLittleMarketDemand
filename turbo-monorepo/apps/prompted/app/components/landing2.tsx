@@ -63,7 +63,7 @@ const FullHeightSection: React.FC<FullHeightSectionProps> = ({ children }) => {
     <Container
       fluid
       style={{
-        height: "90vh",
+        minHeight: "90vh",
       }}
     >
       {children}

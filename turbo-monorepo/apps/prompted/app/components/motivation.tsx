@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Grid,
@@ -7,9 +7,12 @@ import {
   Title,
   Stack,
   Center,
+  Group,
 } from "@mantine/core";
 import LevelProgressAnimation from "../process/[id]/components/level-animation";
 import MilestoneProgressAnimation from "../process/[id]/components/milestone-animation";
+import { FaBarsProgress } from "react-icons/fa6";
+import { FaIdBadge, FaMedal, FaSearch } from "react-icons/fa";
 
 const featureDescriptions = {
   A: {
@@ -21,11 +24,7 @@ const featureDescriptions = {
         Image here for Stat Charts
       </div>
     ),
-    thumbnail: (
-      <div style={{ height: "100px", backgroundColor: "#e0e0e0" }}>
-        Thumbnail for Stat Charts
-      </div>
-    ),
+    icon: <FaBarsProgress size={40} />,
   },
   B: {
     title: "Earn Level Badges",
@@ -50,14 +49,10 @@ const featureDescriptions = {
         animated={true}
       />
     ),
-    thumbnail: (
-      <div style={{ height: "100px", backgroundColor: "#e0e0e0" }}>
-        Thumbnail for Level Badges
-      </div>
-    ),
+    icon: <FaIdBadge size={40} />,
   },
   C: {
-    title: "Achieve Milestone Badges",
+    title: "Achieve Milestones",
     description:
       "Celebrate one-time achievements with milestone badges. These are unique rewards to mark special moments in your writing journey that you can proudly show off.",
     mainContent: (
@@ -83,14 +78,10 @@ const featureDescriptions = {
         />
       </Card>
     ),
-    thumbnail: (
-      <div style={{ height: "100px", backgroundColor: "#e0e0e0" }}>
-        Thumbnail for Milestone Badges
-      </div>
-    ),
+    icon: <FaMedal size={40} />,
   },
   D: {
-    title: "Browse Your Entries",
+    title: "Browse Past Entries",
     description:
       "Easily explore your past entries with powerful search and sorting options. Revisit your favorite pieces or find inspiration in previous works.",
     mainContent: (
@@ -98,11 +89,7 @@ const featureDescriptions = {
         Image here for Search and Sort Entries
       </div>
     ),
-    thumbnail: (
-      <div style={{ height: "100px", backgroundColor: "#e0e0e0" }}>
-        Thumbnail for Search and Sort Entries
-      </div>
-    ),
+    icon: <FaSearch size={40} />,
   },
 };
 
@@ -114,8 +101,9 @@ const FeatureHighlight: React.FC<{ answerQ4: string }> = ({ answerQ4 }) => {
   const [orderedFeatures, setOrderedFeatures] =
     useState<string[]>(initialOrder);
 
-  const selectedFeature = orderedFeatures[0];
-  const mainFeature = featureDescriptions[selectedFeature];
+  useEffect(() => {
+    setOrderedFeatures(initialOrder);
+  }, [answerQ4]);
 
   const rotateFeatures = (clickedKey: string) => {
     const clickedIndex = orderedFeatures.indexOf(clickedKey);
@@ -128,18 +116,22 @@ const FeatureHighlight: React.FC<{ answerQ4: string }> = ({ answerQ4 }) => {
       setOrderedFeatures(newOrder);
     }
   };
+
+  if (orderedFeatures.length === 0) {
+    return null; // or a loading spinner
+  }
+
   return (
-    <Container size="xl">
-      <Title ta="center" order={1} mb="xl">
-        Reward yourself for writing...
-      </Title>
+    <Container size="xl" p="xl">
       <Grid gutter={30}>
         {/* Left Column: Main and Secondary Features */}
         <Grid.Col span={8}>
           <Stack gap="lg">
             {/* Main Feature */}
-            <Card shadow="sm" padding="lg">
-              <Center>{mainFeature.mainContent}</Center>
+            <Card withBorder padding="lg">
+              <Center>
+                {featureDescriptions[orderedFeatures[0]].mainContent}
+              </Center>
             </Card>
 
             {/* Secondary Features */}
@@ -147,13 +139,13 @@ const FeatureHighlight: React.FC<{ answerQ4: string }> = ({ answerQ4 }) => {
               {orderedFeatures.slice(1).map((key) => (
                 <Grid.Col span={4} key={key}>
                   <Card
-                    shadow="sm"
+                    withBorder
                     padding="md"
                     style={{ textAlign: "center", cursor: "pointer" }}
                     onClick={() => rotateFeatures(key)}
                   >
                     <Stack align="center" gap="sm">
-                      {featureDescriptions[key].thumbnail}
+                      {featureDescriptions[key].icon}
                       <Title order={5}>{featureDescriptions[key].title}</Title>
                     </Stack>
                   </Card>
@@ -163,11 +155,17 @@ const FeatureHighlight: React.FC<{ answerQ4: string }> = ({ answerQ4 }) => {
           </Stack>
         </Grid.Col>
 
-        {/* Right Column: Feature Description */}
         <Grid.Col span={4}>
-          <Stack gap="sm">
-            <Title order={3}>{mainFeature.title}</Title>
-            <Text c="dimmed">{mainFeature.description}</Text>
+          <Stack gap="sm" pt={"xl"}>
+            <Group w="full" align="center" gap="sm">
+              {featureDescriptions[orderedFeatures[0]].icon}
+              <Title order={2} w="full">
+                {featureDescriptions[orderedFeatures[0]].title}
+              </Title>
+            </Group>
+            <Text c="dimmed">
+              {featureDescriptions[orderedFeatures[0]].description}
+            </Text>
           </Stack>
         </Grid.Col>
       </Grid>
