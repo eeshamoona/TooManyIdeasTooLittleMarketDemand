@@ -43,7 +43,7 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
       : prompts.map((prompt) => prompt.text); // Fallback to default prompts if no match
 
   return (
-    <Container size="lg" content="center" style={{ marginTop: "40px" }}>
+    <Container size="lg" content="center">
       <Stack
         gap="sm"
         mb="8rem"
@@ -58,7 +58,7 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
       </Stack>
       <Tabs
         orientation="horizontal"
-        variant="pills"
+        variant="outline"
         value={activeTab}
         onChange={setActiveTab}
       >

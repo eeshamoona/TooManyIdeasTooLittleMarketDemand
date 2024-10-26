@@ -22,8 +22,14 @@ import { subtext } from "./data";
 
 interface HeroPageProps {
   answerQ1: string;
+  scrollToCallback: () => void;
+  goToLoginCallback: () => void;
 }
-export function HeroPage({ answerQ1 }: HeroPageProps) {
+export function HeroPage({
+  answerQ1,
+  scrollToCallback,
+  goToLoginCallback,
+}: HeroPageProps) {
   const router = useRouter();
   const customizeLandingPage = () => {
     localStorage.removeItem("quizAnswers");
@@ -98,10 +104,15 @@ export function HeroPage({ answerQ1 }: HeroPageProps) {
           </List>
 
           <Group mt={30}>
-            <Button radius="sm" size="md">
+            <Button radius="sm" size="md" onClick={goToLoginCallback}>
               Start Writing
             </Button>
-            <Button variant="default" radius="sm" size="md">
+            <Button
+              variant="default"
+              radius="sm"
+              size="md"
+              onClick={scrollToCallback}
+            >
               How It Works
             </Button>
           </Group>

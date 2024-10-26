@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Button, Group, Container } from "@mantine/core";
+import { Button, Container } from "@mantine/core";
 import { FaqWithImage } from "./faq";
 import Footer from "./footer";
 import { HeroPage } from "./hero";
 import { HowItWorks } from "./how";
 import FeatureHighlight from "./motivation";
+import { FaArrowRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const LandingPage: React.FC = () => {
+  const router = useRouter();
   const [answerQ1, setAnswerQ1] = useState<string | null>(null);
   const [answerQ2, setAnswerQ2] = useState<string | null>(null);
   const [answerQ3, setAnswerQ3] = useState<string | null>(null);
@@ -23,25 +26,56 @@ const LandingPage: React.FC = () => {
     }
   }, []);
 
+  const scrollToHowItWorks = () => {
+    const element = document.getElementById("how-it-works");
+    if (element) {
+      const headerOffset = 7 * 16; // 10rem in pixels
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.screenY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const goToLogin = () => {
+    router.push("/write");
+  };
+
   return (
     <>
       <FullHeightSection>
-        <HeroPage answerQ1={answerQ1} />
+        <HeroPage
+          answerQ1={answerQ1}
+          scrollToCallback={scrollToHowItWorks}
+          goToLoginCallback={goToLogin}
+        />
       </FullHeightSection>
 
-      <FullHeightSection>
+      <FullHeightSection id="how-it-works">
         <HowItWorks answerQ2={answerQ2} />
       </FullHeightSection>
 
-      <FullHeightSection>
+      <FullHeightSection
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-around",
+        }}
+      >
         <FeatureHighlight answerQ4={answerQ4} />
-      </FullHeightSection>
-
-      <Group justify="center" my="xl">
-        <Button size="lg" variant="filled" color="blue">
-          Start Your Writing Journey
+        <Button
+          size="lg"
+          variant="light"
+          color="blue"
+          rightSection={<FaArrowRight />}
+          onClick={goToLogin}
+        >
+          Sign up for free and get started today
         </Button>
-      </Group>
+      </FullHeightSection>
 
       <FullHeightSection>
         <FaqWithImage />
@@ -56,14 +90,22 @@ const LandingPage: React.FC = () => {
 
 interface FullHeightSectionProps {
   children: React.ReactNode;
+  id?: string;
+  style?: React.CSSProperties;
 }
 
-const FullHeightSection: React.FC<FullHeightSectionProps> = ({ children }) => {
+const FullHeightSection: React.FC<FullHeightSectionProps> = ({
+  children,
+  id,
+  style,
+}) => {
   return (
     <Container
       fluid
+      id={id}
       style={{
         minHeight: "90vh",
+        ...style,
       }}
     >
       {children}

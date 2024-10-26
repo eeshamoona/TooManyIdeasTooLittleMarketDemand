@@ -12,6 +12,7 @@ import {
   Flex,
 } from "@mantine/core";
 import { questions } from "./data";
+import { RiSkipForwardLine } from "react-icons/ri";
 
 interface QuizProps {
   onQuizCompleted: () => void;
@@ -57,17 +58,23 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
         direction={{ base: "column", sm: "row" }}
         gap={{ base: "sm", sm: "lg" }}
         justify={{ sm: "space-between" }}
-        mb="xl"
+        pb="xl"
       >
         <Text size="md" c="dimmed">
           Take a moment to discover what inspires you and makes your writing
           journey meaningful.
         </Text>
-        <Button variant="light" color="red" onClick={handleSkipQuiz}>
+        <Button
+          variant="subtle"
+          color="red"
+          onClick={handleSkipQuiz}
+          rightSection={<RiSkipForwardLine />}
+        >
           Quick Skip
         </Button>
       </Flex>
       <Stepper
+        pt="xl"
         radius="sm"
         size="xs"
         active={activeStep}
@@ -83,7 +90,7 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
             }}
             key={index}
             label={q.label}
-            icon={<q.icon size={14} />}
+            icon={<q.icon size={14} color={theme.colors.blue[6]} />}
           >
             <div
               style={{
