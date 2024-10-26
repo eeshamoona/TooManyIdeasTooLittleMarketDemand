@@ -2,15 +2,42 @@ import { useState } from "react";
 import { Tabs, Text, Grid, Container, Title, Stack } from "@mantine/core";
 import { FaFeather, FaLightbulb, FaRobot, FaChartLine } from "react-icons/fa";
 import { TypewriterArray } from "./typewriter";
+import { usePrompts } from "../context/PromptContext";
+import { NEW_PROMPT_CATEGORIES } from "../write/interface";
 
-const prompts = [
-  "Imagine your dream vacation.",
-  "What if you could fly?",
-  "Describe your perfect day.",
-];
+interface HowItWorksProps {
+  answerQ2: string;
+}
 
-export function HowItWorks() {
+export function HowItWorks({ answerQ2 }: HowItWorksProps) {
+  const { prompts } = usePrompts();
   const [activeTab, setActiveTab] = useState("pick-a-prompt");
+
+  // Mapping of quiz results to category titles
+  const categoryMap: Record<string, string[]> = {
+    A: ["Inner Thoughts", "Gratitude Moments", "Confidence Boost"],
+    B: ["Creative Spark", "Adventure Tales", "Future Dreams"],
+    C: ["Calm Vibes", "Feel-Good Fun", "Playtime Ideas"],
+    D: ["Brain Puzzles", "Empathy Challenge"],
+  };
+
+  // Filter categories based on quizResult or use default prompts
+  const filteredCategories = NEW_PROMPT_CATEGORIES.filter((category) =>
+    categoryMap[answerQ2]?.includes(category.title)
+  );
+
+  const displayPrompts =
+    filteredCategories.length > 0
+      ? prompts
+          .filter((prompt) =>
+            filteredCategories.some(
+              (category) => category.title === prompt.category
+            )
+          )
+          .map((prompt) => prompt.text) // Extract the text from the prompts
+      : prompts.map((prompt) => prompt.text); // Fallback to default prompts if no match
+
+  console.log("Filtered Categories:", filteredCategories);
 
   return (
     <Container size="lg" content="center" style={{ marginTop: "40px" }}>
@@ -24,7 +51,7 @@ export function HowItWorks() {
         }}
       >
         <Title ta="center">Get inspired with questions like...</Title>
-        <TypewriterArray strings={prompts} />
+        <TypewriterArray strings={displayPrompts} />
       </Stack>
       <Tabs
         orientation="horizontal"
@@ -83,7 +110,7 @@ export function HowItWorks() {
             <Grid.Col span={{ base: 12, md: 6 }}></Grid.Col>
             <Grid.Col span={{ base: 12, md: 6 }}>
               <Title order={3}>Get AI Assistance</Title>
-              <Text mt="md" color="dimmed">
+              <Text mt="md" c="dimmed">
                 Need a spark to keep going? Our AI is ready to lend a hand with
                 next-line suggestions, helping you overcome writer’s block and
                 stay inspired.

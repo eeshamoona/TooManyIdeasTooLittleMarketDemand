@@ -12,7 +12,7 @@ interface TypewriterArrayProps {
 export const TypewriterArray: React.FC<TypewriterArrayProps> = ({
   strings,
   loop = true,
-  delay = 50,
+  delay = 30, // faster typing speed
 }) => {
   return (
     <Typewriter
@@ -20,7 +20,7 @@ export const TypewriterArray: React.FC<TypewriterArrayProps> = ({
         strings: strings,
         autoStart: true,
         loop: loop,
-        deleteSpeed: 30,
+        deleteSpeed: 20, // faster delete speed
         delay: delay,
       }}
     />
