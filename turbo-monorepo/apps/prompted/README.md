@@ -208,3 +208,26 @@ Social Media Icons: If applicable.
 AI Assistance: "Your creative companion when you need a nudge."
 Achievements: "Level up and earn badges as you write."
 Writing Stats: "Visualize your progress over time."
+
+
+Header
+Subtext Q1
+
+Call to Action OR How it Works button
+
+Generate Prompts with typewriter effect Q2 asking questions to the user essentially
+
+How to section
+gif displays with vertical tabs on the right for the 4 steps: 1. Pick a prompt 2. Write 3. Get AI assistance when you get stuck 4. See Stats, AI Feedback, Word Freq 
+
+Gamification Features Q4
+Motivational Feature Highlight with the users pick first
+
+Upcoming Features
+Extra Feature Highlight (From Q3) with the rest of the features in a horizontal caroseoul 
+
+Call to Action
+
+FAQ Section 
+
+Footer
