@@ -10,17 +10,29 @@ const Footer: React.FC = () => {
         &copy; {new Date().getFullYear()} Prompted. All rights reserved.
       </Text>
       <Group mt={10} justify="center" gap="lg">
-        <Text component="a" href="#" size="sm" c="dimmed">
+        <Text
+          component="a"
+          href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/tree/main/turbo-monorepo/apps/prompted"
+          size="sm"
+          c="dimmed"
+        >
           Github
         </Text>
-        <Text component="a" href="#" size="sm" c="dimmed">
-          Twitter
+        <Text
+          component="a"
+          href="https://www.linkedin.com/in/eeshamoona/"
+          size="sm"
+          c="dimmed"
+        >
+          Developer
         </Text>
-        <Text component="a" href="#" size="sm" c="dimmed">
-          Instagram
-        </Text>
-        <Text component="a" href="#" size="sm" c="dimmed">
-          Contact Us
+        <Text
+          component="a"
+          href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/issues"
+          size="sm"
+          c="dimmed"
+        >
+          Feedback
         </Text>
       </Group>
       <Text mt={10} size="xs">

@@ -14,7 +14,7 @@ import MilestoneProgressAnimation from "../process/[id]/components/milestone-ani
 import { FaBarsProgress } from "react-icons/fa6";
 import { FaIdBadge, FaMedal, FaSearch } from "react-icons/fa";
 
-const featureDescriptions = {
+export const featureDescriptions = {
   A: {
     title: "Track Your Progress",
     description:

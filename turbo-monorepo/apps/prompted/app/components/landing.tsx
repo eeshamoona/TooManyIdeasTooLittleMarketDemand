@@ -4,7 +4,7 @@ import { FaqWithImage } from "./faq";
 import Footer from "./footer";
 import { HeroPage } from "./hero";
 import { HowItWorks } from "./how";
-import FeatureHighlight from "./motivation";
+import FeatureHighlight from "./motivation2";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
