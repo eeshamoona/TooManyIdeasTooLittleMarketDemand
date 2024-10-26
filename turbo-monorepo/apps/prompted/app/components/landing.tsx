@@ -1,12 +1,14 @@
 import React from "react";
-import { Button, Container } from "@mantine/core";
+import { Button, Container, Stack, Title } from "@mantine/core";
 import { FaqWithImage } from "./faq";
 import Footer from "./footer";
 import { HeroPage } from "./hero";
-import { HowItWorks } from "./how";
+import { HowItWorks } from "./how2";
 import FeatureHighlight from "./motivation";
 import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { TypewriterArray } from "./typewriter";
+import { usePrompts } from "../context/PromptContext";
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
@@ -44,6 +46,9 @@ const LandingPage: React.FC = () => {
     router.push("/write");
   };
 
+  const { prompts } = usePrompts();
+  const displayPrompts = prompts.map((prompt) => prompt.text);
+
   return (
     <>
       <FullHeightSection>
@@ -52,6 +57,18 @@ const LandingPage: React.FC = () => {
           goToLoginCallback={goToLogin}
         />
       </FullHeightSection>
+
+      <Stack
+        gap="sm"
+        align="center"
+        style={{
+          textAlign: "center",
+          padding: "2rem",
+        }}
+      >
+        <Title ta="center">Get inspired with prompts like...</Title>
+        <TypewriterArray strings={displayPrompts} />
+      </Stack>
 
       <FullHeightSection id="how-it-works">
         <HowItWorks />

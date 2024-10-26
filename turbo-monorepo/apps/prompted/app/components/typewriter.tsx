@@ -18,7 +18,7 @@ export const TypewriterArray: React.FC<TypewriterArrayProps> = ({
     fontSize: "1.8rem", // This scales with viewport width
     width: "100%",
     fontWeight: 300,
-    minHeight: "5rem",
+    minHeight: "7rem",
   };
 
   return (

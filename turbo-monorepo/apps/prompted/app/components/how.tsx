@@ -56,7 +56,7 @@ export function HowItWorks({ answerQ2 }: HowItWorksProps) {
         <Title ta="center">Get inspired with questions like...</Title>
         <TypewriterArray strings={displayPrompts} />
       </Stack>
-      <Tabs orientation="horizontal" value={activeTab} onChange={setActiveTab}>
+      <Tabs orientation="vertical" value={activeTab} onChange={setActiveTab}>
         <Tabs.List mb={"lg"} grow>
           <Tabs.Tab
             value="pick-a-prompt"
