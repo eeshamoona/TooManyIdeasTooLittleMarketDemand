@@ -15,7 +15,7 @@ import {
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter, usePathname } from "next/navigation";
-import { LuAward, LuBookOpen, LuPencil, LuPlus } from "react-icons/lu";
+import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
 import { handleLogout } from "./logout/logoutClient";
 import { forwardRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
@@ -54,7 +54,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         </Group>
       </UnstyledButton>
     );
-  },
+  }
 );
 
 function UserMenu({ username }: { username: string }) {
@@ -176,15 +176,6 @@ export function CustomAppShell({
                 >
                   Progress
                 </Button>
-                <Button
-                  variant={isActive("/write/more") ? "light" : "subtle"}
-                  leftSection={
-                    <LuPlus style={{ width: "1rem", height: "1rem" }} />
-                  }
-                  onClick={() => router.push("/write/more")}
-                >
-                  Add
-                </Button>
               </Group>
             )}
             <Group>
@@ -229,13 +220,6 @@ export function CustomAppShell({
           onClick={() => router.push("/progress")}
         >
           Progress
-        </Button>
-        <Button
-          variant={isActive("/write/more") ? "filled" : "light"}
-          leftSection={<LuPlus style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/write/more")}
-        >
-          Add
         </Button>
       </AppShell.Navbar>
 
