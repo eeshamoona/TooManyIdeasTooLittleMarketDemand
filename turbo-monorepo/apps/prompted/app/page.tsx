@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Quiz from "./components/quiz";
-import LandingPage from "./components/landing";
+import LandingPage from "./components/landing2";
 
 export default function Home() {
   const [hasQuizAnswers, setHasQuizAnswers] = useState(null);

@@ -19,17 +19,17 @@ interface QuizProps {
 
 const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const theme = useMantineTheme();
 
   const nextStep = () =>
     setActiveStep((current) => Math.min(current + 1, questions.length - 1));
   const prevStep = () => setActiveStep((current) => Math.max(current - 1, 0));
 
-  const handleAnswerChange = (value: string) => {
+  const handleAnswerChange = (question: string, choice: string) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
-      [activeStep]: value,
+      [question]: choice,
     }));
   };
 
@@ -94,7 +94,7 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
               }}
             >
               <Title order={2} style={{ marginBottom: "20px" }}>
-                {q.question}
+                {q.text}
               </Title>
               <Grid gutter="md" style={{ marginTop: "20px" }}>
                 {q.options.map((option, idx) => (
@@ -104,7 +104,9 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
                     style={{ display: "flex", justifyContent: "center" }}
                   >
                     <Card
-                      onClick={() => handleAnswerChange(option.text)}
+                      onClick={() =>
+                        handleAnswerChange(q.question, option.choice)
+                      }
                       padding="lg"
                       withBorder
                       onMouseEnter={(e) => {
@@ -120,15 +122,15 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
                         width: "100%",
                         height: "100%",
                         backgroundColor:
-                          answers[activeStep] === option.text
+                          answers[q.question] === option.choice
                             ? "var(--mantine-color-blue-light-hover)"
                             : "",
                         borderColor:
-                          answers[activeStep] === option.text
+                          answers[q.question] === option.choice
                             ? "var(--mantine-color-blue-light-color)"
                             : "",
                         borderWidth:
-                          answers[activeStep] === option.text ? "1px" : "",
+                          answers[q.question] === option.choice ? "1px" : "",
                         borderStyle: "solid",
                       }}
                     >
@@ -173,7 +175,7 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
                       alignSelf: "end",
                     }}
                     onClick={nextStep}
-                    disabled={!answers[activeStep]}
+                    disabled={!answers[q.question]}
                   >
                     Next
                   </Button>
@@ -181,7 +183,7 @@ const Quiz: React.FC<QuizProps> = ({ onQuizCompleted }) => {
                 {activeStep === questions.length - 1 && (
                   <Button
                     onClick={handleQuizCompletion}
-                    disabled={!answers[activeStep]}
+                    disabled={!answers[q.question]}
                   >
                     Finish Quiz
                   </Button>
