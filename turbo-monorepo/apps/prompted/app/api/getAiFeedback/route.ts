@@ -11,7 +11,6 @@ const openai = new OpenAI({
 export async function POST(request: Request) {
   const { response, category, prompt } = await request.json();
 
-
   if (!response || !prompt || !category) {
     console.log("Missing required fields:", { response, category, prompt });
     return NextResponse.json(

@@ -76,7 +76,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
       .filter(
         (word) =>
           !STOP_WORDS.includes(word.toLowerCase()) && // Remove stop words
-          word.length >= minLength // Remove short words
+          word.length >= minLength, // Remove short words
       )
       .reduce((filtered: { [key: string]: number }, word) => {
         filtered[word] = wordFreq[word]; // Rebuild filtered word frequency object
@@ -102,7 +102,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category
+    (cat) => cat.title === data.category,
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;

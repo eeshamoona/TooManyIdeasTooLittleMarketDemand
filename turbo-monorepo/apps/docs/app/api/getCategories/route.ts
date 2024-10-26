@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   if (!data || !Array.isArray(data)) {
     return NextResponse.json(
       { error: "Data must be an array of strings" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     console.error("Error calling OpenAI API:", error);
     return NextResponse.json(
       { error: "Error generating summary" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

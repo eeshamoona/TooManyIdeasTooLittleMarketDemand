@@ -60,16 +60,16 @@ const CategorizedDataPage: React.FC<{}> = () => {
   // determine if the categorizedData has every single index in the data array and no duplicates
   // log whether the categorizedData has every single index and if not log the missing indices
   const categorizedIndices = new Set(
-    categorizedData.reduce((acc, item) => acc.concat(item.indices), [])
+    categorizedData.reduce((acc, item) => acc.concat(item.indices), []),
   );
 
   const dataIndices = data.map((_, index) => index); // Map data array to its indices
   const missingIndices = dataIndices.filter(
-    (index) => !categorizedIndices.has(index)
+    (index) => !categorizedIndices.has(index),
   );
 
   console.log(
-    `Categorized data has all indices: ${missingIndices.length === 0 ? "Yes" : "No"}`
+    `Categorized data has all indices: ${missingIndices.length === 0 ? "Yes" : "No"}`,
   );
   if (missingIndices.length > 0) {
     console.log("Missing indices:", missingIndices.toString());
