@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import Footer from "../components/footer";
 import { useMediaQuery } from "@mantine/hooks";
-import loginImage from "../../public/LoginLightbulb.png";
+import loginImage from "../../public/WritingRoom.png";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorString, setErrorString] = useState<string | null>(null);
-  const isMediumScreen = useMediaQuery("(max-width: 800px)");
+  const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
   const handleLogin = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>

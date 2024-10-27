@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { signup } from "../login/actions";
 import {
@@ -17,12 +16,12 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
-import signupImage from "../../public/SignupCharacter.png";
 import Footer from "../components/footer";
+import loginImage from "../../public/SignupCharacter.png";
 
 export default function SignupPage() {
   const router = useRouter();
-  const isMediumScreen = useMediaQuery("(max-width: 800px)");
+  const isMediumScreen = useMediaQuery("(max-width: 995px)");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,8 +76,9 @@ export default function SignupPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "3rem",
+          gap: "4rem",
           flexWrap: "wrap",
+          height: "100%",
         }}
       >
         <form
@@ -144,10 +144,10 @@ export default function SignupPage() {
         {/* Image Section */}
         {!isMediumScreen && (
           <Image
-            src={signupImage.src}
-            alt="Signup character"
+            src={loginImage.src}
+            alt="Login Lightbulb"
             style={{
-              maxWidth: "30rem",
+              maxWidth: "25rem",
               width: "100%",
               height: "auto",
             }}
