@@ -25,7 +25,7 @@ export const featureDescriptions = {
       "Dive into visual charts that showcase your writing journey. Monitor your growth, spot trends, and use insights to stay motivated and reach new milestones.",
     mainContent: (
       <div style={{ width: "100%", height: "auto", alignSelf: "center" }}>
-        Image here for Stat Charts
+        Placeholder image here for Stat Charts
       </div>
     ),
     icon: FaBarsProgress,
@@ -91,7 +91,7 @@ export const featureDescriptions = {
       "Easily explore your past entries with powerful search and sorting options. Revisit your favorite pieces or find inspiration in previous works.",
     mainContent: (
       <div style={{ width: "100%", height: "auto", alignSelf: "center" }}>
-        Image here for Search and Sort Entries
+        Placeholder image here for Search and Sort Entries
       </div>
     ),
     icon: FaSearch,
