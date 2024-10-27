@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { login } from "./actions";
 import {
@@ -39,17 +38,25 @@ export default function LoginPage() {
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    const error = await login(formData);
-    if (error) {
-      switch (error) {
+    const response = await login(formData);
+    if (response) {
+      switch (response) {
+        case "EMAIL_NOT_VERIFIED":
+          setErrorString(
+            "This email has not been verified. Please check your email or sign up again."
+          );
+          break;
         case "INCORRECT_PASSWORD":
           setErrorString("Incorrect password. Please try again.");
           break;
         case "EMAIL_NOT_REGISTERED":
           setErrorString("This email is not registered. Please sign up.");
           break;
-        default:
+        case "UNKNOWN_ERROR":
           setErrorString("An unknown error occurred. Please try again.");
+          break;
+        default:
+          setErrorString("Something went wrong. Please try again.");
       }
       setLoading(false);
       return;

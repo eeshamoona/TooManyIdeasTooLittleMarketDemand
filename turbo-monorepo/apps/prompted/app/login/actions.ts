@@ -83,26 +83,38 @@ export async function login(formData: FormData) {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
-
   const { data: loginData, error } =
     await supabase.auth.signInWithPassword(data);
 
-  if (error && error.message.includes("Invalid login credentials")) {
+  console.log("Login Data:", loginData);
+
+  // Check if the email is in the profiles table
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", data.email)
+    .single();
+
+  // If login succeeds but email is not in profiles table
+  if (loginData.user !== null && checkError) {
+    //Sign out the user
+    await supabase.auth.signOut();
+
+    revalidatePath("/", "layout");
+    // Start the user on the write page
+    redirect("/check-email");
+    console.log("Email not in profiles table:", data.email);
+    return "EMAIL_NOT_VERIFIED";
+  }
+  if (error) {
     console.error("Login Error:", error.message);
-
-    //check if the email is in the profiles table, then password is incorrect
-    const { data: existingUser, error: checkError } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("email", data.email)
-      .single();
-
-    if (checkError) {
-      return "EMAIL_NOT_REGISTERED";
-    } else if (existingUser) {
-      return "INCORRECT_PASSWORD";
+    if (error.message.includes("Invalid login credentials")) {
+      if (checkError) {
+        return "EMAIL_NOT_REGISTERED";
+      } else if (existingUser) {
+        return "INCORRECT_PASSWORD";
+      }
     }
-  } else if (error) {
     return "UNKNOWN_ERROR";
   }
 
@@ -136,6 +148,10 @@ export async function signup(formData: FormData) {
     .select("id")
     .eq("email", data.email)
     .single();
+
+  if (checkError) {
+    console.error("Check Error:", checkError);
+  }
 
   if (existingUser) {
     console.log("User already exists with this email:", data.email);
