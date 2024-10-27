@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { login } from "./actions";
 import {
   Button,
-  Paper,
   PasswordInput,
   TextInput,
   Title,
@@ -13,8 +12,10 @@ import {
   Text,
   Anchor,
   Group,
+  Divider,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import Footer from "../components/footer";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -59,13 +60,32 @@ export default function LoginPage() {
   };
 
   return (
-    <Container size="xs" style={{ display: "flex", alignItems: "center" }}>
-      <Paper radius="md" p="xl" w="100%" withBorder>
-        <Title order={2} ta="center" mt="md" mb={50}>
-          Hey There! Creativity awaits...
-        </Title>
+    <>
+      <Container
+        size="lg"
+        mt={50}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Group w="100%">
+          <Divider flex={1} />
+          <Title ta="center" order={1}>
+            Let’s Do This!
+          </Title>
+          <Divider flex={1} />
+        </Group>
 
-        <form>
+        <Text ta="center" c="dimmed" mb="xl">
+          Login to your account and keep
+        </Text>
+        <form
+          style={{
+            width: "50%",
+          }}
+        >
           <Stack>
             <TextInput
               label="Email address"
@@ -92,27 +112,36 @@ export default function LoginPage() {
               </Text>
             )}
 
-            <Group justify="space-between">
-              <Text c="dimmed" size="sm" ta="center" mt={5}>
-                Do not have an account yet?{" "}
-                <Anchor size="sm" component="button" onClick={switchToSignup}>
-                  Create account
-                </Anchor>
-              </Text>
-              <Button
-                size="md"
-                onClick={handleLogin}
-                loading={loading}
-                loaderProps={{
-                  type: "dots",
-                }}
-              >
-                Login
-              </Button>
-            </Group>
+            <Button
+              size="md"
+              fullWidth
+              onClick={handleLogin}
+              loading={loading}
+              loaderProps={{
+                type: "dots",
+              }}
+            >
+              Login
+            </Button>
+            <Text c="dimmed" size="sm" ta="center" mt={5}>
+              Do not have an account yet?{" "}
+              <Anchor size="sm" component="button" onClick={switchToSignup}>
+                Create account
+              </Anchor>
+            </Text>
           </Stack>
         </form>
-      </Paper>
-    </Container>
+      </Container>
+      <footer
+        style={{
+          marginTop: "auto",
+          bottom: 0,
+          position: "absolute",
+          width: "100%",
+        }}
+      >
+        <Footer />
+      </footer>
+    </>
   );
 }

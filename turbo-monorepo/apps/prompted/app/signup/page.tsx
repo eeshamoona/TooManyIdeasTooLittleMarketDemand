@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { signup } from "../login/actions";
 import {
   Button,
-  Paper,
   PasswordInput,
   TextInput,
   Title,
@@ -12,8 +11,13 @@ import {
   Stack,
   Text,
   Anchor,
+  Image,
+  Divider,
+  Group,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import signupImage from "../../public/SignupCharacter.png";
+import Footer from "../components/footer";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -51,14 +55,35 @@ export default function SignupPage() {
     event.preventDefault();
     router.replace("/login");
   };
-  return (
-    <Container size="xs" style={{ display: "flex", alignItems: "center" }}>
-      <Paper radius="md" p="xl" w="100%" withBorder>
-        <Title order={2} ta="center" mt="md" mb={50}>
-          Hey There! Creativity awaits...
-        </Title>
 
-        <form>
+  return (
+    <>
+      <Group w="100%">
+        <Divider flex={1} />
+        <Title ta="center" order={1}>
+          Let’s Do This!
+        </Title>
+        <Divider flex={1} />
+      </Group>
+
+      <Text ta="center" c="dimmed" mb="xl">
+        Login to your account and keep
+      </Text>
+      <Container
+        size="lg"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "2rem",
+          flexWrap: "wrap",
+        }}
+      >
+        <form
+          style={{
+            width: "50%",
+          }}
+        >
           <Stack>
             <TextInput
               label="Username"
@@ -112,7 +137,28 @@ export default function SignupPage() {
             </Text>
           </Stack>
         </form>
-      </Paper>
-    </Container>
+
+        {/* Image Section */}
+        <Image
+          src={signupImage.src}
+          alt="Signup character"
+          style={{
+            flex: 1,
+            overflow: "hidden",
+            width: "100%",
+            height: "auto",
+          }}
+        />
+      </Container>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+        }}
+      >
+        <Footer />
+      </footer>
+    </>
   );
 }
