@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { signup } from "../login/actions";
 import {
   Button,
-  Paper,
   PasswordInput,
   TextInput,
   Title,
@@ -12,31 +11,82 @@ import {
   Stack,
   Text,
   Anchor,
+  Image,
+  Divider,
+  Group,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@mantine/hooks";
+import signupImage from "../../public/SignupCharacter.png";
+import Footer from "../components/footer";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
+  const isMediumScreen = useMediaQuery("(max-width: 800px)");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorString, setErrorString] = useState<string | null>(null);
+
   const handleSignup = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
+    if (!username || !email || !password) {
+      setErrorString("Please fill out all fields.");
+      return;
+    }
+    setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    await signup(formData);
+    const result = await signup(formData);
+    if (result === "REGISTERED") {
+      setErrorString("This email is already registered. Please login.");
+      setLoading(false);
+      return;
+    } else if (result === "SIGNUP_ERROR") {
+      setErrorString("A signup error occurred. Please try again.");
+      setLoading(false);
+      return;
+    }
   };
 
-  const switchToLogin = () => {
-    router.push("/login");
+  const switchToLogin = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    router.replace("/login");
   };
 
   return (
-    <Container size="xs" style={{ display: "flex", alignItems: "center" }}>
-      <Paper radius="md" p="xl" w="100%" withBorder>
-        <Title order={2} ta="center" mt="md" mb={50}>
-          Hey There! Creativity awaits...
+    <>
+      <Group w="100%" mt="xl">
+        <Divider flex={1} />
+        <Title ta="center" order={1}>
+          Join the Fun!
         </Title>
+        <Divider flex={1} />
+      </Group>
 
-        <form>
+      <Text ta="center" c="dimmed" mb="xl">
+        Sign up to make writing a joyful habit
+      </Text>
+      <Container
+        size="lg"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "3rem",
+          flexWrap: "wrap",
+        }}
+      >
+        <form
+          style={{
+            width: "50%",
+            alignSelf: "center",
+          }}
+        >
           <Stack>
             <TextInput
               label="Username"
@@ -44,7 +94,8 @@ export default function LoginPage() {
               size="md"
               id="username"
               name="username"
-              required
+              value={username}
+              onChange={(e) => setUsername(e.currentTarget.value)}
             />
             <TextInput
               label="Email address"
@@ -53,7 +104,8 @@ export default function LoginPage() {
               id="email"
               name="email"
               type="email"
-              required
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
             />
             <PasswordInput
               label="Password"
@@ -61,9 +113,23 @@ export default function LoginPage() {
               size="md"
               id="password"
               name="password"
-              required
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
             />
-            <Button fullWidth size="md" onClick={handleSignup}>
+            {errorString !== null && (
+              <Text c="red" ta="center" size="sm" mt={5}>
+                {errorString}
+              </Text>
+            )}
+            <Button
+              fullWidth
+              size="md"
+              onClick={handleSignup}
+              loading={loading}
+              loaderProps={{
+                type: "dots",
+              }}
+            >
               Sign up
             </Button>
             <Text c="dimmed" size="sm" ta="center" mt={5}>
@@ -74,7 +140,29 @@ export default function LoginPage() {
             </Text>
           </Stack>
         </form>
-      </Paper>
-    </Container>
+
+        {/* Image Section */}
+        {!isMediumScreen && (
+          <Image
+            src={signupImage.src}
+            alt="Signup character"
+            style={{
+              maxWidth: "30rem",
+              width: "100%",
+              height: "auto",
+            }}
+          />
+        )}
+      </Container>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+        }}
+      >
+        <Footer />
+      </footer>
+    </>
   );
 }

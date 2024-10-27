@@ -86,11 +86,27 @@ export async function login(formData: FormData) {
 
   const { data: loginData, error } =
     await supabase.auth.signInWithPassword(data);
-  await loadBadgesForUser(loginData.user.id);
 
-  if (error) {
-    redirect("/error");
+  if (error && error.message.includes("Invalid login credentials")) {
+    console.error("Login Error:", error.message);
+
+    //check if the email is in the profiles table, then password is incorrect
+    const { data: existingUser, error: checkError } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("email", data.email)
+      .single();
+
+    if (checkError) {
+      return "EMAIL_NOT_REGISTERED";
+    } else if (existingUser) {
+      return "INCORRECT_PASSWORD";
+    }
+  } else if (error) {
+    return "UNKNOWN_ERROR";
   }
+
+  await loadBadgesForUser(loginData.user.id);
 
   revalidatePath("/", "layout");
   // Start the user on the write page
@@ -108,12 +124,29 @@ export async function signup(formData: FormData) {
   });
 
   // Type-casting here for convenience
-  // In practice, you should validate your inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
     username: formData.get("username") as string,
   };
+
+  // Check if the user is already signed up
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", data.email)
+    .single();
+
+  if (checkError) {
+    console.error("Error checking existing user:", checkError.message);
+    redirect("/error");
+    return;
+  }
+
+  if (existingUser) {
+    console.log("User already exists with this email:", data.email);
+    return "REGISTERED";
+  }
 
   // Log data before signUp
   console.log("Data before signUp:", data);
@@ -135,8 +168,7 @@ export async function signup(formData: FormData) {
     // Log error
     console.log("SignUp Error:", error);
     console.error("SignUp Error:", error.message);
-    redirect("/error");
-    return;
+    return "SIGNUP_ERROR";
   }
 
   if (!signUpData.user) {
@@ -149,6 +181,6 @@ export async function signup(formData: FormData) {
   console.log("SignUp successful, redirecting...");
 
   revalidatePath("/", "layout");
-  //TODO: Redirect to a page that prompts the user to check their email
-  redirect("/login");
+  // Redirect to a page that prompts the user to check their email
+  redirect("/check-email");
 }
