@@ -46,7 +46,7 @@ async function loadBadgesForUser(userId: string) {
 
   // Step 4: Filter badges that are missing from the user's progress
   const badgesToInsert = badges.filter(
-    (badge) => !existingBadgeIds.includes(badge.id),
+    (badge) => !existingBadgeIds.includes(badge.id)
   );
 
   // Step 5: Insert missing badges with default values into the progress table
@@ -136,12 +136,6 @@ export async function signup(formData: FormData) {
     .select("id")
     .eq("email", data.email)
     .single();
-
-  if (checkError) {
-    console.error("Error checking existing user:", checkError.message);
-    redirect("/error");
-    return;
-  }
 
   if (existingUser) {
     console.log("User already exists with this email:", data.email);
