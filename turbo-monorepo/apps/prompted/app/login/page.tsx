@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { login } from "./actions";
 import {
   Button,
@@ -17,15 +17,33 @@ import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState(false);
+
   const handleLogin = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (!email || !password) {
+      return;
+    }
     event.preventDefault();
+    setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    await login(formData);
+    const error = await login(formData);
+    if (error) {
+      setEmailError(true);
+      setLoading(false);
+      return;
+    }
   };
 
   const switchToSignup = () => {
+    //Clear all of the fields
+    setEmail("");
+    setPassword("");
+    setEmailError(false);
     router.push("/signup");
   };
 
@@ -46,6 +64,8 @@ export default function LoginPage() {
               name="email"
               type="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
             />
             <PasswordInput
               label="Password"
@@ -54,10 +74,27 @@ export default function LoginPage() {
               id="password"
               name="password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
             />
-            <Button fullWidth size="md" onClick={handleLogin}>
+            {emailError && (
+              <Text c="red" ta="center" size="sm">
+                Invalid email or password. Please try again.
+              </Text>
+            )}
+
+            <Button
+              fullWidth
+              size="md"
+              onClick={handleLogin}
+              loading={loading}
+              loaderProps={{
+                type: "dots",
+              }}
+            >
               Login
             </Button>
+
             <Text c="dimmed" size="sm" ta="center" mt={5}>
               Do not have an account yet?{" "}
               <Anchor size="sm" component="button" onClick={switchToSignup}>

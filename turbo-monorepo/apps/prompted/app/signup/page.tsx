@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { signup } from "../login/actions";
 import {
   Button,
@@ -15,17 +15,38 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [registeredAlready, setRegisteredAlready] = useState(false);
+
   const handleSignup = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
+    if (!username || !email || !password) {
+      return;
+    }
+    setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    await signup(formData);
+    const result = await signup(formData);
+    if (result === "REGISTERED") {
+      setRegisteredAlready(true);
+      setLoading(false);
+      return;
+    }
   };
 
   const switchToLogin = () => {
+    //Clear all of the fields
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setRegisteredAlready(false);
+
     router.push("/login");
   };
 
@@ -45,6 +66,8 @@ export default function LoginPage() {
               id="username"
               name="username"
               required
+              value={username}
+              onChange={(e) => setUsername(e.currentTarget.value)}
             />
             <TextInput
               label="Email address"
@@ -54,6 +77,8 @@ export default function LoginPage() {
               name="email"
               type="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
             />
             <PasswordInput
               label="Password"
@@ -62,8 +87,23 @@ export default function LoginPage() {
               id="password"
               name="password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
             />
-            <Button fullWidth size="md" onClick={handleSignup}>
+            {registeredAlready && (
+              <Text c="red" ta="center" size="sm" mt={5}>
+                This email is already registered. Please login.
+              </Text>
+            )}
+            <Button
+              fullWidth
+              size="md"
+              onClick={handleSignup}
+              loading={loading}
+              loaderProps={{
+                type: "dots",
+              }}
+            >
               Sign up
             </Button>
             <Text c="dimmed" size="sm" ta="center" mt={5}>

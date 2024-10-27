@@ -46,7 +46,7 @@ async function loadBadgesForUser(userId: string) {
 
   // Step 4: Filter badges that are missing from the user's progress
   const badgesToInsert = badges.filter(
-    (badge) => !existingBadgeIds.includes(badge.id),
+    (badge) => !existingBadgeIds.includes(badge.id)
   );
 
   // Step 5: Insert missing badges with default values into the progress table
@@ -86,11 +86,14 @@ export async function login(formData: FormData) {
 
   const { data: loginData, error } =
     await supabase.auth.signInWithPassword(data);
-  await loadBadgesForUser(loginData.user.id);
 
   if (error) {
-    redirect("/error");
+    // redirect("/error");
+    console.error("Login Error:", error.message);
+    return "Error logging in";
   }
+
+  await loadBadgesForUser(loginData.user.id);
 
   revalidatePath("/", "layout");
   // Start the user on the write page
@@ -108,12 +111,29 @@ export async function signup(formData: FormData) {
   });
 
   // Type-casting here for convenience
-  // In practice, you should validate your inputs
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
     username: formData.get("username") as string,
   };
+
+  // Check if the user is already signed up
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", data.email)
+    .single();
+
+  if (checkError) {
+    console.error("Error checking existing user:", checkError.message);
+    redirect("/error");
+    return;
+  }
+
+  if (existingUser) {
+    console.log("User already exists with this email:", data.email);
+    return "REGISTERED";
+  }
 
   // Log data before signUp
   console.log("Data before signUp:", data);
@@ -149,6 +169,6 @@ export async function signup(formData: FormData) {
   console.log("SignUp successful, redirecting...");
 
   revalidatePath("/", "layout");
-  //TODO: Redirect to a page that prompts the user to check their email
-  redirect("/login");
+  // Redirect to a page that prompts the user to check their email
+  redirect("/check-email");
 }
