@@ -13,9 +13,12 @@ import {
   Anchor,
   Group,
   Divider,
+  Image,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import Footer from "../components/footer";
+import { useMediaQuery } from "@mantine/hooks";
+import loginImage from "../../public/LoginLightbulb.png";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,6 +26,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorString, setErrorString] = useState<string | null>(null);
+  const isMediumScreen = useMediaQuery("(max-width: 800px)");
 
   const handleLogin = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -61,29 +65,44 @@ export default function LoginPage() {
 
   return (
     <>
+      <Group w="100%" mt="xl">
+        <Divider flex={1} />
+        <Title ta="center" order={1}>
+          Let’s Do This!
+        </Title>
+        <Divider flex={1} />
+      </Group>
+
+      <Text ta="center" c="dimmed" mb="xl">
+        Login to your account and keep the creativity flowing!
+      </Text>
+
       <Container
         size="lg"
-        mt={50}
         style={{
           display: "flex",
           alignItems: "center",
-          flexDirection: "column",
+          justifyContent: "center",
+          gap: "7rem",
+          flexWrap: "wrap",
+          height: "100%",
         }}
       >
-        <Group w="100%">
-          <Divider flex={1} />
-          <Title ta="center" order={1}>
-            Let’s Do This!
-          </Title>
-          <Divider flex={1} />
-        </Group>
-
-        <Text ta="center" c="dimmed" mb="xl">
-          Login to your account and keep
-        </Text>
+        {!isMediumScreen && (
+          <Image
+            src={loginImage.src}
+            alt="Login Lightbulb"
+            style={{
+              maxWidth: "20rem",
+              width: "100%",
+              height: "auto",
+            }}
+          />
+        )}
         <form
           style={{
             width: "50%",
+            alignSelf: "center",
           }}
         >
           <Stack>

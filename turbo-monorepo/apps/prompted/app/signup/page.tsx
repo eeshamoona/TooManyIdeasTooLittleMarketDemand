@@ -16,11 +16,13 @@ import {
   Group,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { useMediaQuery } from "@mantine/hooks";
 import signupImage from "../../public/SignupCharacter.png";
 import Footer from "../components/footer";
 
 export default function SignupPage() {
   const router = useRouter();
+  const isMediumScreen = useMediaQuery("(max-width: 800px)");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,16 +60,16 @@ export default function SignupPage() {
 
   return (
     <>
-      <Group w="100%">
+      <Group w="100%" mt="xl">
         <Divider flex={1} />
         <Title ta="center" order={1}>
-          Let’s Do This!
+          Join the Fun!
         </Title>
         <Divider flex={1} />
       </Group>
 
       <Text ta="center" c="dimmed" mb="xl">
-        Login to your account and keep
+        Sign up to make writing a joyful habit
       </Text>
       <Container
         size="lg"
@@ -75,13 +77,14 @@ export default function SignupPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "2rem",
+          gap: "3rem",
           flexWrap: "wrap",
         }}
       >
         <form
           style={{
             width: "50%",
+            alignSelf: "center",
           }}
         >
           <Stack>
@@ -139,16 +142,17 @@ export default function SignupPage() {
         </form>
 
         {/* Image Section */}
-        <Image
-          src={signupImage.src}
-          alt="Signup character"
-          style={{
-            flex: 1,
-            overflow: "hidden",
-            width: "100%",
-            height: "auto",
-          }}
-        />
+        {!isMediumScreen && (
+          <Image
+            src={signupImage.src}
+            alt="Signup character"
+            style={{
+              maxWidth: "30rem",
+              width: "100%",
+              height: "auto",
+            }}
+          />
+        )}
       </Container>
       <footer
         style={{
