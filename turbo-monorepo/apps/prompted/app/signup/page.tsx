@@ -21,35 +21,36 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [registeredAlready, setRegisteredAlready] = useState(false);
+  const [errorString, setErrorString] = useState<string | null>(null);
 
   const handleSignup = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
     if (!username || !email || !password) {
+      setErrorString("Please fill out all fields.");
       return;
     }
     setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
     const result = await signup(formData);
     if (result === "REGISTERED") {
-      setRegisteredAlready(true);
+      setErrorString("This email is already registered. Please login.");
+      setLoading(false);
+      return;
+    } else if (result === "SIGNUP_ERROR") {
+      setErrorString("A signup error occurred. Please try again.");
       setLoading(false);
       return;
     }
   };
 
-  const switchToLogin = () => {
-    //Clear all of the fields
-    setUsername("");
-    setEmail("");
-    setPassword("");
-    setRegisteredAlready(false);
-
-    router.push("/login");
+  const switchToLogin = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    router.replace("/login");
   };
-
   return (
     <Container size="xs" style={{ display: "flex", alignItems: "center" }}>
       <Paper radius="md" p="xl" w="100%" withBorder>
@@ -65,7 +66,6 @@ export default function SignupPage() {
               size="md"
               id="username"
               name="username"
-              required
               value={username}
               onChange={(e) => setUsername(e.currentTarget.value)}
             />
@@ -76,7 +76,6 @@ export default function SignupPage() {
               id="email"
               name="email"
               type="email"
-              required
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
@@ -86,13 +85,12 @@ export default function SignupPage() {
               size="md"
               id="password"
               name="password"
-              required
               value={password}
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
-            {registeredAlready && (
+            {errorString !== null && (
               <Text c="red" ta="center" size="sm" mt={5}>
-                This email is already registered. Please login.
+                {errorString}
               </Text>
             )}
             <Button

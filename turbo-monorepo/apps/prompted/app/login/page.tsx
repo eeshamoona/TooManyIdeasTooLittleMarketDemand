@@ -12,6 +12,7 @@ import {
   Stack,
   Text,
   Anchor,
+  Group,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
@@ -20,12 +21,14 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [errorString, setErrorString] = useState<string | null>(null);
 
   const handleLogin = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    setErrorString(null);
     if (!email || !password) {
+      setErrorString("Please fill out all fields.");
       return;
     }
     event.preventDefault();
@@ -33,18 +36,26 @@ export default function LoginPage() {
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
     const error = await login(formData);
     if (error) {
-      setEmailError(true);
+      switch (error) {
+        case "INCORRECT_PASSWORD":
+          setErrorString("Incorrect password. Please try again.");
+          break;
+        case "EMAIL_NOT_REGISTERED":
+          setErrorString("This email is not registered. Please sign up.");
+          break;
+        default:
+          setErrorString("An unknown error occurred. Please try again.");
+      }
       setLoading(false);
       return;
     }
   };
 
-  const switchToSignup = () => {
-    //Clear all of the fields
-    setEmail("");
-    setPassword("");
-    setEmailError(false);
-    router.push("/signup");
+  const switchToSignup = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    router.replace("/signup");
   };
 
   return (
@@ -63,7 +74,6 @@ export default function LoginPage() {
               id="email"
               name="email"
               type="email"
-              required
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
@@ -73,34 +83,33 @@ export default function LoginPage() {
               size="md"
               id="password"
               name="password"
-              required
               value={password}
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
-            {emailError && (
+            {errorString !== null && (
               <Text c="red" ta="center" size="sm">
-                Invalid email or password. Please try again.
+                {errorString}
               </Text>
             )}
 
-            <Button
-              fullWidth
-              size="md"
-              onClick={handleLogin}
-              loading={loading}
-              loaderProps={{
-                type: "dots",
-              }}
-            >
-              Login
-            </Button>
-
-            <Text c="dimmed" size="sm" ta="center" mt={5}>
-              Do not have an account yet?{" "}
-              <Anchor size="sm" component="button" onClick={switchToSignup}>
-                Create account
-              </Anchor>
-            </Text>
+            <Group justify="space-between">
+              <Text c="dimmed" size="sm" ta="center" mt={5}>
+                Do not have an account yet?{" "}
+                <Anchor size="sm" component="button" onClick={switchToSignup}>
+                  Create account
+                </Anchor>
+              </Text>
+              <Button
+                size="md"
+                onClick={handleLogin}
+                loading={loading}
+                loaderProps={{
+                  type: "dots",
+                }}
+              >
+                Login
+              </Button>
+            </Group>
           </Stack>
         </form>
       </Paper>

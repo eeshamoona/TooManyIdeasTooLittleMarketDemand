@@ -87,10 +87,23 @@ export async function login(formData: FormData) {
   const { data: loginData, error } =
     await supabase.auth.signInWithPassword(data);
 
-  if (error) {
-    // redirect("/error");
+  if (error && error.message.includes("Invalid login credentials")) {
     console.error("Login Error:", error.message);
-    return "Error logging in";
+
+    //check if the email is in the profiles table, then password is incorrect
+    const { data: existingUser, error: checkError } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("email", data.email)
+      .single();
+
+    if (checkError) {
+      return "EMAIL_NOT_REGISTERED";
+    } else if (existingUser) {
+      return "INCORRECT_PASSWORD";
+    }
+  } else if (error) {
+    return "UNKNOWN_ERROR";
   }
 
   await loadBadgesForUser(loginData.user.id);
@@ -155,8 +168,7 @@ export async function signup(formData: FormData) {
     // Log error
     console.log("SignUp Error:", error);
     console.error("SignUp Error:", error.message);
-    redirect("/error");
-    return;
+    return "SIGNUP_ERROR";
   }
 
   if (!signUpData.user) {
