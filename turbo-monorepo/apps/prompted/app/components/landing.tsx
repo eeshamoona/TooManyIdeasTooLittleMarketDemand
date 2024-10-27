@@ -1,0 +1,121 @@
+import React, { Suspense } from "react";
+import { Button, Container, Stack, Title } from "@mantine/core";
+import { FaArrowRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { TypewriterArray } from "./typewriter";
+import { usePrompts } from "../context/PromptContext";
+
+// Lazy load the components
+const HeroPage = React.lazy(() => import("./hero"));
+const HowItWorks = React.lazy(() => import("./how"));
+const FeatureHighlight = React.lazy(() => import("./motivation"));
+const FaqWithImage = React.lazy(() => import("./faq"));
+const Footer = React.lazy(() => import("./footer"));
+
+const LandingPage: React.FC = () => {
+  const router = useRouter();
+
+  const scrollToHowItWorks = () => {
+    const element = document.getElementById("how-it-works");
+    if (element) {
+      const headerOffset = 7 * 16; // 10rem in pixels
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.screenY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const goToLogin = () => {
+    router.push("/write");
+  };
+
+  const { prompts } = usePrompts();
+  const displayPrompts = prompts.map((prompt) => prompt.text);
+
+  return (
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <FullHeightSection>
+          <HeroPage
+            scrollToCallback={scrollToHowItWorks}
+            goToLoginCallback={goToLogin}
+          />
+        </FullHeightSection>
+
+        <Stack
+          gap="sm"
+          align="center"
+          style={{
+            textAlign: "center",
+            padding: "2rem",
+          }}
+        >
+          <Title ta="center">Get inspired with prompts like...</Title>
+          <TypewriterArray strings={displayPrompts} />
+        </Stack>
+
+        <FullHeightSection id="how-it-works">
+          <HowItWorks />
+        </FullHeightSection>
+
+        <FullHeightSection
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+          }}
+        >
+          <FeatureHighlight />
+          <Button
+            size="lg"
+            variant="light"
+            color="blue"
+            rightSection={<FaArrowRight />}
+            onClick={goToLogin}
+          >
+            Sign up for free and get started today
+          </Button>
+        </FullHeightSection>
+
+        <FullHeightSection>
+          <FaqWithImage />
+        </FullHeightSection>
+
+        <footer>
+          <Footer />
+        </footer>
+      </Suspense>
+    </>
+  );
+};
+
+interface FullHeightSectionProps {
+  children: React.ReactNode;
+  id?: string;
+  style?: React.CSSProperties;
+}
+
+const FullHeightSection: React.FC<FullHeightSectionProps> = ({
+  children,
+  id,
+  style,
+}) => {
+  return (
+    <Container
+      fluid
+      id={id}
+      style={{
+        minHeight: "90vh",
+        ...style,
+      }}
+    >
+      {children}
+    </Container>
+  );
+};
+
+export default LandingPage;

@@ -10,11 +10,12 @@ import {
   Button,
   Menu,
   UnstyledButton,
+  useMantineTheme,
 } from "@mantine/core";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter, usePathname } from "next/navigation";
-import { LuAward, LuBookOpen, LuPencil, LuPlus } from "react-icons/lu";
+import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
 import { handleLogout } from "./logout/logoutClient";
 import { forwardRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
@@ -106,7 +107,9 @@ export function CustomAppShell({
   const [opened, { toggle }] = useDisclosure();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const router = useRouter();
+  const theme = useMantineTheme();
   const pathname = usePathname();
+  const [textColor, setTextColor] = useState("");
 
   const backgroundColor = colorScheme === "dark" ? "yellow" : "indigo";
 
@@ -133,7 +136,16 @@ export function CustomAppShell({
             />
           )}
           <Group justify="space-between" style={{ flex: 1 }}>
-            <Text>Prompted</Text>
+            <Group
+              onClick={() => router.push("/")}
+              onMouseEnter={() => setTextColor(theme.colors.blue[7])}
+              onMouseLeave={() => setTextColor("")}
+              style={{
+                cursor: "pointer",
+              }}
+            >
+              <Text style={{ color: textColor }}>Prompted</Text>
+            </Group>
             {isLoggedIn && (
               <Group gap={"sm"} visibleFrom="sm">
                 <Button
@@ -163,15 +175,6 @@ export function CustomAppShell({
                   onClick={() => router.push("/progress")}
                 >
                   Progress
-                </Button>
-                <Button
-                  variant={isActive("/write/more") ? "light" : "subtle"}
-                  leftSection={
-                    <LuPlus style={{ width: "1rem", height: "1rem" }} />
-                  }
-                  onClick={() => router.push("/write/more")}
-                >
-                  Add
                 </Button>
               </Group>
             )}
@@ -217,13 +220,6 @@ export function CustomAppShell({
           onClick={() => router.push("/progress")}
         >
           Progress
-        </Button>
-        <Button
-          variant={isActive("/write/more") ? "filled" : "light"}
-          leftSection={<LuPlus style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/write/more")}
-        >
-          Add
         </Button>
       </AppShell.Navbar>
 
