@@ -1,27 +1,94 @@
-import React, { useState } from "react";
+import React from "react";
 import {
+  useMantineColorScheme,
   Box,
   TextInput,
   Select,
-  MultiSelect,
   Button,
-  useMantineColorScheme,
+  SelectProps,
+  ActionIcon,
+  Center,
+  Group,
+  Text,
 } from "@mantine/core";
-import { TiPencil } from "react-icons/ti";
-import { useRouter } from "next/navigation";
+import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
+import { FaCheck } from "react-icons/fa";
 
+// Define the interface for SearchHeader props
 interface SearchHeaderProps {
   hasEntries: boolean;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  category: string | null;
+  setCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
 }
+
+const renderSelectOption: SelectProps["renderOption"] = ({
+  option,
+  checked,
+}) => {
+  const category = NEW_PROMPT_CATEGORIES.find(
+    (cat) => cat.title === option.value
+  );
+  const Icon = category?.icon;
+  const color = category?.color;
+  return (
+    <Group
+      flex="1"
+      align="center"
+      style={{
+        padding: "0px", // Add padding for better spacing
+        borderRadius: "8px", // Rounded corners for smoother edges
+        cursor: "pointer", // Indicate interactivity
+      }}
+      gap="sm"
+    >
+      {Icon && (
+        <Center>
+          <ActionIcon variant="light" color={color} size="lg">
+            <Icon />
+          </ActionIcon>
+        </Center>
+      )}
+      <Text
+        style={{
+          fontWeight: "600", // Semi-bold for better readability
+          fontSize: "14px", // Slightly larger for better legibility
+        }}
+      >
+        {option.value}
+      </Text>
+      <Text
+        c="dimmed"
+        style={{
+          fontSize: "12px", // Keep the label smaller for a subtle look
+        }}
+      >
+        {option["description"]}
+      </Text>
+      {checked && (
+        <FaCheck
+          style={{
+            marginLeft: "auto", // Push the check icon to the right
+            color: "#1976d2", // Give it a pleasant, accent color
+          }}
+        />
+      )}
+    </Group>
+  );
+};
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
   hasEntries,
-}: SearchHeaderProps) => {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
-
+  searchQuery,
+  setSearchQuery,
+  category,
+  setCategory,
+  tags,
+  setTags,
+}) => {
   const { colorScheme } = useMantineColorScheme();
 
   const headingColor =
@@ -29,16 +96,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
       ? "var(--mantine-color-dark-5)"
       : "var(--mantine-color-gray-0)";
 
-  const handleSearch = () => {
-    // Implement search logic here
-    console.log("Search Query:", searchQuery);
-    console.log("Category:", category);
-    console.log("Tags:", tags);
-  };
-
   return (
     <Box
-      p={"sm"}
+      p="sm"
       style={{
         position: "sticky",
         top: 0,
@@ -47,8 +107,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         borderRadius: 5,
         display: "flex",
         gap: "1rem",
+        alignItems: "center",
       }}
     >
+      {/* Search Input */}
       <TextInput
         placeholder="Search..."
         value={searchQuery}
@@ -56,37 +118,25 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         style={{ flex: 1 }}
         disabled={!hasEntries}
       />
+
+      {/* Category Selector */}
       <Select
-        placeholder="Select category"
+        placeholder="Select a category"
+        data={NEW_PROMPT_CATEGORIES.map((category) => ({
+          value: category.title,
+          label: category.title,
+          description: category.description,
+          icon: category.icon,
+        }))}
         value={category}
         onChange={setCategory}
-        data={[
-          { value: "category1", label: "Category 1" },
-          { value: "category2", label: "Category 2" },
-          { value: "category3", label: "Category 3" },
-        ]}
+        renderOption={renderSelectOption}
         disabled={!hasEntries}
       />
-      <MultiSelect
-        placeholder="Select tags"
-        value={tags}
-        onChange={setTags}
-        data={[
-          { value: "tag1", label: "Tag 1" },
-          { value: "tag2", label: "Tag 2" },
-          { value: "tag3", label: "Tag 3" },
-        ]}
-        disabled={!hasEntries}
-      />
-      <Button onClick={handleSearch} disabled={!hasEntries}>
+
+      {/* Search Button */}
+      <Button onClick={() => {}} disabled={!hasEntries}>
         Search
-      </Button>
-      <Button
-        variant="outline"
-        leftSection={<TiPencil />}
-        onClick={() => router.push("/write")}
-      >
-        Write!
       </Button>
     </Box>
   );

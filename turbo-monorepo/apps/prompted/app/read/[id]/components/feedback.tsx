@@ -1,6 +1,6 @@
 "use client";
 import { Card, Grid, Group, Rating, Stack, Text } from "@mantine/core";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 const criteriaDescriptions = {
   completeness: "How complete is the writing?",
@@ -31,12 +31,14 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   //first order the feedbackData by the order of the criteriaDescriptions
-  const orderedFeedbackData = Object.fromEntries(
-    Object.entries(feedbackData).sort(
-      ([criteriaA], [criteriaB]) =>
-        Object.keys(criteriaDescriptions).indexOf(criteriaA) -
-        Object.keys(criteriaDescriptions).indexOf(criteriaB),
-    ),
+  const orderedFeedbackData = useMemo(() => 
+    Object.fromEntries(
+      Object.entries(feedbackData).sort(
+        ([criteriaA], [criteriaB]) =>
+          Object.keys(criteriaDescriptions).indexOf(criteriaA) -
+          Object.keys(criteriaDescriptions).indexOf(criteriaB),
+      ),
+    ), [feedbackData]
   );
 
   return (
