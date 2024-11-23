@@ -5,8 +5,6 @@ import {
   ActionIcon,
   Center,
   Text,
-  Box,
-  Badge,
   SelectProps,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
@@ -79,10 +77,6 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
     setSelectedCategories(values);
   };
 
-  const handleRemoveCategory = (category: string) => {
-    setSelectedCategories((prev) => prev.filter((item) => item !== category));
-  };
-
   return (
     <MultiSelect
       label="Filter Categories"
@@ -92,7 +86,7 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
         description: category.description,
         icon: category.icon,
       }))}
-      placeholder="None selected"
+      placeholder={selectedCategories.length === 0 ? "None Selected" : ""}
       value={selectedCategories}
       onChange={handleCategoryChange}
       searchable

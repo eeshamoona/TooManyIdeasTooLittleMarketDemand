@@ -12,7 +12,6 @@ import { IoCheckmark, IoTrash } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getEntry } from "../actions";
-import StatProgress from "./bar-chart";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 import { LuTimer, LuBaseline } from "react-icons/lu";
 import { convertTimeToDescription } from "../../write/actions";
@@ -31,6 +30,7 @@ interface EntryCardProps {
     created_at: string;
     ai_feedback: any;
   };
+  staticMode: boolean;
   editMode: boolean;
   deleteEntryCallback: (id: string) => void; // Assuming the callback takes an entry ID as a parameter
 }
@@ -38,6 +38,7 @@ interface EntryCardProps {
 export function EntryCard({
   entry,
   editMode,
+  staticMode,
   deleteEntryCallback,
 }: EntryCardProps) {
   const router = useRouter();
@@ -76,19 +77,25 @@ export function EntryCard({
       withBorder
       radius="md"
       shadow="sm"
-      onClick={handleCardClick}
+      onClick={!staticMode ? handleCardClick : undefined}
       style={{
-        cursor: "pointer",
-        transition: "box-shadow 150ms ease, transform 100ms ease",
+        cursor: !staticMode ? "pointer" : "default",
+        transition: !staticMode
+          ? "box-shadow 150ms ease, transform 100ms ease"
+          : undefined,
         boxShadow: "none",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = theme.shadows.md;
-        e.currentTarget.style.transform = "scale(1.01)";
+        if (!staticMode) {
+          e.currentTarget.style.boxShadow = theme.shadows.md;
+          e.currentTarget.style.transform = "scale(1.01)";
+        }
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "none";
-        e.currentTarget.style.transform = "scale(1)";
+        if (!staticMode) {
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.transform = "scale(1)";
+        }
       }}
     >
       <Group justify="space-between">
