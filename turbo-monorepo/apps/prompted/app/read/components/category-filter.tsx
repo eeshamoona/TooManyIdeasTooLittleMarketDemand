@@ -85,19 +85,20 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
 
   return (
     <MultiSelect
+      label="Filter Categories"
       data={NEW_PROMPT_CATEGORIES.map((category) => ({
         value: category.title,
         label: category.title,
         description: category.description,
         icon: category.icon,
       }))}
-      placeholder="Select categories"
+      placeholder="None selected"
       value={selectedCategories}
       onChange={handleCategoryChange}
       searchable
       clearable
       renderOption={renderSelectOption}
-      flex={2}
+      flex={3}
     />
   );
 };

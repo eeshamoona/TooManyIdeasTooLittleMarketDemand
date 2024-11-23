@@ -91,6 +91,7 @@ export default function DisplayEntries({ data: entries }) {
         sortBy={sortBy}
         setSortBy={setSortBy}
         onResetFilters={resetFilters}
+        entriesLength={filteredEntries.length}
       />
       <Box p="sm" style={{ flexGrow: 1, overflowY: "auto" }}>
         <SimpleGrid cols={2} spacing="sm" verticalSpacing="sm">
