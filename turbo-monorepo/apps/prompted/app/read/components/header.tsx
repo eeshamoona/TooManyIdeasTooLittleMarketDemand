@@ -92,7 +92,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           clearable
         />
       </Box>
-      <Text c="dimmed">Results: {entriesLength} entries</Text>
     </Stack>
   );
 };
