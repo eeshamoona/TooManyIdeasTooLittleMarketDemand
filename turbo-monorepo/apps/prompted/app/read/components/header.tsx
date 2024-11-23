@@ -66,8 +66,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           placeholder="Type anything..."
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.currentTarget.value)}
-          style={{ flex: 1, minWidth: "200px" }}
           disabled={!hasEntries}
+          flex={1}
         />
         {/* Multi-Select Filters */}
         <CategoryMultiSelect
@@ -78,18 +78,19 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         <Select
           label="Sort By"
           data={[
-            { value: "dateAsc", label: "Date: Oldest First" },
-            { value: "dateDesc", label: "Date: Newest First" },
-            { value: "lengthAsc", label: "Length: Shortest First" },
-            { value: "lengthDesc", label: "Length: Longest First" },
-            { value: "wordCountAsc", label: "Word Count: Fewest First" },
-            { value: "wordCountDesc", label: "Word Count: Most First" },
+            { value: "dateAsc", label: "Date - Oldest First" },
+            { value: "dateDesc", label: "Date - Newest First" },
+            { value: "lengthAsc", label: "Length - Fastest First" },
+            { value: "lengthDesc", label: "Length - Slowest First" },
+            { value: "wordCountAsc", label: "Word Count - Shortest First" },
+            { value: "wordCountDesc", label: "Word Count - Longest First" },
           ]}
           placeholder="None selected"
           value={sortBy}
           onChange={setSortBy}
           disabled={!hasEntries}
           clearable
+          flex={1}
         />
       </Box>
     </Stack>
