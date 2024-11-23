@@ -223,12 +223,9 @@ export default function TrackedTextarea({
       const data = await saveResponse.json();
       const entry_id = data.entryId;
       console.log("Route to entry page with ID:", entry_id);
-      //TODO: Re-route to process entry
       router.push(`/process/${entry_id}`);
     } catch (error) {
       console.error("Error calling API:", error);
-    } finally {
-      setIsSaving(false);
     }
   };
 
