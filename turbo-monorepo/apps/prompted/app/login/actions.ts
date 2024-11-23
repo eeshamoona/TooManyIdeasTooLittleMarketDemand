@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "../utils/supabase/server";
 
-async function loadBadgesForUser(userId: string) {
+export async function loadBadgesForUser(userId: string) {
   const supabase = createClient();
   console.log(`Loading progress for user: ${userId}`);
 

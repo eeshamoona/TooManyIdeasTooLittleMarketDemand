@@ -33,7 +33,7 @@ export default function Filter({ prompts }) {
   return (
     <VStack spacing={4} maxWidth="80%" margin="0 auto">
       <Select
-        placeholder="Filter by category"
+        placeholder="Filter prompts by category"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       >
