@@ -32,10 +32,14 @@ interface EntryCardProps {
     ai_feedback: any;
   };
   editMode: boolean;
-  // deleteEntryCallback: (id: string) => void; // Assuming the callback takes an entry ID as a parameter
+  deleteEntryCallback: (id: string) => void; // Assuming the callback takes an entry ID as a parameter
 }
 
-export function EntryCard({ entry, editMode }: EntryCardProps) {
+export function EntryCard({
+  entry,
+  editMode,
+  deleteEntryCallback,
+}: EntryCardProps) {
   const router = useRouter();
   const theme = useMantineTheme();
   const [exported, setExported] = useState(false);
@@ -62,11 +66,11 @@ export function EntryCard({ entry, editMode }: EntryCardProps) {
   const color = `var(--mantine-color-${category?.color}-5)`;
 
   // Define the handleDelete function
-  const handleDelete = (e: React.MouseEvent) => {
+  const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Implement the delete logic here
-    console.log("Call API to delete this entry from Supabase");
+    deleteEntryCallback(entry.id);
   };
+
   return (
     <Card
       withBorder

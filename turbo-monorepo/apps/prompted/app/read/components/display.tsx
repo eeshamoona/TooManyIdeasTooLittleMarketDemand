@@ -16,7 +16,8 @@ import { NoResults } from "./no-results";
 import { IoTrash } from "react-icons/io5";
 import { TbEdit, TbEditOff } from "react-icons/tb";
 
-export default function DisplayEntries({ data: entries }: any) {
+export default function DisplayEntries({ data }: any) {
+  const [entries, setEntries] = useState(data);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilters, setCategoryFilters] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<string | null>(null);
@@ -26,6 +27,29 @@ export default function DisplayEntries({ data: entries }: any) {
     setSearchQuery("");
     setCategoryFilters([]);
     setSortBy(null);
+  };
+
+  const deleteEntryCallback = async (entryId) => {
+    try {
+      const response = await fetch("/api/deleteEntry", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: entryId }),
+      });
+
+      if (response.ok) {
+        console.log("Entry deleted successfully");
+        //Remove it from the array
+        setEntries(entries.filter((e) => e.id !== entryId));
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to delete entry:", errorData.error);
+      }
+    } catch (err) {
+      console.error("An error occurred while deleting the entry:", err);
+    }
   };
 
   const filteredEntries = useMemo(() => {
@@ -150,6 +174,7 @@ export default function DisplayEntries({ data: entries }: any) {
               key={entry.id}
               entry={entry}
               editMode={editMode}
+              deleteEntryCallback={deleteEntryCallback}
             />
           ))}
         </SimpleGrid>
