@@ -10,28 +10,32 @@ import { NoResults } from "./no-results";
 export default function DisplayEntries({ data: entries }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "none">("none");
 
   const resetFilters = () => {
     setSearchQuery("");
     setCategory(null);
-    setTags([]);
+    setSortOrder("none");
   };
 
   const filteredEntries = useMemo(() => {
-    return entries.filter((entry) => {
+    const filtered = entries.filter((entry) => {
       const matchesQuery = searchQuery
         ? entry.text.includes(searchQuery) ||
           (entry.prompt && entry.prompt.includes(searchQuery))
         : true;
       const matchesCategory = category ? entry.category === category : true;
-      const matchesTags =
-        tags.length > 0
-          ? tags.every((tag) => entry.metadata_stats?.tags?.includes(tag))
-          : true;
-      return matchesQuery && matchesCategory && matchesTags;
+      return matchesQuery && matchesCategory;
     });
-  }, [entries, searchQuery, category, tags]);
+
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      if (sortOrder === "asc") return dateA - dateB;
+      if (sortOrder === "desc") return dateB - dateA;
+      return 0;
+    });
+  }, [entries, searchQuery, category, sortOrder]);
 
   if (entries.length === 0) {
     return (
@@ -42,8 +46,8 @@ export default function DisplayEntries({ data: entries }) {
           setSearchQuery={setSearchQuery}
           category={category}
           setCategory={setCategory}
-          tags={tags}
-          setTags={setTags}
+          dateSortOrder={sortOrder}
+          setDateSortOrder={setSortOrder}
         />
         <EmptyState />
       </Container>
@@ -61,15 +65,14 @@ export default function DisplayEntries({ data: entries }) {
           width: "100%",
         }}
       >
-        {" "}
         <SearchHeader
           hasEntries={true}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           category={category}
           setCategory={setCategory}
-          tags={tags}
-          setTags={setTags}
+          dateSortOrder={sortOrder}
+          setDateSortOrder={setSortOrder}
         />
         <NoResults resetFilterCallback={resetFilters} />
       </Stack>
@@ -92,8 +95,8 @@ export default function DisplayEntries({ data: entries }) {
         setSearchQuery={setSearchQuery}
         category={category}
         setCategory={setCategory}
-        tags={tags}
-        setTags={setTags}
+        dateSortOrder={sortOrder}
+        setDateSortOrder={setSortOrder}
       />
 
       <Box

@@ -21,8 +21,8 @@ interface SearchHeaderProps {
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   category: string | null;
   setCategory: React.Dispatch<React.SetStateAction<string | null>>;
-  tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  dateSortOrder: "asc" | "desc" | "none";
+  setDateSortOrder: (order: "asc" | "desc" | "none") => void;
 }
 
 const renderSelectOption: SelectProps["renderOption"] = ({
@@ -86,8 +86,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   setSearchQuery,
   category,
   setCategory,
-  tags,
-  setTags,
+  dateSortOrder,
+  setDateSortOrder,
 }) => {
   const { colorScheme } = useMantineColorScheme();
 
@@ -95,6 +95,12 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     colorScheme === "dark"
       ? "var(--mantine-color-dark-5)"
       : "var(--mantine-color-gray-0)";
+
+  const toggleSortOrder = () => {
+    if (dateSortOrder === "asc") setDateSortOrder("desc");
+    if (dateSortOrder === "desc") setDateSortOrder("none");
+    if (dateSortOrder === "none") setDateSortOrder("asc");
+  };
 
   return (
     <Box
@@ -133,6 +139,14 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         renderOption={renderSelectOption}
         disabled={!hasEntries}
       />
+      <Button onClick={toggleSortOrder} disabled={!hasEntries} variant="subtle">
+        Sort Date:{" "}
+        {dateSortOrder === "asc"
+          ? "Oldest First"
+          : dateSortOrder === "desc"
+            ? "Newest First"
+            : "None"}
+      </Button>
 
       {/* Search Button */}
       <Button onClick={() => {}} disabled={!hasEntries}>
