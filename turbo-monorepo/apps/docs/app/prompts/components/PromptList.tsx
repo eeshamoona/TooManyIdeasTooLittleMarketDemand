@@ -14,7 +14,7 @@ export default function PromptList({ prompts }) {
   return (
     <VStack spacing={4} align="stretch">
       <Select
-        placeholder="Filter by category"
+        placeholder="Filter prompts by category"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       >

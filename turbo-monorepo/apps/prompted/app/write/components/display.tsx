@@ -149,7 +149,7 @@ export default function Display({ prompts }: DisplayProps) {
           flex={1}
           clearable={randomPrompt ? false : true}
           defaultValue={null}
-          placeholder="Filter by category"
+          placeholder="Filter prompts by category"
           data={NEW_PROMPT_CATEGORIES.map((category) => ({
             value: category.title,
             label: category.title,
