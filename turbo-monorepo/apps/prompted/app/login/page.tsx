@@ -27,9 +27,7 @@ export default function LoginPage() {
   const [errorString, setErrorString] = useState<string | null>(null);
   const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
-  const handleLogin = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     setErrorString(null);
     if (!email || !password) {
       setErrorString("Please fill out all fields.");
@@ -37,7 +35,7 @@ export default function LoginPage() {
     }
     event.preventDefault();
     setLoading(true);
-    const formData = new FormData(event.currentTarget.form as HTMLFormElement);
+    const formData = new FormData(event.currentTarget);
     const response = await login(formData);
     if (response) {
       switch (response) {
@@ -111,6 +109,7 @@ export default function LoginPage() {
             width: "50%",
             alignSelf: "center",
           }}
+          onSubmit={handleLogin}
         >
           <Stack>
             <TextInput
@@ -141,7 +140,7 @@ export default function LoginPage() {
             <Button
               size="md"
               fullWidth
-              onClick={handleLogin}
+              type="submit"
               loading={loading}
               loaderProps={{
                 type: "dots",

@@ -1,6 +1,6 @@
 import { type EmailOtpType } from "@supabase/supabase-js";
 import { type NextRequest } from "next/server";
-
+import { loadBadgesForUser } from "../../login/actions";
 import { createClient } from "../../utils/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -25,19 +25,36 @@ export async function GET(request: NextRequest) {
       type,
       token_hash,
     });
+
     if (error) {
       console.error("Error verifying OTP:", error);
     } else {
       console.log("OTP verified successfully");
-      // redirect user to specified redirect URL or root of app
-      redirect(next);
-      return;
+
+      // Get the authenticated user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        console.log("Authenticated user:", user);
+        const userId = user.id;
+
+        // Pass userId to loadBadgesForUser
+        await loadBadgesForUser(userId);
+
+        // Redirect user to specified redirect URL or root of app
+        redirect(next);
+        return;
+      } else {
+        console.error("No authenticated user found after OTP verification");
+      }
     }
   } else {
     console.log("Missing token_hash or type");
   }
 
-  // redirect the user to an error page with some instructions
+  // Redirect the user to an error page with some instructions
   console.log("Redirecting to /error");
   redirect("/error");
 }
