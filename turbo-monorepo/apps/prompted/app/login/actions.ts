@@ -125,6 +125,38 @@ export async function login(formData: FormData) {
   redirect("/write");
 }
 
+export async function magicLinkLogin(formData: FormData) {
+  const supabase = createClient();
+
+  // Extract the email from the form data
+  const email = formData.get("email") as string;
+
+  if (!email) {
+    redirect("/error");
+    return;
+  }
+
+  console.log("HELLO THIS IS BEFORE SIGNING IN ")
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      // Update this URL to match your application's post-login redirection path
+      emailRedirectTo: "http://localhost:3000/magic-link-callback",
+      shouldCreateUser: false, // Set to false to prevent automatic sign-up
+    },
+  });
+
+  console.log(error)
+
+  if (error) {
+    console.error("Login Error:", error.message);
+    return "UNKNOWN_ERROR";
+  } else {
+    console.log("going to check your email page")
+    redirect("/check-email"); // Inform the user to check their email
+  }
+}
+
 export async function signup(formData: FormData) {
   const supabase = createClient();
 

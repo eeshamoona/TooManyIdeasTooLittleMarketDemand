@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
-  // default to /write if no next parameter is provided
   const next = searchParams.get("next") ?? "/write";
 
   console.log("token_hash:", token_hash);
@@ -31,7 +30,6 @@ export async function GET(request: NextRequest) {
     } else {
       console.log("OTP verified successfully");
 
-      // Get the authenticated user
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -40,7 +38,27 @@ export async function GET(request: NextRequest) {
         console.log("Authenticated user:", user);
         const userId = user.id;
 
-        // Pass userId to loadBadgesForUser
+        // Check if the user's profile is complete
+        const { data: profileData, error: profileError } = await supabase
+          .from("profiles")
+          .select("profile")
+          .eq("id", userId)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching user profile:", profileError);
+          redirect("/error");
+          return;
+        }
+
+        if (!profileData || !profileData.profile) {
+          console.log("User profile is incomplete. Redirecting to profile form.");
+          //TODO: Create a profile 
+          redirect("/read"); // Redirect to the profile completion form
+          return;
+        }
+
+        // Load badges for the user
         await loadBadgesForUser(userId);
 
         // Redirect user to specified redirect URL or root of app
@@ -54,7 +72,6 @@ export async function GET(request: NextRequest) {
     console.log("Missing token_hash or type");
   }
 
-  // Redirect the user to an error page with some instructions
   console.log("Redirecting to /error");
   redirect("/error");
 }

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { login } from "./actions";
+import { login, magicLinkLogin } from "./actions";
 import {
   Button,
   PasswordInput,
@@ -23,42 +23,21 @@ export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [errorString, setErrorString] = useState<string | null>(null);
   const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     setErrorString(null);
-    if (!email || !password) {
+    if (!email) {
       setErrorString("Please fill out all fields.");
       return;
     }
     event.preventDefault();
     setLoading(true);
     const formData = new FormData(event.currentTarget);
-    const response = await login(formData);
-    if (response) {
-      switch (response) {
-        case "EMAIL_NOT_VERIFIED":
-          setErrorString(
-            "This email has not been verified. Please check your email or sign up again."
-          );
-          break;
-        case "INCORRECT_PASSWORD":
-          setErrorString("Incorrect password. Please try again.");
-          break;
-        case "EMAIL_NOT_REGISTERED":
-          setErrorString("This email is not registered. Please sign up.");
-          break;
-        case "UNKNOWN_ERROR":
-          setErrorString("An unknown error occurred. Please try again.");
-          break;
-        default:
-          setErrorString("Something went wrong. Please try again.");
-      }
-      setLoading(false);
-      return;
-    }
+    await magicLinkLogin(formData);
+    setLoading(false);
   };
 
   const switchToSignup = (
@@ -122,20 +101,6 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              size="md"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-            />
-            {errorString !== null && (
-              <Text c="red" ta="center" size="sm">
-                {errorString}
-              </Text>
-            )}
 
             <Button
               size="md"
