@@ -15,7 +15,7 @@ import { EntryCard } from "./card";
 import SearchHeader from "./header";
 import { EmptyState } from "./empty-state";
 import { NoResults } from "./no-results";
-import { TbEdit, TbEditOff } from "react-icons/tb";
+import { MdOutlineEdit, MdOutlineEditOff } from "react-icons/md";
 
 export default function DisplayEntries({ data }: any) {
   const [entries, setEntries] = useState(data);
@@ -170,16 +170,16 @@ export default function DisplayEntries({ data }: any) {
         onResetFilters={resetFilters}
         entriesLength={filteredEntries.length}
       />
-      <Group px="md" py={3} justify="space-between">
+      <Group px="md" p="xs" justify="end">
         <Text c="dimmed">Results: {filteredEntries.length} entries</Text>
         <ActionIcon
           onClick={() => setEditMode(!editMode)}
           variant="subtle"
           size="lg"
-          radius="md"
+          radius="sm"
           color={editMode ? "red" : ""}
         >
-          {editMode ? <TbEditOff /> : <TbEdit />}
+          {editMode ? <MdOutlineEditOff /> : <MdOutlineEdit />}
         </ActionIcon>
       </Group>
       <Box p="sm" style={{ flexGrow: 1, overflowY: "auto" }}>
