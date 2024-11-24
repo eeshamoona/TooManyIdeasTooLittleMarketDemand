@@ -1,27 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import {
+  useMantineColorScheme,
   Box,
   TextInput,
   Select,
-  MultiSelect,
-  Button,
-  useMantineColorScheme,
+  Stack,
 } from "@mantine/core";
-import { TiPencil } from "react-icons/ti";
-import { useRouter } from "next/navigation";
+import CategoryMultiSelect from "./category-filter";
 
 interface SearchHeaderProps {
   hasEntries: boolean;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  categoryFilters: string[];
+  setCategoryFilters: React.Dispatch<React.SetStateAction<string[]>>;
+  sortBy: string | null;
+  setSortBy: React.Dispatch<React.SetStateAction<string | null>>;
+  onResetFilters: () => void;
+  entriesLength?: number;
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
   hasEntries,
-}: SearchHeaderProps) => {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
-
+  searchQuery,
+  setSearchQuery,
+  categoryFilters,
+  setCategoryFilters,
+  sortBy,
+  setSortBy,
+}) => {
   const { colorScheme } = useMantineColorScheme();
 
   const headingColor =
@@ -29,66 +36,57 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
       ? "var(--mantine-color-dark-5)"
       : "var(--mantine-color-gray-0)";
 
-  const handleSearch = () => {
-    // Implement search logic here
-    console.log("Search Query:", searchQuery);
-    console.log("Category:", category);
-    console.log("Tags:", tags);
-  };
-
   return (
-    <Box
-      p={"sm"}
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-        backgroundColor: headingColor,
-        borderRadius: 5,
-        display: "flex",
-        gap: "1rem",
-      }}
-    >
-      <TextInput
-        placeholder="Search..."
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.currentTarget.value)}
-        style={{ flex: 1 }}
-        disabled={!hasEntries}
-      />
-      <Select
-        placeholder="Select category"
-        value={category}
-        onChange={setCategory}
-        data={[
-          { value: "category1", label: "Category 1" },
-          { value: "category2", label: "Category 2" },
-          { value: "category3", label: "Category 3" },
-        ]}
-        disabled={!hasEntries}
-      />
-      <MultiSelect
-        placeholder="Select tags"
-        value={tags}
-        onChange={setTags}
-        data={[
-          { value: "tag1", label: "Tag 1" },
-          { value: "tag2", label: "Tag 2" },
-          { value: "tag3", label: "Tag 3" },
-        ]}
-        disabled={!hasEntries}
-      />
-      <Button onClick={handleSearch} disabled={!hasEntries}>
-        Search
-      </Button>
-      <Button
-        variant="outline"
-        leftSection={<TiPencil />}
-        onClick={() => router.push("/write")}
+    <Stack px="sm" align="end" gap="xs">
+      <Box
+        p="sm"
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          backgroundColor: headingColor,
+          borderRadius: 5,
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "1rem",
+          alignItems: "center",
+          width: "100%",
+        }}
       >
-        Write!
-      </Button>
-    </Box>
+        {/* Search Input */}
+        <TextInput
+          label="Prompt Search"
+          placeholder="Type anything..."
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.currentTarget.value)}
+          disabled={!hasEntries}
+          flex={1}
+        />
+        {/* Multi-Select Filters */}
+        <CategoryMultiSelect
+          selectedCategories={categoryFilters}
+          setSelectedCategories={setCategoryFilters}
+        />
+        {/* Sort By Dropdown */}
+        <Select
+          label="Sort By"
+          data={[
+            { value: "dateAsc", label: "Date - Oldest First" },
+            { value: "dateDesc", label: "Date - Newest First" },
+            { value: "lengthAsc", label: "Length - Fastest First" },
+            { value: "lengthDesc", label: "Length - Slowest First" },
+            { value: "wordCountAsc", label: "Word Count - Shortest First" },
+            { value: "wordCountDesc", label: "Word Count - Longest First" },
+          ]}
+          placeholder="None selected"
+          value={sortBy}
+          onChange={setSortBy}
+          disabled={!hasEntries}
+          clearable
+          flex={1}
+        />
+      </Box>
+    </Stack>
   );
 };
 

@@ -2,6 +2,14 @@ import { Container, Text } from "@mantine/core";
 import { createClient } from "../utils/supabase/server";
 import DisplayEntries from "./components/display";
 
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 export default async function Read() {
   const supabase = createClient();
 
@@ -19,7 +27,7 @@ export default async function Read() {
 
   return (
     <Container size="lg">
-      <DisplayEntries data={data} />
+      <DisplayEntries data={shuffleArray(data)} />
     </Container>
   );
 }
