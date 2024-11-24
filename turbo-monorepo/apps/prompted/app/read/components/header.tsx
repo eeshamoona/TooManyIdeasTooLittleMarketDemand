@@ -5,7 +5,6 @@ import {
   TextInput,
   Select,
   Stack,
-  Text,
 } from "@mantine/core";
 import CategoryMultiSelect from "./category-filter";
 
@@ -29,8 +28,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   setCategoryFilters,
   sortBy,
   setSortBy,
-  onResetFilters,
-  entriesLength,
 }) => {
   const { colorScheme } = useMantineColorScheme();
 
@@ -38,10 +35,6 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     colorScheme === "dark"
       ? "var(--mantine-color-dark-5)"
       : "var(--mantine-color-gray-0)";
-
-  const handleFilterRemove = (filter: string) => {
-    setCategoryFilters((prev) => prev.filter((f) => f !== filter));
-  };
 
   return (
     <Stack px="sm" align="end" gap="xs">

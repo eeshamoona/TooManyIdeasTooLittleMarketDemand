@@ -8,7 +8,7 @@ import {
   SelectProps,
 } from "@mantine/core";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 interface CategoryMultiSelectProps {
   selectedCategories: string[];
