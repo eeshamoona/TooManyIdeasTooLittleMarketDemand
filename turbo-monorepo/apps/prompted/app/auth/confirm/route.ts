@@ -51,15 +51,17 @@ export async function GET(request: NextRequest) {
           return;
         }
 
+        // Load badges for the user
+        await loadBadgesForUser(userId);
+
         if (!profileData || !profileData.profile) {
-          console.log("User profile is incomplete. Redirecting to profile form.");
-          //TODO: Create a profile 
+          console.log(
+            "User profile is incomplete. Redirecting to profile form."
+          );
+          //TODO: Create a profile
           redirect("/read"); // Redirect to the profile completion form
           return;
         }
-
-        // Load badges for the user
-        await loadBadgesForUser(userId);
 
         // Redirect user to specified redirect URL or root of app
         redirect(next);

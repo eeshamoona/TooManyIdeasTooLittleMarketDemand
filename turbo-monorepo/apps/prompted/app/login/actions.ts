@@ -130,29 +130,57 @@ export async function magicLinkLogin(formData: FormData) {
 
   // Extract the email from the form data
   const email = formData.get("email") as string;
+  const username = formData.get("username") as string;
 
   if (!email) {
     redirect("/error");
     return;
   }
 
-  console.log("HELLO THIS IS BEFORE SIGNING IN ")
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      // Update this URL to match your application's post-login redirection path
-      emailRedirectTo: "http://localhost:3000/magic-link-callback",
-      shouldCreateUser: false, // Set to false to prevent automatic sign-up
-    },
-  });
+  let errorResponse;
 
-  console.log(error)
+  if (!username) {
+    console.log("Login started");
+    const { data: loginData, error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        // TODO: Update this URL to match your application's post-login redirection path
+        emailRedirectTo: "http://localhost:3000/magic-link-callback",
+        shouldCreateUser: false, // Set to false to prevent automatic sign-up
+      },
+    });
+    if (error) {
+      errorResponse = error;
+      console.log(errorResponse);
+    } else {
+      console.log("Login Data information");
+      console.log(loginData);
+    }
+  } else {
+    console.log("Signup started");
 
-  if (error) {
-    console.error("Login Error:", error.message);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        // Update this URL to match your application's post-login redirection path
+        emailRedirectTo: "http://localhost:3000/magic-link-callback",
+        shouldCreateUser: true, // Set to false to prevent automatic sign-up
+        data: {
+          username: username,
+        },
+      },
+    });
+    if (error) {
+      errorResponse = error;
+      console.log(errorResponse);
+    }
+  }
+
+  if (errorResponse) {
+    console.error("Login Error:", errorResponse.message);
     return "UNKNOWN_ERROR";
   } else {
-    console.log("going to check your email page")
+    console.log("Going to check your email page");
     redirect("/check-email"); // Inform the user to check their email
   }
 }
