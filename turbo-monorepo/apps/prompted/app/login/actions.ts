@@ -124,64 +124,68 @@ export async function login(formData: FormData) {
   // Start the user on the write page
   redirect("/write");
 }
-
 export async function magicLinkLogin(formData: FormData) {
   const supabase = createClient();
 
-  // Extract the email from the form data
+  // Extract the email and username from the form data
   const email = formData.get("email") as string;
   const username = formData.get("username") as string;
 
   if (!email) {
+    console.error("Email is required.");
     redirect("/error");
     return;
   }
 
-  let errorResponse;
+  try {
+    if (!username) {
+      console.log("Login process started...");
+      // Attempt to log in the user
+      const { data: loginData, error: loginError } =
+        await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: "http://localhost:3000/magic-link-callback", // Update for production
+            shouldCreateUser: false, // Prevent auto sign-up during login
+          },
+        });
 
-  if (!username) {
-    console.log("Login started");
-    const { data: loginData, error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        // TODO: Update this URL to match your application's post-login redirection path
-        emailRedirectTo: "http://localhost:3000/magic-link-callback",
-        shouldCreateUser: false, // Set to false to prevent automatic sign-up
-      },
-    });
-    if (error) {
-      errorResponse = error;
-      console.log(errorResponse);
+      if (loginError) {
+        console.error("Login error:", loginError.message);
+        throw new Error(loginError.message);
+      }
+
+      console.log("Login Data:", loginData);
     } else {
-      console.log("Login Data information");
-      console.log(loginData);
-    }
-  } else {
-    console.log("Signup started");
+      console.log("Signup process started...");
+      // Attempt to sign up the user
+      const { data: signupData, error: signupError } =
+        await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            emailRedirectTo: "http://localhost:3000/magic-link-callback", // Update for production
+            shouldCreateUser: true, // Allow user creation during signup
+            data: {
+              username, // Additional user metadata
+            },
+          },
+        });
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        // Update this URL to match your application's post-login redirection path
-        emailRedirectTo: "http://localhost:3000/magic-link-callback",
-        shouldCreateUser: true, // Set to false to prevent automatic sign-up
-        data: {
-          username: username,
-        },
-      },
-    });
-    if (error) {
-      errorResponse = error;
-      console.log(errorResponse);
-    }
-  }
+      if (signupError) {
+        console.error("Signup error:", signupError.message);
+        throw new Error(signupError.message);
+      }
 
-  if (errorResponse) {
-    console.error("Login Error:", errorResponse.message);
-    return "UNKNOWN_ERROR";
-  } else {
-    console.log("Going to check your email page");
+      console.log("Signup Data:", signupData);
+    }
+
+    // TODO: Instead of this it should just be the login or signup page itself that shows the 
+    // message as they will see it every time they use magic link
+    console.log("Redirecting to check email page...");
     redirect("/check-email"); // Inform the user to check their email
+  } catch (error) {
+    console.error("Error during authentication:", error.message);
+    redirect("/error");
   }
 }
 
