@@ -41,6 +41,8 @@ export function EntryCard({
   staticMode,
   deleteEntryCallback,
 }: EntryCardProps) {
+  if (!entry) return null;
+
   const router = useRouter();
   const theme = useMantineTheme();
   const [exported, setExported] = useState(false);
