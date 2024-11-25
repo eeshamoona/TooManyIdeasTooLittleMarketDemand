@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Stack, TextInput, Text, Button } from "@mantine/core";
 import { LuSparkles } from "react-icons/lu";
 import { magicLinkLogin } from "../actions";
+import { TbUnlink } from "react-icons/tb";
 
 const MagicLinkForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -68,7 +69,7 @@ const MagicLinkForm: React.FC = () => {
           fullWidth
           variant="light"
           loading={loading}
-          leftSection={<LuSparkles aria-label="Magic Link Icon" />}
+          leftSection={<TbUnlink aria-label="Magic Link Icon" />}
           mt="xs"
         >
           Get Magic Link

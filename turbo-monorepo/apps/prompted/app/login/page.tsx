@@ -17,6 +17,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import loginImage from "../../public/WritingRoom.png";
 import PasswordForm from "./components/passwordLogin";
 import MagicLinkForm from "./components/passwordlessLogin";
+import { FaKey } from "react-icons/fa";
+import { LuSparkle } from "react-icons/lu";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -65,18 +67,21 @@ export default function LoginPage() {
         )}
 
         <Stack flex={1} h="100%" mt="lg">
-          <Tabs variant="pills" defaultValue="magic-link">
+          <Tabs variant="pills" defaultValue="password">
             <Tabs.List grow justify="center">
-              <Tabs.Tab value="magic-link">Send Magic Link</Tabs.Tab>
-              <Tabs.Tab value="password">Use Password</Tabs.Tab>
+              <Tabs.Tab value="password" leftSection={<FaKey />}>
+                Use Password
+              </Tabs.Tab>
+              <Tabs.Tab value="magic-link" leftSection={<LuSparkle />}>
+                Send Magic Link
+              </Tabs.Tab>
             </Tabs.List>
-
-            <Tabs.Panel pt="md" value="magic-link">
-              <MagicLinkForm />
-            </Tabs.Panel>
 
             <Tabs.Panel pt="md" value="password">
               <PasswordForm />
+            </Tabs.Panel>
+            <Tabs.Panel pt="md" value="magic-link">
+              <MagicLinkForm />
             </Tabs.Panel>
           </Tabs>
           <Text ta="center" c="dimmed" size="sm">

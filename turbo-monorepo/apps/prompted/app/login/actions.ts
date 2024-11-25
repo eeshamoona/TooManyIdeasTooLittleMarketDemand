@@ -215,7 +215,9 @@ export async function magicLinkLogin(
  *
  * Redirects the sign up link if they don't have a password
  */
-export async function magicLinkSignUp(formData: FormData): Promise<string | void> {
+export async function magicLinkSignUp(
+  formData: FormData
+): Promise<string | void> {
   const supabase = createClient();
 
   // Extract the email from the form data
@@ -251,8 +253,7 @@ export async function magicLinkSignUp(formData: FormData): Promise<string | void
       },
     });
 
-  console.log("SignUpData", signUpData);
-  if (signUpError || !signUpData.user) {
+  if (signUpError) {
     console.error("Error sending magic link:", signUpError);
     return "SIGNUP_ERROR";
   }
