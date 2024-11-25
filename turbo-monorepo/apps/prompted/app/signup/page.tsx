@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { magicLinkLogin, signup } from "../login/actions";
+import { signup } from "../login/actions";
 import {
   Button,
   PasswordInput,
@@ -24,7 +24,7 @@ export default function SignupPage() {
   const isMediumScreen = useMediaQuery("(max-width: 995px)");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorString, setErrorString] = useState<string | null>(null);
 
@@ -38,9 +38,9 @@ export default function SignupPage() {
     }
     setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    const result = await magicLinkLogin(formData);
-    console.log("In signup page", result)
-    setLoading(false)
+    const result = await signup(formData);
+    console.log("In signup page", result);
+    setLoading(false);
     // if (result === "REGISTERED") {
     //   setErrorString("This email is already registered. Please login.");
     //   setLoading(false);
@@ -109,6 +109,20 @@ export default function SignupPage() {
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              size="md"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+            {errorString !== null && (
+              <Text c="red" ta="center" size="sm" mt={5}>
+                {errorString}
+              </Text>
+            )}
             <Button
               fullWidth
               size="md"

@@ -23,7 +23,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   const [errorString, setErrorString] = useState<string | null>(null);
   const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
@@ -101,6 +101,20 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
+            <PasswordInput
+              label="Password"
+              placeholder="Your password"
+              size="md"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+            {errorString !== null && (
+              <Text c="red" ta="center" size="sm">
+                {errorString}
+              </Text>
+            )}
 
             <Button
               size="md"
