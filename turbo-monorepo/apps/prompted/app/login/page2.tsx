@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { signup } from "../login/actions";
+import { login, magicLinkLogin } from "./actions";
 import {
   Button,
   PasswordInput,
@@ -10,53 +10,41 @@ import {
   Stack,
   Text,
   Anchor,
-  Image,
-  Divider,
   Group,
+  Divider,
+  Image,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import { useMediaQuery } from "@mantine/hooks";
 import Footer from "../components/footer";
-import loginImage from "../../public/SignupCharacter.png";
+import { useMediaQuery } from "@mantine/hooks";
+import loginImage from "../../public/WritingRoom.png";
 
-export default function SignupPage() {
+export default function LoginPage() {
   const router = useRouter();
-  const isMediumScreen = useMediaQuery("(max-width: 995px)");
-  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [errorString, setErrorString] = useState<string | null>(null);
+  const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
-  const handleSignup = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.preventDefault();
-    if (!username || !email) {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    setErrorString(null);
+    if (!email) {
       setErrorString("Please fill out all fields.");
       return;
     }
+    event.preventDefault();
     setLoading(true);
-    const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    const result = await signup(formData);
-    console.log("In signup page", result);
+    const formData = new FormData(event.currentTarget);
+    await magicLinkLogin(formData);
     setLoading(false);
-    // if (result === "REGISTERED") {
-    //   setErrorString("This email is already registered. Please login.");
-    //   setLoading(false);
-    //   return;
-    // } else if (result === "SIGNUP_ERROR") {
-    //   setErrorString("A signup error occurred. Please try again.");
-    //   setLoading(false);
-    //   return;
-    // }
   };
 
-  const switchToLogin = (
+  const switchToSignup = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    router.replace("/login");
+    router.replace("/signup");
   };
 
   return (
@@ -64,42 +52,45 @@ export default function SignupPage() {
       <Group w="100%" mt="xl">
         <Divider flex={1} />
         <Title ta="center" order={1}>
-          Join the Fun!
+          Let’s Do This!
         </Title>
         <Divider flex={1} />
       </Group>
 
       <Text ta="center" c="dimmed" mb="xl">
-        Sign up to make writing a joyful habit
+        Login to your account and keep the creativity flowing!
       </Text>
+
       <Container
         size="lg"
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "4rem",
+          gap: "7rem",
           flexWrap: "wrap",
           height: "100%",
         }}
       >
+        {!isMediumScreen && (
+          <Image
+            src={loginImage.src}
+            alt="Login Lightbulb"
+            style={{
+              maxWidth: "20rem",
+              width: "100%",
+              height: "auto",
+            }}
+          />
+        )}
         <form
           style={{
             width: "50%",
             alignSelf: "center",
           }}
+          onSubmit={handleLogin}
         >
           <Stack>
-            <TextInput
-              label="Username"
-              placeholder="mostCreativeWriterEver"
-              size="md"
-              id="username"
-              name="username"
-              value={username}
-              required={true}
-              onChange={(e) => setUsername(e.currentTarget.value)}
-            />
             <TextInput
               label="Email address"
               placeholder="hello@gmail.com"
@@ -108,7 +99,6 @@ export default function SignupPage() {
               name="email"
               type="email"
               value={email}
-              required={true}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
             <PasswordInput
@@ -118,51 +108,39 @@ export default function SignupPage() {
               id="password"
               name="password"
               value={password}
-              required={false}
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
             {errorString !== null && (
-              <Text c="red" ta="center" size="sm" mt={5}>
+              <Text c="red" ta="center" size="sm">
                 {errorString}
               </Text>
             )}
+
             <Button
-              fullWidth
               size="md"
-              onClick={handleSignup}
+              fullWidth
+              type="submit"
               loading={loading}
               loaderProps={{
                 type: "dots",
               }}
             >
-              Sign up
+              Login
             </Button>
             <Text c="dimmed" size="sm" ta="center" mt={5}>
-              Already have an account?{" "}
-              <Anchor size="sm" component="button" onClick={switchToLogin}>
-                Login
+              Do not have an account yet?{" "}
+              <Anchor size="sm" component="button" onClick={switchToSignup}>
+                Create account
               </Anchor>
             </Text>
           </Stack>
         </form>
-
-        {/* Image Section */}
-        {!isMediumScreen && (
-          <Image
-            src={loginImage.src}
-            alt="Login Lightbulb"
-            style={{
-              maxWidth: "25rem",
-              width: "100%",
-              height: "auto",
-            }}
-          />
-        )}
       </Container>
       <footer
         style={{
-          position: "fixed",
+          marginTop: "auto",
           bottom: 0,
+          position: "absolute",
           width: "100%",
         }}
       >

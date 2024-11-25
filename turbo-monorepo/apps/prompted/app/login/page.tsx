@@ -1,151 +1,169 @@
 "use client";
+
 import React, { useState } from "react";
-import { login, magicLinkLogin } from "./actions";
 import {
   Button,
-  PasswordInput,
   TextInput,
-  Title,
+  PasswordInput,
   Container,
   Stack,
   Text,
-  Anchor,
   Group,
-  Divider,
-  Image,
+  Title,
+  Anchor,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import Footer from "../components/footer";
-import { useMediaQuery } from "@mantine/hooks";
-import loginImage from "../../public/WritingRoom.png";
+import { login, magicLinkLogin } from "./actions"; // Import actions
 
 export default function LoginPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [isMagicLink, setIsMagicLink] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [errorString, setErrorString] = useState<string | null>(null);
-  const isMediumScreen = useMediaQuery("(max-width: 930px)");
+  const [magicLinkSent, setMagicLinkSet] = useState<boolean>(false);
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleMagicLink = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setErrorString(null);
+
     if (!email) {
-      setErrorString("Please fill out all fields.");
+      setErrorString("Please enter your email.");
       return;
     }
-    event.preventDefault();
+
     setLoading(true);
     const formData = new FormData(event.currentTarget);
-    await magicLinkLogin(formData);
+    const result = await magicLinkLogin(formData);
+
+    switch (result) {
+      case "MAGIC_LINK_SENT":
+        setMagicLinkSet(true);
+        break;
+      case "EMAIL_NOT_REGISTERED":
+        setErrorString("We don't recognize this email, please sign up.");
+        break;
+      case "MAGIC_LINK_ERROR":
+        setErrorString("There was an issue sending you an email");
+        break;
+      default:
+        console.log("An unknown error occurred in handle Magic Link");
+        setErrorString("");
+        break;
+    }
     setLoading(false);
   };
 
-  const switchToSignup = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  const handlePasswordLogin = async (
+    event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    router.replace("/signup");
+    setErrorString(null);
+
+    if (!email || !password) {
+      setErrorString("Please fill out all fields.");
+      return;
+    }
+
+    setLoading(true);
+    const formData = new FormData(event.currentTarget);
+    const result = await login(formData);
+    console.log("Result", result);
+
+    if (result === "INCORRECT_PASSWORD") {
+      setErrorString("Incorrect password.");
+    } else if (result === "EMAIL_PASSWORD_REQUIRED") {
+      setErrorString("Email and password are required.");
+    } else if (result === "EMAIL_NOT_REGISTERED") {
+      setErrorString("Email not registered, please sign up");
+    }
   };
 
   return (
-    <>
-      <Group w="100%" mt="xl">
-        <Divider flex={1} />
-        <Title ta="center" order={1}>
-          Let’s Do This!
-        </Title>
-        <Divider flex={1} />
-      </Group>
-
+    <Container size="sm">
+      <Title ta="center" order={1} mt="xl">
+        Log In
+      </Title>
       <Text ta="center" c="dimmed" mb="xl">
-        Login to your account and keep the creativity flowing!
+        Welcome back! Continue your creative journey.
       </Text>
 
-      <Container
-        size="lg"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "7rem",
-          flexWrap: "wrap",
-          height: "100%",
-        }}
-      >
-        {!isMediumScreen && (
-          <Image
-            src={loginImage.src}
-            alt="Login Lightbulb"
-            style={{
-              maxWidth: "20rem",
-              width: "100%",
-              height: "auto",
-            }}
-          />
-        )}
-        <form
-          style={{
-            width: "50%",
-            alignSelf: "center",
-          }}
-          onSubmit={handleLogin}
-        >
+      {isMagicLink ? (
+        <form onSubmit={handleMagicLink}>
           <Stack>
             <TextInput
               label="Email address"
               placeholder="hello@gmail.com"
               size="md"
-              id="email"
-              name="email"
-              type="email"
               value={email}
               onChange={(e) => setEmail(e.currentTarget.value)}
+              name="email"
+              id="email"
+            />
+            {errorString && (
+              <Text ta="center" size="sm" c="red">
+                {errorString}
+              </Text>
+            )}
+            <Button type="submit" size="md" fullWidth loading={loading}>
+              Get Magic Link
+            </Button>
+            <Text ta="center" c="dimmed" size="sm">
+              Prefer using a password?{" "}
+              <Anchor onClick={() => setIsMagicLink(false)} component="button">
+                Login with Password
+              </Anchor>
+            </Text>
+          </Stack>
+        </form>
+      ) : (
+        <form onSubmit={handlePasswordLogin}>
+          <Stack>
+            <TextInput
+              label="Email address"
+              placeholder="hello@gmail.com"
+              size="md"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              name="email"
+              id="email"
             />
             <PasswordInput
               label="Password"
               placeholder="Your password"
               size="md"
-              id="password"
-              name="password"
               value={password}
               onChange={(e) => setPassword(e.currentTarget.value)}
+              name="password"
+              id="password"
             />
-            {errorString !== null && (
-              <Text c="red" ta="center" size="sm">
+            {errorString && (
+              <Text ta="center" size="sm" c="red">
                 {errorString}
               </Text>
             )}
-
             <Button
+              type="submit"
               size="md"
               fullWidth
-              type="submit"
               loading={loading}
-              loaderProps={{
-                type: "dots",
-              }}
+              loaderProps={{ type: "dots" }}
             >
               Login
             </Button>
-            <Text c="dimmed" size="sm" ta="center" mt={5}>
-              Do not have an account yet?{" "}
-              <Anchor size="sm" component="button" onClick={switchToSignup}>
-                Create account
+            <Text ta="center" c="dimmed" size="sm">
+              Forgot password?{" "}
+              <Anchor
+                onClick={() => router.push("/reset-password")}
+                component="button"
+              >
+                Reset here
               </Anchor>
             </Text>
           </Stack>
         </form>
-      </Container>
-      <footer
-        style={{
-          marginTop: "auto",
-          bottom: 0,
-          position: "absolute",
-          width: "100%",
-        }}
-      >
-        <Footer />
-      </footer>
-    </>
+      )}
+    </Container>
   );
 }

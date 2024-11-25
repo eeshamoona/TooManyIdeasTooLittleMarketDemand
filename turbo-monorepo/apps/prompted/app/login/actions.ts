@@ -75,92 +75,74 @@ export async function loadBadgesForUser(userId: string) {
 }
 
 /**
- * Authenticates a user using email and password from the provided form data.
+ * Handles the password login process for a user using the provided form data.
  *
  * @param {FormData} formData - The form data containing the user's email and password.
- * @returns {Promise<string>} A promise that resolves to a status string indicating the result of the login attempt:
- * - "EMAIL_PASSWORD_REQUIRED" if email or password is not provided.
- * - "EMAIL_NOT_REGISTERED" if the email is not found in the profiles table.
- * - "INCORRECT_PASSWORD" if the password is incorrect for the provided email.
- * - "LOGIN_ERROR" for other login-related errors.
- * - "EMAIL_NOT_VERIFIED" if the email is not found in the profiles table after login.
- * - "LOGIN_SUCCESS" if the login is successful.
- * - "UNKNOWN_ERROR" for unexpected errors during login.
+ * @returns {Promise<string | void>} - Returns a string indicating the login status or void if successful.
  *
- * The function also loads badges for the user upon successful login and redirects to the write page.
+ * Possible return values:
+ * - "EMAIL_PASSWORD_REQUIRED": If email or password is missing.
+ * - "EMAIL_NOT_VERIFIED": If the email is not found in the profiles table.
+ * - "EMAIL_NOT_REGISTERED": If the email is not registered.
+ * - "INCORRECT_PASSWORD": If the password is incorrect.
+ * - "UNKNOWN_ERROR": For any other login errors.
+ *
+ * Loads badges for user if authenticated and redirects to /write page
  */
-export async function login(formData: FormData): Promise<string> {
+export async function login(formData: FormData) {
   const supabase = createClient();
 
-  // Extract email and password from form data
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  // type-casting here for convenience
+  // in practice, you should validate your inputs
+  const data = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
 
-  if (!email || !password) {
-    console.error("Email and password are required.");
+  if (!data.email || !data.password) {
     return "EMAIL_PASSWORD_REQUIRED";
   }
 
-  try {
-    // Attempt to log in the user with email and password
-    const { data: loginData, error: loginError } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+  const { data: loginData, error } =
+    await supabase.auth.signInWithPassword(data);
 
-    if (loginError) {
-      console.error("Login error:", loginError.message);
+  console.log("Login Data successful, checking if verified user");
 
-      // Check if it's a known error
-      if (loginError.message.includes("Invalid login credentials")) {
-        // Check if email exists in profiles table
-        const { data: existingUser, error: checkError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("email", email)
-          .single();
+  // Check if the email is in the profiles table
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", data.email)
+    .single();
 
-        if (checkError || !existingUser) {
-          console.log("Email not registered:", email);
-          return "EMAIL_NOT_REGISTERED";
-        } else {
-          console.log("Incorrect password for email:", email);
-          return "INCORRECT_PASSWORD";
-        }
-      }
+  // If login succeeds but email is not in profiles table
+  if (loginData.user !== null && checkError) {
+    //Sign out the user
+    await supabase.auth.signOut();
+    console.log("Email not in profiles table:", data.email);
 
-      // Return a generic error for other login issues
-      return "LOGIN_ERROR";
-    }
-
-    console.log("Login successful:", loginData);
-
-    // Check if the email exists in the profiles table
-    const { data: existingUser, error: checkError } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("email", email)
-      .single();
-
-    if (checkError || !existingUser) {
-      console.log("Email not found in profiles table. Signing out...");
-      await supabase.auth.signOut();
-      return "EMAIL_NOT_VERIFIED";
-    }
-
-    // Load badges for the user after successful login
-    await loadBadgesForUser(loginData.user.id);
-
-    console.log("Redirecting to write page...");
     revalidatePath("/", "layout");
-    redirect("/write");
-
-    return "LOGIN_SUCCESS";
-  } catch (error) {
-    console.error("Unexpected error during login:", error.message);
+    // Start the user on the write page
+    redirect("/check-email");
+    return "EMAIL_NOT_VERIFIED";
+  }
+  if (error) {
+    console.error("Login Error:", error.message);
+    if (error.message.includes("Invalid login credentials")) {
+      if (checkError) {
+        return "EMAIL_NOT_REGISTERED";
+      } else if (existingUser) {
+        return "INCORRECT_PASSWORD";
+      }
+    }
     return "UNKNOWN_ERROR";
   }
+
+  await loadBadgesForUser(loginData.user.id);
+
+  revalidatePath("/", "layout");
+  // Start the user on the write page
+  redirect("/write");
 }
 
 /**
@@ -187,41 +169,37 @@ export async function magicLinkLogin(formData: FormData) {
     return "EMAIL_REQUIRED";
   }
 
-  try {
-    // Check if the email exists in the profiles table
-    const { data: existingUser, error: checkError } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("email", email)
-      .single();
+  // Check if the email exists in the profiles table
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", email)
+    .single();
 
-    if (checkError || !existingUser) {
-      console.error("Email not found in profiles table.");
-      return "EMAIL_NOT_REGISTERED";
-    }
-
-    // If the email is found, send the magic link
-    console.log("Login process started...");
-    const { data: loginData, error: loginError } =
-      await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: "http://localhost:3000/magic-link-callback", // Update for production
-          shouldCreateUser: false, // Prevent auto sign-up during login
-        },
-      });
-
-    if (loginError) {
-      console.error("Error sending magic link:", loginError.message);
-      return "MAGIC_LINK_ERROR";
-    }
-
-    console.log("Magic link sent successfully.");
-    return "MAGIC_LINK_SENT";
-  } catch (error) {
-    console.error("Unexpected error during authentication:", error.message);
-    return "UNKNOWN_ERROR";
+  if (checkError || !existingUser) {
+    console.error("Email not found in profiles table.");
+    return "EMAIL_NOT_REGISTERED";
   }
+
+  // If the email is found, send the magic link
+  console.log("Login process started...");
+  const { data: loginData, error: loginError } =
+    await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: "http://localhost:3000/magic-link-callback", // Update for production
+        shouldCreateUser: false, // Prevent auto sign-up during login
+      },
+    });
+
+  if (loginError) {
+    console.error("Error sending magic link:", loginError.message);
+    return "MAGIC_LINK_ERROR";
+  }
+
+  console.log("Magic link sent successfully.");
+  redirect("/check-email");
+  return "MAGIC_LINK_SENT";
 }
 
 /**
@@ -229,11 +207,13 @@ export async function magicLinkLogin(formData: FormData) {
  *
  * @param {FormData} formData - The form data containing user signup information.
  * @returns {Promise<string>} - A status string indicating the result of the signup process.
- * - "REQUIRED_FIELDS_MISSING": Returned if the email or username is not provided.
- * - "REGISTERED": Returned if a user already exists with the provided email.
+ * - "EMAIL_USERNAME_REQUIRED": Returned if the email or username is not provided.
+ * - "ALREADY_REGISTERED": Returned if a user already exists with the provided email.
  * - "UNKNOWN_ERROR": Returned for unexpected errors during user existence check or signup.
  * - "SIGNUP_ERROR": Returned if there is an error during the signup process.
  * - "SIGNUP_SUCCESS": Returned if the signup is successful and redirects to the check email page.
+ *
+ * Load badges will be called in auth/confirm when they click their magic link
  */
 export async function signup(formData: FormData): Promise<string> {
   const supabase = createClient();
@@ -249,42 +229,35 @@ export async function signup(formData: FormData): Promise<string> {
   // Ensure required fields are present
   if (!email || !username) {
     console.error("Email and username are required.");
-    return "REQUIRED_FIELDS_MISSING";
+    return "EMAIL_USERNAME_REQUIRED";
   }
 
   // Check if the user is already signed up
-  try {
-    const { data: existingUser, error: checkError } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("email", email)
-      .single();
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", email)
+    .single();
 
-    if (checkError || !existingUser) {
-      console.log("User already exists with this email:", email);
-      return "REGISTERED";
-    }
-
-    const { data: signUpData, error: signUpError } = await supabase.auth.signUp(
-      {
-        email,
-        password: password || undefined, // Let Supabase auto-generate password if not provided
-        options: {
-          data: { username }, // Save username in user metadata
-        },
-      }
-    );
-
-    if (signUpError || !signUpData.user) {
-      console.error("Signup error:", signUpError.message);
-      return "SIGNUP_ERROR";
-    }
-
-    console.log("Signup successful. Redirecting to check email...");
-    redirect("/check-email");
-    return "SIGNUP_SUCCESS";
-  } catch (error) {
-    console.error("Unexpected error during signup:", error);
-    return "UNKNOWN_ERROR";
+  if (checkError || !existingUser) {
+    console.log("User already exists with this email:", email);
+    return "ALREADY_REGISTERED";
   }
+
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+    email,
+    password: password || undefined, // Let Supabase auto-generate password if not provided
+    options: {
+      data: { username }, // Save username in user metadata
+    },
+  });
+
+  if (signUpError || !signUpData.user) {
+    console.error("Signup error:", signUpError.message);
+    return "SIGNUP_ERROR";
+  }
+
+  console.log("Signup successful. Redirecting to check email...");
+  redirect("/check-email");
+  return "SIGNUP_SUCCESS";
 }
