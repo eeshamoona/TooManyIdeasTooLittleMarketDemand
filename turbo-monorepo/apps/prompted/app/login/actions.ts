@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "../utils/supabase/server";
 
+const BASE_URL = "http://localhost:3000";
+
 export async function loadBadgesForUser(userId: string) {
   const supabase = createClient();
   console.log(`Loading progress for user: ${userId}`);
@@ -89,7 +91,7 @@ export async function loadBadgesForUser(userId: string) {
  *
  * Loads badges for user if authenticated and redirects to /write page
  */
-export async function login(formData: FormData) {
+export async function login(formData: FormData): Promise<string | void> {
   const supabase = createClient();
 
   // type-casting here for convenience
@@ -149,16 +151,17 @@ export async function login(formData: FormData) {
  * Handles the login process using a magic link sent to the user's email.
  *
  * @param formData - The form data containing the user's email address.
- * @returns A string indicating the result of the login attempt:
+ * @returns {Promise<string | void>} - Returns a string indicating the login status or void if successful.
  * - "EMAIL_REQUIRED" if the email is not provided.
  * - "EMAIL_NOT_REGISTERED" if the email is not found in the profiles table.
  * - "MAGIC_LINK_ERROR" if there is an error sending the magic link.
  * - "MAGIC_LINK_SENT" if the magic link is sent successfully.
- * - "UNKNOWN_ERROR" if an unexpected error occurs during authentication.
  *
  * Load badges will be called in auth/confirm when they click their magic link
  */
-export async function magicLinkLogin(formData: FormData) {
+export async function magicLinkLogin(
+  formData: FormData
+): Promise<string | void> {
   const supabase = createClient();
 
   // Extract the email from the form data
@@ -187,19 +190,76 @@ export async function magicLinkLogin(formData: FormData) {
     await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: "http://localhost:3000/magic-link-callback", // Update for production
+        emailRedirectTo: `${BASE_URL}/magic-link-callback`, // Update for production
         shouldCreateUser: false, // Prevent auto sign-up during login
       },
     });
 
   if (loginError) {
     console.error("Error sending magic link:", loginError.message);
-    return "MAGIC_LINK_ERROR";
+    return "MAGIC_LINK_ERROR" + loginError.message;
   }
 
-  console.log("Magic link sent successfully.");
-  redirect("/check-email");
   return "MAGIC_LINK_SENT";
+}
+
+/**
+ * Initiates the sign-up process using a magic link sent to the user's email.
+ *
+ * @param formData - The form data containing the user's email and username.
+ * @returns {Promise<string | void>} - Returns a string indicating the signup status or void if successful.
+ * - "EMAIL_USERNAME_REQUIRED" if the email or username is not provided.
+ * - "ALREADY_REGISTERED" if the email is already registered.
+ * - "SIGNUP_ERROR" followed by the error message if there is an error sending the magic link.
+ * - "SIGNUP_SUCCESS" if the magic link is sent successfully.
+ *
+ * Redirects the sign up link if they don't have a password
+ */
+export async function magicLinkSignUp(formData: FormData): Promise<string | void> {
+  const supabase = createClient();
+
+  // Extract the email from the form data
+  const email = formData.get("email") as string;
+  const username = formData.get("username") as string;
+
+  if (!email || !username) {
+    console.error("Email and username is required.");
+    return "EMAIL_USERNAME_REQUIRED";
+  }
+
+  // Check if the email exists in the profiles table
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", email)
+    .single();
+
+  if (existingUser) {
+    console.log("User already exists with this email:", email);
+    return "ALREADY_REGISTERED";
+  }
+
+  // If the email is found, send the magic link
+  console.log("Sign up process started...");
+  const { data: signUpData, error: signUpError } =
+    await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${BASE_URL}/magic-link-callback`, // Update for production
+        shouldCreateUser: true, // Prevent auto sign-up during login
+        data: { username }, // Save username in user metadata
+      },
+    });
+
+  console.log("SignUpData", signUpData);
+  if (signUpError || !signUpData.user) {
+    console.error("Error sending magic link:", signUpError);
+    return "SIGNUP_ERROR";
+  }
+
+  console.log("Signup successful. Redirecting to check email...");
+  redirect("/check-email");
+  return "SIGNUP_SUCCESS";
 }
 
 /**
@@ -209,7 +269,6 @@ export async function magicLinkLogin(formData: FormData) {
  * @returns {Promise<string>} - A status string indicating the result of the signup process.
  * - "EMAIL_USERNAME_REQUIRED": Returned if the email or username is not provided.
  * - "ALREADY_REGISTERED": Returned if a user already exists with the provided email.
- * - "UNKNOWN_ERROR": Returned for unexpected errors during user existence check or signup.
  * - "SIGNUP_ERROR": Returned if there is an error during the signup process.
  * - "SIGNUP_SUCCESS": Returned if the signup is successful and redirects to the check email page.
  *
@@ -239,7 +298,7 @@ export async function signup(formData: FormData): Promise<string> {
     .eq("email", email)
     .single();
 
-  if (checkError || !existingUser) {
+  if (existingUser) {
     console.log("User already exists with this email:", email);
     return "ALREADY_REGISTERED";
   }

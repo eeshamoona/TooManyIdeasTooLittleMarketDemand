@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { signup } from "../login/actions";
+import { magicLinkSignUp, signup } from "../login/actions";
 import {
   Button,
   PasswordInput,
@@ -32,24 +32,48 @@ export default function SignupPage() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    if (!username || !email) {
-      setErrorString("Please fill out all fields.");
+    setErrorString(null); // Reset error state
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!username) {
+      setErrorString("Please enter a username.");
       return;
     }
+
+    if (!email) {
+      setErrorString("Please enter your email.");
+      return;
+    } else if (!emailPattern.test(email)) {
+      setErrorString("Please enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    const result = await signup(formData);
-    console.log("In signup page", result);
+    let result: string | void;
+
+    if (!password) {
+      result = await magicLinkSignUp(formData);
+    } else {
+      result = await signup(formData);
+    }
+
     setLoading(false);
-    // if (result === "REGISTERED") {
-    //   setErrorString("This email is already registered. Please login.");
-    //   setLoading(false);
-    //   return;
-    // } else if (result === "SIGNUP_ERROR") {
-    //   setErrorString("A signup error occurred. Please try again.");
-    //   setLoading(false);
-    //   return;
-    // }
+
+    if (typeof result === "string") {
+      // Handle error codes returned by the signup function
+      if (result === "EMAIL_USERNAME_REQUIRED") {
+        setErrorString("Please provide both a username and an email address.");
+      } else if (result === "ALREADY_REGISTERED") {
+        setErrorString("This email is already registered. Please log in.");
+      } else if (result === "SIGNUP_ERROR") {
+        setErrorString("An error occurred during signup. Please try again.");
+      } else {
+        console.error("An unknown error occurred in handle Magic Link");
+        setErrorString("An unexpected error occurred. Please try again later.");
+      }
+    }
   };
 
   const switchToLogin = (
@@ -102,7 +126,7 @@ export default function SignupPage() {
             />
             <TextInput
               label="Email address"
-              placeholder="hello@gmail.com"
+              placeholder="prompted@gmail.com"
               size="md"
               id="email"
               name="email"
@@ -113,7 +137,8 @@ export default function SignupPage() {
             />
             <PasswordInput
               label="Password"
-              placeholder="Your password"
+              placeholder="[Optional] Secret Password"
+              description="Tired of passwords? Skip this and use our magic link for login"
               size="md"
               id="password"
               name="password"

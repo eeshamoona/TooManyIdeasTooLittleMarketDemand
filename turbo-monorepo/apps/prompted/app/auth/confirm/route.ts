@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("Error verifying OTP:", error);
+      if (error.message === "Email link is invalid or has expired") {
+        console.log("Expired Link Accessed");
+      }
     } else {
       console.log("OTP verified successfully");
 
