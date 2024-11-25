@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   Title,
   Container,
@@ -9,7 +9,6 @@ import {
   Group,
   Divider,
   Image,
-  rem,
   Tabs,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
@@ -21,22 +20,14 @@ import MagicLinkForm from "./components/passwordlessLogin";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showMagicLinkForm, setShowMagicLinkForm] = useState(true);
-  const [errorString, setErrorString] = useState<string | null>(null);
   const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
-  const switchToSignup = (
+  const switchToSignUp = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
     router.replace("/signup");
   };
-
-  const iconStyle = { width: rem(12), height: rem(12) };
-
   return (
     <>
       <Group w="100%" mt="xl">
@@ -48,7 +39,7 @@ export default function LoginPage() {
       </Group>
 
       <Text ta="center" c="dimmed" mb="xl">
-        Login to your account and keep the creativity flowing!
+        Login to your account and keep the creativity flowing
       </Text>
 
       <Container
@@ -80,17 +71,17 @@ export default function LoginPage() {
               <Tabs.Tab value="password">Use Password</Tabs.Tab>
             </Tabs.List>
 
-            <Tabs.Panel py="md" value="magic-link">
+            <Tabs.Panel pt="md" value="magic-link">
               <MagicLinkForm />
             </Tabs.Panel>
 
-            <Tabs.Panel py="md" value="password">
+            <Tabs.Panel pt="md" value="password">
               <PasswordForm />
             </Tabs.Panel>
           </Tabs>
           <Text ta="center" c="dimmed" size="sm">
             New here?{" "}
-            <Anchor onClick={() => router.push("/signup")} component="button">
+            <Anchor onClick={switchToSignUp} component="button">
               Sign up for access!
             </Anchor>
           </Text>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, TextInput, Text, Button, Anchor } from "@mantine/core";
+import { Stack, TextInput, Text, Button } from "@mantine/core";
 import { LuSparkles } from "react-icons/lu";
 import { magicLinkLogin } from "../actions";
 
@@ -69,6 +69,7 @@ const MagicLinkForm: React.FC = () => {
           variant="light"
           loading={loading}
           leftSection={<LuSparkles aria-label="Magic Link Icon" />}
+          mt="xs"
         >
           Get Magic Link
         </Button>

@@ -32,19 +32,23 @@ export default function SignupPage() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
+    console.log("Signup process started."); // Debug start
     setErrorString(null); // Reset error state
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!username) {
+      console.warn("Username missing during signup."); // Log missing username
       setErrorString("Please enter a username.");
       return;
     }
 
     if (!email) {
+      console.warn("Email missing during signup."); // Log missing email
       setErrorString("Please enter your email.");
       return;
     } else if (!emailPattern.test(email)) {
+      console.warn("Invalid email format:", email); // Log invalid email format
       setErrorString("Please enter a valid email address.");
       return;
     }
@@ -54,15 +58,18 @@ export default function SignupPage() {
     let result: string | void;
 
     if (!password) {
+      console.log("Proceeding with magic link signup."); // Log signup method
       result = await magicLinkSignUp(formData);
     } else {
+      console.log("Proceeding with password signup."); // Log signup method
       result = await signup(formData);
     }
 
     setLoading(false);
+    console.log("Signup process completed."); // Debug completion
 
     if (typeof result === "string") {
-      // Handle error codes returned by the signup function
+      console.error("Signup error code received:", result); // Log error code
       if (result === "EMAIL_USERNAME_REQUIRED") {
         setErrorString("Please provide both a username and an email address.");
       } else if (result === "ALREADY_REGISTERED") {
@@ -70,7 +77,7 @@ export default function SignupPage() {
       } else if (result === "SIGNUP_ERROR") {
         setErrorString("An error occurred during signup. Please try again.");
       } else {
-        console.error("An unknown error occurred in handle Magic Link");
+        console.error("Unknown error in handleSignup:", result); // Log unknown error
         setErrorString("An unexpected error occurred. Please try again later.");
       }
     }
