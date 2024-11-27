@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
         if (!profileData?.profile) {
           console.warn("User profile incomplete, redirecting to profile form");
-          redirect("/read");
+          redirect("/profile-quiz");
           return;
         }
 

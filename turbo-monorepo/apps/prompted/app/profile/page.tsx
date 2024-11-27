@@ -14,7 +14,7 @@ import {
 } from "@mantine/core";
 import { FaLock } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { getEntries, isUserLoggedIn } from "./action";
+import { getData, isUserLoggedIn } from "./action";
 import Charts from "../progress/components/charts";
 
 const ProfilePage: React.FC = () => {
@@ -23,23 +23,27 @@ const ProfilePage: React.FC = () => {
   const [username, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   // Check if the user is logged in using Supabase
   useEffect(() => {
     const handleCheckedLoggedIn = async () => {
-      const { isLoggedIn, email, username } = await isUserLoggedIn();
+      const { isLoggedIn, email, username, userId } = await isUserLoggedIn();
       if (!isLoggedIn) {
         router.push("/login");
       } else {
-        const entriesData = await getEntries();
+        const { entries: entriesData, profile: profileData } =
+          await getData(userId);
         setEntries(entriesData);
+        setProfile(profileData);
         setEmail(email);
         setUserName(username);
         setLoading(false); // Stop loading once user data is fetched
       }
     };
     handleCheckedLoggedIn();
-  }, [router]);
+    console.log(profile);
+  }, []);
 
   const handleResetPassword = () => {
     // Redirect to the password reset flow
@@ -63,9 +67,24 @@ const ProfilePage: React.FC = () => {
           <Card shadow="sm" padding="lg" radius="md" withBorder>
             <Group align="center" justify="space-between" mb="md">
               <div>
-                <Title order={3}>Hi There, {username}!</Title>
-                It seems that your profile is not filled out at the moment,
-                click here to do so.
+                <Title order={3}>Hey there, {username}!</Title>
+                {profile.length === 0 ? (
+                  <>
+                    <Text>
+                      It seems that your profile is not filled out at the
+                      moment, click here to do so.
+                    </Text>
+                    <Button
+                      onClick={() => router.push("/profile-quiz")}
+                      mt="md"
+                      variant="filled"
+                    >
+                      Fill Out Profile
+                    </Button>
+                  </>
+                ) : (
+                  <Text>{JSON.stringify(profile)}</Text>
+                )}
               </div>
 
               <div>
