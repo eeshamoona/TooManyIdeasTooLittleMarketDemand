@@ -3,12 +3,13 @@ import { Stack, TextInput, Text, Button } from "@mantine/core";
 import { LuSparkles } from "react-icons/lu";
 import { magicLinkLogin } from "../actions";
 import { TbUnlink } from "react-icons/tb";
+import { useRouter } from "next/navigation";
 
 const MagicLinkForm: React.FC = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorString, setErrorString] = useState<string | null>(null);
-  const [magicLinkSent, setMagicLinkSet] = useState<boolean>(false);
 
   const handleMagicLink = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,7 +29,8 @@ const MagicLinkForm: React.FC = () => {
     const result = await magicLinkLogin(formData);
     if (typeof result === "string") {
       if (result === "MAGIC_LINK_SENT") {
-        setMagicLinkSet(true);
+        setErrorString(null);
+        router.push("/check-email?type=magic-link");
       } else if (result === "EMAIL_NOT_REGISTERED") {
         setErrorString("We don't recognize this email, please sign up.");
       } else if (result.startsWith("MAGIC_LINK_ERROR")) {
@@ -56,11 +58,6 @@ const MagicLinkForm: React.FC = () => {
         {errorString && (
           <Text ta="center" size="sm" c="red">
             {errorString}
-          </Text>
-        )}
-        {magicLinkSent && (
-          <Text ta="center" size="sm" c="green">
-            Magic Link Successfully Sent! Please check your email.
           </Text>
         )}
         <Button

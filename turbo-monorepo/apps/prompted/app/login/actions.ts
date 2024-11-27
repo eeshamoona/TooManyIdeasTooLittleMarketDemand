@@ -274,7 +274,7 @@ export async function magicLinkSignUp(
   }
 
   console.log("Signup successful. Redirecting to check email...");
-  redirect("/check-email");
+  redirect("/check-email?type=signup");
   return "SIGNUP_SUCCESS";
 }
 
@@ -333,7 +333,7 @@ export async function signup(formData: FormData): Promise<string> {
   }
 
   console.log("Signup successful. Redirecting to check email...");
-  redirect("/check-email");
+  redirect("/check-email?type=signup");
   return "SIGNUP_SUCCESS";
 }
 

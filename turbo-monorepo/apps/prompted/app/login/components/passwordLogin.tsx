@@ -79,7 +79,7 @@ const PasswordForm: React.FC = () => {
     if (result === "RESET_LINK_SENT") {
       setErrorString(null);
       setShowResetLink(false);
-      router.push("/check-email");
+      router.push("/check-email?type=password-reset");
     } else if (result === "EMAIL_REQUIRED") {
       setErrorString("Email is required.");
     } else if (result === "EMAIL_NOT_REGISTERED") {

@@ -145,7 +145,7 @@ export default function SignupPage() {
             <PasswordInput
               label="Password"
               placeholder="[Optional] Secret Password"
-              description="Tired of passwords? Skip this and use our magic link for login"
+              description="Tired of remembering passwords? Skip this and login with just your email"
               size="md"
               id="password"
               name="password"
