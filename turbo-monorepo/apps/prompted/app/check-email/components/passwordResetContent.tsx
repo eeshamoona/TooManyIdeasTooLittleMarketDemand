@@ -7,8 +7,8 @@ const PasswordResetContent: React.FC = () => {
         📬 Reset Instructions Sent!
       </Title>
       <Text mb="lg">
-        Check your inbox for a link to reset your password (and don’t forget
-        your spam folder).
+        Check your inbox for a link to reset your password and keep the
+        creativity flowing!
       </Text>
       <Text mb="lg">
         Can’t find it?{" "}

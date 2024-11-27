@@ -5,8 +5,7 @@ const MagicLinkContent: React.FC = () => {
     <Stack align="center" gap="md" mb="lg">
       <Title order={2}>✨ Magic Link Sent!</Title>
       <Text ta="center">
-        Check your inbox for the magic link to log in. Don’t forget to peek at
-        your spam folder if it’s not there yet.
+        Check your inbox for the magic link to log in and get back to writing!
       </Text>
       <Text ta="center">
         Didn’t get it?{" "}

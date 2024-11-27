@@ -8,8 +8,8 @@ const DefaultContent: React.FC = () => {
       </Title>
       <Text mb="lg">
         We’ve sent you an email. Please check your inbox for further
-        instructions. If you don’t see the email, check your spam or junk
-        folder.
+        instructions. If you don’t see the email, you can ignore this
+        notification.
       </Text>
     </>
   );
