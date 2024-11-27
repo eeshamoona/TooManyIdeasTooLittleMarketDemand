@@ -1,31 +1,39 @@
 "use server";
 import { createClient } from "../utils/supabase/server";
+
 export async function verifyOtp(token: string, email: string) {
   const supabase = createClient();
 
-  console.log("The token is ", token);
-  console.log("The email is ", email);
+  try {
+    const { data, error } = await supabase.auth.verifyOtp({
+      type: "recovery",
+      token,
+      email,
+    });
 
-  // Verify the token with Supabase
-  const { data, error } = await supabase.auth.verifyOtp({
-    type: "recovery",
-    token,
-    email,
-  });
+    console.log("Data", data);
 
-  console.log("Got Data", data);
+    if (error || !data.user || data.user.email !== email) {
+      console.error(
+        "Error verifying token:",
+        error?.message || "User mismatch"
+      );
+      return "INVALID_TOKEN";
+    }
 
-  if (error) {
-    console.error("Error verifying token:", error.message);
+    return "SUCCESS";
+  } catch (error) {
+    console.error("Unexpected error:", error);
     return "INVALID_TOKEN";
   }
+}
 
-  if (data.user.email !== email) {
-    console.error("The emails don't match for some reason...");
-    return "USER_DATA_ERROR";
-  }
+export async function isUserLoggedIn() {
+  const supabase = createClient();
+  // Fetch user data
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData?.user ?? null;
+  const isLoggedIn = !!user;
 
-  console.log("This gets here?");
-
-  return "SUCCESS";
+  return { isLoggedIn: isLoggedIn, email: user.email };
 }

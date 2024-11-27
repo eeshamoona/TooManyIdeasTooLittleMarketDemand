@@ -9,10 +9,11 @@ import {
 } from "@mantine/core";
 import { LuLogIn } from "react-icons/lu";
 import { login } from "../actions";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import { passwordResetLink } from "../actions";
 
 const PasswordForm: React.FC = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -76,7 +77,9 @@ const PasswordForm: React.FC = () => {
 
     console.log("Result from handlePasswordReset", result);
     if (result === "RESET_LINK_SENT") {
-      setErrorString("Sent your reset password link");
+      setErrorString(null);
+      setShowResetLink(false);
+      router.push("/check-email");
     } else if (result === "EMAIL_REQUIRED") {
       setErrorString("Email is required.");
     } else if (result === "EMAIL_NOT_REGISTERED") {

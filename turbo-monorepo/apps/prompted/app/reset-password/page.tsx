@@ -1,113 +1,127 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { verifyOtp } from "./action";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Container,
+  Center,
+  Title,
+  Text,
+  PasswordInput,
+  Group,
+  Button,
+  Stack,
+} from "@mantine/core";
+import { isUserLoggedIn } from "./action";
+import { FaArrowRight, FaCheck } from "react-icons/fa";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [isVerified, setIsVerified] = useState<boolean | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [successMessage, setSuccessMessage] = useState<boolean | null>(null);
 
+  //Check that the user is logged in with supabase
   useEffect(() => {
-    const verifyToken = async () => {
-      const emailParam = searchParams.get("email");
-      const tokenParam = searchParams.get("token");
-
-      if (!emailParam || !tokenParam) {
-        setMessage("Invalid reset link.");
-        setLoading(false);
-        return;
-      }
-
-      const result = await verifyOtp(tokenParam, emailParam);
-      if (result === "SUCCESS") {
-        setEmail(emailParam);
-        setToken(tokenParam); // Save token in state
-        setIsVerified(true);
+    const handleCheckedLoggedIn = async () => {
+      const { isLoggedIn, email } = await isUserLoggedIn();
+      if (!isLoggedIn) {
+        router.push("/login");
       } else {
-        setMessage("Invalid or expired token.");
-        setIsVerified(false);
+        setEmail(email);
       }
-      setLoading(false);
     };
-
-    // Run verification only on the initial render
-    verifyToken();
-  }, [searchParams]);
+    handleCheckedLoggedIn();
+  }, []);
 
   const handleResetPassword = async () => {
     if (password !== confirmPassword) {
-      setMessage("Passwords do not match.");
-      return;
-    }
-
-    if (!email || !token) {
-      setMessage("Invalid request. Please try again.");
+      setErrorMessage("Passwords do not match.");
       return;
     }
 
     try {
-      const response = await fetch(`/api/update-password`, {
+      const response = await fetch(`/api/updatePassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, token, password }),
+        body: JSON.stringify({ email, password }),
       });
 
+      console.log("Response", response);
       if (response.ok) {
-        setMessage("Password updated successfully! Redirecting to login...");
-        setTimeout(() => router.push("/login"), 3000);
+        setSuccessMessage(true);
       } else {
-        const result = await response.json();
-        setMessage(result.error || "Failed to reset password.");
+        setErrorMessage("Password Reset Failed. Please try again later.");
       }
     } catch (error) {
-      setMessage("An unexpected error occurred.");
+      setErrorMessage("An unexpected error occurred.");
       console.error(error);
     }
   };
 
   return (
-    <div
-      style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}
-    >
-      <h1>Reset Password</h1>
-      {loading && <p>Verifying reset link...</p>}
-      {!loading && message && <p>{message}</p>}
-      {!loading && isVerified && (
-        <>
-          <p>Resetting password for: {email}</p>
-          <input
-            type="password"
-            placeholder="Enter new password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
-          />
-          <input
-            type="password"
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
-          />
-          <button
-            onClick={handleResetPassword}
-            style={{ padding: "10px 20px" }}
+    <Container size="xs" mt="xl">
+      <Center>
+        <Title order={1} ta="center" mb="lg">
+          Reset Password
+        </Title>
+      </Center>
+
+      {successMessage ? (
+        <Stack mt="lg">
+          <Group gap="sm" justify="center">
+            <FaCheck color="green" />
+            <Text ta="center" c="green">
+              Password Successfully Updated
+            </Text>
+          </Group>
+          <Button
+            variant="light"
+            rightSection={<FaArrowRight />}
+            onClick={() => router.push("/write")}
           >
-            Reset Password
-          </button>
+            Back to Writing!
+          </Button>
+        </Stack>
+      ) : (
+        <>
+          <Text ta="center" mb="md">
+            Resetting password for: <b>{email}</b>
+          </Text>
+          <PasswordInput
+            label="New Password"
+            placeholder="Enter your new password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            mb="md"
+          />
+          <PasswordInput
+            label="Confirm Password"
+            placeholder="Re-enter your new password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            required
+            mb="lg"
+          />
+          {errorMessage && (
+            <Text ta="center" size="sm" c="red">
+              {errorMessage}
+            </Text>
+          )}
+
+          <Group justify="center">
+            <Button onClick={handleResetPassword} variant="filled" color="blue">
+              Reset Password
+            </Button>
+          </Group>
         </>
       )}
-    </div>
+    </Container>
   );
 }

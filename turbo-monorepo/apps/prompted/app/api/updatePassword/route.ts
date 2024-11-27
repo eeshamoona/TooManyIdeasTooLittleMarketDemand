@@ -13,9 +13,16 @@ export async function POST(request: Request) {
 
   const supabase = createClient();
 
-  // Update the user's password
-  const { error } = await supabase.auth.updateUser({
-    email,
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 403 });
+  }
+
+  const { data, error } = await supabase.auth.updateUser({
     password,
   });
 
@@ -26,6 +33,6 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
-
+  console.log("Password updated successfully!");
   return NextResponse.json({ success: true }, { status: 200 });
 }

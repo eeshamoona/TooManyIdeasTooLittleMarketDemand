@@ -54,7 +54,7 @@ export async function updateSession(request: NextRequest) {
     !user &&
     !publicRoutes.includes(requestedPath) &&
     !requestedPath.startsWith("/auth") &&
-    !requestedPath.startsWith("/reset-password")
+    !requestedPath.startsWith("/reset-password/confirm")
   ) {
     const url = request.nextUrl.clone();
     url.pathname = "/signup";
