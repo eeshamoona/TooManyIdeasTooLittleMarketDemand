@@ -94,56 +94,71 @@ export async function loadBadgesForUser(userId: string) {
 export async function login(formData: FormData): Promise<string | void> {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  // Extract email and password from formData
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
+  console.log("In the login function", data);
 
+  // Validate inputs
   if (!data.email || !data.password) {
+    console.warn("Email or password missing");
     return "EMAIL_PASSWORD_REQUIRED";
   }
 
+  // Attempt to log in with the provided credentials
   const { data: loginData, error } =
     await supabase.auth.signInWithPassword(data);
 
-  console.log("Login Data successful, checking if verified user");
+  if (error) {
+    console.error("Login Error:", error.message);
 
-  // Check if the email is in the profiles table
-  const { data: existingUser, error: checkError } = await supabase
+    // Handle specific login errors
+    if (error.message.includes("Invalid login credentials")) {
+      // Check if the email exists in the profiles table
+      const { data: existingUser, error: checkError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", data.email)
+        .single();
+
+      if (checkError) {
+        console.warn("Email not registered in profiles:", data.email);
+        return "EMAIL_NOT_REGISTERED";
+      } else {
+        console.warn("Incorrect password for email:", data.email);
+        return "INCORRECT_PASSWORD";
+      }
+    }
+
+    // Return a generic error for unexpected cases
+    return "UNKNOWN_ERROR";
+  }
+
+  // If login succeeds, check if the user exists in profiles
+  const { data: profileData, error: profileError } = await supabase
     .from("profiles")
     .select("id")
     .eq("email", data.email)
     .single();
 
-  // If login succeeds but email is not in profiles table
-  if (loginData.user !== null && checkError) {
-    //Sign out the user
-    await supabase.auth.signOut();
-    console.log("Email not in profiles table:", data.email);
+  if (profileError) {
+    console.warn("Email not found in profiles:", data.email);
 
-    revalidatePath("/", "layout");
-    // Start the user on the write page
-    redirect("/check-email");
+    // Sign out the user if the profile is incomplete
+    await supabase.auth.signOut();
+    console.log("Signed out user:", data.email);
     return "EMAIL_NOT_VERIFIED";
   }
-  if (error) {
-    console.error("Login Error:", error.message);
-    if (error.message.includes("Invalid login credentials")) {
-      if (checkError) {
-        return "EMAIL_NOT_REGISTERED";
-      } else if (existingUser) {
-        return "INCORRECT_PASSWORD";
-      }
-    }
-    return "UNKNOWN_ERROR";
-  }
 
+  console.log("User authenticated and profile verified:");
+
+  // Load user badges (optional functionality)
   await loadBadgesForUser(loginData.user.id);
 
+  // Redirect user to the write page
   revalidatePath("/", "layout");
-  // Start the user on the write page
   redirect("/write");
 }
 
@@ -321,3 +336,48 @@ export async function signup(formData: FormData): Promise<string> {
   redirect("/check-email");
   return "SIGNUP_SUCCESS";
 }
+
+/**
+ * Sends a password reset link to the user's email if the email exists in the profiles table.
+ *
+ * @param {FormData} formData - The form data containing the user's email.
+ * @returns {Promise<string>} - A status string indicating the result of the password reset process.
+ * - "EMAIL_REQUIRED": Returned if the email is not provided.
+ * - "EMAIL_NOT_REGISTERED": Returned if the email is not found in the profiles table.
+ * - "RESET_LINK_ERROR": Returned if there is an error sending the reset password link.
+ * - "RESET_LINK_SENT": Returned if the reset password link is successfully sent.
+ */
+export const passwordResetLink = async (formData: FormData) => {
+  console.log("In password Reset Link");
+  const supabase = createClient();
+
+  const email = formData.get("email") as string;
+
+  if (!email) {
+    console.error("Email and username are required.");
+    return "EMAIL_REQUIRED";
+  }
+
+  // Check if the email exists in the profiles table
+  const { data: existingUser, error: checkError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("email", email)
+    .single();
+
+  if (checkError || !existingUser) {
+    console.error("Email not found in profiles table.");
+    return "EMAIL_NOT_REGISTERED";
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${BASE_URL}/reset-password`,
+  });
+
+  if (error) {
+    console.error("Error sending reset password link:", error.message);
+    return "RESET_LINK_ERROR";
+  }
+
+  return "RESET_LINK_SENT";
+};

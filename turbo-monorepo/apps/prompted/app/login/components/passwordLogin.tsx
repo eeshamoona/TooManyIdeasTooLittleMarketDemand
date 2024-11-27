@@ -10,6 +10,7 @@ import {
 import { LuLogIn } from "react-icons/lu";
 import { login } from "../actions";
 import router from "next/router";
+import { passwordResetLink } from "../actions";
 
 const PasswordForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -66,6 +67,28 @@ const PasswordForm: React.FC = () => {
     }
   };
 
+  const handlePasswordReset = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    console.log("Handle password reset.");
+    const formData = new FormData();
+    formData.append("email", email);
+    const result = await passwordResetLink(formData);
+
+    console.log("Result from handlePasswordReset", result);
+    if (result === "RESET_LINK_SENT") {
+      setErrorString("Sent your reset password link");
+    } else if (result === "EMAIL_REQUIRED") {
+      setErrorString("Email is required.");
+    } else if (result === "EMAIL_NOT_REGISTERED") {
+      setErrorString("Email not registered, please sign up.");
+    } else if (result === "RESET_LINK_ERROR") {
+      setErrorString("There was an error sending your reset link");
+    } else {
+      console.error("Unknown error in handlePasswordReset:", result);
+      setErrorString("An unexpected error occurred. Please try again later.");
+    }
+  };
+
   return (
     <form onSubmit={handlePasswordLogin}>
       <Stack>
@@ -91,15 +114,7 @@ const PasswordForm: React.FC = () => {
           <Text ta="center" size="sm" c="red">
             {errorString}{" "}
             {showResetLink && (
-              <Anchor
-                href="/reset-password"
-                size="sm"
-                ta="center"
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/reset-password");
-                }}
-              >
+              <Anchor size="sm" ta="center" onClick={handlePasswordReset}>
                 Need help? Reset it here.
               </Anchor>
             )}

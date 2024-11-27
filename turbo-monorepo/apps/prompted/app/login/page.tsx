@@ -30,6 +30,7 @@ export default function LoginPage() {
     event.preventDefault();
     router.replace("/signup");
   };
+
   return (
     <>
       <Group w="100%" mt="xl">
