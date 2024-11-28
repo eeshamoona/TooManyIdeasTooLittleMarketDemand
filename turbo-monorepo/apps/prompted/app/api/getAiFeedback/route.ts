@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { system_instructions2 } from "./constants";
+import { system_instructions } from "./constants";
 
 //TODO: Determine if I need to batch the text to avoid hitting the token limit
 
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     console.log("Missing required fields:", { response, category, prompt });
     return NextResponse.json(
       { error: "Response and Prompt are required" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: system_instructions2,
+              text: system_instructions,
             },
           ],
         },
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     console.error("Error calling OpenAI API:", error);
     return NextResponse.json(
       { error: "Error generating summary" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -4,128 +4,47 @@ import {
   Container,
   Title,
   Stepper,
-  Grid,
   Text,
   Button,
-  NumberInput,
-  Radio,
+  Slider,
   Stack,
   Group,
   Card,
-  ActionIcon,
-  Flex,
+  SimpleGrid,
+  useMantineTheme,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import { FaPencilAlt, FaBrain, FaBullseye } from "react-icons/fa";
 import { updateProfile } from "./actions";
-
-const questions = [
-  {
-    label: "Writing Goals",
-    icon: FaBullseye,
-    text: "What's your target word count per response?",
-    question: "wordCount",
-    options: [
-      { value: "100", label: "Quick (100 words)" },
-      { value: "250", label: "Standard (250 words)" },
-      { value: "500", label: "Detailed (500 words)" },
-      { value: "custom", label: "Custom" },
-    ],
-  },
-  {
-    label: "AI Feedback Style",
-    icon: FaBrain,
-    text: "How would you like your AI feedback?",
-    question: "feedbackStyle",
-    options: [
-      {
-        value: "gentle",
-        label: "Friendly & Encouraging",
-        description:
-          "Focus on positives with gentle suggestions for improvement",
-      },
-      {
-        value: "balanced",
-        label: "Balanced & Constructive",
-        description: "Equal focus on strengths and areas for improvement",
-      },
-      {
-        value: "critical",
-        label: "Critical & Detailed",
-        description:
-          "In-depth analysis with focus on improvement opportunities",
-      },
-    ],
-  },
-  {
-    label: "Writing Focus",
-    icon: FaPencilAlt,
-    text: "What aspect of writing do you want to improve most?",
-    question: "writingFocus",
-    options: [
-      {
-        value: "creativity",
-        label: "Creativity",
-        description: "Enhance imaginative and unique expressions",
-      },
-      {
-        value: "clarity",
-        label: "Clarity",
-        description: "Improve clear and effective communication",
-      },
-      {
-        value: "structure",
-        label: "Structure",
-        description: "Better organization and flow of ideas",
-      },
-      {
-        value: "style",
-        label: "Style",
-        description: "Develop a more engaging writing voice",
-      },
-    ],
-  },
-];
+import { profileQuizQuestions } from "./constants";
+import { IconType } from "react-icons";
 
 export default function ProfileQuiz() {
   const [activeStep, setActiveStep] = useState(0);
   const [answers, setAnswers] = useState({
-    wordCount: "250",
+    wordCount: 250,
     feedbackStyle: "balanced",
-    writingFocus: "creativity",
+    motivatingFeedback: "",
   });
-  const [customWordCount, setCustomWordCount] = useState<number | "">(250);
   const router = useRouter();
+  const theme = useMantineTheme();
 
-  const handleCustomWordCount = (value: string | number) => {
-    setCustomWordCount(value === "" ? "" : Number(value));
-  };
-
-  const handleAnswerChange = (question: string, value: string) => {
+  const handleAnswerChange = (question: string, value: string | number) => {
     setAnswers((prev) => ({
       ...prev,
       [question]: value,
     }));
   };
+
   const nextStep = async () => {
-    if (activeStep < questions.length - 1) {
+    if (activeStep < profileQuizQuestions.length - 1) {
       setActiveStep((current) => current + 1);
     } else {
       try {
-        // Save profile preferences
-        const finalAnswers = {
-          ...answers,
-          wordCount:
-            answers.wordCount === "custom"
-              ? customWordCount.toString()
-              : answers.wordCount,
-        };
-
-        const { success, profile } = await updateProfile(finalAnswers);
+        const { success } = await updateProfile(answers);
         if (success) {
           router.push("/write");
         } else {
-          console.error("Failed to update profile:", profile);
+          console.error("Failed to update profile");
         }
       } catch (error) {
         console.error("Failed to update profile:", error);
@@ -135,84 +54,106 @@ export default function ProfileQuiz() {
 
   const prevStep = () => setActiveStep((current) => Math.max(current - 1, 0));
 
+  const renderQuestionContent = () => {
+    const currentQuestion = profileQuizQuestions[activeStep];
+
+    if (currentQuestion.question === "wordCount") {
+      return (
+        <Stack gap="xl" style={{ width: "100%" }}>
+          <Text size="lg" fw={500}>
+            {answers.wordCount} words
+          </Text>
+          <Slider
+            value={answers.wordCount as number}
+            onChange={(value) => handleAnswerChange("wordCount", value)}
+            min={100}
+            max={1000}
+            step={50}
+            marks={[
+              { value: 100, label: "100" },
+              { value: 250, label: "250" },
+              { value: 500, label: "500" },
+              { value: 750, label: "750" },
+              { value: 1000, label: "1000" },
+            ]}
+            styles={(theme) => ({
+              mark: {
+                width: "2px",
+                height: "8px",
+                borderRadius: 0,
+                transform: "translateX(-1px) translateY(2px)",
+              },
+              markLabel: {
+                fontSize: theme.fontSizes.xs,
+                marginBottom: 5,
+                marginTop: 0,
+              },
+            })}
+          />
+        </Stack>
+      );
+    } else {
+      return (
+        <SimpleGrid cols={3} spacing="md">
+          {currentQuestion.options.map((option) => (
+            <Card
+              key={option.value}
+              shadow="sm"
+              padding="md"
+              radius="md"
+              withBorder
+              style={{
+                cursor: "pointer",
+                borderColor:
+                  answers[currentQuestion.question] === option.value
+                    ? theme.colors.blue[6]
+                    : theme.colors.gray[3],
+              }}
+              onClick={() =>
+                handleAnswerChange(currentQuestion.question, option.value)
+              }
+            >
+              <Stack align="center" gap="xs">
+                {option.icon && (
+                  <option.icon size={24} color={theme.colors.blue[6]} />
+                )}
+                <Text size="sm" fw={500}>
+                  {option.label}
+                </Text>
+                <Text size="xs" c="dimmed" ta="center">
+                  {option.description}
+                </Text>
+              </Stack>
+            </Card>
+          ))}
+        </SimpleGrid>
+      );
+    }
+  };
+
   return (
-    <Container size="md" py="xl">
+    <Container size="lg">
       <Title order={1} mb="xl">
         Customize Your Writing Experience
       </Title>
 
       <Stepper active={activeStep} onStepClick={setActiveStep} mb="xl">
-        {questions.map((q, index) => (
+        {profileQuizQuestions.map((q, index) => (
           <Stepper.Step
             key={index}
             label={q.label}
-            icon={<q.icon size={18} />}
+            icon={q.icon && <q.icon size={18} />}
           />
         ))}
       </Stepper>
 
       <Card withBorder p="xl" radius="md">
-        <Stack>
-          <Title order={2}>{questions[activeStep].text}</Title>
+        <Stack gap="xl">
+          <Title order={2}>{profileQuizQuestions[activeStep].text}</Title>
 
-          {questions[activeStep].question === "wordCount" && (
-            <>
-              <Radio.Group
-                value={answers.wordCount}
-                onChange={(value) =>
-                  handleAnswerChange(questions[activeStep].question, value)
-                }
-              >
-                <Stack mt="md">
-                  {questions[activeStep].options.map((option) => (
-                    <Radio
-                      key={option.value}
-                      value={option.value}
-                      label={option.label}
-                    />
-                  ))}
-                </Stack>
-              </Radio.Group>
-              {answers.wordCount === "custom" && (
-                <NumberInput
-                  label="Custom word count"
-                  value={customWordCount}
-                  onChange={handleCustomWordCount}
-                  min={50}
-                  max={2000}
-                  step={50}
-                />
-              )}
-            </>
-          )}
+          {renderQuestionContent()}
 
-          {questions[activeStep].question !== "wordCount" && (
-            <Radio.Group
-              value={answers[questions[activeStep].question]}
-              onChange={(value) =>
-                handleAnswerChange(questions[activeStep].question, value)
-              }
-            >
-              <Stack mt="md">
-                {questions[activeStep].options.map((option) => (
-                  <Radio
-                    key={option.value}
-                    value={option.value}
-                    label={
-                      <div>
-                        <Text fw={500}>{option.label}</Text>
-                        <Text size="sm" c="dimmed">
-                          {option.description}
-                        </Text>
-                      </div>
-                    }
-                  />
-                ))}
-              </Stack>
-            </Radio.Group>
-          )}
-
-          <Group justify="flex-end" mt="xl">
+          <Group justify="apart" mt="xl">
             <Button
               variant="default"
               onClick={prevStep}
@@ -221,7 +162,9 @@ export default function ProfileQuiz() {
               Back
             </Button>
             <Button onClick={nextStep}>
-              {activeStep === questions.length - 1 ? "Finish" : "Next"}
+              {activeStep === profileQuizQuestions.length - 1
+                ? "Finish"
+                : "Next"}
             </Button>
           </Group>
         </Stack>
