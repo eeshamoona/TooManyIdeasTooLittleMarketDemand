@@ -20,6 +20,8 @@ import Heatmap from "../../progress/components/heatmap";
 import { useRouter } from "next/navigation";
 import { profileQuizQuestions } from "../../profile-quiz/constants";
 import { FaBook } from "react-icons/fa";
+import DonutCharts from "./donut-chart";
+import { ProfileItem } from "./profile-item";
 
 interface StatChartsProps {
   entries: any[];
@@ -38,7 +40,9 @@ const StatCharts: React.FC<StatChartsProps> = ({
   const router = useRouter();
 
   const findOptionDetails = (questionKey: string, value: string) => {
-    const question = profileQuizQuestions.find((q) => q.question === questionKey);
+    const question = profileQuizQuestions.find(
+      (q) => q.question === questionKey
+    );
     const option = question?.options.find((opt) => opt.value === value);
     return {
       label: option?.label || value,
@@ -67,43 +71,22 @@ const StatCharts: React.FC<StatChartsProps> = ({
     return descriptions.find((d) => count <= d.threshold)?.text;
   };
 
-  const ProfileItem = ({ icon: ItemIcon, label, title, description }) => (
-    <Paper p="md" radius="sm" withBorder>
-      <Group wrap="nowrap" gap="xl">
-        {ItemIcon && (
-          <ThemeIcon size="lg" variant="light" color="blue">
-            <ItemIcon size={20} />
-          </ThemeIcon>
-        )}
-        <div style={{ flex: 1 }}>
-          <Text size="xs" tt="uppercase" fw={500} c="dimmed">
-            {title}
-          </Text>
-          <Text size="sm" fw={500} mb={4}>
-            {label}
-          </Text>
-          <Text size="xs" c="dimmed" lineClamp={2}>
-            {description}
-          </Text>
-        </div>
-      </Group>
-    </Paper>
-  );
-
   const renderProfileDetails = () => {
     if (!profile) return null;
 
     const { wordCount, ...otherDetails } = profile;
 
     return (
-      <Stack gap="xl">
+      <Grid>
         {wordCount && (
-          <ProfileItem
-            icon={FaBook}
-            title="Target Word Count"
-            label={`${wordCount} words`}
-            description={getWordCountDescription(wordCount)}
-          />
+          <Grid.Col span={{ base: 12, xs: 6, md: 4, lg: 3 }}>
+            <ProfileItem
+              icon={FaBook}
+              title="Target Word Count"
+              label={`${wordCount} words`}
+              description={getWordCountDescription(wordCount)}
+            />
+          </Grid.Col>
         )}
 
         {Object.entries(otherDetails).map(([key, value]) => {
@@ -112,16 +95,17 @@ const StatCharts: React.FC<StatChartsProps> = ({
             value as string
           );
           return (
-            <ProfileItem
-              key={key}
-              icon={Icon}
-              title={key.replace(/([A-Z])/g, " $1").trim()}
-              label={label}
-              description={description}
-            />
+            <Grid.Col key={key} span={{ base: 12, xs: 6, md: 4, lg: 3 }}>
+              <ProfileItem
+                icon={Icon}
+                title={key.replace(/([A-Z])/g, " $1").trim()}
+                label={label}
+                description={description}
+              />
+            </Grid.Col>
           );
         })}
-      </Stack>
+      </Grid>
     );
   };
 
@@ -229,9 +213,10 @@ const StatCharts: React.FC<StatChartsProps> = ({
 
   return (
     <Grid>
-      {/* Left sidebar */}
-      <Grid.Col span={{ base: 12, md: 3 }}>
+      {/* Profile information at the top */}
+      <Grid.Col span={12}>
         <Card shadow="sm" padding="lg" radius="md" withBorder>
+          {/* ...Profile Information... */}
           <Stack justify="space-between" h="100%" gap="xl">
             <Stack gap="md">
               <div>
@@ -264,42 +249,8 @@ const StatCharts: React.FC<StatChartsProps> = ({
         </Card>
       </Grid.Col>
 
-      {/* Right side charts */}
-      <Grid.Col span={{ base: 12, md: 9 }}>
-        <Group justify="space-between" align="center" w={"100%"}>
-          <RadarChart
-            h={300}
-            data={numberOfEntriesInEachCategory}
-            dataKey="category"
-            series={[{ name: "count", color: "blue.4", opacity: 0.5 }]}
-            withPolarAngleAxis
-            withPolarRadiusAxis={false}
-            flex={2}
-          />
-          <div
-            style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Text ta="center" size="xl">
-              {entries.length} Entries
-            </Text>
-            <DonutChart
-              withLabelsLine
-              withLabels
-              data={finalDonutChartData}
-              startAngle={180}
-              endAngle={0}
-              size={250}
-              thickness={20}
-              h={300}
-              chartLabel={`${totalWords} Total Words`}
-            />
-          </div>
-        </Group>
+      {/* Heatmap spanning full width */}
+      <Grid.Col span={12}>
         <Paper
           radius="sm"
           p="md"
@@ -313,30 +264,50 @@ const StatCharts: React.FC<StatChartsProps> = ({
         >
           <Heatmap data={heatmapData} />
         </Paper>
-        <div>
-          <CompositeChart
-            h={300}
-            data={stackedChartData}
-            dataKey="date"
-            curveType="monotone"
-            xAxisLabel="Date"
-            withLegend
-            tickLine="none"
-            gridAxis="y"
-            legendProps={{ verticalAlign: "top", height: 50 }}
-            yAxisLabel="Score"
-            yAxisProps={{
-              domain: [0, 10],
-            }}
-            series={[
-              { name: "Mood Score", color: "yellow.4", type: "line" },
-              { name: "Relevance Score", color: "blue.4", type: "line" },
-              { name: "Creativity Score", color: "green.4", type: "line" },
-              { name: "Readability Score", color: "red.4", type: "line" },
-              { name: "Completeness Score", color: "violet.4", type: "line" },
-            ]}
-          />
-        </div>
+      </Grid.Col>
+
+      {/* Composite Chart spanning full width */}
+      <Grid.Col span={12}>
+        <CompositeChart
+          h={300}
+          data={stackedChartData}
+          dataKey="date"
+          curveType="monotone"
+          xAxisLabel="Date"
+          withLegend
+          tickLine="none"
+          gridAxis="y"
+          legendProps={{ verticalAlign: "top", height: 50 }}
+          yAxisLabel="Score"
+          yAxisProps={{
+            domain: [0, 10],
+          }}
+          series={[
+            { name: "Mood Score", color: "yellow.4", type: "line" },
+            { name: "Relevance Score", color: "blue.4", type: "line" },
+            { name: "Creativity Score", color: "green.4", type: "line" },
+            { name: "Readability Score", color: "red.4", type: "line" },
+            { name: "Completeness Score", color: "violet.4", type: "line" },
+          ]}
+        />
+      </Grid.Col>
+      {/* Radar and Donut charts side by side */}
+      <Grid.Col span={{ base: 12, md: 6 }}>
+        <RadarChart
+          h={300}
+          data={numberOfEntriesInEachCategory}
+          dataKey="category"
+          series={[{ name: "count", color: "blue.4", opacity: 0.5 }]}
+          withPolarAngleAxis
+          withPolarRadiusAxis={false}
+        />
+      </Grid.Col>
+      <Grid.Col span={{ base: 12, md: 6 }}>
+        <DonutCharts
+          finalDonutChartData={finalDonutChartData}
+          entriesLength={entries.length}
+          totalWords={totalWords}
+        />
       </Grid.Col>
     </Grid>
   );
