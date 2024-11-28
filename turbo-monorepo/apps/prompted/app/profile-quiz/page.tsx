@@ -16,13 +16,12 @@ import {
 import { useRouter } from "next/navigation";
 import { updateProfile } from "./actions";
 import { profileQuizQuestions } from "./constants";
-import { IconType } from "react-icons";
 
 export default function ProfileQuiz() {
   const [activeStep, setActiveStep] = useState(0);
   const [answers, setAnswers] = useState({
     wordCount: 250,
-    feedbackStyle: "balanced",
+    feedbackStyle: "",
     motivatingFeedback: "",
   });
   const router = useRouter();
@@ -59,16 +58,17 @@ export default function ProfileQuiz() {
 
     if (currentQuestion.question === "wordCount") {
       return (
-        <Stack gap="xl" style={{ width: "100%" }}>
-          <Text size="lg" fw={500}>
-            {answers.wordCount} words
-          </Text>
+        <Stack
+          gap="xl"
+          style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}
+        >
           <Slider
             value={answers.wordCount as number}
             onChange={(value) => handleAnswerChange("wordCount", value)}
             min={100}
             max={1000}
             step={50}
+            mt="xl"
             marks={[
               { value: 100, label: "100" },
               { value: 250, label: "250" },
@@ -90,16 +90,28 @@ export default function ProfileQuiz() {
               },
             })}
           />
+          <Text size="lg" ta="center" fw={500}>
+            {(() => {
+              const count = answers.wordCount;
+              if (count <= 100) return "Quick (100 words)";
+              if (count <= 350) return "Standard (250-350 words)";
+              if (count <= 650) return "Detailed (500-650 words)";
+              if (count <= 850) return "Extended (650-850 words)";
+              return "Long-form (850+ words)";
+            })()}
+          </Text>
         </Stack>
       );
     } else {
       return (
-        <SimpleGrid cols={3} spacing="md">
+        <SimpleGrid
+          cols={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: "sm", sm: "md" }}
+        >
           {currentQuestion.options.map((option) => (
             <Card
               key={option.value}
               shadow="sm"
-              padding="md"
               radius="md"
               withBorder
               style={{
@@ -108,19 +120,30 @@ export default function ProfileQuiz() {
                   answers[currentQuestion.question] === option.value
                     ? theme.colors.blue[6]
                     : theme.colors.gray[3],
+                backgroundColor:
+                  answers[currentQuestion.question] === option.value
+                    ? theme.colors.blue[0]
+                    : "",
               }}
               onClick={() =>
                 handleAnswerChange(currentQuestion.question, option.value)
               }
             >
-              <Stack align="center" gap="xs">
+              <Stack align="center" gap={0}>
                 {option.icon && (
-                  <option.icon size={24} color={theme.colors.blue[6]} />
+                  <option.icon
+                    size={24}
+                    color={
+                      answers[currentQuestion.question] === option.value
+                        ? theme.colors.blue[6]
+                        : ""
+                    }
+                  />
                 )}
-                <Text size="sm" fw={500}>
+                <Text size="md" fw={500} mt="xs">
                   {option.label}
                 </Text>
-                <Text size="xs" c="dimmed" ta="center">
+                <Text size="sm" c="dimmed" ta="center">
                   {option.description}
                 </Text>
               </Stack>
@@ -132,43 +155,53 @@ export default function ProfileQuiz() {
   };
 
   return (
-    <Container size="lg">
-      <Title order={1} mb="xl">
-        Customize Your Writing Experience
-      </Title>
+    <Container size="md">
+      <Stack gap="xl">
+        <Title order={1} ta="center">
+          Customize Your Writing Experience
+        </Title>
 
-      <Stepper active={activeStep} onStepClick={setActiveStep} mb="xl">
-        {profileQuizQuestions.map((q, index) => (
-          <Stepper.Step
-            key={index}
-            label={q.label}
-            icon={q.icon && <q.icon size={18} />}
-          />
-        ))}
-      </Stepper>
+        <Stepper
+          active={activeStep}
+          onStepClick={setActiveStep}
+          styles={{
+            root: { width: "100%" },
+          }}
+        >
+          {profileQuizQuestions.map((q, index) => (
+            <Stepper.Step
+              key={index}
+              label={q.label}
+              icon={q.icon && <q.icon size={18} />}
+            />
+          ))}
+        </Stepper>
 
-      <Card withBorder p="xl" radius="md">
-        <Stack gap="xl">
-          <Title order={2}>{profileQuizQuestions[activeStep].text}</Title>
+        <Card withBorder p={{ base: "md", sm: "xl" }} radius="md" w="100%">
+          <Stack>
+            <Title order={2} ta="center">
+              {profileQuizQuestions[activeStep].text}
+            </Title>
 
-          {renderQuestionContent()}
+            {renderQuestionContent()}
 
-          <Group justify="apart" mt="xl">
-            <Button
-              variant="default"
-              onClick={prevStep}
-              disabled={activeStep === 0}
-            >
-              Back
-            </Button>
-            <Button onClick={nextStep}>
-              {activeStep === profileQuizQuestions.length - 1
-                ? "Finish"
-                : "Next"}
-            </Button>
-          </Group>
-        </Stack>
-      </Card>
+            <Group justify="space-between" mt={{ base: "md", sm: "xl" }}>
+              <Button
+                variant="default"
+                onClick={prevStep}
+                disabled={activeStep === 0}
+              >
+                Back
+              </Button>
+              <Button onClick={nextStep}>
+                {activeStep === profileQuizQuestions.length - 1
+                  ? "Finish"
+                  : "Next"}
+              </Button>
+            </Group>
+          </Stack>
+        </Card>
+      </Stack>
     </Container>
   );
 }
