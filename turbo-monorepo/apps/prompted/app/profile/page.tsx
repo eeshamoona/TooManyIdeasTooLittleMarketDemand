@@ -11,11 +11,14 @@ import {
   Paper,
   Loader,
   Center,
+  Stack,
+  ThemeIcon,
 } from "@mantine/core";
 import { FaLock } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { getData, isUserLoggedIn } from "./action";
 import Charts from "../progress/components/charts";
+import { profileQuizQuestions } from "../profile-quiz/constants";
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
@@ -50,6 +53,50 @@ const ProfilePage: React.FC = () => {
     router.push("/reset-password");
   };
 
+  const renderProfileDetails = () => {
+    if (!profile) return null;
+
+    const findOptionDetails = (questionKey: string, value: string) => {
+      const question = profileQuizQuestions.find(q => q.question === questionKey);
+      const option = question?.options.find(opt => opt.value === value);
+      return {
+        label: option?.label || value,
+        description: option?.description || '',
+        Icon: option?.icon
+      };
+    };
+
+    return (
+      <Stack gap="md">
+        {Object.entries(profile).map(([key, value]) => {
+          const { label, description, Icon } = findOptionDetails(key, value as string);
+          return (
+            <Group key={key} align="flex-start">
+              {Icon && (
+                <ThemeIcon size="lg" variant="light">
+                  <Icon size={20} />
+                </ThemeIcon>
+              )}
+              <div>
+                <Text fw={500} size="sm" tt="capitalize">
+                  {key.replace(/([A-Z])/g, ' $1').trim()}
+                </Text>
+                <Text size="sm" fw={500}>
+                  {label}
+                </Text>
+                {description && (
+                  <Text size="xs" c="dimmed">
+                    {description}
+                  </Text>
+                )}
+              </div>
+            </Group>
+          );
+        })}
+      </Stack>
+    );
+  };
+
   // Show loading spinner if user data is not yet fetched
   if (loading) {
     return (
@@ -68,7 +115,7 @@ const ProfilePage: React.FC = () => {
             <Group align="center" justify="space-between" mb="md">
               <div>
                 <Title order={3}>Hey there, {username}!</Title>
-                {profile.length === 0 ? (
+                {profile?.length === 0 ? (
                   <>
                     <Text>
                       It seems that your profile is not filled out at the
@@ -83,7 +130,7 @@ const ProfilePage: React.FC = () => {
                     </Button>
                   </>
                 ) : (
-                  <Text>{JSON.stringify(profile)}</Text>
+                  renderProfileDetails()
                 )}
               </div>
 

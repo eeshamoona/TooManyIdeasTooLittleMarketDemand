@@ -27,10 +27,36 @@ export const profileQuizQuestions = [
     text: "What's your target word count per response?",
     question: "wordCount",
     options: [
-      { value: "100", label: "Quick (100 words)", icon: FaRegClock },
-      { value: "250", label: "Standard (250 words)", icon: FaBook },
-      { value: "500", label: "Detailed (500 words)", icon: FaRunning },
-      { value: "custom", label: "Custom", icon: FaCog },
+      {
+        value: "100",
+        label: "Quick (100 words)",
+        description: "Quick, actionable fixes to level up your writing.",
+        icon: FaRegClock,
+      },
+      {
+        value: "250",
+        label: "Standard (250 words)",
+        description: "A mix of praise and constructive guidance.",
+        icon: FaBook,
+      },
+      {
+        value: "500",
+        label: "Detailed (500 words)",
+        description: "Deep dive into your writing with detailed feedback.",
+        icon: FaRunning,
+      },
+      {
+        value: "750",
+        label: "Extensive (750 words)",
+        description: "Comprehensive feedback covering all aspects of your writing.",
+        icon: FaBook,
+      },
+      {
+        value: "custom",
+        label: "Custom",
+        description: "Tailor your feedback to your specific needs.",
+        icon: FaCog,
+      },
     ],
   },
   {

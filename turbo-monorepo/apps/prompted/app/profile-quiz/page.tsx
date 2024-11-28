@@ -93,11 +93,15 @@ export default function ProfileQuiz() {
           <Text size="lg" ta="center" fw={500}>
             {(() => {
               const count = answers.wordCount;
-              if (count <= 100) return "Quick (100 words)";
-              if (count <= 350) return "Standard (250-350 words)";
-              if (count <= 650) return "Detailed (500-650 words)";
-              if (count <= 850) return "Extended (650-850 words)";
-              return "Long-form (850+ words)";
+              if (count <= 100)
+                return `Brief Response (${count} words) - Perfect for quick thoughts`;
+              if (count <= 350)
+                return `Short Article (${count} words) - Ideal for clear, concise ideas`;
+              if (count <= 650)
+                return `Full Article (${count} words) - Room to develop your thoughts`;
+              if (count <= 850)
+                return `In-Depth Piece (${count} words) - Space for rich detail`;
+              return `Comprehensive Essay (${count} words) - Full exploration of your topic`;
             })()}
           </Text>
         </Stack>
