@@ -13,11 +13,13 @@ import {
   Center,
   Stack,
   ThemeIcon,
+  SimpleGrid,
+  Slider,
 } from "@mantine/core";
-import { FaLock } from "react-icons/fa";
+import { FaLock, FaBook } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { getData, isUserLoggedIn } from "./action";
-import Charts from "../progress/components/charts";
+import Charts from "./components/charts";
 import { profileQuizQuestions } from "../profile-quiz/constants";
 
 const ProfilePage: React.FC = () => {
@@ -57,40 +59,87 @@ const ProfilePage: React.FC = () => {
     if (!profile) return null;
 
     const findOptionDetails = (questionKey: string, value: string) => {
-      const question = profileQuizQuestions.find(q => q.question === questionKey);
-      const option = question?.options.find(opt => opt.value === value);
+      const question = profileQuizQuestions.find(
+        (q) => q.question === questionKey
+      );
+      const option = question?.options.find((opt) => opt.value === value);
       return {
         label: option?.label || value,
-        description: option?.description || '',
-        Icon: option?.icon
+        description: option?.description || "",
+        Icon: option?.icon,
       };
     };
 
+    const { wordCount, ...otherDetails } = profile;
+
+    const getWordCountDescription = (count: number) => {
+      const descriptions = [
+        { threshold: 100, text: "Brief Response - Perfect for quick thoughts" },
+        {
+          threshold: 350,
+          text: "Short Article - Ideal for clear, concise ideas",
+        },
+        {
+          threshold: 650,
+          text: "Full Article - Room to develop your thoughts",
+        },
+        { threshold: 850, text: "In-Depth Piece - Space for rich detail" },
+        {
+          threshold: Infinity,
+          text: "Comprehensive Essay - Full exploration of your topic",
+        },
+      ];
+
+      return descriptions.find((d) => count <= d.threshold)?.text;
+    };
+
+    const ProfileItem = ({ icon: ItemIcon, label, title, description }) => (
+      <Paper p="md" radius="sm" withBorder>
+        <Group wrap="nowrap" gap="xl">
+          {ItemIcon && (
+            <ThemeIcon size="lg" variant="light" color="blue">
+              <ItemIcon size={20} />
+            </ThemeIcon>
+          )}
+          <div style={{ flex: 1 }}>
+            <Text size="xs" tt="uppercase" fw={500} c="dimmed">
+              {title}
+            </Text>
+            <Text size="sm" fw={500} mb={4}>
+              {label}
+            </Text>
+            <Text size="xs" c="dimmed" lineClamp={2}>
+              {description}
+            </Text>
+          </div>
+        </Group>
+      </Paper>
+    );
+
     return (
-      <Stack gap="md">
-        {Object.entries(profile).map(([key, value]) => {
-          const { label, description, Icon } = findOptionDetails(key, value as string);
+      <Stack gap="xl">
+        {wordCount && (
+          <ProfileItem
+            icon={FaBook}
+            title="Target Word Count"
+            label={`${wordCount} words`}
+            description={getWordCountDescription(wordCount)}
+          />
+        )}
+
+        {Object.entries(otherDetails).map(([key, value]) => {
+          const { label, description, Icon } = findOptionDetails(
+            key,
+            value as string
+          );
           return (
-            <Group key={key} align="flex-start">
-              {Icon && (
-                <ThemeIcon size="lg" variant="light">
-                  <Icon size={20} />
-                </ThemeIcon>
-              )}
-              <div>
-                <Text fw={500} size="sm" tt="capitalize">
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </Text>
-                <Text size="sm" fw={500}>
-                  {label}
-                </Text>
-                {description && (
-                  <Text size="xs" c="dimmed">
-                    {description}
-                  </Text>
-                )}
-              </div>
-            </Group>
+            <ProfileItem
+              key={key}
+              icon={Icon}
+              title={key.replace(/([A-Z])/g, " $1").trim()}
+              label={label}
+              description={description}
+            />
           );
         })}
       </Stack>
@@ -107,52 +156,55 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <Container size="lg" mt="lg">
-      <Grid gutter="lg" h={"100%"}>
+    <Container size="xl" py="xl">
+      <Grid gutter="xl">
         {/* Left Section: User Information */}
-        <Grid.Col>
+        <Grid.Col span={{ base: 12, md: 4, lg: 3 }}>
           <Card shadow="sm" padding="lg" radius="md" withBorder>
-            <Group align="center" justify="space-between" mb="md">
-              <div>
-                <Title order={3}>Hey there, {username}!</Title>
+            <Stack justify="space-between" h="100%" gap="xl">
+              <Stack gap="md">
+                <div>
+                  <Title order={3} mb={4}>
+                    Hey there, {username}!
+                  </Title>
+                  <Text size="sm" c="dimmed">
+                    {email}
+                  </Text>
+                </div>
+
                 {profile?.length === 0 ? (
-                  <>
-                    <Text>
+                  <Paper p="md" withBorder>
+                    <Text mb="md">
                       It seems that your profile is not filled out at the
                       moment, click here to do so.
                     </Text>
                     <Button
                       onClick={() => router.push("/profile-quiz")}
-                      mt="md"
                       variant="filled"
+                      fullWidth
                     >
                       Fill Out Profile
                     </Button>
-                  </>
+                  </Paper>
                 ) : (
                   renderProfileDetails()
                 )}
-              </div>
-
-              <div>
-                <Text c="dimmed">{email}</Text>
-                <Button
-                  leftSection={<FaLock />}
-                  mt="lg"
-                  variant="outline"
-                  color="red"
-                  onClick={handleResetPassword}
-                >
-                  Reset Password
-                </Button>
-              </div>
-            </Group>
+              </Stack>
+              <Button
+                leftSection={<FaLock />}
+                variant="light"
+                color="red"
+                onClick={handleResetPassword}
+              >
+                Reset Password
+              </Button>
+            </Stack>
           </Card>
         </Grid.Col>
 
-        {/* Right Section: Sidebar Content */}
-        <Grid.Col flex={1}>
-          <Paper shadow="sm" radius="md" p="lg" withBorder>
+        {/* Right Section: Charts */}
+        <Grid.Col span={{ base: 12, md: 8, lg: 9 }}>
+          <Paper shadow="sm" radius="md" p="xl" withBorder>
             <Charts entries={entries} />
           </Paper>
         </Grid.Col>
