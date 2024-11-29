@@ -1,7 +1,7 @@
 "use client";
 import { Box, Divider } from "@mantine/core";
 import { PromptList } from "../../components/prompt-list";
-import { DisplayProps, Prompt } from "../../components/display";
+import { Prompt } from "../../components/display";
 import { useState } from "react";
 import { AiAddPromptForm } from "./ai-add-prompt";
 
