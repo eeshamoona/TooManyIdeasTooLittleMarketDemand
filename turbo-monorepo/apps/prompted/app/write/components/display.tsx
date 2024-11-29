@@ -22,11 +22,18 @@ export interface Prompt {
   category: string;
 }
 
-export interface DisplayProps {
-  prompts: Prompt[];
+export interface Profile {
+  wordCount: number;
+  feedbackStyle: string;
+  motivatingFeedback: string;
 }
 
-export default function Display({ prompts }: DisplayProps) {
+export interface DisplayProps {
+  prompts: Prompt[];
+  profile: Profile;
+}
+
+export default function Display({ prompts, profile }: DisplayProps) {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -60,7 +67,7 @@ export default function Display({ prompts }: DisplayProps) {
 
   const leftSectionIcon = () => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === selectedCategory,
+      (cat) => cat.title === selectedCategory
     );
 
     const Icon = category?.icon;
@@ -80,7 +87,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;
@@ -185,6 +192,7 @@ export default function Display({ prompts }: DisplayProps) {
         <TrackedTextarea
           promptText={randomPrompt?.text}
           categoryText={randomPrompt?.category}
+          target_word_count={profile.wordCount}
         />
       ) : (
         <>

@@ -26,6 +26,7 @@ interface TrackedTextareaProps {
   placeholder?: string;
   promptText: string;
   categoryText: string;
+  target_word_count: number;
 }
 
 export interface Character {
@@ -39,6 +40,7 @@ export default function TrackedTextarea({
   placeholder = "Write your response here...",
   promptText,
   categoryText,
+  target_word_count,
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
@@ -94,7 +96,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -138,7 +140,7 @@ export default function TrackedTextarea({
 
     // Convert the dictionary to an array of tuples [word, frequency]
     const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
 
     // Convert back to an object and return
@@ -253,17 +255,29 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =
       totalCharacters > 0 ? (userCharacters / totalCharacters) * 100 : 0;
+
+    const wordCount = combinedResponse.trim().split(/\s+/).length;
+    const aiWordCount = combinedResponse
+      .split(/\s+/)
+      .filter((_, index, array) => {
+        const startIndex =
+          array.slice(0, index + 1).join(" ").length - array[index].length;
+        return characters[startIndex]?.type === "AI";
+      }).length;
 
     return {
       totalCharacters,
       aiCharacters,
       userCharacters,
       userPercentage: parseFloat(userPercentage.toFixed(2)),
+      wordCount,
+      target_word_count,
+      aiWordCount,
     };
   };
 

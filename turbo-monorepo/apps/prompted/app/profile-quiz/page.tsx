@@ -34,7 +34,42 @@ export default function ProfileQuiz() {
     }));
   };
 
+  const isCurrentStepValid = () => {
+    const currentQuestion = profileQuizQuestions[activeStep];
+    const currentAnswer =
+      answers[currentQuestion.question as keyof typeof answers];
+
+    // Word count always has a default value, so it's always valid
+    if (currentQuestion.question === "wordCount") return true;
+
+    // For other questions, check if there's a selected value
+    return Boolean(currentAnswer);
+  };
+
+  const skipQuiz = async () => {
+    const defaultAnswers = {
+      wordCount: 250,
+      feedbackStyle: "balanced",
+      motivatingFeedback: "clearGoal",
+    };
+
+    try {
+      const { success } = await updateProfile(defaultAnswers);
+      if (success) {
+        router.push("/write");
+      } else {
+        console.error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+    }
+  };
+
   const nextStep = async () => {
+    if (!isCurrentStepValid()) {
+      return; // Don't proceed if current step is invalid
+    }
+
     if (activeStep < profileQuizQuestions.length - 1) {
       setActiveStep((current) => current + 1);
     } else {
@@ -162,24 +197,23 @@ export default function ProfileQuiz() {
     <Container size="md">
       <Stack gap="xl">
         <Title order={1} ta="center">
-          Customize Your Writing Experience
+          Customize your AI Feedback
         </Title>
 
-        <Stepper
-          active={activeStep}
-          onStepClick={setActiveStep}
-          styles={{
-            root: { width: "100%" },
-          }}
-        >
-          {profileQuizQuestions.map((q, index) => (
-            <Stepper.Step
-              key={index}
-              label={q.label}
-              icon={q.icon && <q.icon size={18} />}
-            />
-          ))}
-        </Stepper>
+        <Group>
+          <Stepper active={activeStep} onStepClick={setActiveStep} flex={1}>
+            {profileQuizQuestions.map((q, index) => (
+              <Stepper.Step
+                key={index}
+                label={q.label}
+                icon={q.icon && <q.icon size={18} />}
+              />
+            ))}
+          </Stepper>
+          <Button variant="subtle" color="red" onClick={skipQuiz}>
+            Skip Quiz
+          </Button>
+        </Group>
 
         <Card withBorder p={{ base: "md", sm: "xl" }} radius="md" w="100%">
           <Stack>
@@ -190,14 +224,16 @@ export default function ProfileQuiz() {
             {renderQuestionContent()}
 
             <Group justify="space-between" mt={{ base: "md", sm: "xl" }}>
-              <Button
-                variant="default"
-                onClick={prevStep}
-                disabled={activeStep === 0}
-              >
-                Back
-              </Button>
-              <Button onClick={nextStep}>
+              <Group>
+                <Button
+                  variant="default"
+                  onClick={prevStep}
+                  disabled={activeStep === 0}
+                >
+                  Back
+                </Button>
+              </Group>
+              <Button onClick={nextStep} disabled={!isCurrentStepValid()}>
                 {activeStep === profileQuizQuestions.length - 1
                   ? "Finish"
                   : "Next"}
