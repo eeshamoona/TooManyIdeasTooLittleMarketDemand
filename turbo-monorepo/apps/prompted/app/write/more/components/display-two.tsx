@@ -5,7 +5,11 @@ import { DisplayProps, Prompt } from "../../components/display";
 import { useState } from "react";
 import { AiAddPromptForm } from "./ai-add-prompt";
 
-export const Display2 = ({ prompts }: DisplayProps) => {
+type Display2Props = {
+  prompts: Prompt[];
+};
+
+export const Display2 = ({ prompts }: Display2Props) => {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
 
   const handleCategorySelected = (category: string | null) => {
