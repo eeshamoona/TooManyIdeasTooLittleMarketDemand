@@ -195,22 +195,22 @@ export default function ProfileQuiz() {
   };
 
   return (
-    <Container size="md">
-      <Stack gap="sm" align="center">
-        <Button
-          fullWidth
-          variant="light"
-          color="red"
-          onClick={skipQuiz}
-          mb="xl"
-        >
-          Skip Profile Quiz
-        </Button>
+    <Container size="lg">
+      <Stack gap="lg" align="center" mx="auto">
+        <Stack gap="sm" align="center">
+          <Title order={2} ta="center">
+            Let's Make This Space Yours
+          </Title>
+          <Text c="dimmed" size="md" ta="center">
+            A few quick questions to create your perfect writing environment.
+          </Text>
+        </Stack>
+
         <Stepper
           active={activeStep}
           onStepClick={setActiveStep}
-          w={"100%"}
-          flex={1}
+          mx="xl"
+          w="100%"
         >
           {profileQuizQuestions.map((q, index) => (
             <Stepper.Step
@@ -221,15 +221,17 @@ export default function ProfileQuiz() {
           ))}
         </Stepper>
 
-        <Card withBorder mt="xl" radius="md" w="100%">
-          <Stack>
-            <Title order={2} ta="center">
-              {profileQuizQuestions[activeStep].text}
-            </Title>
+        <Card withBorder radius="md" w="100%" padding="xl">
+          <Stack gap="xl">
+            <Stack gap="xs" align="center">
+              <Title order={2} ta="center">
+                {profileQuizQuestions[activeStep].text}
+              </Title>
+            </Stack>
 
             {renderQuestionContent()}
 
-            <Group justify="space-between" mt={{ base: "md", sm: "xl" }}>
+            <Group justify="space-between" mt="xl">
               <Group>
                 <Button
                   variant="default"
@@ -241,12 +243,21 @@ export default function ProfileQuiz() {
               </Group>
               <Button onClick={nextStep} disabled={!isCurrentStepValid()}>
                 {activeStep === profileQuizQuestions.length - 1
-                  ? "Finish"
+                  ? "Start Writing"
                   : "Next"}
               </Button>
             </Group>
           </Stack>
         </Card>
+
+        <Button
+          variant="subtle"
+          color="red"
+          onClick={skipQuiz}
+          leftSection={<Text size="sm">→</Text>}
+        >
+          Skip for now, I'll customize later
+        </Button>
       </Stack>
     </Container>
   );
