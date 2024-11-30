@@ -1,5 +1,5 @@
 "use client";
-import { Button, Container, Paper } from "@mantine/core";
+import { Button, Container } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaLock } from "react-icons/fa";
@@ -8,29 +8,40 @@ import Charts from "./components/charts";
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState<string | null>(null);
   const [username, setUserName] = useState<string | null>(null);
   const [entries, setEntries] = useState(null);
   const [profile, setProfile] = useState(null);
 
-  // Check if the user is logged in using Supabase
   useEffect(() => {
     const handleCheckedLoggedIn = async () => {
-      const { isLoggedIn, email, username, userId } = await isUserLoggedIn();
-      if (!isLoggedIn) {
-        router.push("/login");
-      } else {
+      try {
+        setLoading(true);
+        const { isLoggedIn, email, username, userId } = await isUserLoggedIn();
+        if (!isLoggedIn) {
+          router.push("/login");
+          return;
+        }
+        
         const { entries: entriesData, profile: profileData } =
           await getData(userId);
         setEntries(entriesData);
         setProfile(profileData);
         setEmail(email);
         setUserName(username);
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      } finally {
+        setLoading(false);
       }
     };
     handleCheckedLoggedIn();
-    console.log(profile);
   }, []);
+
+  if (loading) {
+    return <Container size="lg" py="md">Loading...</Container>;
+  }
 
   const handleResetPassword = () => {
     // Redirect to the password reset flow
@@ -38,24 +49,22 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <Container size="xl" py="xl">
-      <Paper shadow="sm" radius="md" p="xl" withBorder>
-        <Charts
-          entries={entries}
-          profile={profile}
-          username={username}
-          email={email}
-        />
-        <Button
-          leftSection={<FaLock />}
-          variant="outline"
-          color="red"
-          fullWidth
-          onClick={handleResetPassword}
-        >
-          Reset Password
-        </Button>
-      </Paper>
+    <Container size="lg" py="md">
+      <Charts
+        entries={entries}
+        profile={profile}
+        username={username}
+        email={email}
+      />
+      <Button
+        leftSection={<FaLock />}
+        variant="outline"
+        color="red"
+        fullWidth
+        onClick={handleResetPassword}
+      >
+        Reset Password
+      </Button>
     </Container>
   );
 };

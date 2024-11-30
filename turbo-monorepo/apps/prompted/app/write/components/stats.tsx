@@ -6,7 +6,7 @@ import {
   FaReceipt,
   FaUserPlus,
 } from "react-icons/fa";
-import { getPercentageColor } from "../../read/actions";
+import { getPercentageColor } from "../../read/[id]/actions";
 
 const icons = {
   user: FaUserPlus,

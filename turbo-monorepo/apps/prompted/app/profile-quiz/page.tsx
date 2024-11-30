@@ -18,6 +18,9 @@ import { Profile } from "../write/components/display";
 import { updateProfile } from "./actions";
 import { profileQuizQuestions } from "./constants";
 
+//TODO: If the user has already filled out the quiz we should add a button to cancel the quiz and go back
+// to the profile page with their original profile
+
 export default function ProfileQuiz() {
   const [activeStep, setActiveStep] = useState(0);
   const [answers, setAnswers] = useState<Profile>({

@@ -16,6 +16,7 @@ function getSystemInstructions(profile?: {
   motivatingFeedback?: string;
 }) {
   if (!profile || (!profile.feedbackPersona && !profile.motivatingFeedback)) {
+    console.log("Using default instructions");
     return system_instructions;
   }
 
@@ -38,6 +39,8 @@ function getSystemInstructions(profile?: {
   } else {
     instructions = instructions.replace("{{MOTIVATING_FEEDBACK}}", "");
   }
+
+  console.log("Using profile instructions");
 
   return instructions;
 }

@@ -1,12 +1,16 @@
 "use client";
 import { Button, Center, Stack, Text } from "@mantine/core";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Profile } from "../../../write/components/display";
+import { updateEntryFeedback } from "../actions";
 
 interface FeedbackRetryProps {
   entryId: string;
   text: string;
   category: string;
   prompt: string;
+  profile: Profile;
 }
 
 export function FeedbackRetry({
@@ -14,13 +18,10 @@ export function FeedbackRetry({
   text,
   category,
   prompt,
+  profile,
 }: FeedbackRetryProps) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
-  console.log("entryId", entryId);
-  console.log("response", text);
-  console.log("category", category);
-  console.log("prompt", prompt);
 
   const handleRetry = async () => {
     setIsLoading(true);
@@ -34,6 +35,7 @@ export function FeedbackRetry({
           response: text,
           category,
           prompt,
+          profile,
         }),
       });
 
@@ -42,9 +44,13 @@ export function FeedbackRetry({
       }
 
       const { aiFeedback } = await feedbackResponse.json();
-      console.log("aiFeedback", aiFeedback);
 
-      //TODO: Update the entry in the database with the new feedback
+      const parsedFeedback =
+        typeof aiFeedback === "string" ? JSON.parse(aiFeedback) : aiFeedback;
+
+      await updateEntryFeedback(entryId, parsedFeedback);
+      console.log("Entry feedback updated");
+      router.refresh();
     } catch (error) {
       console.error("Error generating feedback:", error);
     } finally {

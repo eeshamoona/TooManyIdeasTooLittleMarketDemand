@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaBook, FaEnvelope } from "react-icons/fa";
+import { LiaUserEditSolid } from "react-icons/lia";
 import { profileQuizQuestions } from "../../profile-quiz/constants";
 import Heatmap from "../../progress/components/heatmap";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
@@ -216,8 +217,8 @@ const StatCharts: React.FC<StatChartsProps> = ({
       <Grid.Col span={12}>
         {/* ...Profile Information... */}
         <Stack justify="space-between" h="100%" gap="xl">
-          <Stack gap="md">
-            <Group align="center">
+          <Group align="center" justify="space-between">
+            <Group>
               <Avatar
                 color="initials"
                 name={username}
@@ -244,20 +245,31 @@ const StatCharts: React.FC<StatChartsProps> = ({
                 </Text>
               </div>
             </Group>
-            {profile.length === 0 ? (
-              <>
-                <Button
-                  onClick={() => router.push("/profile-quiz")}
-                  variant="light"
-                  fullWidth
-                >
-                  Fill Out Profile
-                </Button>
-              </>
-            ) : (
-              renderProfileDetails()
+            {profile && profile.length !== 0 && (
+              <Button
+                onClick={() => router.push("/profile-quiz")}
+                variant="subtle"
+                leftSection={
+                  <LiaUserEditSolid style={{ width: "1rem", height: "1rem" }} />
+                }
+              >
+                Edit Profile
+              </Button>
             )}
-          </Stack>
+          </Group>
+          {profile.length === 0 ? (
+            <>
+              <Button
+                onClick={() => router.push("/profile-quiz")}
+                variant="light"
+                fullWidth
+              >
+                Fill Out Profile
+              </Button>
+            </>
+          ) : (
+            renderProfileDetails()
+          )}
         </Stack>
       </Grid.Col>
 

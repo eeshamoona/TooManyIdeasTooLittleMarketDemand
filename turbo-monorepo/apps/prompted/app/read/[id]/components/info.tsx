@@ -2,9 +2,9 @@
 import { Box, Tabs } from "@mantine/core";
 import React from "react";
 import { StatsGrid3 } from "../components/stats-grid";
-import { FeedbackData } from "./feedback";
-import { FeedbackDisplay } from "./feedback";
+import { FeedbackData, FeedbackDisplay } from "./feedback";
 import { FeedbackRetry } from "./feedback-retry";
+import { Profile } from "../../../write/components/display";
 
 interface InfoProps {
   entry: {
@@ -15,13 +15,13 @@ interface InfoProps {
     category: string;
     prompt: string;
   };
+  profile: Profile;
 }
 
-const Info: React.FC<InfoProps> = ({ entry }) => {
+const Info: React.FC<InfoProps> = ({ entry, profile }) => {
   const isFeedbackEmpty =
     !entry.ai_feedback || Object.keys(entry.ai_feedback).length === 0;
 
-  console.log(entry);
   return (
     <Tabs defaultValue="stats">
       <Tabs.List>
@@ -43,6 +43,7 @@ const Info: React.FC<InfoProps> = ({ entry }) => {
               text={entry.text}
               category={entry.category}
               prompt={entry.prompt}
+              profile={profile}
             />
           ) : (
             <FeedbackDisplay feedbackData={entry.ai_feedback} />
