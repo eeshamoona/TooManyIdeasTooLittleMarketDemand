@@ -1,11 +1,11 @@
-import React from "react";
 import {
   Flex,
   Progress,
-  Tooltip,
   Text,
+  Tooltip,
   useMantineColorScheme,
 } from "@mantine/core";
+import React from "react";
 import { getPercentageColor } from "../actions";
 
 interface StatProgressProps {

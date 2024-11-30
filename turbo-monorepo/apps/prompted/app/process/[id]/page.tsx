@@ -1,7 +1,7 @@
 import { Container } from "@mantine/core";
-import Display from "./components/display";
-import { createClient } from "../../utils/supabase/server";
 import { getProgressInfo } from "../../progress/interface";
+import { createClient } from "../../utils/supabase/server";
+import Display from "./components/display";
 
 interface LevelProgress {
   lowThreshold: number;
@@ -30,7 +30,7 @@ export default async function ProcessPage({
     .from("entries")
     .select();
   const { data: progressData, error: progressError } = await supabase.from(
-    "progress",
+    "progress"
   ).select(`
     *,
     badges (
@@ -57,7 +57,7 @@ export default async function ProcessPage({
   // Set current and previous entries
   const currentEntries = entriesData;
   const previousEntries = currentEntries.filter(
-    (entry) => entry.id !== Number(id),
+    (entry) => entry.id !== Number(id)
   );
 
   // Function to calculate progress
@@ -65,7 +65,7 @@ export default async function ProcessPage({
     criteria: string,
     data: any[],
     hasLevels: boolean,
-    thresholds: number[],
+    thresholds: number[]
   ): LevelProgress | MilestoneProgress => {
     let criteriaFunction = null;
 
@@ -117,13 +117,13 @@ export default async function ProcessPage({
               progress.badges.criteria,
               previousEntries,
               progress.hasLevels,
-              progress.badges.thresholds,
+              progress.badges.thresholds
             );
             const currentProgress = calculateProgress(
               progress.badges.criteria,
               currentEntries,
               progress.hasLevels,
-              progress.badges.thresholds,
+              progress.badges.thresholds
             );
             if (progress.hasLevels) {
               const temp = previousProgress as LevelProgress;
@@ -159,7 +159,7 @@ export default async function ProcessPage({
                 console.log(
                   "Found milestone change:",
                   temp.achieved,
-                  temp2.achieved,
+                  temp2.achieved
                 );
                 return {
                   badgeId: progress.badges.id,
@@ -175,7 +175,7 @@ export default async function ProcessPage({
             }
           }
           return null;
-        },
+        }
       )
       .filter(Boolean);
   };

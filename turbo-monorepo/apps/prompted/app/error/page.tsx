@@ -1,5 +1,5 @@
 "use client";
-import { Container, Paper, Title, Text, Button, Group } from "@mantine/core";
+import { Button, Container, Group, Paper, Text, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
 export default function ErrorPage() {

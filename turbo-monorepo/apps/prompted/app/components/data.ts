@@ -1,18 +1,18 @@
+import { BsFillBarChartFill, BsStars } from "react-icons/bs";
 import {
+  FaClipboardCheck,
+  FaLightbulb,
+  FaMedal,
   FaPenNib,
   FaSeedling,
-  FaLightbulb,
-  FaClipboardCheck,
-  FaMedal,
 } from "react-icons/fa";
 import {
-  GiSkills,
   GiAchievement,
   GiMagnifyingGlass,
   GiPuzzle,
+  GiSkills,
 } from "react-icons/gi";
-import { MdInsights, MdSelfImprovement, MdCreate } from "react-icons/md";
-import { BsStars, BsFillBarChartFill } from "react-icons/bs";
+import { MdCreate, MdInsights, MdSelfImprovement } from "react-icons/md";
 import { RiMentalHealthFill } from "react-icons/ri";
 
 export const questions = [

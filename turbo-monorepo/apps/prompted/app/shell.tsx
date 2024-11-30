@@ -1,24 +1,24 @@
 "use client";
 import {
-  AppShell,
-  Burger,
-  Group,
-  Avatar,
-  useMantineColorScheme,
   ActionIcon,
-  Text,
+  AppShell,
+  Avatar,
+  Burger,
   Button,
+  Group,
   Menu,
+  Text,
   UnstyledButton,
+  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { forwardRef, useState } from "react";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { IoExitOutline } from "react-icons/io5";
 import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
 import { handleLogout } from "./logout/logoutClient";
-import { forwardRef, useState } from "react";
-import { IoExitOutline } from "react-icons/io5";
 
 interface CustomAppShellProps {
   metadata: any;

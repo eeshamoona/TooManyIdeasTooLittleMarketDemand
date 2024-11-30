@@ -1,21 +1,21 @@
 "use client";
 import {
+  ActionIcon,
   Button,
-  Select,
-  Group,
-  Divider,
   Center,
+  Divider,
+  Group,
+  Select,
   SelectProps,
   Text,
-  ActionIcon,
 } from "@mantine/core";
 import { useState } from "react";
-import { NEW_PROMPT_CATEGORIES } from "../interface";
-import TrackedTextarea from "./tracked-textarea";
-import { PromptList } from "./prompt-list";
 import { FaCheck } from "react-icons/fa";
-import { TbWriting } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
+import { TbWriting } from "react-icons/tb";
+import { NEW_PROMPT_CATEGORIES } from "../interface";
+import { PromptList } from "./prompt-list";
+import TrackedTextarea from "./tracked-textarea";
 
 export interface Prompt {
   text: string;
@@ -60,7 +60,7 @@ export default function Display({ prompts }: DisplayProps) {
 
   const leftSectionIcon = () => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === selectedCategory,
+      (cat) => cat.title === selectedCategory
     );
 
     const Icon = category?.icon;
@@ -80,7 +80,7 @@ export default function Display({ prompts }: DisplayProps) {
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;

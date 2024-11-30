@@ -15,14 +15,13 @@ export async function POST(request: Request) {
 
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser();
 
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 403 });
   }
 
-  const { data, error } = await supabase.auth.updateUser({
+  const { error } = await supabase.auth.updateUser({
     password,
   });
 

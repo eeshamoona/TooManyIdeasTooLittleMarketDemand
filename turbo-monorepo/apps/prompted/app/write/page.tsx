@@ -1,6 +1,6 @@
 import { Container } from "@mantine/core";
-import Display from "./components/display";
 import { createClient } from "../utils/supabase/server";
+import Display from "./components/display";
 
 export default async function Write() {
   const supabase = createClient();

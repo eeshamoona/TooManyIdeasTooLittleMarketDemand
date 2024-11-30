@@ -65,7 +65,7 @@ const CustomHeatmap: React.FC<CustomHeatmapProps> = ({
     const colorCodes = theme.colors.blue; // Use the 'blue' color scale from Mantine
     const colorIndex = Math.min(
       Math.floor(intensity * colorCodes.length),
-      colorCodes.length - 1,
+      colorCodes.length - 1
     );
     return colorCodes[colorIndex];
   };

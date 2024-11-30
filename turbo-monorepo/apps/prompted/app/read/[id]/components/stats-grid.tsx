@@ -1,13 +1,13 @@
 "use client";
 import { Grid, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import {
-  FaUser,
-  FaPercentage,
+  FaClock,
   FaFileAlt,
   FaFileWord,
   FaFont,
+  FaPercentage,
   FaRobot,
-  FaClock,
+  FaUser,
 } from "react-icons/fa";
 import { getPercentageColor } from "../../actions";
 

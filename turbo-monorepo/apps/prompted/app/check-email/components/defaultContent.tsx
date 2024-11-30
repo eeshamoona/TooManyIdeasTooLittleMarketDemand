@@ -1,4 +1,4 @@
-import { Title, Anchor, Text } from "@mantine/core";
+import { Text, Title } from "@mantine/core";
 
 const DefaultContent: React.FC = () => {
   return (

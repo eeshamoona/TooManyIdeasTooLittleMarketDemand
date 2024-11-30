@@ -1,5 +1,5 @@
-import React from "react";
 import { Center, Loader } from "@mantine/core";
+import React from "react";
 
 const Loading: React.FC = () => {
   return (

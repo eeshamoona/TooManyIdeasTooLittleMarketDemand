@@ -117,7 +117,7 @@ export async function login(formData: FormData): Promise<string | void> {
     // Handle specific login errors
     if (error.message.includes("Invalid login credentials")) {
       // Check if the email exists in the profiles table
-      const { data: existingUser, error: checkError } = await supabase
+      const { error: checkError } = await supabase
         .from("profiles")
         .select("id")
         .eq("email", data.email)
@@ -137,7 +137,7 @@ export async function login(formData: FormData): Promise<string | void> {
   }
 
   // If login succeeds, check if the user exists in profiles
-  const { data: profileData, error: profileError } = await supabase
+  const { error: profileError } = await supabase
     .from("profiles")
     .select("id")
     .eq("email", data.email)
@@ -201,14 +201,13 @@ export async function magicLinkLogin(
 
   // If the email is found, send the magic link
   console.log("Login process started...");
-  const { data: loginData, error: loginError } =
-    await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${BASE_URL}/magic-link-callback`, // Update for production
-        shouldCreateUser: false, // Prevent auto sign-up during login
-      },
-    });
+  const { error: loginError } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: `${BASE_URL}/magic-link-callback`, // Update for production
+      shouldCreateUser: false, // Prevent auto sign-up during login
+    },
+  });
 
   if (loginError) {
     console.error("Error sending magic link:", loginError.message);
@@ -245,7 +244,7 @@ export async function magicLinkSignUp(
   }
 
   // Check if the email exists in the profiles table
-  const { data: existingUser, error: checkError } = await supabase
+  const { data: existingUser } = await supabase
     .from("profiles")
     .select("id")
     .eq("email", email)
@@ -258,15 +257,14 @@ export async function magicLinkSignUp(
 
   // If the email is found, send the magic link
   console.log("Sign up process started...");
-  const { data: signUpData, error: signUpError } =
-    await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${BASE_URL}/magic-link-callback`, // Update for production
-        shouldCreateUser: true, // Prevent auto sign-up during login
-        data: { username }, // Save username in user metadata
-      },
-    });
+  const { error: signUpError } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: `${BASE_URL}/magic-link-callback`, // Update for production
+      shouldCreateUser: true, // Prevent auto sign-up during login
+      data: { username }, // Save username in user metadata
+    },
+  });
 
   if (signUpError) {
     console.error("Error sending magic link:", signUpError);
@@ -275,7 +273,6 @@ export async function magicLinkSignUp(
 
   console.log("Signup successful. Redirecting to check email...");
   redirect("/check-email?type=signup");
-  return "SIGNUP_SUCCESS";
 }
 
 /**
@@ -308,7 +305,7 @@ export async function signup(formData: FormData): Promise<string> {
   }
 
   // Check if the user is already signed up
-  const { data: existingUser, error: checkError } = await supabase
+  const { data: existingUser } = await supabase
     .from("profiles")
     .select("id")
     .eq("email", email)
@@ -321,9 +318,9 @@ export async function signup(formData: FormData): Promise<string> {
 
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
-    password: password || undefined, // Let Supabase auto-generate password if not provided
+    password: password || undefined,
     options: {
-      data: { username }, // Save username in user metadata
+      data: { username },
     },
   });
 
@@ -334,7 +331,6 @@ export async function signup(formData: FormData): Promise<string> {
 
   console.log("Signup successful. Redirecting to check email...");
   redirect("/check-email?type=signup");
-  return "SIGNUP_SUCCESS";
 }
 
 /**

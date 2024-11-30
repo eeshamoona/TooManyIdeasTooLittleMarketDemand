@@ -1,19 +1,19 @@
 "use client";
 import {
+  ActionIcon,
   AppShell,
+  Avatar,
   Burger,
   Group,
   UnstyledButton,
-  Avatar,
   useMantineColorScheme,
-  ActionIcon,
 } from "@mantine/core";
-import { FaMoon, FaSun } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
-import { IoExitOutline } from "react-icons/io5";
+import { FaMoon, FaSun } from "react-icons/fa";
 import { HiChevronDown, HiChevronLeft } from "react-icons/hi2";
-import { LuBookOpen, LuPlusCircle, LuPencil, LuAward } from "react-icons/lu";
+import { IoExitOutline } from "react-icons/io5";
+import { LuAward, LuBookOpen, LuPencil, LuPlusCircle } from "react-icons/lu";
 
 interface CustomAppShellProps {
   metadata: any;
@@ -21,8 +21,8 @@ interface CustomAppShellProps {
   children: React.ReactNode;
 }
 
-import { forwardRef, useState } from "react";
 import { Menu } from "@mantine/core";
+import { forwardRef, useState } from "react";
 import { handleLogout } from "./logout/logoutClient";
 
 interface UserButtonProps extends React.ComponentPropsWithoutRef<"button"> {
@@ -60,7 +60,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         </Group>
       </UnstyledButton>
     );
-  },
+  }
 );
 
 function UserMenu({ username }: { username: string }) {

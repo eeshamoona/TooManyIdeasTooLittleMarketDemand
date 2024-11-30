@@ -1,18 +1,18 @@
-import React, { useState } from "react";
 import {
-  Stepper,
-  Button,
-  Container,
-  Grid,
-  Card,
   Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Grid,
+  Stepper,
   Text,
   Title,
   useMantineTheme,
-  Flex,
 } from "@mantine/core";
-import { questions } from "./data";
+import React, { useState } from "react";
 import { RiSkipForwardLine } from "react-icons/ri";
+import { questions } from "./data";
 
 interface QuizProps {
   onQuizCompleted: () => void;

@@ -1,4 +1,4 @@
-import { Image, Accordion, Grid, Container } from "@mantine/core";
+import { Accordion, Container, Grid, Image } from "@mantine/core";
 import image from "../../public/FAQs-rafiki.png";
 
 const faqData = [

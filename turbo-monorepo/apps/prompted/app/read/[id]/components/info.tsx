@@ -1,9 +1,8 @@
 "use client";
+import { Box, Tabs } from "@mantine/core";
 import React from "react";
-import { Tabs, Box } from "@mantine/core";
 import { StatsGrid3 } from "../components/stats-grid";
-import { FeedbackData } from "./feedback";
-import { FeedbackDisplay } from "./feedback";
+import { FeedbackData, FeedbackDisplay } from "./feedback";
 
 interface InfoProps {
   entry: {

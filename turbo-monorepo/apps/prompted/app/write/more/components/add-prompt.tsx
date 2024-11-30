@@ -1,22 +1,22 @@
 "use client";
-import { useEffect, useState } from "react";
 import {
-  TextInput,
-  Select,
+  ActionIcon,
+  Button,
+  Center,
   Group,
   Paper,
-  Button,
+  Select,
   SelectProps,
-  Text,
-  Center,
-  ActionIcon,
   Stack,
+  Text,
+  TextInput,
   useMantineColorScheme,
 } from "@mantine/core";
-import { NEW_PROMPT_CATEGORIES } from "../../interface";
-import { useRouter } from "next/navigation";
-import { FaCheck, FaPaperPlane } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaCheck, FaPaperPlane } from "react-icons/fa";
+import { NEW_PROMPT_CATEGORIES } from "../../interface";
 
 interface AddPromptFormProps {
   // eslint-disable-next-line no-unused-vars
@@ -88,7 +88,7 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
     checked,
   }) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value,
+      (cat) => cat.title === option.value
     );
     const Icon = category?.icon;
     const color = category?.color;

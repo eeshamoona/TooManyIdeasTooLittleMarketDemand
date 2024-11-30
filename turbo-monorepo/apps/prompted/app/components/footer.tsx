@@ -1,5 +1,5 @@
+import { Box, Divider, Group, Text, useMantineTheme } from "@mantine/core";
 import React from "react";
-import { Box, Text, Group, Divider, useMantineTheme } from "@mantine/core";
 
 const Footer: React.FC = () => {
   const theme = useMantineTheme();
