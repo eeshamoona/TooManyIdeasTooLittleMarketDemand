@@ -1,10 +1,10 @@
 "use client";
 import { Box, Tabs } from "@mantine/core";
 import React from "react";
-import { StatsGrid3 } from "../components/stats-grid";
+import { Profile } from "../../../write/components/display";
 import { FeedbackData, FeedbackDisplay } from "./feedback";
 import { FeedbackRetry } from "./feedback-retry";
-import { Profile } from "../../../write/components/display";
+import { StatsGrid3 } from "./stats-grid";
 
 interface InfoProps {
   entry: {
@@ -22,6 +22,22 @@ const Info: React.FC<InfoProps> = ({ entry, profile }) => {
   const isFeedbackEmpty =
     !entry.ai_feedback || Object.keys(entry.ai_feedback).length === 0;
 
+  const getStats = () => {
+    //Calculate the number of words AI wrote by multiplying the userPercentage by the totalWordCount
+    const aiWordCount = Math.abs(
+      Math.ceil(
+        (entry.metadata_stats.userPercentage / 100) *
+          entry.metadata_stats.totalWords
+      ) - entry.metadata_stats.totalWords
+    );
+
+    return {
+      ...entry.metadata_stats,
+      aiWordCount,
+      targetWordCount: profile.targetWordCount,
+    };
+  };
+
   return (
     <Tabs defaultValue="stats">
       <Tabs.List>
@@ -31,7 +47,7 @@ const Info: React.FC<InfoProps> = ({ entry, profile }) => {
 
       <Tabs.Panel value="stats" pt="xs">
         <Box mt="md" style={{ flexShrink: 0 }}>
-          <StatsGrid3 stats={entry.metadata_stats} />
+          <StatsGrid3 stats={getStats()} />
         </Box>
       </Tabs.Panel>
 

@@ -69,6 +69,7 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
   const [showAIParts, setShowAIParts] = useState(false);
   const [showWordFreq, setShowWordFreq] = useState(false);
   const [showCleanWordFreq, setShowCleanWordFreq] = useState<boolean>(false);
+  const [accordionValue, setAccordionValue] = useState<string | null>("stats");
 
   // Function to filter out useless words
   function cleanWordFreq(wordFreq: { [key: string]: number }): {
@@ -215,7 +216,12 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
                   ))}
             </Paper>
 
-            <Accordion variant="separated" mt="xs">
+            <Accordion
+              variant="separated"
+              mt="xs"
+              value={accordionValue}
+              onChange={setAccordionValue}
+            >
               <Accordion.Item value="stats">
                 <Accordion.Control>
                   <Group gap="xs">

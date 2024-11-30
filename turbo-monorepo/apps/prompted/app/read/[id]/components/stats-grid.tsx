@@ -1,9 +1,10 @@
 "use client";
 import { Grid, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import {
+  FaBalanceScale,
+  FaChartPie,
   FaClock,
-  FaFileAlt,
-  FaFileWord,
+  FaFingerprint,
   FaFont,
   FaPercentage,
   FaRobot,
@@ -15,11 +16,12 @@ const icons = {
   totalCharacters: FaFont,
   aiCharacters: FaRobot,
   userCharacters: FaUser,
-  userPercentage: FaPercentage,
-  uniqueWordCount: FaFileWord,
-  uniqueWordPercentage: FaPercentage,
-  totalWords: FaFileAlt,
+  userPercentage: FaChartPie,
+  uniqueWordCount: FaFingerprint,
+  uniqueWordPercentage: FaBalanceScale,
+  totalWords: FaFont,
   elapsedTime: FaClock,
+  percentage: FaPercentage,
 };
 
 export type StatsProps = {
@@ -32,47 +34,40 @@ export type StatsProps = {
   totalWords: number;
   elapsedTime: number;
   aiCallCount: number;
+  aiWordCount: number;
+  targetWordCount: number;
 };
 
 const data = (stats: StatsProps) =>
   [
     {
-      title: "Total Characters",
-      icon: "totalCharacters",
-      value: stats.totalCharacters.toString(),
-    },
-    {
-      title: "AI Characters",
-      icon: "aiCharacters",
-      value: stats.aiCharacters.toString(),
-      color: "grape",
-    },
-    {
-      title: "User Characters",
-      icon: "userCharacters",
-      value: stats.userCharacters.toString(),
-    },
-    {
-      title: "User Percentage",
-      icon: "userPercentage",
-      value: `${stats.userPercentage}%`,
-      color: getPercentageColor(stats.userPercentage),
-    },
-    {
       title: "Total Words",
       icon: "totalWords",
-      value: stats.totalWords.toString(),
+      value: `${stats.totalWords} / ${stats.targetWordCount} words`,
+      color:
+        stats.totalWords < stats.targetWordCount * 0.8
+          ? "red"
+          : stats.totalWords < stats.targetWordCount
+            ? "yellow"
+            : "green",
+      description:
+        stats.totalWords < stats.targetWordCount
+          ? `${stats.targetWordCount - stats.totalWords} words below target`
+          : `${stats.totalWords - stats.targetWordCount} words over target 🎉`,
     },
     {
-      title: "Unique Word Count",
-      icon: "uniqueWordCount",
-      value: stats.uniqueWordCount.toString(),
-    },
-    {
-      title: "Uniqueness Percentage",
+      title: "Writing Variety",
       icon: "uniqueWordPercentage",
-      value: `${stats.uniqueWordPercentage.toFixed(2)}%`,
+      value: `${stats.uniqueWordPercentage.toFixed(2)}% unique`,
       color: getPercentageColor(stats.uniqueWordPercentage),
+      description: `${stats.uniqueWordCount} different words used`,
+    },
+    {
+      title: "Writing Originality",
+      icon: "userPercentage",
+      value: `${stats.userPercentage}% original`,
+      color: getPercentageColor(stats.userPercentage),
+      description: `${stats.aiWordCount} words written by AI`,
     },
   ] as const;
 
@@ -84,7 +79,7 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
     <Grid mt="sm">
       {statsData.map((stat, index) => {
         const Icon = icons[stat.icon];
-        const span = index < 4 ? 3 : 4; // 4 cards on top row, 3 on bottom
+        const span = index < 6 ? 4 : 6;
 
         return (
           <Grid.Col key={stat.title} span={span}>
@@ -113,21 +108,21 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
                 <Icon size="1rem" />
               </Group>
 
-              <Group align="flex-end" mt={10}>
+              <Group align="flex-end" mt={25}>
                 <Text
-                  size="lg"
-                  c={
-                    stat.title === "Uniqueness Percentage" ||
-                    stat.title === "User Percentage" ||
-                    stat.title === "AI Characters"
-                      ? stat.color
-                      : undefined
-                  }
-                  style={{ fontSize: "1.2rem", fontWeight: "bold" }}
+                  size="xl"
+                  c={stat.color || undefined}
+                  style={{ fontSize: "1.5rem", fontWeight: "bold" }}
                 >
                   {stat.value}
                 </Text>
               </Group>
+
+              {stat.description && (
+                <Text size="xs" c="dimmed" mt={5}>
+                  {stat.description}
+                </Text>
+              )}
             </Paper>
           </Grid.Col>
         );
