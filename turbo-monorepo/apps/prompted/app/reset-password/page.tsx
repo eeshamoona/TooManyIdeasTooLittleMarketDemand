@@ -115,7 +115,7 @@ export default function ResetPasswordPage() {
             </Text>
           )}
 
-          <Group justify="center">
+          <Group justify="center" mt="lg">
             <Button onClick={handleResetPassword} variant="filled" color="blue">
               Reset Password
             </Button>
