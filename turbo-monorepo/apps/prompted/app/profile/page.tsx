@@ -1,26 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Grid,
-  Card,
-  Title,
-  Text,
-  Button,
-  Group,
-  Paper,
-  Loader,
-  Center,
-  Stack,
-  ThemeIcon,
-  SimpleGrid,
-  Slider,
-} from "@mantine/core";
-import { FaLock, FaBook } from "react-icons/fa";
+import { Button, Container, Paper } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { FaLock } from "react-icons/fa";
 import { getData, isUserLoggedIn } from "./action";
 import Charts from "./components/charts";
-import { profileQuizQuestions } from "../profile-quiz/constants";
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();

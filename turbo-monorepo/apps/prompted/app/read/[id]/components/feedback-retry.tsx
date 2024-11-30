@@ -1,7 +1,6 @@
 "use client";
+import { Button, Center, Stack, Text } from "@mantine/core";
 import { useState } from "react";
-import { Button, Text, Stack, Center } from "@mantine/core";
-import { useRouter } from "next/navigation";
 
 interface FeedbackRetryProps {
   entryId: string;
@@ -17,7 +16,6 @@ export function FeedbackRetry({
   prompt,
 }: FeedbackRetryProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   console.log("entryId", entryId);
   console.log("response", text);
@@ -44,6 +42,7 @@ export function FeedbackRetry({
       }
 
       const { aiFeedback } = await feedbackResponse.json();
+      console.log("aiFeedback", aiFeedback);
 
       //TODO: Update the entry in the database with the new feedback
     } catch (error) {

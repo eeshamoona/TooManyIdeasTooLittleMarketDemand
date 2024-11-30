@@ -44,7 +44,6 @@ export async function GET(request: NextRequest) {
             profileError
           );
           redirect("/error");
-          return;
         }
 
         // Load badges for the user
@@ -53,12 +52,10 @@ export async function GET(request: NextRequest) {
         if (!profileData?.profile) {
           console.warn("User profile incomplete, redirecting to profile form");
           redirect("/profile-quiz");
-          return;
         }
 
         console.log("Redirecting user to:", next);
         redirect(next);
-        return;
       } else {
         console.error("No user found after OTP verification");
       }

@@ -1,5 +1,5 @@
+import { Group, Paper, Text, ThemeIcon } from "@mantine/core";
 import React from "react";
-import { Paper, Group, ThemeIcon, Text } from "@mantine/core";
 
 interface ProfileItemProps {
   icon: React.ComponentType<any>;

@@ -1,6 +1,6 @@
-import React from "react";
+import { DonutChart } from "@mantine/charts";
 import { Grid, Text } from "@mantine/core";
-import { RadarChart, DonutChart } from "@mantine/charts";
+import React from "react";
 
 interface RadarAndDonutChartsProps {
   finalDonutChartData: any[];

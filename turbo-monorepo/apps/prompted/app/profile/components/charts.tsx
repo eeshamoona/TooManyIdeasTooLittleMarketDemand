@@ -1,25 +1,23 @@
 "use client";
-import React from "react";
+import { CompositeChart, RadarChart } from "@mantine/charts";
 import {
-  Group,
-  Paper,
-  useMantineColorScheme,
-  Text,
-  Grid,
-  Card,
-  Stack,
-  Title,
   Button,
-  ThemeIcon,
+  Card,
   Center,
+  Grid,
   Loader,
+  Paper,
+  Stack,
+  Text,
+  Title,
+  useMantineColorScheme,
 } from "@mantine/core";
-import { CompositeChart, DonutChart, RadarChart } from "@mantine/charts";
-import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
-import Heatmap from "../../progress/components/heatmap";
 import { useRouter } from "next/navigation";
-import { profileQuizQuestions } from "../../profile-quiz/constants";
+import React from "react";
 import { FaBook } from "react-icons/fa";
+import { profileQuizQuestions } from "../../profile-quiz/constants";
+import Heatmap from "../../progress/components/heatmap";
+import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 import DonutCharts from "./donut-chart";
 import { ProfileItem } from "./profile-item";
 

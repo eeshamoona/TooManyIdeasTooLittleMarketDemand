@@ -19,6 +19,7 @@ import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import { getTitleOrder } from "../actions";
 import { Profile } from "./display";
+import { StatsGrid } from "./stats";
 
 const dmp = new DiffMatchPatch();
 

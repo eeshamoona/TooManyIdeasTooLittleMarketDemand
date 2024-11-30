@@ -1,23 +1,23 @@
 import {
-  FaBullseye,
-  FaBrain,
-  FaLightbulb,
-  FaRunning,
-  FaRegClock,
-  FaBook,
-  FaCog,
-  FaHeart,
   FaBalanceScale,
+  FaBook,
+  FaBrain,
+  FaBullseye,
+  FaCog,
+  FaCompass,
   FaExclamationCircle,
+  FaEye,
+  FaFlag,
+  FaHeart,
+  FaLightbulb,
   FaMagic,
   FaPencilAlt,
-  FaUserGraduate,
-  FaFlag,
-  FaStepForward,
   FaQuestion,
+  FaRegClock,
+  FaRunning,
   FaStar,
-  FaEye,
-  FaCompass,
+  FaStepForward,
+  FaUserGraduate,
 } from "react-icons/fa";
 
 export const profileQuizQuestions = [
@@ -48,7 +48,8 @@ export const profileQuizQuestions = [
       {
         value: "750",
         label: "Extensive (750 words)",
-        description: "Comprehensive feedback covering all aspects of your writing.",
+        description:
+          "Comprehensive feedback covering all aspects of your writing.",
         icon: FaBook,
       },
       {

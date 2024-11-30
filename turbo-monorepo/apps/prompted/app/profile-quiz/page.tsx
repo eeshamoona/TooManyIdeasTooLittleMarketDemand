@@ -1,22 +1,22 @@
 "use client";
-import { useState } from "react";
 import {
-  Container,
-  Title,
-  Stepper,
-  Text,
   Button,
+  Card,
+  Container,
+  Group,
+  SimpleGrid,
   Slider,
   Stack,
-  Group,
-  Card,
-  SimpleGrid,
+  Stepper,
+  Text,
+  Title,
   useMantineTheme,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Profile } from "../write/components/display";
 import { updateProfile } from "./actions";
 import { profileQuizQuestions } from "./constants";
-import { Profile } from "../write/components/display";
 
 export default function ProfileQuiz() {
   const [activeStep, setActiveStep] = useState(0);

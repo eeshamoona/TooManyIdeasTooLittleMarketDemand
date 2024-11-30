@@ -1,7 +1,6 @@
+import { Paper, useMantineColorScheme } from "@mantine/core";
 import React from "react";
-import { Paper } from "@mantine/core";
 import Heatmap from "../../progress/components/heatmap";
-import { useMantineColorScheme } from "@mantine/core";
 
 interface HeatmapChartProps {
   heatmapData: any[];
