@@ -17,6 +17,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { forwardRef, useState } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
+import { GoCommentDiscussion } from "react-icons/go";
 import { IoExitOutline } from "react-icons/io5";
 import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
 import { handleLogout } from "./logout/logoutClient";
@@ -180,24 +181,30 @@ export function CustomAppShell({
             )}
             <Group>
               {isLoggedIn ? (
-                <>
+                <Group gap={"sm"} visibleFrom="sm">
                   <Tooltip
-                    label="Share Your Thoughts"
+                    label="Share Feedback"
                     position="bottom"
                     withArrow
+                    offset={9}
                   >
-                    <Button
-                      variant="default"
-                      size="xs"
+                    <ActionIcon
+                      variant="subtle"
+                      size="lg"
                       component="a"
                       href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
                       target="_blank"
                     >
-                      Feedback
-                    </Button>
+                      <GoCommentDiscussion
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                        }}
+                      />
+                    </ActionIcon>
                   </Tooltip>
                   <UserMenu username={metadata.username} />
-                </>
+                </Group>
               ) : (
                 <Group>
                   <Button

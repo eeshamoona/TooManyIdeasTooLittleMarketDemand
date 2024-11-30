@@ -160,10 +160,7 @@ export default function ProfileQuiz() {
                   answers[currentQuestion.question] === option.value
                     ? theme.colors.blue[6]
                     : "",
-                backgroundColor:
-                  answers[currentQuestion.question] === option.value
-                    ? theme.colors.blue[0]
-                    : "",
+                borderWidth: 2,
               }}
               onClick={() =>
                 handleAnswerChange(currentQuestion.question, option.value)
@@ -216,17 +213,15 @@ export default function ProfileQuiz() {
           ))}
         </Stepper>
 
-        <Card withBorder radius="md" w="100%" padding="xl">
-          <Stack gap="xl">
-            <Stack gap="xs" align="center">
-              <Title order={2} ta="center">
-                {profileQuizQuestions[activeStep].text}
-              </Title>
-            </Stack>
+        <Card withBorder radius="md" w="100%" padding={"sm"}>
+          <Stack gap="lg">
+            <Title order={2} ta="center">
+              {profileQuizQuestions[activeStep].text}
+            </Title>
 
             {renderQuestionContent()}
 
-            <Group justify="space-between" mt="xl">
+            <Group justify="space-between">
               <Group>
                 <Button
                   variant="default"
