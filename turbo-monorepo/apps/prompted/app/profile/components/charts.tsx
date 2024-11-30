@@ -327,11 +327,13 @@ const StatCharts: React.FC<StatChartsProps> = ({
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, md: 6 }}>
-        <DonutCharts
-          finalDonutChartData={finalDonutChartData}
-          entriesLength={entries.length}
-          totalWords={totalWords}
-        />
+        <Center>
+          <DonutCharts
+            finalDonutChartData={finalDonutChartData}
+            entriesLength={entries.length}
+            totalWords={totalWords}
+          />
+        </Center>
       </Grid.Col>
     </Grid>
   );

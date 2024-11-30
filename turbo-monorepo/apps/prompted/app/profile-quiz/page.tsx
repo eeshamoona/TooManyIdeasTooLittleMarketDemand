@@ -82,17 +82,28 @@ export default function ProfileQuiz() {
 
     if (currentQuestion.question === "targetWordCount") {
       return (
-        <Stack
-          gap="xl"
-          style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}
-        >
+        <Stack>
+          <Text size="md" ta="center" fw={500}>
+            {(() => {
+              const count = answers.targetWordCount;
+              if (count <= 100)
+                return `Brief Response (${count} words) - Perfect for quick thoughts`;
+              if (count <= 350)
+                return `Short Article (${count} words) - Ideal for clear, concise ideas`;
+              if (count <= 650)
+                return `Full Article (${count} words) - Room to develop your thoughts`;
+              if (count <= 850)
+                return `In-Depth Piece (${count} words) - Space for rich detail`;
+              return `Comprehensive Essay (${count} words) - Full exploration of your topic`;
+            })()}
+          </Text>
           <Slider
             value={answers.targetWordCount as number}
             onChange={(value) => handleAnswerChange("targetWordCount", value)}
             min={100}
             max={1000}
             step={50}
-            mt="xl"
+            mt="lg"
             marks={[
               { value: 100, label: "100" },
               { value: 250, label: "250" },
@@ -114,20 +125,6 @@ export default function ProfileQuiz() {
               },
             })}
           />
-          <Text size="lg" ta="center" fw={500}>
-            {(() => {
-              const count = answers.targetWordCount;
-              if (count <= 100)
-                return `Brief Response (${count} words) - Perfect for quick thoughts`;
-              if (count <= 350)
-                return `Short Article (${count} words) - Ideal for clear, concise ideas`;
-              if (count <= 650)
-                return `Full Article (${count} words) - Room to develop your thoughts`;
-              if (count <= 850)
-                return `In-Depth Piece (${count} words) - Space for rich detail`;
-              return `Comprehensive Essay (${count} words) - Full exploration of your topic`;
-            })()}
-          </Text>
         </Stack>
       );
     } else {
@@ -153,11 +150,15 @@ export default function ProfileQuiz() {
               onClick={() =>
                 handleAnswerChange(currentQuestion.question, option.value)
               }
+              p="md"
             >
-              <Stack align="center" gap={0}>
+              <Group justify="space-between">
+                <Text size="sm" ta="center" tt="uppercase" fw={500} c="dimmed">
+                  {option.label}
+                </Text>
                 {option.icon && (
                   <option.icon
-                    size={24}
+                    size="1rem"
                     color={
                       answers[currentQuestion.question] === option.value
                         ? theme.colors.blue[6]
@@ -165,13 +166,17 @@ export default function ProfileQuiz() {
                     }
                   />
                 )}
-                <Text size="md" fw={500} mt="xs">
-                  {option.label}
+              </Group>
+
+              <Group align="flex-end" mt={25}>
+                <Text size="sm" fw={500}>
+                  {option.value}
                 </Text>
-                <Text size="sm" c="dimmed" ta="center">
-                  {option.description}
-                </Text>
-              </Stack>
+              </Group>
+
+              <Text size="xs" c="dimmed" lineClamp={2} mt={5}>
+                {option.description}
+              </Text>
             </Card>
           ))}
         </SimpleGrid>
@@ -201,15 +206,15 @@ export default function ProfileQuiz() {
           ))}
         </Stepper>
 
-        <Card withBorder radius="md" w="100%" padding={"sm"}>
+        <Card withBorder radius="md">
           <Stack gap="lg">
-            <Title order={2} ta="center">
+            <Title order={3} ta="center">
               {profileQuizQuestions[activeStep].text}
             </Title>
 
             {renderQuestionContent()}
 
-            <Group justify="space-between">
+            <Group justify="space-between" mt="md">
               <Group>
                 <Button
                   variant="default"
