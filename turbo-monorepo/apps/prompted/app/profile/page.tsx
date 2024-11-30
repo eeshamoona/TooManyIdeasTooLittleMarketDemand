@@ -26,7 +26,6 @@ const ProfilePage: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState<string | null>(null);
   const [username, setUserName] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState(null);
   const [profile, setProfile] = useState(null);
 
@@ -43,7 +42,6 @@ const ProfilePage: React.FC = () => {
         setProfile(profileData);
         setEmail(email);
         setUserName(username);
-        setLoading(false); // Stop loading once user data is fetched
       }
     };
     handleCheckedLoggedIn();

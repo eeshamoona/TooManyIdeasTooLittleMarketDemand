@@ -74,17 +74,17 @@ const StatCharts: React.FC<StatChartsProps> = ({
   const renderProfileDetails = () => {
     if (!profile) return null;
 
-    const { wordCount, ...otherDetails } = profile;
+    const { targetWordCount, ...otherDetails } = profile;
 
     return (
       <Grid>
-        {wordCount && (
+        {targetWordCount && (
           <Grid.Col span={{ base: 12, xs: 6, md: 4, lg: 3 }}>
             <ProfileItem
               icon={FaBook}
               title="Target Word Count"
-              label={`${wordCount} words`}
-              description={getWordCountDescription(wordCount)}
+              label={`${targetWordCount} words`}
+              description={getWordCountDescription(targetWordCount)}
             />
           </Grid.Col>
         )}
@@ -227,20 +227,16 @@ const StatCharts: React.FC<StatChartsProps> = ({
                   {email}
                 </Text>
               </div>
-              {!profile ? (
-                <Paper p="md" withBorder>
-                  <Text mb="md">
-                    It seems that your profile is not filled out at the moment,
-                    click here to do so.
-                  </Text>
+              {profile.length === 0 ? (
+                <>
                   <Button
                     onClick={() => router.push("/profile-quiz")}
-                    variant="filled"
+                    variant="light"
                     fullWidth
                   >
                     Fill Out Profile
                   </Button>
-                </Paper>
+                </>
               ) : (
                 renderProfileDetails()
               )}

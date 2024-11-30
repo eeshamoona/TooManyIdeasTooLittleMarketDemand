@@ -25,7 +25,7 @@ export const profileQuizQuestions = [
     label: "Writing Goals",
     icon: FaBullseye,
     text: "What's your target word count per response?",
-    question: "wordCount",
+    question: "targetWordCount",
     options: [
       {
         value: "100",
@@ -63,7 +63,7 @@ export const profileQuizQuestions = [
     label: "AI Feedback Style",
     icon: FaBrain,
     text: "How would you like your AI feedback?",
-    question: "feedbackStyle",
+    question: "feedbackPersona",
     options: [
       {
         value: "gentle",

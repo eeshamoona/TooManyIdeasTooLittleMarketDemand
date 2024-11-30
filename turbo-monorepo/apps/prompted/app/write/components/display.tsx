@@ -16,6 +16,7 @@ import { PromptList } from "./prompt-list";
 import { FaCheck } from "react-icons/fa";
 import { TbWriting } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
+import { profileQuizQuestions } from "../../profile-quiz/constants";
 
 export interface Prompt {
   text: string;
@@ -23,8 +24,8 @@ export interface Prompt {
 }
 
 export interface Profile {
-  wordCount: number;
-  feedbackStyle: string;
+  targetWordCount: number;
+  feedbackPersona: string;
   motivatingFeedback: string;
 }
 
@@ -137,6 +138,20 @@ export default function Display({ prompts, profile }: DisplayProps) {
     );
   };
 
+  const getProfileDescription = (questionKey: string, value: string) => {
+    const question = profileQuizQuestions.find((q) => q.question === questionKey);
+    const option = question?.options.find((opt) => opt.value === value);
+    return option 
+      ? `${option.label} - ${option.description}`
+      : value;
+  };
+
+  const enrichedProfile = {
+    targetWordCount: profile.targetWordCount,
+    feedbackPersona: getProfileDescription('feedbackPersona', profile.feedbackPersona),
+    motivatingFeedback: getProfileDescription('motivatingFeedback', profile.motivatingFeedback),
+  };
+
   return (
     <>
       <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0">
@@ -192,7 +207,8 @@ export default function Display({ prompts, profile }: DisplayProps) {
         <TrackedTextarea
           promptText={randomPrompt?.text}
           categoryText={randomPrompt?.category}
-          target_word_count={profile.wordCount}
+          targetWordCount={profile.targetWordCount}
+          profile={enrichedProfile}
         />
       ) : (
         <>

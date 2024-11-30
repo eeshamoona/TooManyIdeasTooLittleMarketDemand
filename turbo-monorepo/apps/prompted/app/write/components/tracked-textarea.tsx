@@ -19,6 +19,7 @@ import { StatsGrid } from "./stats";
 import { useRouter } from "next/navigation";
 import { useDisclosure } from "@mantine/hooks";
 import { getTitleOrder } from "../actions";
+import { Profile } from "./display";
 
 const dmp = new DiffMatchPatch();
 
@@ -26,7 +27,8 @@ interface TrackedTextareaProps {
   placeholder?: string;
   promptText: string;
   categoryText: string;
-  target_word_count: number;
+  targetWordCount: number;
+  profile: Profile;
 }
 
 export interface Character {
@@ -40,7 +42,8 @@ export default function TrackedTextarea({
   placeholder = "Write your response here...",
   promptText,
   categoryText,
-  target_word_count,
+  targetWordCount,
+  profile,
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
@@ -190,6 +193,7 @@ export default function TrackedTextarea({
           response: combinedResponse,
           category: categoryText,
           prompt: promptText,
+          profile: profile,
         }),
       });
       const generatedJson = await aiFeedbackData.json();
@@ -276,7 +280,7 @@ export default function TrackedTextarea({
       userCharacters,
       userPercentage: parseFloat(userPercentage.toFixed(2)),
       wordCount,
-      target_word_count,
+      targetWordCount,
       aiWordCount,
     };
   };

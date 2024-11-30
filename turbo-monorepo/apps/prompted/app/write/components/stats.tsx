@@ -22,7 +22,7 @@ type StatsProps = {
   userCharacters: number;
   userPercentage: number;
   wordCount: number;
-  target_word_count: number;
+  targetWordCount: number;
   aiWordCount: number;
 };
 
@@ -31,11 +31,11 @@ const data = (stats: StatsProps) =>
     {
       title: "Word Count",
       icon: "font",
-      value: `${stats.wordCount} / ${stats.target_word_count}`,
+      value: `${stats.wordCount} / ${stats.targetWordCount}`,
       color:
-        stats.wordCount < stats.target_word_count * 0.8
+        stats.wordCount < stats.targetWordCount * 0.8
           ? "red"
-          : stats.wordCount < stats.target_word_count
+          : stats.wordCount < stats.targetWordCount
             ? "yellow"
             : "green",
     },
@@ -74,9 +74,9 @@ export function StatsGrid({ stats }: { stats: StatsProps }) {
 
         {stat.title === "Word Count" && (
           <Text size="xs" c="dimmed" mt={5}>
-            {stats.wordCount < stats.target_word_count
-              ? `${stats.target_word_count - stats.wordCount} words to go`
-              : `${stats.wordCount - stats.target_word_count} words over target 🎉`}
+            {stats.wordCount < stats.targetWordCount
+              ? `${stats.targetWordCount - stats.wordCount} words to go`
+              : `${stats.wordCount - stats.targetWordCount} words over target 🎉`}
           </Text>
         )}
 

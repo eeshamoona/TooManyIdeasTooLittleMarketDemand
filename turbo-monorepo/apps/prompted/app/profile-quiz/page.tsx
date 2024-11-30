@@ -16,12 +16,13 @@ import {
 import { useRouter } from "next/navigation";
 import { updateProfile } from "./actions";
 import { profileQuizQuestions } from "./constants";
+import { Profile } from "../write/components/display";
 
 export default function ProfileQuiz() {
   const [activeStep, setActiveStep] = useState(0);
-  const [answers, setAnswers] = useState({
-    wordCount: 250,
-    feedbackStyle: "",
+  const [answers, setAnswers] = useState<Profile>({
+    targetWordCount: 250,
+    feedbackPersona: "",
     motivatingFeedback: "",
   });
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function ProfileQuiz() {
       answers[currentQuestion.question as keyof typeof answers];
 
     // Word count always has a default value, so it's always valid
-    if (currentQuestion.question === "wordCount") return true;
+    if (currentQuestion.question === "targetWordCount") return true;
 
     // For other questions, check if there's a selected value
     return Boolean(currentAnswer);
@@ -48,8 +49,8 @@ export default function ProfileQuiz() {
 
   const skipQuiz = async () => {
     const defaultAnswers = {
-      wordCount: 250,
-      feedbackStyle: "balanced",
+      targetWordCount: 250,
+      feedbackPersona: "balanced",
       motivatingFeedback: "clearGoal",
     };
 
@@ -91,15 +92,15 @@ export default function ProfileQuiz() {
   const renderQuestionContent = () => {
     const currentQuestion = profileQuizQuestions[activeStep];
 
-    if (currentQuestion.question === "wordCount") {
+    if (currentQuestion.question === "targetWordCount") {
       return (
         <Stack
           gap="xl"
           style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}
         >
           <Slider
-            value={answers.wordCount as number}
-            onChange={(value) => handleAnswerChange("wordCount", value)}
+            value={answers.targetWordCount as number}
+            onChange={(value) => handleAnswerChange("targetWordCount", value)}
             min={100}
             max={1000}
             step={50}
@@ -127,7 +128,7 @@ export default function ProfileQuiz() {
           />
           <Text size="lg" ta="center" fw={500}>
             {(() => {
-              const count = answers.wordCount;
+              const count = answers.targetWordCount;
               if (count <= 100)
                 return `Brief Response (${count} words) - Perfect for quick thoughts`;
               if (count <= 350)
