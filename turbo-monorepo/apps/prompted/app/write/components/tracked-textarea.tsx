@@ -400,6 +400,7 @@ export default function TrackedTextarea({
           </Button>
           <Button
             loading={isSaving}
+            loaderProps={{ type: "dots" }}
             variant="solid"
             onClick={saveEntry}
             disabled={combinedResponse.trim() === ""}

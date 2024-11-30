@@ -9,7 +9,7 @@ interface DisplayProps {
   progress: ProgressModel[];
 }
 
-export default function Display({ entries, progress }: DisplayProps) {
+export default function Display({ progress }: DisplayProps) {
   const level_badges = progress.filter((badge) => badge.hasLevels);
   const milestone_badges = progress.filter((badge) => !badge.hasLevels);
 

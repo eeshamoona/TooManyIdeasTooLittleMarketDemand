@@ -306,6 +306,7 @@ export const AiAddPromptForm: React.FC<AiAddPromptFormProps> = ({
                 variant="light"
                 color="blue"
                 loading={saveLoading}
+                loaderProps={{ type: "dots" }}
                 leftSection={<FaPaperPlane />}
               >
                 Add Prompt

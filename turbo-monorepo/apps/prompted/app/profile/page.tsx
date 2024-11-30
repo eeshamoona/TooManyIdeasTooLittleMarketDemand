@@ -3,7 +3,7 @@ import { Button, Container } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaLock } from "react-icons/fa";
-import { getData, isUserLoggedIn } from "./action";
+import { getData, isUserLoggedIn } from "./actions";
 import Charts from "./components/charts";
 
 const ProfilePage: React.FC = () => {

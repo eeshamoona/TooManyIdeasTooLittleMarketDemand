@@ -65,6 +65,7 @@ export function FeedbackRetry({
         <Button
           onClick={handleRetry}
           loading={isLoading}
+          loaderProps={{ type: "dots" }}
           variant="light"
           color="blue"
         >
