@@ -39,6 +39,7 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
           category: data.category,
           created_at: data.created_at,
           ai_feedback: data.ai_feedback,
+          id: data.id,
         }}
         username={username}
       />

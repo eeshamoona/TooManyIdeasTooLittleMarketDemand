@@ -8,6 +8,8 @@ import {
   SelectProps,
   Text,
   ActionIcon,
+  Stack,
+  Box,
 } from "@mantine/core";
 import { useState } from "react";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
@@ -97,9 +99,9 @@ export default function Display({ prompts, profile }: DisplayProps) {
         flex="1"
         align="center"
         style={{
-          padding: "0px", // Add padding for better spacing
-          borderRadius: "8px", // Rounded corners for smoother edges
-          cursor: "pointer", // Indicate interactivity
+          padding: "0px",
+          borderRadius: "8px",
+          cursor: "pointer",
         }}
         gap="sm"
       >
@@ -112,8 +114,8 @@ export default function Display({ prompts, profile }: DisplayProps) {
         )}
         <Text
           style={{
-            fontWeight: "600", // Semi-bold for better readability
-            fontSize: "14px", // Slightly larger for better legibility
+            fontWeight: "600",
+            fontSize: "14px",
           }}
         >
           {option.value}
@@ -121,7 +123,7 @@ export default function Display({ prompts, profile }: DisplayProps) {
         <Text
           c="dimmed"
           style={{
-            fontSize: "12px", // Keep the label smaller for a subtle look
+            fontSize: "12px",
           }}
         >
           {option["description"]}
@@ -129,8 +131,8 @@ export default function Display({ prompts, profile }: DisplayProps) {
         {checked && (
           <FaCheck
             style={{
-              marginLeft: "auto", // Push the check icon to the right
-              color: "#1976d2", // Give it a pleasant, accent color
+              marginLeft: "auto",
+              color: "#1976d2",
             }}
           />
         )}
@@ -139,32 +141,30 @@ export default function Display({ prompts, profile }: DisplayProps) {
   };
 
   const getProfileDescription = (questionKey: string, value: string) => {
-    const question = profileQuizQuestions.find((q) => q.question === questionKey);
+    const question = profileQuizQuestions.find(
+      (q) => q.question === questionKey
+    );
     const option = question?.options.find((opt) => opt.value === value);
-    return option 
-      ? `${option.label} - ${option.description}`
-      : value;
+    return option ? `${option.label} - ${option.description}` : value;
   };
 
-  const enrichedProfile = {
-    targetWordCount: profile.targetWordCount,
-    feedbackPersona: getProfileDescription('feedbackPersona', profile.feedbackPersona),
-    motivatingFeedback: getProfileDescription('motivatingFeedback', profile.motivatingFeedback),
-  };
+  const enrichedProfile = profile && Object.keys(profile).length > 0
+    ? {
+        targetWordCount: profile.targetWordCount,
+        feedbackPersona: getProfileDescription(
+          "feedbackPersona",
+          profile.feedbackPersona
+        ),
+        motivatingFeedback: getProfileDescription(
+          "motivatingFeedback",
+          profile.motivatingFeedback
+        ),
+      }
+    : null;
 
   return (
-    <>
-      <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0">
-        {/* <Button
-          variant="outline"
-          px={"sm"}
-          color={"blue"}
-          onClick={() => router.push("read")}
-          leftSection={<LuLayoutDashboard />}
-        >
-          View All
-        </Button> */}
-      </Group>
+    <Box style={{ display: "flex", flexDirection: "column", height: "85vh" }}>
+      <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0"></Group>
 
       <Group my={"md"} align="center">
         <Select
@@ -195,7 +195,6 @@ export default function Display({ prompts, profile }: DisplayProps) {
           variant={randomPrompt ? "subtle" : "filled"}
           rightSection={randomPrompt ? <RxCross2 /> : null}
         >
-          {/* {randomPrompt ? "Reset Prompt" : "Get Random Prompt"} */}
           {randomPrompt
             ? "Reset Prompt"
             : selectedCategory
@@ -203,22 +202,24 @@ export default function Display({ prompts, profile }: DisplayProps) {
               : "Get Random Prompt"}
         </Button>
       </Group>
-      {randomPrompt ? (
-        <TrackedTextarea
-          promptText={randomPrompt?.text}
-          categoryText={randomPrompt?.category}
-          targetWordCount={profile.targetWordCount}
-          profile={enrichedProfile}
-        />
-      ) : (
-        <>
-          <Divider my="md" />
-          <PromptList
-            data={filteredPrompts}
-            onSelectPrompt={handleSelectSinglePrompt}
+      <Stack style={{ flex: 1, width: "100%" }}>
+        {randomPrompt ? (
+          <TrackedTextarea
+            promptText={randomPrompt?.text}
+            categoryText={randomPrompt?.category}
+            targetWordCount={profile.targetWordCount}
+            profile={enrichedProfile}
           />
-        </>
-      )}
-    </>
+        ) : (
+          <>
+            <Divider my="md" />
+            <PromptList
+              data={filteredPrompts}
+              onSelectPrompt={handleSelectSinglePrompt}
+            />
+          </>
+        )}
+      </Stack>
+    </Box>
   );
 }

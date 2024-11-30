@@ -56,8 +56,6 @@ export async function POST(request: Request) {
   try {
     const instructions = getSystemInstructions(profile);
 
-    console.log("Instructions:", instructions);
-
     const openaiResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [

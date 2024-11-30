@@ -196,27 +196,32 @@ export default function ProfileQuiz() {
 
   return (
     <Container size="md">
-      <Stack gap="xl">
-        <Title order={1} ta="center">
-          Customize your AI Feedback
-        </Title>
+      <Stack gap="sm" align="center">
+        <Button
+          fullWidth
+          variant="light"
+          color="red"
+          onClick={skipQuiz}
+          mb="xl"
+        >
+          Skip Profile Quiz
+        </Button>
+        <Stepper
+          active={activeStep}
+          onStepClick={setActiveStep}
+          w={"100%"}
+          flex={1}
+        >
+          {profileQuizQuestions.map((q, index) => (
+            <Stepper.Step
+              key={index}
+              label={q.label}
+              icon={q.icon && <q.icon size={18} />}
+            />
+          ))}
+        </Stepper>
 
-        <Group>
-          <Stepper active={activeStep} onStepClick={setActiveStep} flex={1}>
-            {profileQuizQuestions.map((q, index) => (
-              <Stepper.Step
-                key={index}
-                label={q.label}
-                icon={q.icon && <q.icon size={18} />}
-              />
-            ))}
-          </Stepper>
-          <Button variant="subtle" color="red" onClick={skipQuiz}>
-            Skip Quiz
-          </Button>
-        </Group>
-
-        <Card withBorder p={{ base: "md", sm: "xl" }} radius="md" w="100%">
+        <Card withBorder mt="xl" radius="md" w="100%">
           <Stack>
             <Title order={2} ta="center">
               {profileQuizQuestions[activeStep].text}

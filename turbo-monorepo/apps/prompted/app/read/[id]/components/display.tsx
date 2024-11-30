@@ -28,6 +28,7 @@ import Info from "./info";
 
 interface DisplayTextProps {
   data: {
+    id: string;
     metadata_stats: StatsProps;
     text: string;
     character_data: Character[];
@@ -201,6 +202,10 @@ export default function DisplayText({ data }: DisplayTextProps) {
                 entry={{
                   metadata_stats: data.metadata_stats,
                   ai_feedback: data.ai_feedback,
+                  id: data.id,
+                  text: data.text,
+                  category: data.category,
+                  prompt: data.prompt,
                 }}
               />
             </Box>
