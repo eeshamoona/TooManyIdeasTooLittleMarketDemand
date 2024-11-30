@@ -1,10 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { login } from "./actions";
+import React from "react";
 import {
-  Button,
-  PasswordInput,
-  TextInput,
   Title,
   Container,
   Stack,
@@ -13,55 +9,22 @@ import {
   Group,
   Divider,
   Image,
+  Tabs,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import Footer from "../components/footer";
 import { useMediaQuery } from "@mantine/hooks";
 import loginImage from "../../public/WritingRoom.png";
+import PasswordForm from "./components/passwordLogin";
+import MagicLinkForm from "./components/passwordlessLogin";
+import { FaKey } from "react-icons/fa";
+import { LuSparkle } from "react-icons/lu";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorString, setErrorString] = useState<string | null>(null);
   const isMediumScreen = useMediaQuery("(max-width: 930px)");
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    setErrorString(null);
-    if (!email || !password) {
-      setErrorString("Please fill out all fields.");
-      return;
-    }
-    event.preventDefault();
-    setLoading(true);
-    const formData = new FormData(event.currentTarget);
-    const response = await login(formData);
-    if (response) {
-      switch (response) {
-        case "EMAIL_NOT_VERIFIED":
-          setErrorString(
-            "This email has not been verified. Please check your email or sign up again."
-          );
-          break;
-        case "INCORRECT_PASSWORD":
-          setErrorString("Incorrect password. Please try again.");
-          break;
-        case "EMAIL_NOT_REGISTERED":
-          setErrorString("This email is not registered. Please sign up.");
-          break;
-        case "UNKNOWN_ERROR":
-          setErrorString("An unknown error occurred. Please try again.");
-          break;
-        default:
-          setErrorString("Something went wrong. Please try again.");
-      }
-      setLoading(false);
-      return;
-    }
-  };
-
-  const switchToSignup = (
+  const switchToSignUp = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
@@ -79,14 +42,13 @@ export default function LoginPage() {
       </Group>
 
       <Text ta="center" c="dimmed" mb="xl">
-        Login to your account and keep the creativity flowing!
+        Login to your account and keep the creativity flowing
       </Text>
 
       <Container
         size="lg"
         style={{
           display: "flex",
-          alignItems: "center",
           justifyContent: "center",
           gap: "7rem",
           flexWrap: "wrap",
@@ -104,58 +66,32 @@ export default function LoginPage() {
             }}
           />
         )}
-        <form
-          style={{
-            width: "50%",
-            alignSelf: "center",
-          }}
-          onSubmit={handleLogin}
-        >
-          <Stack>
-            <TextInput
-              label="Email address"
-              placeholder="hello@gmail.com"
-              size="md"
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.currentTarget.value)}
-            />
-            <PasswordInput
-              label="Password"
-              placeholder="Your password"
-              size="md"
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
-            />
-            {errorString !== null && (
-              <Text c="red" ta="center" size="sm">
-                {errorString}
-              </Text>
-            )}
 
-            <Button
-              size="md"
-              fullWidth
-              type="submit"
-              loading={loading}
-              loaderProps={{
-                type: "dots",
-              }}
-            >
-              Login
-            </Button>
-            <Text c="dimmed" size="sm" ta="center" mt={5}>
-              Do not have an account yet?{" "}
-              <Anchor size="sm" component="button" onClick={switchToSignup}>
-                Create account
-              </Anchor>
-            </Text>
-          </Stack>
-        </form>
+        <Stack flex={1} h="100%" mt="lg">
+          <Tabs variant="pills" defaultValue="password">
+            <Tabs.List grow justify="center">
+              <Tabs.Tab value="password" leftSection={<FaKey />}>
+                Use Password
+              </Tabs.Tab>
+              <Tabs.Tab value="magic-link" leftSection={<LuSparkle />}>
+                Send Magic Link
+              </Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel pt="md" value="password">
+              <PasswordForm />
+            </Tabs.Panel>
+            <Tabs.Panel pt="md" value="magic-link">
+              <MagicLinkForm />
+            </Tabs.Panel>
+          </Tabs>
+          <Text ta="center" c="dimmed" size="sm">
+            New here?{" "}
+            <Anchor onClick={switchToSignUp} component="button">
+              Sign up for access!
+            </Anchor>
+          </Text>
+        </Stack>
       </Container>
       <footer
         style={{

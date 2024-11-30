@@ -54,7 +54,7 @@ const UserButton = forwardRef<HTMLButtonElement, UserButtonProps>(
         </Group>
       </UnstyledButton>
     );
-  },
+  }
 );
 
 function UserMenu({ username }: { username: string }) {
@@ -179,7 +179,26 @@ export function CustomAppShell({
               </Group>
             )}
             <Group>
-              {isLoggedIn && <UserMenu username={metadata.username} />}
+              {isLoggedIn ? (
+                <UserMenu username={metadata.username} />
+              ) : (
+                <Group>
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    onClick={() => router.push("/signup")}
+                  >
+                    Sign Up
+                  </Button>
+                  <Button
+                    size="xs"
+                    variant="filled"
+                    onClick={() => router.push("/login")}
+                  >
+                    Login
+                  </Button>
+                </Group>
+              )}
               <ActionIcon
                 onClick={() => toggleColorScheme()}
                 variant="transparent"

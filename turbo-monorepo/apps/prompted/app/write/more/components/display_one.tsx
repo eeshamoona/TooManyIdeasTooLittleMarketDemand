@@ -20,7 +20,6 @@ export const Display = ({ prompts }: DisplayProps) => {
   };
 
   const handleOnPromptAdded = () => {
-    // TODO: refresh prompts
     router.refresh();
     setFilteredPrompts(prompts);
   };

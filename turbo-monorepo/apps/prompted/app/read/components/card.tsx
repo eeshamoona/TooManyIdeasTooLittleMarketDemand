@@ -51,7 +51,6 @@ export function EntryCard({
     router.push(`/read/${entry.id}`);
   };
 
-  // TODO: Export the rest of the stats for this entry as well
   const handleExport = (e: React.MouseEvent) => {
     e.stopPropagation();
     setExported(true);

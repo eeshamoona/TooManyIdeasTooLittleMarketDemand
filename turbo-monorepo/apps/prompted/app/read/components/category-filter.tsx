@@ -13,11 +13,13 @@ import { FaCheck } from "react-icons/fa";
 interface CategoryMultiSelectProps {
   selectedCategories: string[];
   setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  disabled: boolean;
 }
 
 const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
   selectedCategories,
   setSelectedCategories,
+  disabled,
 }) => {
   const renderSelectOption: SelectProps["renderOption"] = ({
     option,
@@ -93,6 +95,7 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
       clearable
       renderOption={renderSelectOption}
       flex={3}
+      disabled={disabled}
     />
   );
 };

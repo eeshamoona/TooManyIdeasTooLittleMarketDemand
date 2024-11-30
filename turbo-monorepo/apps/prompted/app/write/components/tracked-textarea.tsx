@@ -156,7 +156,6 @@ export default function TrackedTextarea({
   const saveEntry = async () => {
     setIsSaving(true);
     const stats = generateCharacterStats(characters);
-    //TODO: Split up the words into a frequency map for the AI to give better suggestions on high frequency words
     const { sortedWordFreqDict, totalWords, top10Words } =
       wordFrequencyMap(combinedResponse);
 

@@ -19,17 +19,17 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
+            request.cookies.set(name, value)
           );
           supabaseResponse = NextResponse.next({
             request,
           });
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
+            supabaseResponse.cookies.set(name, value, options)
           );
         },
       },
-    },
+    }
   );
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
@@ -40,32 +40,27 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Allow access to the home page even if not logged in
-  // TODO: Create a list of public routes to allow access to
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth") &&
-    !publicRoutes.includes(request.nextUrl.pathname)
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  const requestedPath = request.nextUrl.pathname;
+
+  // Redirect logged-in users to `/write` if they access public routes, except for "/"
+  if (user && publicRoutes.includes(requestedPath) && requestedPath !== "/") {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/write";
     return NextResponse.redirect(url);
   }
 
-  // IMPORTANT You *must* return the supabaseResponse object as it is. If you're
-  // creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  // Redirect unauthenticated users to `/signup` if they access protected routes
+  if (
+    !user &&
+    !publicRoutes.includes(requestedPath) &&
+    !requestedPath.startsWith("/auth") &&
+    !requestedPath.startsWith("/reset-password/confirm")
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/signup";
+    return NextResponse.redirect(url);
+  }
 
+  // IMPORTANT: You *must* return the supabaseResponse object as it is
   return supabaseResponse;
 }

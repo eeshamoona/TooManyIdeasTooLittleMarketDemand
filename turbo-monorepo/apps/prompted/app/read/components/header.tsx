@@ -66,6 +66,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         <CategoryMultiSelect
           selectedCategories={categoryFilters}
           setSelectedCategories={setCategoryFilters}
+          disabled={!hasEntries}
         />
         {/* Sort By Dropdown */}
         <Select

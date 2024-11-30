@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { signup } from "../login/actions";
+import { magicLinkSignUp, signup } from "../login/actions";
 import {
   Button,
   PasswordInput,
@@ -32,21 +32,54 @@ export default function SignupPage() {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    if (!username || !email || !password) {
-      setErrorString("Please fill out all fields.");
+    console.log("Signup process started."); // Debug start
+    setErrorString(null); // Reset error state
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!username) {
+      console.warn("Username missing during signup."); // Log missing username
+      setErrorString("Please enter a username.");
       return;
     }
+
+    if (!email) {
+      console.warn("Email missing during signup."); // Log missing email
+      setErrorString("Please enter your email.");
+      return;
+    } else if (!emailPattern.test(email)) {
+      console.warn("Invalid email format:", email); // Log invalid email format
+      setErrorString("Please enter a valid email address.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
-    const result = await signup(formData);
-    if (result === "REGISTERED") {
-      setErrorString("This email is already registered. Please login.");
-      setLoading(false);
-      return;
-    } else if (result === "SIGNUP_ERROR") {
-      setErrorString("A signup error occurred. Please try again.");
-      setLoading(false);
-      return;
+    let result: string | void;
+
+    if (!password) {
+      console.log("Proceeding with magic link signup."); // Log signup method
+      result = await magicLinkSignUp(formData);
+    } else {
+      console.log("Proceeding with password signup."); // Log signup method
+      result = await signup(formData);
+    }
+
+    setLoading(false);
+    console.log("Signup process completed."); // Debug completion
+
+    if (typeof result === "string") {
+      console.error("Signup error code received:", result); // Log error code
+      if (result === "EMAIL_USERNAME_REQUIRED") {
+        setErrorString("Please provide both a username and an email address.");
+      } else if (result === "ALREADY_REGISTERED") {
+        setErrorString("This email is already registered. Please log in.");
+      } else if (result === "SIGNUP_ERROR") {
+        setErrorString("An error occurred during signup. Please try again.");
+      } else {
+        console.error("Unknown error in handleSignup:", result); // Log unknown error
+        setErrorString("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
@@ -95,25 +128,29 @@ export default function SignupPage() {
               id="username"
               name="username"
               value={username}
+              required={true}
               onChange={(e) => setUsername(e.currentTarget.value)}
             />
             <TextInput
               label="Email address"
-              placeholder="hello@gmail.com"
+              placeholder="prompted@gmail.com"
               size="md"
               id="email"
               name="email"
               type="email"
               value={email}
+              required={true}
               onChange={(e) => setEmail(e.currentTarget.value)}
             />
             <PasswordInput
               label="Password"
-              placeholder="Your password"
+              placeholder="[Optional] Secret Password"
+              description="Tired of remembering passwords? Skip this and login with just your email"
               size="md"
               id="password"
               name="password"
               value={password}
+              required={false}
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
             {errorString !== null && (
