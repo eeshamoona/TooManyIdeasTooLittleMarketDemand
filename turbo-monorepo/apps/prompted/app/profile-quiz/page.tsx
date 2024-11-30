@@ -159,7 +159,7 @@ export default function ProfileQuiz() {
                 borderColor:
                   answers[currentQuestion.question] === option.value
                     ? theme.colors.blue[6]
-                    : theme.colors.gray[3],
+                    : "",
                 backgroundColor:
                   answers[currentQuestion.question] === option.value
                     ? theme.colors.blue[0]
@@ -196,7 +196,7 @@ export default function ProfileQuiz() {
 
   return (
     <Container size="lg">
-      <Stack gap="lg" align="center" mx="auto">
+      <Stack gap="xl" mt="xl" justify="start">
         <Stack gap="sm" align="center">
           <Title order={2} ta="center">
             Let's Make This Space Yours
@@ -206,12 +206,7 @@ export default function ProfileQuiz() {
           </Text>
         </Stack>
 
-        <Stepper
-          active={activeStep}
-          onStepClick={setActiveStep}
-          mx="xl"
-          w="100%"
-        >
+        <Stepper active={activeStep} mx="xl" w="100%">
           {profileQuizQuestions.map((q, index) => (
             <Stepper.Step
               key={index}
