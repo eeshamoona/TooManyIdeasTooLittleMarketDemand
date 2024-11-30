@@ -14,17 +14,17 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
   title,
   description,
 }) => (
-  <Paper p="md" radius="sm" withBorder>
-    <Group wrap="nowrap" gap="xl">
+  <Paper p="md" radius="sm" withBorder h="100%">
+    <Text size="xs" tt="uppercase" mb={4} fw={500} c="dimmed">
+      {title}
+    </Text>
+    <Group wrap="nowrap" h="100%" gap="xl" align="center">
       {ItemIcon && (
         <ThemeIcon size="lg" variant="light" color="blue">
-          <ItemIcon size={20} />
+          <ItemIcon />
         </ThemeIcon>
       )}
       <div style={{ flex: 1 }}>
-        <Text size="xs" tt="uppercase" fw={500} c="dimmed">
-          {title}
-        </Text>
         <Text size="sm" fw={500} mb={4}>
           {label}
         </Text>

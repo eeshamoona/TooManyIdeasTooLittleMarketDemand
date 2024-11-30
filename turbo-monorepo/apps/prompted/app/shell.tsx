@@ -148,7 +148,15 @@ export function CustomAppShell({
               <Text style={{ color: textColor }}>Prompted</Text>
             </Group>
             {isLoggedIn && (
-              <Group gap={"sm"} visibleFrom="sm">
+              <Group
+                gap={"sm"}
+                visibleFrom="sm"
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              >
                 <Button
                   variant={isActive("/write") ? "light" : "subtle"}
                   leftSection={
@@ -186,7 +194,7 @@ export function CustomAppShell({
                     label="Share Feedback"
                     position="bottom"
                     withArrow
-                    offset={9}
+                    offset={11}
                   >
                     <ActionIcon
                       variant="subtle"

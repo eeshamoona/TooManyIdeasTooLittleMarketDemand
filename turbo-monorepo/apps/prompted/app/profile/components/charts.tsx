@@ -1,10 +1,11 @@
 "use client";
 import { CompositeChart, RadarChart } from "@mantine/charts";
 import {
+  Avatar,
   Button,
-  Card,
   Center,
   Grid,
+  Group,
   Loader,
   Paper,
   Stack,
@@ -14,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaBook } from "react-icons/fa";
+import { FaBook, FaEnvelope } from "react-icons/fa";
 import { profileQuizQuestions } from "../../profile-quiz/constants";
 import Heatmap from "../../progress/components/heatmap";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
@@ -75,25 +76,25 @@ const StatCharts: React.FC<StatChartsProps> = ({
     const { targetWordCount, ...otherDetails } = profile;
 
     return (
-      <Grid>
-        {targetWordCount && (
-          <Grid.Col span={{ base: 12, xs: 6, md: 4, lg: 3 }}>
+      <Grid w="100%">
+        <Grid.Col span={{ base: 12, sm: 4 }}>
+          {targetWordCount && (
             <ProfileItem
               icon={FaBook}
               title="Target Word Count"
               label={`${targetWordCount} words`}
               description={getWordCountDescription(targetWordCount)}
             />
-          </Grid.Col>
-        )}
+          )}
+        </Grid.Col>
 
-        {Object.entries(otherDetails).map(([key, value]) => {
+        {Object.entries(otherDetails).map(([key, value], index) => {
           const { label, description, Icon } = findOptionDetails(
             key,
             value as string
           );
           return (
-            <Grid.Col key={key} span={{ base: 12, xs: 6, md: 4, lg: 3 }}>
+            <Grid.Col key={key} span={{ base: 12, sm: 4 }}>
               <ProfileItem
                 icon={Icon}
                 title={key.replace(/([A-Z])/g, " $1").trim()}
@@ -213,34 +214,51 @@ const StatCharts: React.FC<StatChartsProps> = ({
     <Grid>
       {/* Profile information at the top */}
       <Grid.Col span={12}>
-        <Card shadow="sm" padding="lg" radius="md" withBorder>
-          {/* ...Profile Information... */}
-          <Stack justify="space-between" h="100%" gap="xl">
-            <Stack gap="md">
+        {/* ...Profile Information... */}
+        <Stack justify="space-between" h="100%" gap="xl">
+          <Stack gap="md">
+            <Group align="center">
+              <Avatar
+                color="initials"
+                name={username}
+                radius={"sm"}
+                size="lg"
+              />
               <div>
                 <Title order={3} mb={4}>
                   Hey there, {username}!
                 </Title>
-                <Text size="sm" c="dimmed">
-                  {email}
+                <Text
+                  size="sm"
+                  c="dimmed"
+                  style={{
+                    gap: 8,
+                    "--text-fz": "var(--mantine-font-size-sm)",
+                    "--text-lh": "var(--mantine-line-height-sm)",
+                    color: "var(--mantine-color-dimmed)",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <FaEnvelope /> {email}
                 </Text>
               </div>
-              {profile.length === 0 ? (
-                <>
-                  <Button
-                    onClick={() => router.push("/profile-quiz")}
-                    variant="light"
-                    fullWidth
-                  >
-                    Fill Out Profile
-                  </Button>
-                </>
-              ) : (
-                renderProfileDetails()
-              )}
-            </Stack>
+            </Group>
+            {profile.length === 0 ? (
+              <>
+                <Button
+                  onClick={() => router.push("/profile-quiz")}
+                  variant="light"
+                  fullWidth
+                >
+                  Fill Out Profile
+                </Button>
+              </>
+            ) : (
+              renderProfileDetails()
+            )}
           </Stack>
-        </Card>
+        </Stack>
       </Grid.Col>
 
       {/* Heatmap spanning full width */}
