@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
-import { Group, Paper, useMantineColorScheme, Text } from "@mantine/core";
 import { CompositeChart, DonutChart, RadarChart } from "@mantine/charts";
+import { Group, Paper, Text, useMantineColorScheme } from "@mantine/core";
+import React from "react";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 import Heatmap from "./heatmap";
 
@@ -26,9 +26,9 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           acc[category.title] = { category: category.title, count: 0 };
           return acc;
         },
-        {} as Record<string, { category: string; count: number }>,
-      ),
-    ),
+        {} as Record<string, { category: string; count: number }>
+      )
+    )
   );
 
   // Extract data for heatmap
@@ -48,8 +48,8 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
           }
           return acc;
         },
-        {} as Record<string, { date: string; count: number }>,
-      ),
+        {} as Record<string, { date: string; count: number }>
+      )
     );
 
   const stackedChartData = entries.map((entry) => {
@@ -95,7 +95,7 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
       [
         { name: "Human Words", color: "blue", value: 0 },
         { name: "AI Words", color: "grape", value: 0 },
-      ],
+      ]
     );
 
   const totalValues = donutChartData[0].value + donutChartData[1].value;

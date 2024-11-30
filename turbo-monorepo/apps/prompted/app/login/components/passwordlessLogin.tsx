@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Stack, TextInput, Text, Button } from "@mantine/core";
-import { LuSparkles } from "react-icons/lu";
-import { magicLinkLogin } from "../actions";
-import { TbUnlink } from "react-icons/tb";
+import { Button, Stack, Text, TextInput } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { TbUnlink } from "react-icons/tb";
+import { magicLinkLogin } from "../actions";
 
 const MagicLinkForm: React.FC = () => {
   const router = useRouter();

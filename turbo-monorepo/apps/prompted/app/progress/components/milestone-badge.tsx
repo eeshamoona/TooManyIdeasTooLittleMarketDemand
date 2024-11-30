@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
-import { icon_map } from "../interface";
-import "./milestone-badge.css";
-import { FaQuestionCircle } from "react-icons/fa";
 import { Text, Tooltip } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
+import React, { useState } from "react";
+import { FaQuestionCircle } from "react-icons/fa";
+import { icon_map } from "../interface";
+import "./milestone-badge.css";
 
 interface MilestoneBadgeProps {
   hidden?: boolean;

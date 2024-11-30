@@ -31,14 +31,16 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
 
   //first order the feedbackData by the order of the criteriaDescriptions
-  const orderedFeedbackData = useMemo(() => 
-    Object.fromEntries(
-      Object.entries(feedbackData).sort(
-        ([criteriaA], [criteriaB]) =>
-          Object.keys(criteriaDescriptions).indexOf(criteriaA) -
-          Object.keys(criteriaDescriptions).indexOf(criteriaB),
+  const orderedFeedbackData = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(feedbackData).sort(
+          ([criteriaA], [criteriaB]) =>
+            Object.keys(criteriaDescriptions).indexOf(criteriaA) -
+            Object.keys(criteriaDescriptions).indexOf(criteriaB)
+        )
       ),
-    ), [feedbackData]
+    [feedbackData]
   );
 
   return (
@@ -84,7 +86,7 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
               </Card>
             </Grid.Col>
           );
-        },
+        }
       )}
     </Grid>
   );

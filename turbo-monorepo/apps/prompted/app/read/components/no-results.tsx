@@ -1,5 +1,5 @@
 "use client";
-import { Box, Center, Title, Text, Button } from "@mantine/core";
+import { Box, Button, Center, Text, Title } from "@mantine/core";
 
 interface NoResultsProps {
   resetFilterCallback: () => void;

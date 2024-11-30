@@ -1,17 +1,17 @@
-import React from "react";
 import {
-  Progress,
-  Group,
-  Text,
-  Tooltip,
   Card,
   Grid,
-  useMantineTheme,
+  Group,
+  Progress,
+  Text,
+  Tooltip,
   useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
+import React from "react";
+import { IoIosInfinite } from "react-icons/io";
 import { getProgressInfo, ProgressModel } from "../interface";
 import LevelBadge from "./level-badge";
-import { IoIosInfinite } from "react-icons/io";
 
 interface LevelProgressPageProps {
   progressBadgeData: ProgressModel[];
@@ -26,7 +26,7 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
     const enhancedProgressData = progressBadgeData.map((PBadge) => {
       const progressInfo = getProgressInfo(
         PBadge.progress,
-        PBadge.badges.thresholds,
+        PBadge.badges.thresholds
       );
       return {
         ...PBadge,

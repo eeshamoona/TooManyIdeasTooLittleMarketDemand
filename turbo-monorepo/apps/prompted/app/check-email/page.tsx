@@ -1,11 +1,11 @@
 "use client";
+import { Button, Card, Container, Group } from "@mantine/core";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
-import { Container, Button, Group, Card } from "@mantine/core";
-import { useSearchParams, useRouter } from "next/navigation";
-import SignupContent from "./components/signupContent";
-import PasswordResetContent from "./components/passwordResetContent";
-import MagicLinkContent from "./components/magicLinkContent";
 import DefaultContent from "./components/defaultContent";
+import MagicLinkContent from "./components/magicLinkContent";
+import PasswordResetContent from "./components/passwordResetContent";
+import SignupContent from "./components/signupContent";
 
 const CheckEmailPage: React.FC = () => {
   const router = useRouter();

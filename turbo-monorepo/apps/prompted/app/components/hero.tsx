@@ -1,19 +1,19 @@
 "use client";
 import {
-  Image,
-  Container,
-  Title,
   Button,
-  Group,
-  Text,
-  List,
-  ThemeIcon,
-  Grid,
-  rem,
+  Container,
   Flex,
+  Grid,
+  Group,
+  Image,
+  List,
+  rem,
+  Text,
+  ThemeIcon,
+  Title,
 } from "@mantine/core";
-import image from "../../public/Creative writing-pana.png";
 import { FaCheck } from "react-icons/fa";
+import image from "../../public/Creative writing-pana.png";
 import { subtext } from "./data";
 
 interface HeroPageProps {

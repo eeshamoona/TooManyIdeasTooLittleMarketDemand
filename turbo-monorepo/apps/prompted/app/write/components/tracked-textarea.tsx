@@ -1,24 +1,24 @@
-import { useState } from "react";
 import {
-  Textarea,
-  Button,
-  Box,
-  Tooltip,
-  Group,
-  Stack,
   ActionIcon,
+  Box,
+  Button,
+  Group,
   Paper,
+  Stack,
+  Text,
+  Textarea,
   Title,
   TitleOrder,
-  Text,
+  Tooltip,
 } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import DiffMatchPatch from "diff-match-patch";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import { FaWandMagicSparkles } from "react-icons/fa6";
-import DiffMatchPatch from "diff-match-patch";
-import { StatsGrid } from "./stats";
-import { useRouter } from "next/navigation";
-import { useDisclosure } from "@mantine/hooks";
 import { getTitleOrder } from "../actions";
+import { StatsGrid } from "./stats";
 
 const dmp = new DiffMatchPatch();
 
@@ -94,7 +94,7 @@ export default function TrackedTextarea({
   };
 
   const generateAIResponse = async (
-    currentResponse: string,
+    currentResponse: string
   ): Promise<string> => {
     try {
       const generateResponse = await fetch("/api/addASentence", {
@@ -138,7 +138,7 @@ export default function TrackedTextarea({
 
     // Convert the dictionary to an array of tuples [word, frequency]
     const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a,
+      ([, a], [, b]) => b - a
     );
 
     // Convert back to an object and return
@@ -253,7 +253,7 @@ export default function TrackedTextarea({
     const totalCharacters = characters.length;
     const aiCharacters = characters.filter((char) => char.type === "AI").length;
     const userCharacters = characters.filter(
-      (char) => char.type === "user",
+      (char) => char.type === "user"
     ).length;
 
     const userPercentage =

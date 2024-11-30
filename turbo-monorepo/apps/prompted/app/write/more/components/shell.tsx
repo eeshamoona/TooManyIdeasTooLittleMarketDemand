@@ -2,9 +2,9 @@
 import { Tabs } from "@mantine/core";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import { TbFileArrowRight } from "react-icons/tb";
-import { Display } from "./display_one";
-import { Display2 } from "./display-two";
 import { DisplayProps } from "../../components/display";
+import { Display2 } from "./display-two";
+import { Display } from "./display_one";
 
 export const Shell = ({ prompts }: DisplayProps) => {
   return (

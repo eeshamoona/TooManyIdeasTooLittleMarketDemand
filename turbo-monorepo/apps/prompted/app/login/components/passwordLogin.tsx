@@ -1,16 +1,15 @@
-import React, { useState } from "react";
 import {
-  Stack,
-  TextInput,
-  Text,
-  Button,
   Anchor,
+  Button,
   PasswordInput,
+  Stack,
+  Text,
+  TextInput,
 } from "@mantine/core";
-import { LuLogIn } from "react-icons/lu";
-import { login } from "../actions";
 import { useRouter } from "next/navigation";
-import { passwordResetLink } from "../actions";
+import React, { useState } from "react";
+import { LuLogIn } from "react-icons/lu";
+import { login, passwordResetLink } from "../actions";
 
 const PasswordForm: React.FC = () => {
   const router = useRouter();

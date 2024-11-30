@@ -1,11 +1,11 @@
 "use client";
 import {
   Box,
+  Button,
+  Center,
   SimpleGrid,
   Skeleton,
-  Center,
   Title,
-  Button,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 

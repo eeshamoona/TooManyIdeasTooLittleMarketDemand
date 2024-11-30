@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     if (!text || !category) {
       return NextResponse.json(
         { error: "Text and category are required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -25,12 +25,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json(
       { message: "Prompt added successfully", data },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (err) {
     return NextResponse.json(
       { error: "Internal Server Error" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -1,5 +1,5 @@
 import { Group, Paper, SimpleGrid, Text } from "@mantine/core";
-import { FaUserPlus, FaPercentage, FaReceipt, FaCoins } from "react-icons/fa";
+import { FaCoins, FaPercentage, FaReceipt, FaUserPlus } from "react-icons/fa";
 import { getPercentageColor } from "../../read/actions";
 
 const icons = {

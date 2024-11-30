@@ -1,23 +1,23 @@
 "use client";
-import React, { useState } from "react";
-import { magicLinkSignUp, signup } from "../login/actions";
 import {
-  Button,
-  PasswordInput,
-  TextInput,
-  Title,
-  Container,
-  Stack,
-  Text,
   Anchor,
-  Image,
+  Button,
+  Container,
   Divider,
   Group,
+  Image,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
 } from "@mantine/core";
-import { useRouter } from "next/navigation";
 import { useMediaQuery } from "@mantine/hooks";
-import Footer from "../components/footer";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import loginImage from "../../public/SignupCharacter.png";
+import Footer from "../components/footer";
+import { magicLinkSignUp, signup } from "../login/actions";
 
 export default function SignupPage() {
   const router = useRouter();

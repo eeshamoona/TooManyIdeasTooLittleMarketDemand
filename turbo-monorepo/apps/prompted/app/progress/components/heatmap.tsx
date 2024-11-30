@@ -1,8 +1,8 @@
 "use client";
 import { Button, Text } from "@mantine/core";
 import React, { useState } from "react";
-import CustomHeatmap from "./custom-calendar";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import CustomHeatmap from "./custom-calendar";
 
 // import dynamic from "next/dynamic";
 

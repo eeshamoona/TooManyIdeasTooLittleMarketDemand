@@ -1,24 +1,24 @@
 "use client";
-import React from "react";
 import {
-  Title,
-  Container,
-  Stack,
-  Text,
   Anchor,
-  Group,
+  Container,
   Divider,
+  Group,
   Image,
+  Stack,
   Tabs,
+  Text,
+  Title,
 } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import Footer from "../components/footer";
 import { useMediaQuery } from "@mantine/hooks";
-import loginImage from "../../public/WritingRoom.png";
-import PasswordForm from "./components/passwordLogin";
-import MagicLinkForm from "./components/passwordlessLogin";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { FaKey } from "react-icons/fa";
 import { LuSparkle } from "react-icons/lu";
+import loginImage from "../../public/WritingRoom.png";
+import Footer from "../components/footer";
+import PasswordForm from "./components/passwordLogin";
+import MagicLinkForm from "./components/passwordlessLogin";
 
 export default function LoginPage() {
   const router = useRouter();
