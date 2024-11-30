@@ -102,7 +102,7 @@ export function StatsGrid3({ stats }: { stats: StatsProps }) {
               }}
             >
               <Group justify="space-between">
-                <Text size="xs" c="dimmed">
+                <Text size="xs" tt="uppercase" c="dimmed">
                   {stat.title}
                 </Text>
                 <Icon size="1rem" />

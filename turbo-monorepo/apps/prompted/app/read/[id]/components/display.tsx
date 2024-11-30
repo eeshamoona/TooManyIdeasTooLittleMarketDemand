@@ -226,7 +226,6 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
                 <Accordion.Control>
                   <Group gap="xs">
                     <IoStatsChart />
-                    <Text>Stats & AI Feedback</Text>
                   </Group>
                 </Accordion.Control>
                 <Accordion.Panel>
