@@ -50,23 +50,8 @@ export default function ProfileQuiz() {
     return Boolean(currentAnswer);
   };
 
-  const skipQuiz = async () => {
-    const defaultAnswers = {
-      targetWordCount: 250,
-      feedbackPersona: "balanced",
-      motivatingFeedback: "clearGoal",
-    };
-
-    try {
-      const { success } = await updateProfile(defaultAnswers);
-      if (success) {
-        router.push("/write");
-      } else {
-        console.error("Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Failed to update profile:", error);
-    }
+  const skipQuiz = () => {
+    router.push("/profile");
   };
 
   const nextStep = async () => {

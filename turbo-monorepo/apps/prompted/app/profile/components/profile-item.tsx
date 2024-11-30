@@ -15,7 +15,7 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
   description,
 }) => (
   <Paper p="md" radius="sm" withBorder h="100%">
-    <Text size="xs" tt="uppercase" mb={4} fw={500} c="dimmed">
+    <Text size="xs" ta="center" tt="uppercase" mb={4} fw={500} c="dimmed">
       {title}
     </Text>
     <Group wrap="nowrap" h="100%" gap="xl" align="center">

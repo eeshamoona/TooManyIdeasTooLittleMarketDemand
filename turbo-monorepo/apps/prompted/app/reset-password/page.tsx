@@ -13,7 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaArrowRight, FaCheck } from "react-icons/fa";
-import { isUserLoggedIn } from "./actions";
+import { isUserLoggedIn } from "./action";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
