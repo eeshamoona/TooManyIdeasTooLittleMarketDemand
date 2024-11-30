@@ -1,10 +1,10 @@
 "use client";
 import { Box, Divider } from "@mantine/core";
-import { PromptList } from "../../components/prompt-list";
 import { useRouter } from "next/navigation";
-import { Prompt } from "../../components/display";
-import { AddPromptForm } from "./add-prompt";
 import { useState } from "react";
+import { Prompt } from "../../components/display";
+import { PromptList } from "../../components/prompt-list";
+import { AddPromptForm } from "./add-prompt";
 
 type DisplayProps = {
   prompts: Prompt[];

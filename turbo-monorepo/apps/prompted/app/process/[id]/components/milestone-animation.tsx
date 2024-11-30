@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { Text, Transition } from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import MilestoneBadge from "../../../progress/components/milestone-badge";
 
 export interface MilestoneProgressAnimationProps {
@@ -17,7 +17,7 @@ const MilestoneProgressAnimation: React.FC<MilestoneProgressAnimationProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(animated ? false : true);
   const [showDescription, setShowDescription] = useState(
-    animated ? false : true,
+    animated ? false : true
   );
   const [showTitle, setShowTitle] = useState(animated ? false : true);
 

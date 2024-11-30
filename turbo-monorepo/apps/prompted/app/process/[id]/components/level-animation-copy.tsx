@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from "react";
-import LevelBadge from "../../../progress/components/level-badge";
 import {
   Group,
   Progress,
@@ -7,7 +5,9 @@ import {
   Tooltip,
   useMantineColorScheme,
 } from "@mantine/core";
+import React, { useEffect, useState } from "react";
 import { IoIosInfinite } from "react-icons/io";
+import LevelBadge from "../../../progress/components/level-badge";
 
 export interface LevelInformation {
   startLevel: number;

@@ -1,9 +1,9 @@
-import React, { Suspense } from "react";
 import { Button, Container, Stack, Title } from "@mantine/core";
-import { FaArrowRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { TypewriterArray } from "./typewriter";
+import React, { Suspense } from "react";
+import { FaArrowRight } from "react-icons/fa";
 import { usePrompts } from "../context/PromptContext";
+import { TypewriterArray } from "./typewriter";
 
 // Lazy load the components
 const HeroPage = React.lazy(() => import("./hero"));

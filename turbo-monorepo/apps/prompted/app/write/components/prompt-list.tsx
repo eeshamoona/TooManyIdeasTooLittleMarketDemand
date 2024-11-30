@@ -1,20 +1,20 @@
-import { useState } from "react";
 import {
-  Table,
-  ScrollArea,
-  UnstyledButton,
+  ActionIcon,
+  Badge,
   Group,
+  ScrollArea,
+  Switch,
+  Table,
   Text,
   TextInput,
+  UnstyledButton,
   rem,
-  Badge,
-  Switch,
-  ActionIcon,
 } from "@mantine/core";
+import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { Prompt } from "./display";
-import { NEW_PROMPT_CATEGORIES } from "../interface";
 import { RiArrowRightCircleLine } from "react-icons/ri";
+import { NEW_PROMPT_CATEGORIES } from "../interface";
+import { Prompt } from "./display";
 
 interface PromptListProps {
   data: Prompt[];
@@ -52,12 +52,12 @@ export function PromptList({
   };
 
   const filteredData = data.filter((item) =>
-    item.text.toLowerCase().includes(search.toLowerCase()),
+    item.text.toLowerCase().includes(search.toLowerCase())
   );
 
   const rows = filteredData.map((row: Prompt, index: number) => {
     const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === row.category,
+      (cat) => cat.title === row.category
     );
     const Icon = category?.icon;
     const color = `var(--mantine-color-${category?.color}-5)`;

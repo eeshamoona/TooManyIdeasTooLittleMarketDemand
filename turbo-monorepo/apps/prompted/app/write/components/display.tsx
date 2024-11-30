@@ -1,24 +1,24 @@
 "use client";
 import {
-  Button,
-  Select,
-  Group,
-  Divider,
-  Center,
-  SelectProps,
-  Text,
   ActionIcon,
-  Stack,
   Box,
+  Button,
+  Center,
+  Divider,
+  Group,
+  Select,
+  SelectProps,
+  Stack,
+  Text,
 } from "@mantine/core";
 import { useState } from "react";
-import { NEW_PROMPT_CATEGORIES } from "../interface";
-import TrackedTextarea from "./tracked-textarea";
-import { PromptList } from "./prompt-list";
 import { FaCheck } from "react-icons/fa";
-import { TbWriting } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
+import { TbWriting } from "react-icons/tb";
 import { profileQuizQuestions } from "../../profile-quiz/constants";
+import { NEW_PROMPT_CATEGORIES } from "../interface";
+import { PromptList } from "./prompt-list";
+import TrackedTextarea from "./tracked-textarea";
 
 export interface Prompt {
   text: string;
@@ -148,19 +148,20 @@ export default function Display({ prompts, profile }: DisplayProps) {
     return option ? `${option.label} - ${option.description}` : value;
   };
 
-  const enrichedProfile = profile && Object.keys(profile).length > 0
-    ? {
-        targetWordCount: profile.targetWordCount,
-        feedbackPersona: getProfileDescription(
-          "feedbackPersona",
-          profile.feedbackPersona
-        ),
-        motivatingFeedback: getProfileDescription(
-          "motivatingFeedback",
-          profile.motivatingFeedback
-        ),
-      }
-    : null;
+  const enrichedProfile =
+    profile && Object.keys(profile).length > 0
+      ? {
+          targetWordCount: profile.targetWordCount,
+          feedbackPersona: getProfileDescription(
+            "feedbackPersona",
+            profile.feedbackPersona
+          ),
+          motivatingFeedback: getProfileDescription(
+            "motivatingFeedback",
+            profile.motivatingFeedback
+          ),
+        }
+      : null;
 
   return (
     <Box style={{ display: "flex", flexDirection: "column", height: "85vh" }}>

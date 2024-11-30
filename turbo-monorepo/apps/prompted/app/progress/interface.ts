@@ -1,3 +1,4 @@
+import { BsSpeedometer } from "react-icons/bs";
 import {
   FaDove,
   FaQuestionCircle,
@@ -6,7 +7,6 @@ import {
   FaRegStar,
 } from "react-icons/fa";
 import { FaSpaceAwesome } from "react-icons/fa6";
-import { LuGem, LuShrink, LuWholeWord } from "react-icons/lu";
 import {
   GiEagleHead,
   GiFinch,
@@ -18,24 +18,24 @@ import {
   GiPuzzle,
   GiTurtleShell,
 } from "react-icons/gi";
-import { BsSpeedometer } from "react-icons/bs";
-import {
-  TbBallpen,
-  TbLetterCaseUpper,
-  TbUserHexagon,
-  TbUserStar,
-} from "react-icons/tb";
-import { MdManageSearch, MdOutlineCelebration } from "react-icons/md";
+import { GoTrophy } from "react-icons/go";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 import {
   IoExtensionPuzzleOutline,
   IoGameControllerOutline,
   IoLeafOutline,
   IoRocketOutline,
 } from "react-icons/io5";
-import { GoTrophy } from "react-icons/go";
 import { LiaHandshake } from "react-icons/lia";
+import { LuGem, LuShrink, LuWholeWord } from "react-icons/lu";
+import { MdManageSearch, MdOutlineCelebration } from "react-icons/md";
+import {
+  TbBallpen,
+  TbLetterCaseUpper,
+  TbUserHexagon,
+  TbUserStar,
+} from "react-icons/tb";
 import { TfiThought } from "react-icons/tfi";
-import { HiOutlineEmojiHappy } from "react-icons/hi";
 
 export interface BadgeModel {
   id: string;

@@ -1,21 +1,21 @@
 "use client";
-import React, { useState, useMemo } from "react";
 import {
   ActionIcon,
   Box,
+  Button,
   Container,
+  Group,
+  Modal,
   SimpleGrid,
   Stack,
-  Group,
   Text,
-  Modal,
-  Button,
 } from "@mantine/core";
-import { EntryCard } from "./card";
-import SearchHeader from "./header";
-import { EmptyState } from "./empty-state";
-import { NoResults } from "./no-results";
+import { useMemo, useState } from "react";
 import { MdOutlineEdit, MdOutlineEditOff } from "react-icons/md";
+import { EntryCard } from "./card";
+import { EmptyState } from "./empty-state";
+import SearchHeader from "./header";
+import { NoResults } from "./no-results";
 
 export default function DisplayEntries({ data }: any) {
   const [entries, setEntries] = useState(data);

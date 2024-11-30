@@ -1,5 +1,3 @@
-import React, { useState, useEffect, useRef } from "react";
-import LevelBadge from "../../../progress/components/level-badge";
 import {
   Card,
   Group,
@@ -8,8 +6,10 @@ import {
   Tooltip,
   useMantineColorScheme,
 } from "@mantine/core";
-import { IoIosInfinite } from "react-icons/io";
+import React, { useEffect, useRef, useState } from "react";
 import Confetti from "react-confetti";
+import { IoIosInfinite } from "react-icons/io";
+import LevelBadge from "../../../progress/components/level-badge";
 
 export interface LevelInformation {
   startLevel: number;
@@ -41,10 +41,10 @@ const LevelProgressAnimation: React.FC<LevelProgressAnimationProps> = ({
 }) => {
   const { colorScheme } = useMantineColorScheme();
   const [progress, setProgress] = useState(
-    animated ? levelInfo.startProgressValue : levelInfo.endProgressValue,
+    animated ? levelInfo.startProgressValue : levelInfo.endProgressValue
   );
   const [currentLevel, setCurrentLevel] = useState(
-    animated ? levelInfo.startLevel : levelInfo.endLevel,
+    animated ? levelInfo.startLevel : levelInfo.endLevel
   );
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);

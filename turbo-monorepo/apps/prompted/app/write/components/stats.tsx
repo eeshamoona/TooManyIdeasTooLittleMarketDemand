@@ -1,10 +1,10 @@
 import { Group, Paper, SimpleGrid, Text } from "@mantine/core";
 import {
-  FaUserPlus,
-  FaPercentage,
-  FaReceipt,
   FaCoins,
   FaFont,
+  FaPercentage,
+  FaReceipt,
+  FaUserPlus,
 } from "react-icons/fa";
 import { getPercentageColor } from "../../read/actions";
 

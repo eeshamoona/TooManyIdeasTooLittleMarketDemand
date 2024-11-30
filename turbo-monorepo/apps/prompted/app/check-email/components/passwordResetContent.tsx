@@ -1,4 +1,4 @@
-import { Title, Anchor, Text } from "@mantine/core";
+import { Anchor, Text, Title } from "@mantine/core";
 
 const PasswordResetContent: React.FC = () => {
   return (

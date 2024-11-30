@@ -6,25 +6,24 @@ import {
   Button,
   Divider,
   Group,
-  Title,
-  Text,
-  useMantineColorScheme,
-  Tooltip,
   Paper,
   Switch,
+  Text,
+  Title,
+  Tooltip,
+  useMantineColorScheme,
 } from "@mantine/core";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
-import { Character } from "../../../write/components/tracked-textarea";
-import { useRouter } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { StatsProps } from "./stats-grid";
+import { RiBubbleChartFill, RiBubbleChartLine } from "react-icons/ri";
 import { convertTimeToDescription } from "../../../write/actions";
+import { Character } from "../../../write/components/tracked-textarea";
 import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
-import { RiBubbleChartLine } from "react-icons/ri";
-import { RiBubbleChartFill } from "react-icons/ri";
 import MatterCircles from "./bubbles";
 import Info from "./info";
+import { StatsProps } from "./stats-grid";
 
 interface DisplayTextProps {
   data: {
@@ -77,7 +76,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
       .filter(
         (word) =>
           !STOP_WORDS.includes(word.toLowerCase()) && // Remove stop words
-          word.length >= minLength, // Remove short words
+          word.length >= minLength // Remove short words
       )
       .reduce((filtered: { [key: string]: number }, word) => {
         filtered[word] = wordFreq[word]; // Rebuild filtered word frequency object
@@ -103,7 +102,7 @@ export default function DisplayText({ data }: DisplayTextProps) {
   };
 
   const category = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === data.category,
+    (cat) => cat.title === data.category
   );
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;

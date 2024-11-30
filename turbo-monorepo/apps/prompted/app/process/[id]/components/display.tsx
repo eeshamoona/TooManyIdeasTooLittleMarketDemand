@@ -1,19 +1,18 @@
 "use client";
-import { useState, useEffect } from "react";
 import {
-  Button,
   Box,
-  Container,
-  Text,
-  SimpleGrid,
+  Button,
   Center,
+  Container,
   Flex,
   RingProgress,
+  SimpleGrid,
+  Text,
 } from "@mantine/core";
-import { LevelInformation } from "./level-animation";
-import LevelProgressAnimation from "./level-animation";
-import MilestoneProgressAnimation from "./milestone-animation";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import LevelProgressAnimation, { LevelInformation } from "./level-animation";
+import MilestoneProgressAnimation from "./milestone-animation";
 
 interface BadgeProgress {
   badgeId: number;

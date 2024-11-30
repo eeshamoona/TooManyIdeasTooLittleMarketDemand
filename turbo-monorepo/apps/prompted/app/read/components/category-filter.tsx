@@ -1,14 +1,14 @@
-import React from "react";
 import {
-  MultiSelect,
-  Group,
   ActionIcon,
   Center,
-  Text,
+  Group,
+  MultiSelect,
   SelectProps,
+  Text,
 } from "@mantine/core";
-import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
+import React from "react";
 import { FaCheck } from "react-icons/fa";
+import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 
 interface CategoryMultiSelectProps {
   selectedCategories: string[];

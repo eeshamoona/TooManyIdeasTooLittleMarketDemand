@@ -1,4 +1,4 @@
-import { Title, Anchor, Text, Button, Stack } from "@mantine/core";
+import { Anchor, Stack, Text, Title } from "@mantine/core";
 
 const SignupContent: React.FC = () => {
   return (

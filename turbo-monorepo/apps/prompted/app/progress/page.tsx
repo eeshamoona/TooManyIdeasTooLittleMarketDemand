@@ -1,13 +1,13 @@
 import { Container } from "@mantine/core";
-import Display from "./components/display";
 import { createClient } from "../utils/supabase/server";
+import Display from "./components/display";
 
 export default async function Read() {
   const supabase = createClient();
 
   const { data, error } = await supabase.from("entries").select();
   const { data: progressData, error: progressError } = await supabase.from(
-    "progress",
+    "progress"
   ).select(`
     *,
     badges (

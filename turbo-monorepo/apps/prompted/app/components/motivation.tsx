@@ -1,18 +1,17 @@
 "use client";
-import { createElement, useState, useEffect, useRef } from "react";
 import {
-  Container,
-  Stack,
   Card,
   Center,
-  Group,
-  Title,
-  Grid,
-  Text,
-  useMantineTheme,
+  Container,
   Divider,
+  Grid,
+  Group,
+  Stack,
+  Text,
+  Title,
+  useMantineTheme,
 } from "@mantine/core";
-import React from "react";
+import React, { createElement, useEffect, useRef, useState } from "react";
 import { FaIdBadge, FaMedal, FaSearch } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import LevelProgressAnimation from "../process/[id]/components/level-animation";

@@ -1,9 +1,9 @@
 "use client";
 import { Container, Tabs } from "@mantine/core";
-import Charts from "./charts";
-import MilestoneBadges from "./milestone";
-import LevelProgressPage from "./levels";
 import { ProgressModel } from "../interface";
+import Charts from "./charts";
+import LevelProgressPage from "./levels";
+import MilestoneBadges from "./milestone";
 
 interface DisplayProps {
   entries: any[];

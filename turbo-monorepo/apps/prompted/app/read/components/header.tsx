@@ -1,11 +1,11 @@
-import React from "react";
 import {
-  useMantineColorScheme,
   Box,
-  TextInput,
   Select,
   Stack,
+  TextInput,
+  useMantineColorScheme,
 } from "@mantine/core";
+import React from "react";
 import CategoryMultiSelect from "./category-filter";
 
 interface SearchHeaderProps {

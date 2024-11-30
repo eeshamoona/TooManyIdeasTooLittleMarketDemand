@@ -1,22 +1,22 @@
 "use client";
 import {
-  Card,
-  Text,
-  Badge,
-  Group,
   ActionIcon,
+  Badge,
+  Card,
+  Group,
+  Text,
   useMantineTheme,
 } from "@mantine/core";
-import { PiExportLight } from "react-icons/pi";
-import { IoCheckmark, IoTrash } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { getEntry } from "../actions";
-import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
-import { LuTimer, LuBaseline } from "react-icons/lu";
+import { IoCheckmark, IoTrash } from "react-icons/io5";
+import { LuBaseline, LuTimer } from "react-icons/lu";
+import { PiExportLight } from "react-icons/pi";
 import { convertTimeToDescription } from "../../write/actions";
-import { StatsProps } from "../[id]/components/stats-grid";
 import { Character } from "../../write/components/tracked-textarea";
+import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
+import { StatsProps } from "../[id]/components/stats-grid";
+import { getEntry } from "../actions";
 
 interface EntryCardProps {
   entry: {
@@ -32,7 +32,8 @@ interface EntryCardProps {
   };
   staticMode: boolean;
   editMode: boolean;
-  deleteEntryCallback: (id: string) => void; // Assuming the callback takes an entry ID as a parameter
+  // eslint-disable-next-line no-unused-vars
+  deleteEntryCallback: (id: string) => void;
 }
 
 export function EntryCard({
@@ -68,7 +69,6 @@ export function EntryCard({
   const Icon = category?.icon;
   const color = `var(--mantine-color-${category?.color}-5)`;
 
-  // Define the handleDelete function
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
     deleteEntryCallback(entry.id);
@@ -115,7 +115,7 @@ export function EntryCard({
         <Group>
           <Text size="sm" c="dimmed">
             {new Date(entry.created_at).toLocaleDateString("en-US", {
-              weekday: "short", // Add this line to include the day of the week
+              weekday: "short",
               month: "short",
               day: "2-digit",
               year: "numeric",
@@ -142,10 +142,6 @@ export function EntryCard({
       >
         {entry.text}
       </Text>
-
-      {/* <Card.Section inheritPadding mt="sm">
-        <StatProgress {...entry.metadata_stats} />
-      </Card.Section> */}
 
       <Card.Section inheritPadding pb="sm">
         <Group justify="apart" mt="md">

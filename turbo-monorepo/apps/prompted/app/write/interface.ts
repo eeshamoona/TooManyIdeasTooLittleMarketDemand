@@ -1,14 +1,14 @@
-import { FaRegLightbulb, FaRegStar, FaRegCompass } from "react-icons/fa";
-import { TfiThought } from "react-icons/tfi";
-import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { FaRegCompass, FaRegLightbulb, FaRegStar } from "react-icons/fa";
 import { GoTrophy } from "react-icons/go";
+import { HiOutlineEmojiHappy } from "react-icons/hi";
 import {
-  IoLeafOutline,
-  IoGameControllerOutline,
   IoExtensionPuzzleOutline,
+  IoGameControllerOutline,
+  IoLeafOutline,
   IoRocketOutline,
 } from "react-icons/io5";
 import { LiaHandshake } from "react-icons/lia";
+import { TfiThought } from "react-icons/tfi";
 
 export const NEW_PROMPT_CATEGORIES = [
   {

@@ -1,14 +1,14 @@
-import React, { Suspense } from "react";
-import "./globals.css";
-import { createClient } from "./utils/supabase/server";
-import { CustomAppShell } from "./shell";
-import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+import React, { Suspense } from "react";
 import "react-calendar-heatmap/dist/styles.css";
 import "react-tooltip/dist/react-tooltip.css";
-import Loading from "./loading";
-import { MantineProvider } from "@mantine/core";
 import { PromptsProvider } from "./context/PromptContext";
+import "./globals.css";
+import Loading from "./loading";
+import { CustomAppShell } from "./shell";
+import { createClient } from "./utils/supabase/server";
 
 export default async function RootLayout({
   children,

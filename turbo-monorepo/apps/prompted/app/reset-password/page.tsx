@@ -1,19 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
-  Container,
-  Center,
-  Title,
-  Text,
-  PasswordInput,
-  Group,
   Button,
+  Center,
+  Container,
+  Group,
+  PasswordInput,
   Stack,
+  Text,
+  Title,
 } from "@mantine/core";
-import { isUserLoggedIn } from "./action";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaArrowRight, FaCheck } from "react-icons/fa";
+import { isUserLoggedIn } from "./action";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
