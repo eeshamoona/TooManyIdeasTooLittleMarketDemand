@@ -8,6 +8,7 @@ import {
   Group,
   Menu,
   Text,
+  Tooltip,
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
@@ -77,12 +78,11 @@ function UserMenu({ username }: { username: string }) {
         <UserButton name={username} onClick={handleMenuToggle} />
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Label>Actions</Menu.Label>
         <Menu.Item
           leftSection={<LuBookOpen style={{ width: "1rem", height: "1rem" }} />}
           onClick={() => router.push("/profile")}
         >
-          Profile
+          My Profile
         </Menu.Item>
 
         <Menu.Item
@@ -180,7 +180,24 @@ export function CustomAppShell({
             )}
             <Group>
               {isLoggedIn ? (
-                <UserMenu username={metadata.username} />
+                <>
+                  <Tooltip
+                    label="Share Your Thoughts"
+                    position="bottom"
+                    withArrow
+                  >
+                    <Button
+                      variant="default"
+                      size="xs"
+                      component="a"
+                      href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
+                      target="_blank"
+                    >
+                      Feedback
+                    </Button>
+                  </Tooltip>
+                  <UserMenu username={metadata.username} />
+                </>
               ) : (
                 <Group>
                   <Button
