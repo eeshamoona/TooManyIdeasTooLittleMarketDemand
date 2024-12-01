@@ -22,9 +22,9 @@ import {
 
 export const profileQuizQuestions = [
   {
-    label: "Writing Goals",
+    label: "Word Count",
     icon: FaBullseye,
-    text: "Let's start with setting a target word count per entry:",
+    text: "Choose your target word count:",
     question: "targetWordCount",
     options: [
       {
@@ -60,9 +60,9 @@ export const profileQuizQuestions = [
     ],
   },
   {
-    label: "AI Feedback Style",
+    label: "AI Style",
     icon: FaBrain,
-    text: "Pick an AI Persona to guide your feedback:",
+    text: "Select your preferred AI persona:",
     question: "feedbackPersona",
     options: [
       {
@@ -104,19 +104,19 @@ export const profileQuizQuestions = [
     ],
   },
   {
-    label: "Motivating Feedback",
+    label: "Feedback Type",
     icon: FaLightbulb,
-    text: "Pick a type of feedback that motivates you most:",
+    text: "What feedback style motivates you?",
     question: "motivatingFeedback",
     options: [
       {
-        value: "clearGoal",
+        value: "clear goal",
         label: "A clear goal",
         description: "Set a target to guide your improvement.",
         icon: FaFlag,
       },
       {
-        value: "actionableStep",
+        value: "actionable step",
         label: "An actionable step",
         description: "Get advice you can use immediately.",
         icon: FaStepForward,
@@ -128,19 +128,19 @@ export const profileQuizQuestions = [
         icon: FaQuestion,
       },
       {
-        value: "highlightStrengths",
+        value: "strengths",
         label: "Highlight strengths",
         description: "Learn what’s working well and how to build on it.",
         icon: FaStar,
       },
       {
-        value: "newPerspective",
+        value: "new perspective",
         label: "A new perspective",
         description: "See your work from a fresh angle.",
         icon: FaEye,
       },
       {
-        value: "bigPicture",
+        value: "big picture",
         label: "The big picture",
         description: "Connect your work to a broader purpose.",
         icon: FaCompass,

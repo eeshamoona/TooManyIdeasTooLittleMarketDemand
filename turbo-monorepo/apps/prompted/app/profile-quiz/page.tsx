@@ -82,19 +82,19 @@ export default function ProfileQuiz() {
 
     if (currentQuestion.question === "targetWordCount") {
       return (
-        <Stack>
-          <Text size="md" ta="center" fw={500}>
+        <Stack gap="xs">
+          <Title ta="center">{answers.targetWordCount} words</Title>
+          <Text size="md" ta="center" c="dimmed">
             {(() => {
               const count = answers.targetWordCount;
               if (count <= 100)
-                return `Brief Response (${count} words) - Perfect for quick thoughts`;
+                return `Brief Response - Perfect for quick thoughts`;
               if (count <= 350)
-                return `Short Article (${count} words) - Ideal for clear, concise ideas`;
+                return `Short Article - Ideal for clear, concise ideas`;
               if (count <= 650)
-                return `Full Article (${count} words) - Room to develop your thoughts`;
-              if (count <= 850)
-                return `In-Depth Piece (${count} words) - Space for rich detail`;
-              return `Comprehensive Essay (${count} words) - Full exploration of your topic`;
+                return `Full Article - Room to develop your thoughts`;
+              if (count <= 850) return `In-Depth Piece - Space for rich detail`;
+              return `Comprehensive Essay - Full exploration of your prompt`;
             })()}
           </Text>
           <Slider
@@ -169,7 +169,7 @@ export default function ProfileQuiz() {
               </Group>
 
               <Group align="flex-end" mt={25}>
-                <Text size="sm" fw={500}>
+                <Text size="sm" tt="capitalize" fw={500}>
                   {option.value}
                 </Text>
               </Group>
@@ -196,21 +196,22 @@ export default function ProfileQuiz() {
           </Text>
         </Stack>
 
-        <Stepper active={activeStep} mx="xl" w="100%">
+        <Stepper radius="sm" size="sm" active={activeStep}>
           {profileQuizQuestions.map((q, index) => (
             <Stepper.Step
               key={index}
               label={q.label}
-              icon={q.icon && <q.icon size={18} />}
+              description={q.text}
+              icon={q.icon && <q.icon size={20} />}
             />
           ))}
         </Stepper>
 
         <Card withBorder radius="md">
           <Stack gap="lg">
-            <Title order={3} ta="center">
+            {/* <Title order={3} ta="center">
               {profileQuizQuestions[activeStep].text}
-            </Title>
+            </Title> */}
 
             {renderQuestionContent()}
 

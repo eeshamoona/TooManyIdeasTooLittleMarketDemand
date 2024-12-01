@@ -23,7 +23,7 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
     </Group>
 
     <Group align="flex-end" mt={25}>
-      <Text size="sm" fw={500}>
+      <Text size="sm" tt="capitalize" fw={500}>
         {label}
       </Text>
     </Group>
