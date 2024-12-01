@@ -19,7 +19,7 @@ export const ProfileItem: React.FC<ProfileItemProps> = ({
       <Text size="sm" ta="center" tt="uppercase" fw={500} c="dimmed">
         {title}
       </Text>
-      {ItemIcon && <ItemIcon size="1rem" />}
+      {ItemIcon && <ItemIcon size={20} />}
     </Group>
 
     <Group align="flex-end" mt={25}>

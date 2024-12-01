@@ -15,8 +15,9 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaBook, FaEnvelope } from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
 import { LiaUserEditSolid } from "react-icons/lia";
+import { TbTargetArrow } from "react-icons/tb";
 import { profileQuizQuestions } from "../../profile-quiz/constants";
 import Heatmap from "../../progress/components/heatmap";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
@@ -81,7 +82,7 @@ const StatCharts: React.FC<StatChartsProps> = ({
         <Grid.Col span={{ base: 12, sm: 4 }}>
           {targetWordCount && (
             <ProfileItem
-              icon={FaBook}
+              icon={TbTargetArrow}
               title="Target Word Count"
               label={`${targetWordCount} words`}
               description={getWordCountDescription(targetWordCount)}

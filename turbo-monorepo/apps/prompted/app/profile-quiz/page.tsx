@@ -4,12 +4,14 @@ import {
   Card,
   Container,
   Group,
+  Paper,
   SimpleGrid,
   Slider,
   Stack,
   Stepper,
   Text,
   Title,
+  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
@@ -30,6 +32,7 @@ export default function ProfileQuiz() {
   });
   const router = useRouter();
   const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
 
   const handleAnswerChange = (question: string, value: string | number) => {
     setAnswers((prev) => ({
@@ -158,7 +161,7 @@ export default function ProfileQuiz() {
                 </Text>
                 {option.icon && (
                   <option.icon
-                    size="1rem"
+                    size={24}
                     color={
                       answers[currentQuestion.question] === option.value
                         ? theme.colors.blue[6]
@@ -187,12 +190,13 @@ export default function ProfileQuiz() {
   return (
     <Container size="lg">
       <Stack gap="xl" mt="xl" justify="start">
-        <Stack gap="sm" align="center">
+        <Stack gap="0" align="center">
           <Title order={2} ta="center">
             Let's Make This Space Yours
           </Title>
           <Text c="dimmed" size="md" ta="center">
-            A few quick questions to create your perfect writing environment.
+            Answer a few quick questions to customize your perfect writing
+            environment
           </Text>
         </Stack>
 
@@ -201,18 +205,23 @@ export default function ProfileQuiz() {
             <Stepper.Step
               key={index}
               label={q.label}
-              description={q.text}
               icon={q.icon && <q.icon size={20} />}
             />
           ))}
         </Stepper>
 
-        <Card withBorder radius="md">
-          <Stack gap="lg">
-            {/* <Title order={3} ta="center">
-              {profileQuizQuestions[activeStep].text}
-            </Title> */}
+        <Card
+          radius="sm"
+          p="xs"
+          bg={colorScheme === "light" ? theme.colors.gray[0] : undefined}
+        >
+          <Text size="lg" ta="center">
+            {profileQuizQuestions[activeStep].text}
+          </Text>
+        </Card>
 
+        <Paper radius="md">
+          <Stack gap="lg">
             {renderQuestionContent()}
 
             <Group justify="space-between" mt="md">
@@ -232,7 +241,7 @@ export default function ProfileQuiz() {
               </Button>
             </Group>
           </Stack>
-        </Card>
+        </Paper>
 
         <Button
           variant="subtle"
