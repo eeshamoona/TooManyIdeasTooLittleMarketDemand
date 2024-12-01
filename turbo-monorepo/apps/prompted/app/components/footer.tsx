@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
         </Text>
         <Text
           component="a"
-          href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/issues"
+          href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
           size="sm"
           c="dimmed"
         >

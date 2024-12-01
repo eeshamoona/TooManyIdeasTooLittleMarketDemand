@@ -1,4 +1,4 @@
-import { Button, Container, Stack, Title } from "@mantine/core";
+import { Button, Center, Container, Loader, Stack, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { Suspense } from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -38,7 +38,13 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <Center style={{ height: "100vh" }}>
+            <Loader color="blue" size="lg" type="dots" />
+          </Center>
+        }
+      >
         <FullHeightSection>
           <HeroPage
             scrollToCallback={scrollToHowItWorks}

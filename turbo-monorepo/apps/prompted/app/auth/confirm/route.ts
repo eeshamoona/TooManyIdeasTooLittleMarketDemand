@@ -44,21 +44,18 @@ export async function GET(request: NextRequest) {
             profileError
           );
           redirect("/error");
-          return;
         }
 
         // Load badges for the user
         await loadBadgesForUser(user.id);
 
-        if (!profileData?.profile) {
+        if (profileData?.profile.length === 0 && type === "signup") {
           console.warn("User profile incomplete, redirecting to profile form");
-          redirect("/read");
-          return;
+          redirect("/profile-quiz");
         }
 
         console.log("Redirecting user to:", next);
         redirect(next);
-        return;
       } else {
         console.error("No user found after OTP verification");
       }

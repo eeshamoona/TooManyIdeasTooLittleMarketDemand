@@ -150,7 +150,7 @@ export default function DisplayEntries({ data }: any) {
 
   return (
     <Stack
-      mt="xl"
+      mt="lg"
       gap={0}
       style={{
         maxHeight: "85vh",

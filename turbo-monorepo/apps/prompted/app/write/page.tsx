@@ -4,12 +4,30 @@ import Display from "./components/display";
 
 export default async function Write() {
   const supabase = createClient();
-  const { data: prompts, error } = await supabase.from("prompts").select();
-  if (error) return <div>{error.message}</div>;
+
+  // Get prompts
+  const { data: prompts, error: promptsError } = await supabase
+    .from("prompts")
+    .select();
+  if (promptsError) return <div>{promptsError.message}</div>;
+
+  // Get user profile
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+  if (userError) return <div>{userError.message}</div>;
+
+  const { data: profiles, error: profileError } = await supabase
+    .from("profiles")
+    .select("profile")
+    .eq("id", user?.id)
+    .single();
+  if (profileError) return <div>{profileError.message}</div>;
 
   return (
     <Container size="lg">
-      <Display prompts={prompts} />
+      <Display prompts={prompts} profile={profiles.profile} />
     </Container>
   );
 }

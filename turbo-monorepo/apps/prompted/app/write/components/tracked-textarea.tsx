@@ -18,6 +18,7 @@ import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 import { getTitleOrder } from "../actions";
+import { Profile } from "./display";
 import { StatsGrid } from "./stats";
 
 const dmp = new DiffMatchPatch();
@@ -26,6 +27,8 @@ interface TrackedTextareaProps {
   placeholder?: string;
   promptText: string;
   categoryText: string;
+  targetWordCount: number;
+  profile: Profile;
 }
 
 export interface Character {
@@ -39,13 +42,14 @@ export default function TrackedTextarea({
   placeholder = "Write your response here...",
   promptText,
   categoryText,
+  targetWordCount,
+  profile,
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [aiCallCount, setAICallCount] = useState<number>(0);
   const [aiLoading, { open: openAi, close: closeAi }] = useDisclosure();
-  // const [saveLoading, { open: openSave, close: closeSave }] = useDisclosure();
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
 
@@ -171,8 +175,6 @@ export default function TrackedTextarea({
     stats["uniqueWordPercentage"] = uniqueWordPercentage;
     stats["aiCallCount"] = aiCallCount;
 
-    //TODO: Call AI to get suggestions on high frequency words to get synonyms
-
     const elapsedTime = startTime ? (Date.now() - startTime) / 1000 : 0;
     setStartTime(null);
     stats["elapsedTime"] = elapsedTime;
@@ -188,6 +190,7 @@ export default function TrackedTextarea({
           response: combinedResponse,
           category: categoryText,
           prompt: promptText,
+          profile: profile,
         }),
       });
       const generatedJson = await aiFeedbackData.json();
@@ -259,11 +262,23 @@ export default function TrackedTextarea({
     const userPercentage =
       totalCharacters > 0 ? (userCharacters / totalCharacters) * 100 : 0;
 
+    const wordCount = combinedResponse.trim().split(/\s+/).length;
+    const aiWordCount = combinedResponse
+      .split(/\s+/)
+      .filter((_, index, array) => {
+        const startIndex =
+          array.slice(0, index + 1).join(" ").length - array[index].length;
+        return characters[startIndex]?.type === "AI";
+      }).length;
+
     return {
       totalCharacters,
       aiCharacters,
       userCharacters,
       userPercentage: parseFloat(userPercentage.toFixed(2)),
+      wordCount,
+      targetWordCount,
+      aiWordCount,
     };
   };
 
@@ -280,116 +295,120 @@ export default function TrackedTextarea({
   let titleOrder: TitleOrder = getTitleOrder(promptTextLength);
 
   return (
-    <Stack style={{ width: "100%" }}>
-      <Group
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <Title m={4} flex={1} order={titleOrder}>
-          {promptText}
-        </Title>
-        <>
-          <Tooltip
-            label="Show Stats"
-            aria-label="Character stats tooltip"
-            position="left"
-            withArrow
-            color="gray"
-            transitionProps={{ transition: "fade" }}
-          >
-            <ActionIcon
-              onMouseEnter={handleStatsMouseDown}
-              onMouseLeave={handleStatsMouseUp}
-              color={showStats ? "grape" : "gray"}
-              disabled={characters.length === 0}
-              variant="light"
-              size="lg"
+    <Stack style={{ width: "100%", height: "100%" }}>
+      <Stack flex={1}>
+        <Group
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Title m={4} flex={1} order={titleOrder}>
+            {promptText}
+          </Title>
+          <>
+            <Tooltip
+              label="Show Stats"
+              aria-label="Character stats tooltip"
+              position="left"
+              withArrow
+              color="gray"
+              transitionProps={{ transition: "fade" }}
             >
-              {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-            </ActionIcon>
-          </Tooltip>
-          <Tooltip
-            label={
-              combinedResponse.length > 100
-                ? "Generate AI text"
-                : "At least 100 characters required"
-            }
-            position="right"
-            withArrow
-            color={combinedResponse.length > 100 ? "grape" : "gray"}
-            transitionProps={{ transition: "fade" }}
-          >
-            <ActionIcon
-              loading={aiLoading}
-              loaderProps={{ type: "dots", size: "xs" }}
-              onClick={handleGenerateClick}
-              disabled={combinedResponse.length <= 100}
-              variant={"filled"}
-              color="grape"
-              size="lg"
-            >
-              <FaWandMagicSparkles />
-            </ActionIcon>
-          </Tooltip>
-        </>
-      </Group>
-
-      <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
-        {showStats ? (
-          <Paper px="12" py="3" mih={minTextBoxHeight}>
-            {characters.map((char, index) => (
-              <Text
-                span
-                key={index}
-                style={{
-                  color:
-                    char.type === "AI"
-                      ? "var(--mantine-color-grape-light-color)"
-                      : "",
-                  backgroundColor:
-                    char.type === "AI"
-                      ? "var(--mantine-color-grape-light-hover)"
-                      : "transparent",
-                  fontSize:
-                    "var(--input-fz, var(--input-fz, var(--mantine-font-size-sm)))",
-                }}
+              <ActionIcon
+                onMouseEnter={handleStatsMouseDown}
+                onMouseLeave={handleStatsMouseUp}
+                color={showStats ? "grape" : "gray"}
+                disabled={characters.length === 0}
+                variant="light"
+                size="lg"
               >
-                {char.value}
-              </Text>
-            ))}
-          </Paper>
-        ) : (
-          <Textarea
-            placeholder={placeholder}
-            value={combinedResponse}
-            onChange={handleUserInputChange}
-            autosize
-            minRows={10}
-          />
-        )}
-      </Box>
+                {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip
+              label={
+                combinedResponse.length > 100
+                  ? "Generate AI text"
+                  : "At least 100 characters required"
+              }
+              position="right"
+              withArrow
+              color={combinedResponse.length > 100 ? "grape" : "gray"}
+              transitionProps={{ transition: "fade" }}
+            >
+              <ActionIcon
+                loading={aiLoading}
+                loaderProps={{ type: "dots", size: "xs" }}
+                onClick={handleGenerateClick}
+                disabled={combinedResponse.length <= 100}
+                variant={"filled"}
+                color="grape"
+                size="lg"
+              >
+                <FaWandMagicSparkles />
+              </ActionIcon>
+            </Tooltip>
+          </>
+        </Group>
 
-      <Group grow>
-        <Button
-          variant="outline"
-          onClick={handleSaveAndClearResponse}
-          disabled={combinedResponse.trim() === ""}
-        >
-          Clear
-        </Button>
-        <Button
-          loading={isSaving}
-          variant="solid"
-          onClick={saveEntry}
-          disabled={combinedResponse.trim() === ""}
-        >
-          Save Response
-        </Button>
-      </Group>
+        <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
+          {showStats ? (
+            <Paper px="12" py="3" mih={minTextBoxHeight}>
+              {characters.map((char, index) => (
+                <Text
+                  span
+                  key={index}
+                  style={{
+                    color:
+                      char.type === "AI"
+                        ? "var(--mantine-color-grape-light-color)"
+                        : "",
+                    backgroundColor:
+                      char.type === "AI"
+                        ? "var(--mantine-color-grape-light-hover)"
+                        : "transparent",
+                    fontSize:
+                      "var(--input-fz, var(--input-fz, var(--mantine-font-size-sm)))",
+                  }}
+                >
+                  {char.value}
+                </Text>
+              ))}
+            </Paper>
+          ) : (
+            <Textarea
+              placeholder={placeholder}
+              value={combinedResponse}
+              onChange={handleUserInputChange}
+              autosize
+              minRows={10}
+            />
+          )}
+        </Box>
+      </Stack>
+      <Stack>
+        {showStats && <StatsGrid stats={stats} />}
 
-      {showStats && <StatsGrid stats={stats} />}
+        <Group grow>
+          <Button
+            variant="outline"
+            onClick={handleSaveAndClearResponse}
+            disabled={combinedResponse.trim() === ""}
+          >
+            Clear
+          </Button>
+          <Button
+            loading={isSaving}
+            loaderProps={{ type: "dots" }}
+            variant="solid"
+            onClick={saveEntry}
+            disabled={combinedResponse.trim() === ""}
+          >
+            Save Response
+          </Button>
+        </Group>
+      </Stack>
     </Stack>
   );
 }

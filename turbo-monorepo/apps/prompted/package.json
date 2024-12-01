@@ -10,7 +10,7 @@
     "ci": "rm -rf node_modules && rm -rf .next && npm install"
   },
   "dependencies": {
-    "@mantine/charts": "^7.13.3",
+    "@mantine/charts": "^7.14.3",
     "@mantine/core": "^7.13.3",
     "@mantine/hooks": "^7.13.3",
     "@repo/ui": "*",
@@ -32,6 +32,7 @@
     "react-icons": "^4.12.0",
     "react-tooltip": "^5.28.0",
     "recharts": "^2.13.0",
+    "sharp": "^0.33.5",
     "typewriter-effect": "^2.21.0"
   },
   "devDependencies": {

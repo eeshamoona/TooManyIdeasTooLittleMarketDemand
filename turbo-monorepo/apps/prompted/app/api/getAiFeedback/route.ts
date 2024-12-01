@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
-import { system_instructions2 } from "./constants";
+import {
+  system_instructions,
+  system_instructions_with_profile,
+} from "./constants";
 
 //TODO: Determine if I need to batch the text to avoid hitting the token limit
 
@@ -8,8 +11,42 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+function getSystemInstructions(profile?: {
+  feedbackPersona?: string;
+  motivatingFeedback?: string;
+}) {
+  if (!profile || (!profile.feedbackPersona && !profile.motivatingFeedback)) {
+    console.log("Using default instructions");
+    return system_instructions;
+  }
+
+  let instructions = system_instructions_with_profile;
+
+  if (profile.feedbackPersona) {
+    instructions = instructions.replace(
+      "{{FEEDBACK_PERSONA}}",
+      `The user's preferred feedback persona is: ${profile.feedbackPersona}`
+    );
+  } else {
+    instructions = instructions.replace("{{FEEDBACK_PERSONA}}", "");
+  }
+
+  if (profile.motivatingFeedback) {
+    instructions = instructions.replace(
+      "{{MOTIVATING_FEEDBACK}}",
+      `The user prefers to receive motivating feedback in the following way: ${profile.motivatingFeedback}`
+    );
+  } else {
+    instructions = instructions.replace("{{MOTIVATING_FEEDBACK}}", "");
+  }
+
+  console.log("Using profile instructions");
+
+  return instructions;
+}
+
 export async function POST(request: Request) {
-  const { response, category, prompt } = await request.json();
+  const { response, category, prompt, profile } = await request.json();
 
   if (!response || !prompt || !category) {
     console.log("Missing required fields:", { response, category, prompt });
@@ -20,6 +57,8 @@ export async function POST(request: Request) {
   }
 
   try {
+    const instructions = getSystemInstructions(profile);
+
     const openaiResponse = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -28,7 +67,7 @@ export async function POST(request: Request) {
           content: [
             {
               type: "text",
-              text: system_instructions2,
+              text: instructions,
             },
           ],
         },

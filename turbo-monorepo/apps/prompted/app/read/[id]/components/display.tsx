@@ -19,6 +19,7 @@ import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { RiBubbleChartFill, RiBubbleChartLine } from "react-icons/ri";
 import { convertTimeToDescription } from "../../../write/actions";
+import { Profile } from "../../../write/components/display";
 import { Character } from "../../../write/components/tracked-textarea";
 import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 import MatterCircles from "./bubbles";
@@ -27,6 +28,7 @@ import { StatsProps } from "./stats-grid";
 
 interface DisplayTextProps {
   data: {
+    id: string;
     metadata_stats: StatsProps;
     text: string;
     character_data: Character[];
@@ -37,6 +39,7 @@ interface DisplayTextProps {
     ai_feedback: any;
   };
   username: string;
+  profile: Profile;
 }
 const STOP_WORDS = [
   "a",
@@ -60,7 +63,7 @@ const STOP_WORDS = [
   "those",
 ];
 
-export default function DisplayText({ data }: DisplayTextProps) {
+export default function DisplayText({ data, profile }: DisplayTextProps) {
   const [showAIParts, setShowAIParts] = useState(false);
   const [showWordFreq, setShowWordFreq] = useState(false);
   const [showCleanWordFreq, setShowCleanWordFreq] = useState<boolean>(false);
@@ -200,7 +203,12 @@ export default function DisplayText({ data }: DisplayTextProps) {
                 entry={{
                   metadata_stats: data.metadata_stats,
                   ai_feedback: data.ai_feedback,
+                  id: data.id,
+                  text: data.text,
+                  category: data.category,
+                  prompt: data.prompt,
                 }}
+                profile={profile}
               />
             </Box>
           </Box>

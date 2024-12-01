@@ -65,6 +65,7 @@ const MagicLinkForm: React.FC = () => {
           fullWidth
           variant="light"
           loading={loading}
+          loaderProps={{ type: "dots" }}
           leftSection={<TbUnlink aria-label="Magic Link Icon" />}
           mt="xs"
         >

@@ -8,6 +8,7 @@ import {
   Group,
   Menu,
   Text,
+  Tooltip,
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
@@ -16,6 +17,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { forwardRef, useState } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
+import { GoCommentDiscussion } from "react-icons/go";
 import { IoExitOutline } from "react-icons/io5";
 import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
 import { handleLogout } from "./logout/logoutClient";
@@ -77,12 +79,11 @@ function UserMenu({ username }: { username: string }) {
         <UserButton name={username} onClick={handleMenuToggle} />
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Label>Actions</Menu.Label>
         <Menu.Item
           leftSection={<LuBookOpen style={{ width: "1rem", height: "1rem" }} />}
           onClick={() => router.push("/profile")}
         >
-          Profile
+          My Profile
         </Menu.Item>
 
         <Menu.Item
@@ -147,7 +148,15 @@ export function CustomAppShell({
               <Text style={{ color: textColor }}>Prompted</Text>
             </Group>
             {isLoggedIn && (
-              <Group gap={"sm"} visibleFrom="sm">
+              <Group
+                gap={"sm"}
+                visibleFrom="sm"
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              >
                 <Button
                   variant={isActive("/write") ? "light" : "subtle"}
                   leftSection={
@@ -180,7 +189,30 @@ export function CustomAppShell({
             )}
             <Group>
               {isLoggedIn ? (
-                <UserMenu username={metadata.username} />
+                <Group gap={"sm"} visibleFrom="sm">
+                  <Tooltip
+                    label="Share Feedback"
+                    position="bottom"
+                    withArrow
+                    offset={11}
+                  >
+                    <ActionIcon
+                      variant="subtle"
+                      size="lg"
+                      component="a"
+                      href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
+                      target="_blank"
+                    >
+                      <GoCommentDiscussion
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                        }}
+                      />
+                    </ActionIcon>
+                  </Tooltip>
+                  <UserMenu username={metadata.username} />
+                </Group>
               ) : (
                 <Group>
                   <Button

@@ -1,18 +1,21 @@
 "use client";
 import {
   ActionIcon,
+  Box,
   Button,
   Center,
   Divider,
   Group,
   Select,
   SelectProps,
+  Stack,
   Text,
 } from "@mantine/core";
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { TbWriting } from "react-icons/tb";
+import { profileQuizQuestions } from "../../profile-quiz/constants";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import { PromptList } from "./prompt-list";
 import TrackedTextarea from "./tracked-textarea";
@@ -22,11 +25,18 @@ export interface Prompt {
   category: string;
 }
 
-export interface DisplayProps {
-  prompts: Prompt[];
+export interface Profile {
+  targetWordCount: number;
+  feedbackPersona: string;
+  motivatingFeedback: string;
 }
 
-export default function Display({ prompts }: DisplayProps) {
+export interface DisplayProps {
+  prompts: Prompt[];
+  profile: Profile;
+}
+
+export default function Display({ prompts, profile }: DisplayProps) {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
   const [randomPrompt, setRandomPrompt] = useState<Prompt | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -89,9 +99,9 @@ export default function Display({ prompts }: DisplayProps) {
         flex="1"
         align="center"
         style={{
-          padding: "0px", // Add padding for better spacing
-          borderRadius: "8px", // Rounded corners for smoother edges
-          cursor: "pointer", // Indicate interactivity
+          padding: "0px",
+          borderRadius: "8px",
+          cursor: "pointer",
         }}
         gap="sm"
       >
@@ -104,8 +114,8 @@ export default function Display({ prompts }: DisplayProps) {
         )}
         <Text
           style={{
-            fontWeight: "600", // Semi-bold for better readability
-            fontSize: "14px", // Slightly larger for better legibility
+            fontWeight: "600",
+            fontSize: "14px",
           }}
         >
           {option.value}
@@ -113,7 +123,7 @@ export default function Display({ prompts }: DisplayProps) {
         <Text
           c="dimmed"
           style={{
-            fontSize: "12px", // Keep the label smaller for a subtle look
+            fontSize: "12px",
           }}
         >
           {option["description"]}
@@ -121,8 +131,8 @@ export default function Display({ prompts }: DisplayProps) {
         {checked && (
           <FaCheck
             style={{
-              marginLeft: "auto", // Push the check icon to the right
-              color: "#1976d2", // Give it a pleasant, accent color
+              marginLeft: "auto",
+              color: "#1976d2",
             }}
           />
         )}
@@ -130,19 +140,32 @@ export default function Display({ prompts }: DisplayProps) {
     );
   };
 
+  const getProfileDescription = (questionKey: string, value: string) => {
+    const question = profileQuizQuestions.find(
+      (q) => q.question === questionKey
+    );
+    const option = question?.options.find((opt) => opt.value === value);
+    return option ? `${option.label} - ${option.description}` : value;
+  };
+
+  const enrichedProfile =
+    profile && Object.keys(profile).length > 0
+      ? {
+          targetWordCount: profile.targetWordCount,
+          feedbackPersona: getProfileDescription(
+            "feedbackPersona",
+            profile.feedbackPersona
+          ),
+          motivatingFeedback: getProfileDescription(
+            "motivatingFeedback",
+            profile.motivatingFeedback
+          ),
+        }
+      : null;
+
   return (
-    <>
-      <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0">
-        {/* <Button
-          variant="outline"
-          px={"sm"}
-          color={"blue"}
-          onClick={() => router.push("read")}
-          leftSection={<LuLayoutDashboard />}
-        >
-          View All
-        </Button> */}
-      </Group>
+    <Box style={{ display: "flex", flexDirection: "column", height: "85vh" }}>
+      <Group mt="xl" style={{ justifyContent: "flex-start" }} gap="0"></Group>
 
       <Group my={"md"} align="center">
         <Select
@@ -173,7 +196,6 @@ export default function Display({ prompts }: DisplayProps) {
           variant={randomPrompt ? "subtle" : "filled"}
           rightSection={randomPrompt ? <RxCross2 /> : null}
         >
-          {/* {randomPrompt ? "Reset Prompt" : "Get Random Prompt"} */}
           {randomPrompt
             ? "Reset Prompt"
             : selectedCategory
@@ -181,20 +203,24 @@ export default function Display({ prompts }: DisplayProps) {
               : "Get Random Prompt"}
         </Button>
       </Group>
-      {randomPrompt ? (
-        <TrackedTextarea
-          promptText={randomPrompt?.text}
-          categoryText={randomPrompt?.category}
-        />
-      ) : (
-        <>
-          <Divider my="md" />
-          <PromptList
-            data={filteredPrompts}
-            onSelectPrompt={handleSelectSinglePrompt}
+      <Stack style={{ flex: 1, width: "100%" }}>
+        {randomPrompt ? (
+          <TrackedTextarea
+            promptText={randomPrompt?.text}
+            categoryText={randomPrompt?.category}
+            targetWordCount={profile.targetWordCount}
+            profile={enrichedProfile}
           />
-        </>
-      )}
-    </>
+        ) : (
+          <>
+            <Divider my="md" />
+            <PromptList
+              data={filteredPrompts}
+              onSelectPrompt={handleSelectSinglePrompt}
+            />
+          </>
+        )}
+      </Stack>
+    </Box>
   );
 }

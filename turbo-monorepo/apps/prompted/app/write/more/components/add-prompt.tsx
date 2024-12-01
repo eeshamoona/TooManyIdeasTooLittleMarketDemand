@@ -185,6 +185,7 @@ export const AddPromptForm: React.FC<AddPromptFormProps> = ({
             variant="light"
             color="blue"
             loading={saveLoading}
+            loaderProps={{ type: "dots" }}
             flex={1}
             leftSection={<FaPaperPlane />}
           >

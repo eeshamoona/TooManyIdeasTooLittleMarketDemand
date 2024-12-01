@@ -9,6 +9,12 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
   const { data: user } = await supabase.auth.getUser();
   const username = user?.user?.user_metadata?.username ?? null;
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select()
+    .eq("username", username)
+    .single();
+
   const { data } = await supabase
     .from("entries")
     .select()
@@ -39,8 +45,10 @@ export default async function ReadPage({ params }: { params: { id: string } }) {
           category: data.category,
           created_at: data.created_at,
           ai_feedback: data.ai_feedback,
+          id: data.id,
         }}
         username={username}
+        profile={profile.profile}
       />
     </Container>
   );

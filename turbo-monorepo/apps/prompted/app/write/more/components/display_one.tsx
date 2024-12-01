@@ -2,9 +2,13 @@
 import { Box, Divider } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { DisplayProps, Prompt } from "../../components/display";
+import { Prompt } from "../../components/display";
 import { PromptList } from "../../components/prompt-list";
 import { AddPromptForm } from "./add-prompt";
+
+type DisplayProps = {
+  prompts: Prompt[];
+};
 
 export const Display = ({ prompts }: DisplayProps) => {
   const router = useRouter();

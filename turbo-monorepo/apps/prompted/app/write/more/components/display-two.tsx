@@ -1,11 +1,15 @@
 "use client";
 import { Box, Divider } from "@mantine/core";
 import { useState } from "react";
-import { DisplayProps, Prompt } from "../../components/display";
+import { Prompt } from "../../components/display";
 import { PromptList } from "../../components/prompt-list";
 import { AiAddPromptForm } from "./ai-add-prompt";
 
-export const Display2 = ({ prompts }: DisplayProps) => {
+type Display2Props = {
+  prompts: Prompt[];
+};
+
+export const Display2 = ({ prompts }: Display2Props) => {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>(prompts);
 
   const handleCategorySelected = (category: string | null) => {
