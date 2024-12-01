@@ -11,7 +11,8 @@ export async function signout() {
 
   if (error) {
     console.error("Error signing out:", error);
-    redirect("/error");
+    const errorMessage = `There was an error signing out: ${error.message}`;
+    redirect(`/error?error=${errorMessage}`);
   }
 
   revalidatePath("/", "layout");
