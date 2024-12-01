@@ -1,5 +1,6 @@
 "use client";
 import {
+  Accordion,
   ActionIcon,
   Badge,
   Box,
@@ -16,6 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
+import { IoStatsChart } from "react-icons/io5";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { RiBubbleChartFill, RiBubbleChartLine } from "react-icons/ri";
 import { convertTimeToDescription } from "../../../write/actions";
@@ -67,6 +69,7 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
   const [showAIParts, setShowAIParts] = useState(false);
   const [showWordFreq, setShowWordFreq] = useState(false);
   const [showCleanWordFreq, setShowCleanWordFreq] = useState<boolean>(false);
+  const [accordionValue, setAccordionValue] = useState<string | null>("stats");
 
   // Function to filter out useless words
   function cleanWordFreq(wordFreq: { [key: string]: number }): {
@@ -175,9 +178,23 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
           </div>
         ) : (
           <Box
-            style={{ height: "100%", display: "flex", flexDirection: "column" }}
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+            }}
           >
-            <Paper style={{ height: "100%", overflowY: "auto" }}>
+            <Paper
+              p="md"
+              style={{
+                flex: 1,
+                minHeight: 0,
+                overflowY: "auto",
+                whiteSpace: "pre-wrap",
+                wordBreak: "break-word",
+              }}
+            >
               {!showAIParts
                 ? data.text
                 : data.character_data.map((char, index) => (
@@ -198,19 +215,34 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
                     </span>
                   ))}
             </Paper>
-            <Box>
-              <Info
-                entry={{
-                  metadata_stats: data.metadata_stats,
-                  ai_feedback: data.ai_feedback,
-                  id: data.id,
-                  text: data.text,
-                  category: data.category,
-                  prompt: data.prompt,
-                }}
-                profile={profile}
-              />
-            </Box>
+
+            <Accordion
+              variant="separated"
+              mt="xs"
+              value={accordionValue}
+              onChange={setAccordionValue}
+            >
+              <Accordion.Item value="stats">
+                <Accordion.Control>
+                  <Group gap="xs">
+                    <IoStatsChart />
+                  </Group>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <Info
+                    entry={{
+                      metadata_stats: data.metadata_stats,
+                      ai_feedback: data.ai_feedback,
+                      id: data.id,
+                      text: data.text,
+                      category: data.category,
+                      prompt: data.prompt,
+                    }}
+                    profile={profile}
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
           </Box>
         )}
       </>

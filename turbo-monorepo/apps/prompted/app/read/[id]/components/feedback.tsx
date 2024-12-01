@@ -47,8 +47,11 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
     <Grid mt="sm" grow>
       {Object.entries(orderedFeedbackData).map(
         ([criteria, { score, feedback }], index) => {
-          const span = index < 3 ? 4 : 6; // 4 cards on top row, 3 on bottom
-          const height = index < 3 ? 150 : 125;
+          const span = {
+            xs: 12,
+            sm: index < 3 ? 4 : 6,
+          };
+          const height = 100;
 
           return (
             <Grid.Col key={criteria} span={span}>
@@ -56,26 +59,34 @@ export function FeedbackDisplay({ feedbackData }: FeedbackPrompts) {
                 h={height}
                 withBorder
                 radius="md"
-                p="sm"
+                p="xs"
                 onMouseEnter={() => setHoveredCategory(criteria)}
                 onMouseLeave={() => setHoveredCategory(null)}
               >
                 {hoveredCategory === criteria ? (
-                  <Text size="xs">{feedback}</Text>
+                  <Text
+                    size="xs"
+                    style={{
+                      overflowY: "auto",
+                      maxHeight: "80px",
+                      height: "100%",
+                    }}
+                  >
+                    {feedback}
+                  </Text>
                 ) : (
-                  <Stack h="100%" justify="space-between">
+                  <Stack h="100%" justify="space-between" gap="xs">
                     <Stack justify="start" gap={0}>
-                      <Text fz="md" tt="uppercase" fw={700}>
+                      <Text fz="sm" tt="uppercase" fw={700}>
                         {criteria}
                       </Text>
-
-                      <Text fz="sm" c="dimmed">
+                      <Text fz="xs" c="dimmed">
                         {criteriaDescriptions[criteria]}
                       </Text>
                     </Stack>
                     <Group justify="end">
                       <Rating
-                        size={"md"}
+                        size="sm"
                         readOnly
                         fractions={2}
                         value={score / 2}

@@ -41,16 +41,15 @@ export async function POST(request: Request) {
           ],
         },
       ],
-      temperature: 1,
-      max_tokens: 2048,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
+      temperature: 0.7,
+      max_tokens: 100,
+      top_p: 0.9,
+      frequency_penalty: 0.3,
+      presence_penalty: 0.3,
       response_format: {
         type: "text",
       },
     });
-    console.log(openaiResponse);
     const generatedSentence = openaiResponse.choices[0].message.content.trim();
     return NextResponse.json({ generatedSentence }, { status: 200 });
   } catch (error) {

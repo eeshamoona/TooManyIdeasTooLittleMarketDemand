@@ -1,5 +1,6 @@
 import {
   Box,
+  Grid,
   Select,
   Stack,
   TextInput,
@@ -46,46 +47,45 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           zIndex: 1,
           backgroundColor: headingColor,
           borderRadius: 5,
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "1rem",
-          alignItems: "center",
           width: "100%",
         }}
       >
-        {/* Search Input */}
-        <TextInput
-          label="Prompt Search"
-          placeholder="Type anything..."
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.currentTarget.value)}
-          disabled={!hasEntries}
-          flex={1}
-        />
-        {/* Multi-Select Filters */}
-        <CategoryMultiSelect
-          selectedCategories={categoryFilters}
-          setSelectedCategories={setCategoryFilters}
-          disabled={!hasEntries}
-        />
-        {/* Sort By Dropdown */}
-        <Select
-          label="Sort By"
-          data={[
-            { value: "dateAsc", label: "Date - Oldest First" },
-            { value: "dateDesc", label: "Date - Newest First" },
-            { value: "lengthAsc", label: "Length - Fastest First" },
-            { value: "lengthDesc", label: "Length - Slowest First" },
-            { value: "wordCountAsc", label: "Word Count - Shortest First" },
-            { value: "wordCountDesc", label: "Word Count - Longest First" },
-          ]}
-          placeholder="None selected"
-          value={sortBy}
-          onChange={setSortBy}
-          disabled={!hasEntries}
-          clearable
-          flex={1}
-        />
+        <Grid gutter="md">
+          <Grid.Col span={{ base: 12, sm: 12, lg: 4 }}>
+            <TextInput
+              label="Prompt Search"
+              placeholder="Type anything..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.currentTarget.value)}
+              disabled={!hasEntries}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <CategoryMultiSelect
+              selectedCategories={categoryFilters}
+              setSelectedCategories={setCategoryFilters}
+              disabled={!hasEntries}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+            <Select
+              label="Sort By"
+              data={[
+                { value: "dateAsc", label: "Date - Oldest First" },
+                { value: "dateDesc", label: "Date - Newest First" },
+                { value: "lengthAsc", label: "Length - Fastest First" },
+                { value: "lengthDesc", label: "Length - Slowest First" },
+                { value: "wordCountAsc", label: "Word Count - Shortest First" },
+                { value: "wordCountDesc", label: "Word Count - Longest First" },
+              ]}
+              placeholder="None selected"
+              value={sortBy}
+              onChange={setSortBy}
+              disabled={!hasEntries}
+              clearable
+            />
+          </Grid.Col>
+        </Grid>
       </Box>
     </Stack>
   );
