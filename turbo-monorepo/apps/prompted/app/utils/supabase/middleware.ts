@@ -2,7 +2,14 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 // NOTE: Add public routes here
-const publicRoutes = ["/", "/signup", "/login", "/error", "/check-email"];
+const publicRoutes = [
+  "/",
+  "/signup",
+  "/login",
+  "/error",
+  "/check-email",
+  "/not-found",
+];
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({

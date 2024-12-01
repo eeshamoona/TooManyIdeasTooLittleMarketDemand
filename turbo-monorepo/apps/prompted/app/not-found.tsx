@@ -4,13 +4,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import NotFoundImage from "../public/images/NotFound.png";
+import Footer from "./components/footer";
 
 const NotFound: React.FC = () => {
   const router = useRouter();
 
   return (
     <Container size="md">
-      <Stack align="center" gap="0">
+      <Stack align="center" gap="0" mt="-2rem">
         <Image
           src={NotFoundImage}
           alt="404 Not Found"
@@ -30,11 +31,12 @@ const NotFound: React.FC = () => {
           mt="md"
           size="md"
           variant="filled"
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/login")}
         >
           Take Me Home
         </Button>
       </Stack>
+      <Footer />
     </Container>
   );
 };
