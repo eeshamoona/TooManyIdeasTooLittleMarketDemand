@@ -4,13 +4,23 @@
 
 These badges have multiple achievement levels with specific thresholds.
 
-### Writing Volume & Quality
+### Writing Volume & Quality (11 total)
 
 - **Wordsmith**: Total words across all prompts
   - Levels: 500, 1000, 2000, 3000, 4000, 5000 words
 - **Word Mania**: Highest word count in a single prompt
   - Levels: 100, 200, 300, 400, 500, 600 words
-- **Concise Creator**: Entries with 50 words or less
+- **Concise Creator**: Entries with 100 words or less
+  - Levels: 5, 10, 20, 50, 100, 150 entries
+- **Simple Entry**: Entries between 100 and 250 words
+  - Levels: 5, 10, 20, 50, 100, 150 entries
+- **Quick Answer**: Entries between 250 and 400 words
+  - Levels: 5, 10, 20, 50, 100, 150 entries
+- **Developed Tale**: Entries between 400 and 650 words
+  - Levels: 5, 10, 20, 50, 100, 150 entries
+- **Rich Narrative**: Entries between 650 and 850 words
+  - Levels: 5, 10, 20, 50, 100, 150 entries
+- **Epic Story**: Entries over 850 words
   - Levels: 5, 10, 20, 50, 100, 150 entries
 - **Vocab Explorer**: Entries with over 80% word uniqueness
   - Levels: 5, 10, 20, 50, 100, 150 entries
@@ -19,14 +29,14 @@ These badges have multiple achievement levels with specific thresholds.
 - **True OG**: Entries with over 95% word uniqueness
   - Levels: 5, 10, 20, 50, 100, 150 entries
 
-### Vocabulary Tracking
+### Vocabulary Tracking (2 total)
 
 - **Uniqueness Collector**: Total unique words across all prompts
   - Levels: 500, 1000, 2000, 3000, 4000, 5000 words
 - **Unique Writer**: Most unique words in a single prompt
   - Levels: 50, 100, 150, 200, 300, 500 words
 
-### AI Interaction
+### AI Interaction (3 total)
 
 - **AI Collaborator**: Total AI interactions
   - Levels: 10, 25, 50, 100, 150, 200 calls
@@ -35,14 +45,18 @@ These badges have multiple achievement levels with specific thresholds.
 - **Purely Human**: Entries without AI assistance
   - Levels: 5, 10, 15, 25, 50, 100 entries
 
-### Time-Based Achievement
+### Time-Based Achievement (4 total)
 
 - **Speed Racer**: Entries under 1 minute
+  - Levels: 1, 5, 10, 15, 20, 25 entries
+- **Quick Draw**: Entries between 1 and 5 minutes
+  - Levels: 1, 5, 10, 15, 20, 25 entries
+- **Walking Speed**: Entries between 5 and 10 minutes
   - Levels: 1, 5, 10, 15, 20, 25 entries
 - **Turtle Wins**: Entries over 10 minutes
   - Levels: 1, 5, 10, 15, 20, 25 entries
 
-### Time of Day
+### Time of Day (4 total)
 
 - **Morning Dove**: Entries 6 AM - 12 PM UTC
   - Levels: 5, 10, 20, 50, 100, 150 entries
@@ -53,9 +67,9 @@ These badges have multiple achievement levels with specific thresholds.
 - **Night Owl**: Entries 12 AM - 6 AM UTC
   - Levels: 5, 10, 20, 50, 100, 150 entries
 
-### Category Progress
+### Category Progress (11 total)
 
-All categories have the same level thresholds: 10, 25, 50, 100, 150, 200 entries
+All categories have the same level thresholds for number of entries: 10, 25, 50, 100, 150, 200 entries
 
 - Calm Vibes
 - Brain Puzzles
@@ -73,7 +87,7 @@ All categories have the same level thresholds: 10, 25, 50, 100, 150, 200 entries
 
 These badges are earned once when specific criteria are met.
 
-### Milestones
+### Milestones (10 total)
 
 - **First Entry**: First submission
 - **First 100 Words**: First entry over 100 words
@@ -86,14 +100,14 @@ These badges are earned once when specific criteria are met.
 - **100th Entry**: Hundredth submission
 - **150th Entry**: Hundred-fiftieth submission
 
-### Special Achievements
+### Special Achievements (4 total)
 
 - **Exactly 1111 Words**: Entry with exactly 1111 words
 - **Exactly 1234 Words**: Entry with exactly 1234 words
 - **60 Seconds**: Entry completed in exactly 1 minute
 - **First Human Entry**: First entry without AI assistance
 
-### Category First Entries
+### Category First Entries (11 total)
 
 One-time badges for first submission in each category:
 
