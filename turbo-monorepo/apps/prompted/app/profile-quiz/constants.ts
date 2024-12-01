@@ -1,152 +1,155 @@
+import { AiFillNotification } from "react-icons/ai";
+import { BsQuestionLg } from "react-icons/bs";
+import { FaBook, FaCog, FaRegClock, FaRunning } from "react-icons/fa";
+import { GiGreekTemple, GiMeditation, GiWhistle } from "react-icons/gi";
+import { GrTask } from "react-icons/gr";
+import { IoEarth } from "react-icons/io5";
+import { LiaDumbbellSolid } from "react-icons/lia";
+import { LuGoal } from "react-icons/lu";
+import { MdRunningWithErrors } from "react-icons/md";
+import { RiEdit2Fill } from "react-icons/ri";
 import {
-  FaBalanceScale,
-  FaBook,
-  FaBrain,
-  FaBullseye,
-  FaCog,
-  FaCompass,
-  FaExclamationCircle,
-  FaEye,
-  FaFlag,
-  FaHeart,
-  FaLightbulb,
-  FaMagic,
-  FaPencilAlt,
-  FaQuestion,
-  FaRegClock,
-  FaRunning,
-  FaStar,
-  FaStepForward,
-  FaUserGraduate,
-} from "react-icons/fa";
+  TbEyeSearch,
+  TbMessageHeart,
+  TbTargetArrow,
+  TbUser,
+} from "react-icons/tb";
 
 export const profileQuizQuestions = [
   {
-    label: "Writing Goals",
-    icon: FaBullseye,
-    text: "What's your target word count per response?",
+    label: "Word Count",
+    icon: TbTargetArrow,
+    text: "How long would you like your journal entries to be?",
     question: "targetWordCount",
     options: [
       {
         value: "100",
         label: "Quick (100 words)",
-        description: "Quick, actionable fixes to level up your writing.",
+        description: "Perfect for jotting down initial ideas",
         icon: FaRegClock,
       },
       {
         value: "250",
         label: "Standard (250 words)",
-        description: "A mix of praise and constructive guidance.",
+        description: "Balanced for clarity and focus",
         icon: FaBook,
       },
       {
         value: "500",
         label: "Detailed (500 words)",
-        description: "Deep dive into your writing with detailed feedback.",
+        description: "Explore ideas with more depth",
         icon: FaRunning,
       },
       {
         value: "750",
         label: "Extensive (750 words)",
-        description:
-          "Comprehensive feedback covering all aspects of your writing.",
+        description: "Dive into detailed storytelling or analysis",
         icon: FaBook,
       },
       {
         value: "custom",
         label: "Custom",
-        description: "Tailor your feedback to your specific needs.",
+        description: "Adjust the word count to suit your needs",
         icon: FaCog,
       },
     ],
   },
   {
-    label: "AI Feedback Style",
-    icon: FaBrain,
-    text: "How would you like your AI feedback?",
+    label: "Feedback Persona",
+    icon: TbUser,
+    text: "What kind of writing companion would help you thrive?",
     question: "feedbackPersona",
     options: [
       {
         value: "gentle",
         label: "Cheerleader",
-        description: "Celebrate wins and gently suggest ways to grow.",
-        icon: FaHeart,
+        description: "Encouraging feedback to celebrate progress",
+        icon: AiFillNotification,
       },
       {
         value: "balanced",
         label: "Coach",
-        description: "A mix of praise and constructive guidance.",
-        icon: FaBalanceScale,
+        description: "Practical guidance with a mix of praise and direction",
+        icon: GiWhistle,
       },
       {
         value: "critical",
         label: "Critic",
-        description: "Direct, detailed advice to help you improve fast.",
-        icon: FaExclamationCircle,
+        description: "Constructive, detailed feedback for big improvement",
+        icon: MdRunningWithErrors,
       },
       {
         value: "inspirational",
         label: "Muse",
-        description: "Spark creative ideas and encourage exploration.",
-        icon: FaMagic,
+        description: "Creative ideas to inspire your next entry",
+        icon: GiGreekTemple,
       },
       {
         value: "efficient",
         label: "Editor",
-        description: "Quick, actionable fixes to level up your writing.",
-        icon: FaPencilAlt,
+        description: "Quick suggestions to refine your writing now",
+        icon: RiEdit2Fill,
       },
       {
         value: "reflective",
-        label: "Mentor",
-        description: "Focus on long-term growth with reflective insights.",
-        icon: FaUserGraduate,
+        label: "Guru",
+        description: "Guiding questions for deeper self-reflection",
+        icon: GiMeditation,
       },
     ],
   },
   {
     label: "Motivating Feedback",
-    icon: FaLightbulb,
-    text: "What kind of feedback motivates you most?",
+    icon: TbMessageHeart,
+    text: "Which feedback style helps you grow the most?",
     question: "motivatingFeedback",
     options: [
       {
-        value: "clearGoal",
-        label: "A clear goal for next time",
-        description: "Set an overarching target to focus on improving.",
-        icon: FaFlag,
+        value: "goal",
+        label: "Clear Goal",
+        description: "Stay focused with a specific target to aim for",
+        icon: LuGoal,
       },
       {
-        value: "actionableStep",
-        label: "An actionable step to improve",
-        description: "Get specific advice you can apply immediately.",
-        icon: FaStepForward,
+        value: "action",
+        label: "Next Steps",
+        description: "Practical advice you can apply right away",
+        icon: GrTask,
       },
       {
         value: "question",
-        label: "A question to explore",
-        description:
-          "Receive a thought-provoking question to spark creativity.",
-        icon: FaQuestion,
+        label: "Thought-Provoking Question",
+        description: "Open-ended prompts to fuel creativity",
+        icon: BsQuestionLg,
       },
       {
-        value: "highlightStrengths",
-        label: "Highlighting my strengths",
-        description: "Learn what's working well and how to build on it.",
-        icon: FaStar,
+        value: "strengths",
+        label: "Highlight Strengths",
+        description: "Build confidence by focusing the positives",
+        icon: LiaDumbbellSolid,
       },
       {
-        value: "newPerspective",
-        label: "A new perspective to consider",
-        description: "See your work from a different or fresh angle.",
-        icon: FaEye,
+        value: "perspective",
+        label: "New Perspective",
+        description: "Discover fresh ways to approach your work",
+        icon: TbEyeSearch,
       },
       {
-        value: "bigPicture",
-        label: "A reflection on the big picture",
-        description: "Connect your writing to the overall theme or purpose.",
-        icon: FaCompass,
+        value: "vision",
+        label: "Big Picture",
+        description: "Connect your ideas to a larger vision or purpose",
+        icon: IoEarth,
       },
     ],
   },
 ];
+
+export const getWordCountDescription = (count: number): string => {
+  if (count <= 200)
+    return `Quick Answer - Great for brainstorming or a vivid moment.`;
+  if (count <= 400) return `Short Story - A concise, focused response.`;
+  if (count <= 650) return `Developed Tale - Enough room to explore ideas.`;
+  if (count <= 850)
+    return `Rich Narrative - Add depth and detail to your story.`;
+  return `Epic Story - Fully immerse yourself in a complete world.`;
+};

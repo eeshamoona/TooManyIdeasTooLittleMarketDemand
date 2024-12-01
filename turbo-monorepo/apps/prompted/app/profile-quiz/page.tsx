@@ -4,19 +4,21 @@ import {
   Card,
   Container,
   Group,
+  Paper,
   SimpleGrid,
   Slider,
   Stack,
   Stepper,
   Text,
   Title,
+  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Profile } from "../write/components/display";
 import { updateProfile } from "./actions";
-import { profileQuizQuestions } from "./constants";
+import { getWordCountDescription, profileQuizQuestions } from "./constants";
 
 //TODO: If the user has already filled out the quiz we should add a button to cancel the quiz and go back
 // to the profile page with their original profile
@@ -30,6 +32,7 @@ export default function ProfileQuiz() {
   });
   const router = useRouter();
   const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
 
   const handleAnswerChange = (question: string, value: string | number) => {
     setAnswers((prev) => ({
@@ -50,23 +53,8 @@ export default function ProfileQuiz() {
     return Boolean(currentAnswer);
   };
 
-  const skipQuiz = async () => {
-    const defaultAnswers = {
-      targetWordCount: 250,
-      feedbackPersona: "balanced",
-      motivatingFeedback: "clearGoal",
-    };
-
-    try {
-      const { success } = await updateProfile(defaultAnswers);
-      if (success) {
-        router.push("/write");
-      } else {
-        console.error("Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Failed to update profile:", error);
-    }
+  const skipQuiz = () => {
+    router.push("/profile");
   };
 
   const nextStep = async () => {
@@ -97,17 +85,18 @@ export default function ProfileQuiz() {
 
     if (currentQuestion.question === "targetWordCount") {
       return (
-        <Stack
-          gap="xl"
-          style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}
-        >
+        <Stack gap="xs">
+          <Title ta="center">{answers.targetWordCount} words</Title>
+          <Text size="md" ta="center" c="dimmed">
+            {getWordCountDescription(answers.targetWordCount)}
+          </Text>
           <Slider
             value={answers.targetWordCount as number}
             onChange={(value) => handleAnswerChange("targetWordCount", value)}
             min={100}
             max={1000}
             step={50}
-            mt="xl"
+            mt="lg"
             marks={[
               { value: 100, label: "100" },
               { value: 250, label: "250" },
@@ -129,20 +118,6 @@ export default function ProfileQuiz() {
               },
             })}
           />
-          <Text size="lg" ta="center" fw={500}>
-            {(() => {
-              const count = answers.targetWordCount;
-              if (count <= 100)
-                return `Brief Response (${count} words) - Perfect for quick thoughts`;
-              if (count <= 350)
-                return `Short Article (${count} words) - Ideal for clear, concise ideas`;
-              if (count <= 650)
-                return `Full Article (${count} words) - Room to develop your thoughts`;
-              if (count <= 850)
-                return `In-Depth Piece (${count} words) - Space for rich detail`;
-              return `Comprehensive Essay (${count} words) - Full exploration of your topic`;
-            })()}
-          </Text>
         </Stack>
       );
     } else {
@@ -168,8 +143,12 @@ export default function ProfileQuiz() {
               onClick={() =>
                 handleAnswerChange(currentQuestion.question, option.value)
               }
+              p="md"
             >
-              <Stack align="center" gap={0}>
+              <Group justify="space-between">
+                <Text size="sm" ta="center" tt="uppercase" fw={500} c="dimmed">
+                  {option.label}
+                </Text>
                 {option.icon && (
                   <option.icon
                     size={24}
@@ -180,13 +159,17 @@ export default function ProfileQuiz() {
                     }
                   />
                 )}
-                <Text size="md" fw={500} mt="xs">
-                  {option.label}
+              </Group>
+
+              <Group align="flex-end" mt={25}>
+                <Text size="sm" tt="capitalize" fw={500}>
+                  {option.value}
                 </Text>
-                <Text size="sm" c="dimmed" ta="center">
-                  {option.description}
-                </Text>
-              </Stack>
+              </Group>
+
+              <Text size="xs" c="dimmed" lineClamp={2} mt={5}>
+                {option.description}
+              </Text>
             </Card>
           ))}
         </SimpleGrid>
@@ -197,34 +180,41 @@ export default function ProfileQuiz() {
   return (
     <Container size="lg">
       <Stack gap="xl" mt="xl" justify="start">
-        <Stack gap="sm" align="center">
+        <Stack gap="0" align="center">
           <Title order={2} ta="center">
             Let's Make This Space Yours
           </Title>
           <Text c="dimmed" size="md" ta="center">
-            A few quick questions to create your perfect writing environment.
+            Answer a few quick questions to customize your perfect writing
+            environment
           </Text>
         </Stack>
 
-        <Stepper active={activeStep} mx="xl" w="100%">
+        <Stepper radius="sm" size="sm" active={activeStep}>
           {profileQuizQuestions.map((q, index) => (
             <Stepper.Step
               key={index}
               label={q.label}
-              icon={q.icon && <q.icon size={18} />}
+              icon={q.icon && <q.icon size={20} />}
             />
           ))}
         </Stepper>
 
-        <Card withBorder radius="md" w="100%" padding={"sm"}>
-          <Stack gap="lg">
-            <Title order={2} ta="center">
-              {profileQuizQuestions[activeStep].text}
-            </Title>
+        <Card
+          radius="sm"
+          p="xs"
+          bg={colorScheme === "light" ? theme.colors.gray[0] : undefined}
+        >
+          <Text size="lg" ta="center">
+            {profileQuizQuestions[activeStep].text}
+          </Text>
+        </Card>
 
+        <Paper radius="md">
+          <Stack gap="lg">
             {renderQuestionContent()}
 
-            <Group justify="space-between">
+            <Group justify="space-between" mt="md">
               <Group>
                 <Button
                   variant="default"
@@ -241,7 +231,7 @@ export default function ProfileQuiz() {
               </Button>
             </Group>
           </Stack>
-        </Card>
+        </Paper>
 
         <Button
           variant="subtle"

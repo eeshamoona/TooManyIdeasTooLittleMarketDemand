@@ -1,5 +1,5 @@
 "use client";
-import { Button, Container } from "@mantine/core";
+import { Button, Center, Container, Loader } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaLock } from "react-icons/fa";
@@ -23,7 +23,7 @@ const ProfilePage: React.FC = () => {
           router.push("/login");
           return;
         }
-        
+
         const { entries: entriesData, profile: profileData } =
           await getData(userId);
         setEntries(entriesData);
@@ -31,7 +31,7 @@ const ProfilePage: React.FC = () => {
         setEmail(email);
         setUserName(username);
       } catch (error) {
-        console.error('Error loading profile:', error);
+        console.error("Error loading profile:", error);
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,11 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <Container size="lg" py="md">Loading...</Container>;
+    return (
+      <Center style={{ height: "100vh" }}>
+        <Loader color="blue" size="lg" type="dots" />
+      </Center>
+    );
   }
 
   const handleResetPassword = () => {
@@ -58,7 +62,7 @@ const ProfilePage: React.FC = () => {
       />
       <Button
         leftSection={<FaLock />}
-        variant="outline"
+        variant="light"
         color="red"
         fullWidth
         onClick={handleResetPassword}
