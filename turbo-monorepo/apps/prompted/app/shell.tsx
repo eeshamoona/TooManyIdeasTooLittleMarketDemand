@@ -265,7 +265,10 @@ export function CustomAppShell({
               leftSection={
                 <LuPencil style={{ width: "1rem", height: "1rem" }} />
               }
-              onClick={() => router.push("/write")}
+              onClick={() => {
+                router.push("/write");
+                toggle();
+              }}
             >
               Write
             </Button>
@@ -274,7 +277,10 @@ export function CustomAppShell({
               leftSection={
                 <LuBookOpen style={{ width: "1rem", height: "1rem" }} />
               }
-              onClick={() => router.push("/read")}
+              onClick={() => {
+                router.push("/read");
+                toggle();
+              }}
             >
               Read
             </Button>
@@ -283,7 +289,10 @@ export function CustomAppShell({
               leftSection={
                 <LuAward style={{ width: "1rem", height: "1rem" }} />
               }
-              onClick={() => router.push("/progress")}
+              onClick={() => {
+                router.push("/progress");
+                toggle();
+              }}
             >
               Progress
             </Button>
@@ -295,7 +304,10 @@ export function CustomAppShell({
               leftSection={
                 <LuBookOpen style={{ width: "1rem", height: "1rem" }} />
               }
-              onClick={() => router.push("/profile")}
+              onClick={() => {
+                router.push("/profile");
+                toggle();
+              }}
             >
               My Profile
             </Button>
@@ -305,7 +317,10 @@ export function CustomAppShell({
               leftSection={
                 <IoExitOutline style={{ width: "1rem", height: "1rem" }} />
               }
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                toggle();
+              }}
             >
               Logout
             </Button>
