@@ -17,8 +17,11 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { LiaUserEditSolid } from "react-icons/lia";
-import { TbTargetArrow } from "react-icons/tb";
-import { profileQuizQuestions } from "../../profile-quiz/constants";
+import { TbArrowRight, TbTargetArrow, TbUser } from "react-icons/tb";
+import {
+  getWordCountDescription,
+  profileQuizQuestions,
+} from "../../profile-quiz/constants";
 import Heatmap from "../../progress/components/heatmap";
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 import DonutCharts from "./donut-chart";
@@ -50,26 +53,6 @@ const StatCharts: React.FC<StatChartsProps> = ({
       description: option?.description || "",
       Icon: option?.icon,
     };
-  };
-
-  const getWordCountDescription = (count: number) => {
-    const descriptions = [
-      { threshold: 100, text: "Brief Response - Perfect for quick thoughts" },
-      {
-        threshold: 350,
-        text: "Short Article - Ideal for clear, concise ideas",
-      },
-      {
-        threshold: 650,
-        text: "Full Article - Room to develop your thoughts",
-      },
-      { threshold: 850, text: "In-Depth Piece - Space for rich detail" },
-      {
-        threshold: Infinity,
-        text: "Comprehensive Essay - Full exploration of your topic",
-      },
-    ];
-    return descriptions.find((d) => count <= d.threshold)?.text;
   };
 
   const renderProfileDetails = () => {
@@ -264,8 +247,12 @@ const StatCharts: React.FC<StatChartsProps> = ({
                 onClick={() => router.push("/profile-quiz")}
                 variant="light"
                 fullWidth
+                leftSection={
+                  <TbUser style={{ width: "1rem", height: "1rem" }} />
+                }
+                rightSection={<TbArrowRight />}
               >
-                Fill Out Profile
+                Customize Your Writing Feedback
               </Button>
             </>
           ) : (

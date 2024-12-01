@@ -143,3 +143,13 @@ export const profileQuizQuestions = [
     ],
   },
 ];
+
+export const getWordCountDescription = (count: number): string => {
+  if (count <= 200)
+    return `Quick Answer - Great for brainstorming or a vivid moment.`;
+  if (count <= 400) return `Short Story - A concise, focused response.`;
+  if (count <= 650) return `Developed Tale - Enough room to explore ideas.`;
+  if (count <= 850)
+    return `Rich Narrative - Add depth and detail to your story.`;
+  return `Epic Story - Fully immerse yourself in a complete world.`;
+};

@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Profile } from "../write/components/display";
 import { updateProfile } from "./actions";
-import { profileQuizQuestions } from "./constants";
+import { getWordCountDescription, profileQuizQuestions } from "./constants";
 
 //TODO: If the user has already filled out the quiz we should add a button to cancel the quiz and go back
 // to the profile page with their original profile
@@ -88,17 +88,7 @@ export default function ProfileQuiz() {
         <Stack gap="xs">
           <Title ta="center">{answers.targetWordCount} words</Title>
           <Text size="md" ta="center" c="dimmed">
-            {(() => {
-              const count = answers.targetWordCount;
-              if (count <= 100)
-                return `Brief Response - Perfect for quick thoughts`;
-              if (count <= 350)
-                return `Short Article - Ideal for clear, concise ideas`;
-              if (count <= 650)
-                return `Full Article - Room to develop your thoughts`;
-              if (count <= 850) return `In-Depth Piece - Space for rich detail`;
-              return `Comprehensive Essay - Full exploration of your prompt`;
-            })()}
+            {getWordCountDescription(answers.targetWordCount)}
           </Text>
           <Slider
             value={answers.targetWordCount as number}
