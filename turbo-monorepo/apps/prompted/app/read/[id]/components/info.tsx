@@ -15,7 +15,7 @@ interface InfoProps {
     category: string;
     prompt: string;
   };
-  profile: Profile;
+  profile: Profile | null;
 }
 
 const Info: React.FC<InfoProps> = ({ entry, profile }) => {
@@ -34,7 +34,7 @@ const Info: React.FC<InfoProps> = ({ entry, profile }) => {
     return {
       ...entry.metadata_stats,
       aiWordCount,
-      targetWordCount: profile.targetWordCount,
+      targetWordCount: profile?.targetWordCount ?? null,
     };
   };
 
