@@ -44,7 +44,8 @@ export async function GET(request: NextRequest) {
             profileError
           );
           const errorMessage = `There was an error fetching profile for userId ${user.id}: ${profileError.message}. You may need to sign up again.`;
-          redirect(`/error?error=${errorMessage}`);
+          const encodedErrorMessage = encodeURIComponent(errorMessage);
+          redirect(`/error?error=${encodedErrorMessage}`);
         }
 
         // Load badges for the user
@@ -66,5 +67,6 @@ export async function GET(request: NextRequest) {
   }
   const errorMessage =
     "There was an authenticating your link. Please get a new link.";
-  redirect(`/error?error=${errorMessage}`);
+  const encodedErrorMessage = encodeURIComponent(errorMessage);
+  redirect(`/error?error=${encodedErrorMessage}`);
 }
