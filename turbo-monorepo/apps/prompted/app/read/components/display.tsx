@@ -183,7 +183,7 @@ export default function DisplayEntries({ data }: any) {
         </ActionIcon>
       </Group>
       <Box p="sm" style={{ flexGrow: 1, overflowY: "auto" }}>
-        <SimpleGrid cols={2} spacing="md" verticalSpacing="md">
+        <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md" verticalSpacing="md">
           {filteredEntries.map((entry) => (
             <EntryCard
               key={entry.id}
