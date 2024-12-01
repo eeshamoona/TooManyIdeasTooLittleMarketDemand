@@ -26,14 +26,14 @@ export interface Prompt {
 }
 
 export interface Profile {
-  targetWordCount: number;
-  feedbackPersona: string;
-  motivatingFeedback: string;
+  targetWordCount?: number;
+  feedbackPersona?: string;
+  motivatingFeedback?: string;
 }
 
 export interface DisplayProps {
   prompts: Prompt[];
-  profile: Profile;
+  profile: Profile | null;
 }
 
 export default function Display({ prompts, profile }: DisplayProps) {
@@ -208,7 +208,7 @@ export default function Display({ prompts, profile }: DisplayProps) {
           <TrackedTextarea
             promptText={randomPrompt?.text}
             categoryText={randomPrompt?.category}
-            targetWordCount={profile.targetWordCount}
+            targetWordCount={enrichedProfile?.targetWordCount}
             profile={enrichedProfile}
           />
         ) : (

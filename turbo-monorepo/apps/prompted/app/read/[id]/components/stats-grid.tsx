@@ -1,13 +1,13 @@
 "use client";
 import { Grid, Group, Paper, Text, useMantineTheme } from "@mantine/core";
 import {
-  FaBalanceScale,
   FaChartPie,
   FaClock,
   FaFingerprint,
   FaFont,
   FaPercentage,
   FaRobot,
+  FaShapes,
   FaUser,
 } from "react-icons/fa";
 import { getPercentageColor } from "../../actions";
@@ -18,7 +18,7 @@ const icons = {
   userCharacters: FaUser,
   userPercentage: FaChartPie,
   uniqueWordCount: FaFingerprint,
-  uniqueWordPercentage: FaBalanceScale,
+  uniqueWordPercentage: FaShapes,
   totalWords: FaFont,
   elapsedTime: FaClock,
   percentage: FaPercentage,
@@ -35,7 +35,7 @@ export type StatsProps = {
   elapsedTime: number;
   aiCallCount: number;
   aiWordCount: number;
-  targetWordCount: number;
+  targetWordCount: number | null;
 };
 
 const data = (stats: StatsProps) =>
@@ -43,27 +43,32 @@ const data = (stats: StatsProps) =>
     {
       title: "Total Words",
       icon: "totalWords",
-      value: `${stats.totalWords} / ${stats.targetWordCount} words`,
+      value: stats.targetWordCount
+        ? `${stats.totalWords} / ${stats.targetWordCount} words`
+        : `${stats.totalWords}`,
       color:
-        stats.totalWords < stats.targetWordCount * 0.8
-          ? "red"
-          : stats.totalWords < stats.targetWordCount
-            ? "yellow"
-            : "green",
-      description:
-        stats.totalWords < stats.targetWordCount
+        stats.targetWordCount === null
+          ? ""
+          : stats.totalWords < stats.targetWordCount * 0.8
+            ? "red"
+            : stats.totalWords < stats.targetWordCount
+              ? "yellow"
+              : "green",
+      description: stats.targetWordCount
+        ? stats.totalWords < stats.targetWordCount
           ? `${stats.targetWordCount - stats.totalWords} words below target`
-          : `${stats.totalWords - stats.targetWordCount} words over target 🎉`,
+          : `${stats.totalWords - stats.targetWordCount} words over target 🎉`
+        : "Keep going, every word counts!",
     },
     {
-      title: "Writing Variety",
+      title: "Diversity",
       icon: "uniqueWordPercentage",
       value: `${stats.uniqueWordPercentage.toFixed(2)}% unique`,
       color: getPercentageColor(stats.uniqueWordPercentage),
       description: `${stats.uniqueWordCount} different words used`,
     },
     {
-      title: "Writing Originality",
+      title: "Originality",
       icon: "userPercentage",
       value: `${stats.userPercentage}% original`,
       color: getPercentageColor(stats.userPercentage),

@@ -27,8 +27,8 @@ interface TrackedTextareaProps {
   placeholder?: string;
   promptText: string;
   categoryText: string;
-  targetWordCount: number;
-  profile: Profile;
+  targetWordCount?: number;
+  profile?: Profile;
 }
 
 export interface Character {
@@ -190,7 +190,7 @@ export default function TrackedTextarea({
           response: combinedResponse,
           category: categoryText,
           prompt: promptText,
-          profile: profile,
+          profile: profile ?? null,
         }),
       });
       const generatedJson = await aiFeedbackData.json();
@@ -277,7 +277,7 @@ export default function TrackedTextarea({
       userCharacters,
       userPercentage: parseFloat(userPercentage.toFixed(2)),
       wordCount,
-      targetWordCount,
+      targetWordCount: targetWordCount ?? null,
       aiWordCount,
     };
   };
