@@ -251,27 +251,81 @@ export function CustomAppShell({
       </AppShell.Header>
 
       <AppShell.Navbar py="md" px={4}>
-        <Button
-          variant={isActive("/write") ? "filled" : "light"}
-          leftSection={<LuPencil style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/write")}
-        >
-          Write
-        </Button>
-        <Button
-          variant={isActive("/read") ? "filled" : "light"}
-          leftSection={<LuBookOpen style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/read")}
-        >
-          Read
-        </Button>
-        <Button
-          variant={isActive("/progress") ? "filled" : "light"}
-          leftSection={<LuAward style={{ width: "1rem", height: "1rem" }} />}
-          onClick={() => router.push("/progress")}
-        >
-          Progress
-        </Button>
+        <Group h="100%" grow>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+              height: "100%",
+            }}
+          >
+            <Button
+              variant={isActive("/write") ? "filled" : "light"}
+              leftSection={
+                <LuPencil style={{ width: "1rem", height: "1rem" }} />
+              }
+              onClick={() => {
+                router.push("/write");
+                toggle();
+              }}
+            >
+              Write
+            </Button>
+            <Button
+              variant={isActive("/read") ? "filled" : "light"}
+              leftSection={
+                <LuBookOpen style={{ width: "1rem", height: "1rem" }} />
+              }
+              onClick={() => {
+                router.push("/read");
+                toggle();
+              }}
+            >
+              Read
+            </Button>
+            <Button
+              variant={isActive("/progress") ? "filled" : "light"}
+              leftSection={
+                <LuAward style={{ width: "1rem", height: "1rem" }} />
+              }
+              onClick={() => {
+                router.push("/progress");
+                toggle();
+              }}
+            >
+              Progress
+            </Button>
+
+            <div style={{ flexGrow: 1 }} />
+
+            <Button
+              variant={isActive("/profile") ? "filled" : "light"}
+              leftSection={
+                <LuBookOpen style={{ width: "1rem", height: "1rem" }} />
+              }
+              onClick={() => {
+                router.push("/profile");
+                toggle();
+              }}
+            >
+              My Profile
+            </Button>
+            <Button
+              variant="light"
+              color="red"
+              leftSection={
+                <IoExitOutline style={{ width: "1rem", height: "1rem" }} />
+              }
+              onClick={() => {
+                handleLogout();
+                toggle();
+              }}
+            >
+              Logout
+            </Button>
+          </div>
+        </Group>
       </AppShell.Navbar>
 
       <AppShell.Main>{children}</AppShell.Main>

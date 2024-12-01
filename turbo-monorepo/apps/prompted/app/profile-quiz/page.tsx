@@ -161,8 +161,8 @@ export default function ProfileQuiz() {
                 )}
               </Group>
 
-              <Group align="flex-end" mt={25}>
-                <Text size="sm" tt="capitalize" fw={500}>
+              <Group align="flex-end" mt={"sm"}>
+                <Text size="lg" tt="capitalize" fw={500}>
                   {option.value}
                 </Text>
               </Group>

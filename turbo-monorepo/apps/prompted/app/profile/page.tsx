@@ -1,8 +1,9 @@
 "use client";
-import { Button, Center, Container, Loader } from "@mantine/core";
+import { Button, Container } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaLock } from "react-icons/fa";
+import Loading from "../loading";
 import { getData, isUserLoggedIn } from "./actions";
 import Charts from "./components/charts";
 
@@ -40,11 +41,7 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <Center style={{ height: "100vh" }}>
-        <Loader color="blue" size="lg" type="dots" />
-      </Center>
-    );
+    return <Loading />;
   }
 
   const handleResetPassword = () => {

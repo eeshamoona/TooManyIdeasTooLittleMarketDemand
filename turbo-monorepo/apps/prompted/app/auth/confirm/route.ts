@@ -43,7 +43,9 @@ export async function GET(request: NextRequest) {
             user.id,
             profileError
           );
-          redirect("/error");
+          const errorMessage = `There was an error fetching profile for userId ${user.id}: ${profileError.message}. You may need to sign up again.`;
+          const encodedErrorMessage = encodeURIComponent(errorMessage);
+          redirect(`/error?error=${encodedErrorMessage}`);
         }
 
         // Load badges for the user
@@ -63,7 +65,8 @@ export async function GET(request: NextRequest) {
   } else {
     console.warn("Missing required parameters: token_hash or type");
   }
-
-  console.log("Redirecting to /error");
-  redirect("/error");
+  const errorMessage =
+    "There was an authenticating your link. Please get a new link.";
+  const encodedErrorMessage = encodeURIComponent(errorMessage);
+  redirect(`/error?error=${encodedErrorMessage}`);
 }

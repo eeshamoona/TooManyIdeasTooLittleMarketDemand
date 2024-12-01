@@ -6,7 +6,6 @@ import {
   Center,
   Grid,
   Group,
-  Loader,
   Paper,
   Stack,
   Text,
@@ -18,6 +17,7 @@ import React from "react";
 import { FaEnvelope } from "react-icons/fa";
 import { LiaUserEditSolid } from "react-icons/lia";
 import { TbArrowRight, TbTargetArrow, TbUser } from "react-icons/tb";
+import Loading from "../../loading";
 import {
   getWordCountDescription,
   profileQuizQuestions,
@@ -94,11 +94,7 @@ const StatCharts: React.FC<StatChartsProps> = ({
   };
 
   if (!entries || !profile) {
-    return (
-      <Center style={{ height: "100vh" }}>
-        <Loader size="lg" />
-      </Center>
-    );
+    return <Loading />;
   }
 
   const numberOfEntriesInEachCategory = Object.values(

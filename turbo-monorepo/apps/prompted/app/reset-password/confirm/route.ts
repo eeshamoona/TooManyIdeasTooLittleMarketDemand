@@ -10,7 +10,10 @@ export async function GET(request: NextRequest) {
 
   if (!token || !email) {
     console.warn("Missing required parameters: token or email");
-    redirect("/error?message=Missing required parameters");
+    const errorMessage =
+      "Your reset password link is invalid. Please get a new link.";
+    const encodedErrorMessage = encodeURIComponent(errorMessage);
+    redirect(`/error?error=${encodedErrorMessage}`);
   }
 
   const supabase = createClient();
@@ -26,7 +29,8 @@ export async function GET(request: NextRequest) {
       error.message === "Email link is invalid or has expired"
         ? "The link is invalid or has expired."
         : "OTP verification failed.";
-    redirect(`/error?message=${encodeURIComponent(errorMessage)}`);
+    const encodedErrorMessage = encodeURIComponent(errorMessage);
+    redirect(`/error?error=${encodedErrorMessage}`);
   }
 
   console.log("OTP verified successfully, redirecting to:", next);

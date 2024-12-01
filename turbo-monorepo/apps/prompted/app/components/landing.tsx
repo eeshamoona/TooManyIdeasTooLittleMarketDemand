@@ -1,8 +1,9 @@
-import { Button, Center, Container, Loader, Stack, Title } from "@mantine/core";
+import { Button, Container, Stack, Title } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import React, { Suspense } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { usePrompts } from "../context/PromptContext";
+import Loading from "../loading";
 import { TypewriterArray } from "./typewriter";
 
 // Lazy load the components
@@ -38,13 +39,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <Suspense
-        fallback={
-          <Center style={{ height: "100vh" }}>
-            <Loader color="blue" size="lg" type="dots" />
-          </Center>
-        }
-      >
+      <Suspense fallback={<Loading />}>
         <FullHeightSection>
           <HeroPage
             scrollToCallback={scrollToHowItWorks}
