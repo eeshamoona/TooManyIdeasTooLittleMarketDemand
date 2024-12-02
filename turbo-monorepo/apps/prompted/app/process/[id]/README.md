@@ -100,11 +100,40 @@ These badges are earned once when specific criteria are met.
 - **100th Entry**: Hundredth submission
 - **150th Entry**: Hundred-fiftieth submission
 
-### Special Achievements (4 total)
+### Special Achievements
 
+#### Word Count Achievements (16 total)
+- **Exactly 111 Words**: Entry with exactly 111 words
+- **Exactly 123 Words**: Entry with exactly 123 words
+- **Exactly 222 Words**: Entry with exactly 222 words
+- **Exactly 250 Words**: Entry with exactly 250 words
+- **Exactly 333 Words**: Entry with exactly 333 words
+- **Exactly 444 Words**: Entry with exactly 444 words
+- **Exactly 500 Words**: Entry with exactly 500 words
+- **Exactly 555 Words**: Entry with exactly 555 words
+- **Exactly 666 Words**: Entry with exactly 666 words
+- **Exactly 750 Words**: Entry with exactly 700 words
+- **Exactly 777 Words**: Entry with exactly 777 words
+- **Exactly 888 Words**: Entry with exactly 888 words
+- **Exactly 999 Words**: Entry with exactly 999 words
+- **Exactly 1000 Words**: Entry with exactly 1000 words
 - **Exactly 1111 Words**: Entry with exactly 1111 words
 - **Exactly 1234 Words**: Entry with exactly 1234 words
+
+#### Time Achievements (11 total)
+- **30 Seconds**: Entry completed in exactly 30 seconds
 - **60 Seconds**: Entry completed in exactly 1 minute
+- **120 Seconds**: Entry completed in exactly 2 minutes
+- **180 Seconds**: Entry completed in exactly 3 minutes
+- **240 Seconds**: Entry completed in exactly 4 minutes
+- **300 Seconds**: Entry completed in exactly 5 minutes
+- **360 Seconds**: Entry completed in exactly 6 minutes
+- **420 Seconds**: Entry completed in exactly 7 minutes
+- **480 Seconds**: Entry completed in exactly 8 minutes
+- **540 Seconds**: Entry completed in exactly 9 minutes
+- **600 Seconds**: Entry completed in exactly 10 minutes
+
+#### Unique Achievement
 - **First Human Entry**: First entry without AI assistance
 
 ### Category First Entries (11 total)
