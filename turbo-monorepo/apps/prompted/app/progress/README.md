@@ -1,5 +1,18 @@
 # Badge Documentation
 
+There are a total of 94 badges in the database at the moment.
+
+## Badge Properties
+
+- **id**: Unique identifier for the badge
+- **title**: Title of the badge
+- **description**: Description of the badge
+- **hasLevels**: Indicates if the badge has multiple achievement levels
+- **thresholds**: For leveled badges, defines the requirements for each level
+- **label**: For leveled badges, the label of the threshold value
+- **icon**: Unique icon representing the badge theme
+- **criteria**: JavaScript-based calculation logic for badge progress
+
 ## Level-Based Badges
 
 These badges have multiple achievement levels with specific thresholds.
@@ -103,6 +116,7 @@ These badges are earned once when specific criteria are met.
 ### Special Achievements
 
 #### Word Count Achievements (16 total)
+
 - **Exactly 111 Words**: Entry with exactly 111 words
 - **Exactly 123 Words**: Entry with exactly 123 words
 - **Exactly 222 Words**: Entry with exactly 222 words
@@ -120,7 +134,20 @@ These badges are earned once when specific criteria are met.
 - **Exactly 1111 Words**: Entry with exactly 1111 words
 - **Exactly 1234 Words**: Entry with exactly 1234 words
 
+#### Unique Word Achievements (9 total)
+
+- **10 Different Words**: Entry with exactly 10 different words
+- **25 Different Words**: Entry with exactly 25 different words
+- **50 Different Words**: Entry with exactly 50 different words
+- **75 Different Words**: Entry with exactly 75 different words
+- **100 Different Words**: Entry with exactly 100 different words
+- **125 Different Words**: Entry with exactly 125 different words
+- **150 Different Words**: Entry with exactly 150 different words
+- **175 Different Words**: Entry with exactly 175 different words
+- **200 Different Words**: Entry with exactly 200 different words
+
 #### Time Achievements (11 total)
+
 - **30 Seconds**: Entry completed in exactly 30 seconds
 - **60 Seconds**: Entry completed in exactly 1 minute
 - **120 Seconds**: Entry completed in exactly 2 minutes
@@ -133,8 +160,10 @@ These badges are earned once when specific criteria are met.
 - **540 Seconds**: Entry completed in exactly 9 minutes
 - **600 Seconds**: Entry completed in exactly 10 minutes
 
-#### Unique Achievement
+#### Unique Achievements (2 total)
+
 - **First Human Entry**: First entry without AI assistance
+- **First 100% Unique Entry**: First entry with 100% word uniqueness
 
 ### Category First Entries (11 total)
 
@@ -151,10 +180,3 @@ One-time badges for first submission in each category:
 - First Empathy Challenge Entry
 - First Confidence Boost Entry
 - First Gratitude Moments Entry
-
-## Badge Properties
-
-- **hasLevels**: Indicates if the badge has multiple achievement levels
-- **thresholds**: For leveled badges, defines the requirements for each level
-- **icon**: Unique icon representing the badge theme
-- **criteria**: JavaScript-based calculation logic for badge progress
