@@ -1,6 +1,5 @@
 import React from "react";
-import { getBadgeColor } from "../interface";
-import { getIconComponent } from "../interface2";
+import { getBadgeColor, getIconComponent } from "../interface";
 import "./level-badge.css";
 
 interface LevelBadgeProps {

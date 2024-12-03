@@ -3,7 +3,7 @@ import { Text, Tooltip } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import React, { useState } from "react";
 import { FaQuestionCircle } from "react-icons/fa";
-import { getIconComponent } from "../interface2";
+import { getIconComponent } from "../interface";
 import "./milestone-badge.css";
 
 interface MilestoneBadgeProps {
