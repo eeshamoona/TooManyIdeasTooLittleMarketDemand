@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
         // Load badges for the user
         await loadBadgesForUser(user.id);
 
-        if (profileData?.profile.length === 0 && type === "signup") {
+        if (!profileData?.profile && type === "signup") {
           console.warn("User profile incomplete, redirecting to profile form");
           redirect("/profile-quiz");
         }

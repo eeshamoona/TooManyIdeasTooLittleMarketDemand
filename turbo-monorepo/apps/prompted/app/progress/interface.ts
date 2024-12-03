@@ -1,41 +1,26 @@
-import { BsSpeedometer } from "react-icons/bs";
-import {
-  FaDove,
-  FaQuestionCircle,
-  FaRegCompass,
-  FaRegLightbulb,
-  FaRegStar,
-} from "react-icons/fa";
-import { FaSpaceAwesome } from "react-icons/fa6";
-import {
-  GiEagleHead,
-  GiFinch,
-  GiGems,
-  GiLeafSwirl,
-  GiMagicLamp,
-  GiMagicPalm,
-  GiOwl,
-  GiPuzzle,
-  GiTurtleShell,
-} from "react-icons/gi";
-import { GoTrophy } from "react-icons/go";
-import { HiOutlineEmojiHappy } from "react-icons/hi";
-import {
-  IoExtensionPuzzleOutline,
-  IoGameControllerOutline,
-  IoLeafOutline,
-  IoRocketOutline,
-} from "react-icons/io5";
-import { LiaHandshake } from "react-icons/lia";
-import { LuGem, LuShrink, LuWholeWord } from "react-icons/lu";
-import { MdManageSearch, MdOutlineCelebration } from "react-icons/md";
-import {
-  TbBallpen,
-  TbLetterCaseUpper,
-  TbUserHexagon,
-  TbUserStar,
-} from "react-icons/tb";
-import { TfiThought } from "react-icons/tfi";
+import * as Ai from "react-icons/ai";
+import * as Bi from "react-icons/bi";
+import * as Bs from "react-icons/bs";
+import * as Cg from "react-icons/cg";
+import * as Fa from "react-icons/fa";
+import * as Fa6 from "react-icons/fa6";
+import * as Fi from "react-icons/fi";
+import * as Gi from "react-icons/gi";
+import * as Go from "react-icons/go";
+import * as Hi from "react-icons/hi";
+import * as Hi2 from "react-icons/hi2";
+import * as Io from "react-icons/io";
+import * as Io5 from "react-icons/io5";
+import * as Lia from "react-icons/lia";
+import * as Lu from "react-icons/lu";
+import * as Md from "react-icons/md";
+import * as Ri from "react-icons/ri";
+import * as Rx from "react-icons/rx";
+import * as Si from "react-icons/si";
+import * as Tb from "react-icons/tb";
+import * as Tfi from "react-icons/tfi";
+import * as Vsc from "react-icons/vsc";
+import * as Wi from "react-icons/wi";
 
 export interface BadgeModel {
   id: string;
@@ -58,6 +43,72 @@ export interface ProgressModel {
   badges: BadgeModel;
 }
 
+const iconCache: { [key: string]: any } = {};
+
+// Function to get the appropriate icon component based on the icon name
+export const getIconComponent = (iconName: string) => {
+  // Return cached icon if it exists
+  if (iconCache[iconName]) {
+    return iconCache[iconName];
+  }
+
+  // Handle special cases for Io5 and Heroicons v2 naming conventions
+  if (iconName.startsWith("Io") && iconName.includes("Outline")) {
+    iconCache[iconName] = Io5[iconName];
+    return iconCache[iconName];
+  }
+  if (iconName.startsWith("Hi") && iconName.includes("2")) {
+    iconCache[iconName] = Hi2[iconName];
+    return iconCache[iconName];
+  }
+
+  // Split the icon name to determine the prefix for the icon set
+  const [prefix] = iconName.split(/(?=[A-Z])/);
+
+  // Mapping of icon prefixes to their respective libraries
+  const iconSet: { [key: string]: any } = {
+    Ai,
+    Bi,
+    Bs,
+    Cg,
+    Fa,
+    Fa6,
+    Fi,
+    Gi,
+    Go,
+    Hi,
+    Hi2,
+    Io,
+    Io5,
+    Lia,
+    Lu,
+    Md,
+    Ri,
+    Rx,
+    Si,
+    Tb,
+    Tfi,
+    Vsc,
+    Wi,
+  };
+
+  // Check for Font Awesome icons in both Fa and Fa6
+  if (prefix === "Fa") {
+    iconCache[iconName] = Fa[iconName] || Fa6[iconName];
+    return iconCache[iconName];
+  }
+
+  // Check for Heroicons in both Hi and Hi2
+  if (prefix === "Hi") {
+    iconCache[iconName] = Hi[iconName] || Hi2[iconName];
+    return iconCache[iconName];
+  }
+
+  // Retrieve the icon from the appropriate icon set and cache it
+  iconCache[iconName] = iconSet[prefix]?.[iconName];
+  return iconCache[iconName];
+};
+
 export const getBadgeColor = (level: number) => {
   switch (level) {
     case 1:
@@ -75,42 +126,6 @@ export const getBadgeColor = (level: number) => {
     default:
       return "#090f46"; // Dark Charcoal (fallback)
   }
-};
-
-export const icon_map = {
-  BsSpeedometer: BsSpeedometer,
-  FaDove: FaDove,
-  FaQuestionCircle: FaQuestionCircle,
-  FaRegCompass: FaRegCompass,
-  FaRegLightbulb: FaRegLightbulb,
-  FaRegStar: FaRegStar,
-  FaSpaceAwesome: FaSpaceAwesome,
-  GiEagleHead: GiEagleHead,
-  GiFinch: GiFinch,
-  GiGems: GiGems,
-  GiLeafSwirl: GiLeafSwirl,
-  GiMagicLamp: GiMagicLamp,
-  GiMagicPalm: GiMagicPalm,
-  GiOwl: GiOwl,
-  GiPuzzle: GiPuzzle,
-  GiTurtleShell: GiTurtleShell,
-  GoTrophy: GoTrophy,
-  HiOutlineEmojiHappy: HiOutlineEmojiHappy,
-  IoExtensionPuzzleOutline: IoExtensionPuzzleOutline,
-  IoGameControllerOutline: IoGameControllerOutline,
-  IoLeafOutline: IoLeafOutline,
-  IoRocketOutline: IoRocketOutline,
-  LiaHandshake: LiaHandshake,
-  LuGem: LuGem,
-  LuShrink: LuShrink,
-  LuWholeWord: LuWholeWord,
-  MdManageSearch: MdManageSearch,
-  MdOutlineCelebration: MdOutlineCelebration,
-  TbLetterCaseUpper: TbLetterCaseUpper,
-  TbUserHexagon: TbUserHexagon,
-  TbUserStar: TbUserStar,
-  TfiThought: TfiThought,
-  TbBallpen: TbBallpen,
 };
 
 export const getProgressInfo = (progress: number, thresholds: number[]) => {
