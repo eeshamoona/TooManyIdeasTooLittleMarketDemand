@@ -3,7 +3,7 @@ import { Text, Tooltip } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import React, { useState } from "react";
 import { FaQuestionCircle } from "react-icons/fa";
-import { icon_map } from "../interface";
+import { getIconComponent } from "../interface2";
 import "./milestone-badge.css";
 
 interface MilestoneBadgeProps {
@@ -22,7 +22,7 @@ const MilestoneBadge: React.FC<MilestoneBadgeProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [debouncedHovered] = useDebouncedValue(isHovered, 10);
 
-  let IconComponent = icon_map[icon];
+  let IconComponent = getIconComponent(icon);
 
   if (hidden) {
     IconComponent = FaQuestionCircle;

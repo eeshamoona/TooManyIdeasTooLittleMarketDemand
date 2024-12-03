@@ -1,5 +1,6 @@
 import React from "react";
-import { getBadgeColor, icon_map } from "../interface";
+import { getBadgeColor } from "../interface";
+import { getIconComponent } from "../interface2";
 import "./level-badge.css";
 
 interface LevelBadgeProps {
@@ -8,7 +9,7 @@ interface LevelBadgeProps {
 }
 
 const LevelBadge: React.FC<LevelBadgeProps> = ({ level, icon }) => {
-  const IconComponent = icon_map[icon];
+  const IconComponent = getIconComponent(icon);
   const badgeColor = getBadgeColor(level);
 
   const blackWhiteThreshold = 4;

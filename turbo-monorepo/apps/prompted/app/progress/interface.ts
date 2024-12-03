@@ -1,5 +1,6 @@
-import { BsSpeedometer } from "react-icons/bs";
+import { BsSpeedometer, BsTrophy } from "react-icons/bs";
 import {
+  FaAward,
   FaDove,
   FaQuestionCircle,
   FaRegCompass,
@@ -11,31 +12,52 @@ import {
   GiEagleHead,
   GiFinch,
   GiGems,
+  GiLaurelsTrophy,
   GiLeafSwirl,
   GiMagicLamp,
   GiMagicPalm,
   GiOwl,
   GiPuzzle,
+  GiRibbonMedal,
   GiTurtleShell,
 } from "react-icons/gi";
 import { GoTrophy } from "react-icons/go";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
+import { IoMdTimer } from "react-icons/io";
 import {
   IoExtensionPuzzleOutline,
   IoGameControllerOutline,
   IoLeafOutline,
   IoRocketOutline,
 } from "react-icons/io5";
-import { LiaHandshake } from "react-icons/lia";
+import { LiaHandshake, LiaTrophySolid } from "react-icons/lia";
 import { LuGem, LuShrink, LuWholeWord } from "react-icons/lu";
-import { MdManageSearch, MdOutlineCelebration } from "react-icons/md";
 import {
+  MdFingerprint,
+  MdManageSearch,
+  MdOutlineCelebration,
+  MdOutlineTimer10,
+} from "react-icons/md";
+import {
+  TbAlignJustified,
   TbBallpen,
   TbLetterCaseUpper,
   TbUserHexagon,
   TbUserStar,
 } from "react-icons/tb";
 import { TfiThought } from "react-icons/tfi";
+import {
+  WiTime1,
+  WiTime10,
+  WiTime2,
+  WiTime3,
+  WiTime4,
+  WiTime5,
+  WiTime6,
+  WiTime7,
+  WiTime8,
+  WiTime9,
+} from "react-icons/wi";
 
 export interface BadgeModel {
   id: string;
@@ -77,41 +99,60 @@ export const getBadgeColor = (level: number) => {
   }
 };
 
-export const icon_map = {
-  BsSpeedometer: BsSpeedometer,
-  FaDove: FaDove,
-  FaQuestionCircle: FaQuestionCircle,
-  FaRegCompass: FaRegCompass,
-  FaRegLightbulb: FaRegLightbulb,
-  FaRegStar: FaRegStar,
-  FaSpaceAwesome: FaSpaceAwesome,
-  GiEagleHead: GiEagleHead,
-  GiFinch: GiFinch,
-  GiGems: GiGems,
-  GiLeafSwirl: GiLeafSwirl,
-  GiMagicLamp: GiMagicLamp,
-  GiMagicPalm: GiMagicPalm,
-  GiOwl: GiOwl,
-  GiPuzzle: GiPuzzle,
-  GiTurtleShell: GiTurtleShell,
-  GoTrophy: GoTrophy,
-  HiOutlineEmojiHappy: HiOutlineEmojiHappy,
-  IoExtensionPuzzleOutline: IoExtensionPuzzleOutline,
-  IoGameControllerOutline: IoGameControllerOutline,
-  IoLeafOutline: IoLeafOutline,
-  IoRocketOutline: IoRocketOutline,
-  LiaHandshake: LiaHandshake,
-  LuGem: LuGem,
-  LuShrink: LuShrink,
-  LuWholeWord: LuWholeWord,
-  MdManageSearch: MdManageSearch,
-  MdOutlineCelebration: MdOutlineCelebration,
-  TbLetterCaseUpper: TbLetterCaseUpper,
-  TbUserHexagon: TbUserHexagon,
-  TbUserStar: TbUserStar,
-  TfiThought: TfiThought,
-  TbBallpen: TbBallpen,
-};
+// export const icon_map = {
+//   BsSpeedometer: BsSpeedometer,
+//   FaDove: FaDove,
+//   FaQuestionCircle: FaQuestionCircle,
+//   FaRegCompass: FaRegCompass,
+//   FaRegLightbulb: FaRegLightbulb,
+//   FaRegStar: FaRegStar,
+//   FaSpaceAwesome: FaSpaceAwesome,
+//   GiEagleHead: GiEagleHead,
+//   GiFinch: GiFinch,
+//   GiGems: GiGems,
+//   GiLeafSwirl: GiLeafSwirl,
+//   GiMagicLamp: GiMagicLamp,
+//   GiMagicPalm: GiMagicPalm,
+//   GiOwl: GiOwl,
+//   GiPuzzle: GiPuzzle,
+//   GiTurtleShell: GiTurtleShell,
+//   GoTrophy: GoTrophy,
+//   HiOutlineEmojiHappy: HiOutlineEmojiHappy,
+//   IoExtensionPuzzleOutline: IoExtensionPuzzleOutline,
+//   IoGameControllerOutline: IoGameControllerOutline,
+//   IoLeafOutline: IoLeafOutline,
+//   IoRocketOutline: IoRocketOutline,
+//   LiaHandshake: LiaHandshake,
+//   LuGem: LuGem,
+//   LuShrink: LuShrink,
+//   LuWholeWord: LuWholeWord,
+//   MdManageSearch: MdManageSearch,
+//   MdOutlineCelebration: MdOutlineCelebration,
+//   TbLetterCaseUpper: TbLetterCaseUpper,
+//   TbUserHexagon: TbUserHexagon,
+//   TbUserStar: TbUserStar,
+//   TfiThought: TfiThought,
+//   TbBallpen: TbBallpen,
+//   TbAlignJustified: TbAlignJustified,
+//   MdFingerprint: MdFingerprint,
+//   IoMdTimer: IoMdTimer,
+//   GiRibbonMedal: GiRibbonMedal,
+//   FaAward: FaAward,
+//   BsTrophy: BsTrophy,
+//   LiaTrophySolid: LiaTrophySolid,
+//   GiLaurelsTrophy: GiLaurelsTrophy,
+//   MdOutlineTimer10: MdOutlineTimer10,
+//   WiTime1: WiTime1,
+//   WiTime2: WiTime2,
+//   WiTime3: WiTime3,
+//   WiTime4: WiTime4,
+//   WiTime5: WiTime5,
+//   WiTime6: WiTime6,
+//   WiTime7: WiTime7,
+//   WiTime8: WiTime8,
+//   WiTime9: WiTime9,
+//   WiTime10: WiTime10,
+// };
 
 export const getProgressInfo = (progress: number, thresholds: number[]) => {
   let lowThreshold = 0;
