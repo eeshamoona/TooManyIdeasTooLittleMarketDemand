@@ -43,6 +43,11 @@ export default function ResetPasswordPage() {
       return;
     }
 
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      return;
+    }
+
     try {
       const response = await fetch(`/api/updatePassword`, {
         method: "POST",

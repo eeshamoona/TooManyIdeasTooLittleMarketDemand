@@ -53,6 +53,12 @@ export default function SignupPage() {
       return;
     }
 
+    if (password && password.length < 6) {
+      console.warn("Password too short during signup."); // Log short password
+      setErrorString("Password must be at least 6 characters long.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData(event.currentTarget.form as HTMLFormElement);
     let result: string | void;
