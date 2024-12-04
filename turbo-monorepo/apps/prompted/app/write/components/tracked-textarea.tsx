@@ -317,7 +317,7 @@ export default function TrackedTextarea({
               <ActionIcon
                 onMouseEnter={handleStatsMouseDown}
                 onMouseLeave={handleStatsMouseUp}
-                color={showStats ? "grape" : "gray"}
+                color={showStats ? "blue" : "gray"}
                 disabled={characters.length === 0}
                 variant="light"
                 size="lg"
@@ -333,7 +333,7 @@ export default function TrackedTextarea({
               }
               position="right"
               withArrow
-              color={combinedResponse.length > 100 ? "grape" : "gray"}
+              color={combinedResponse.length > 100 ? "blue" : "gray"}
               transitionProps={{ transition: "fade" }}
             >
               <ActionIcon
@@ -342,7 +342,7 @@ export default function TrackedTextarea({
                 onClick={handleGenerateClick}
                 disabled={combinedResponse.length <= 100}
                 variant={"filled"}
-                color="grape"
+                color="blue"
                 size="lg"
               >
                 <FaBolt />
@@ -361,11 +361,11 @@ export default function TrackedTextarea({
                   style={{
                     color:
                       char.type === "AI"
-                        ? "var(--mantine-color-grape-light-color)"
+                        ? "var(--mantine-color-blue-light-color)"
                         : "",
                     backgroundColor:
                       char.type === "AI"
-                        ? "var(--mantine-color-grape-light-hover)"
+                        ? "var(--mantine-color-blue-light-hover)"
                         : "transparent",
                     fontSize:
                       "var(--input-fz, var(--input-fz, var(--mantine-font-size-sm)))",
