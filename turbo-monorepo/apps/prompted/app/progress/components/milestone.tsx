@@ -26,7 +26,7 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
           <Grid.Col
             key={badge.id}
             style={{
-              maxWidth: "100%",
+              maxWidth: "150px",
               minHeight: "180px",
               height: "auto",
             }}
