@@ -1,12 +1,14 @@
 import {
   Box,
-  Grid,
+  Flex,
   Select,
   Stack,
   TextInput,
   useMantineColorScheme,
 } from "@mantine/core";
 import React from "react";
+import { FaSearch } from "react-icons/fa";
+import { TbArrowsSort } from "react-icons/tb";
 import CategoryMultiSelect from "./category-filter";
 
 interface SearchHeaderProps {
@@ -50,26 +52,26 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           width: "100%",
         }}
       >
-        <Grid gutter="md">
-          <Grid.Col span={{ base: 12, sm: 12, lg: 4 }}>
+        <Flex direction={{ base: 'column', sm: 'row' }} gap="md">
+          <Box flex={{ base: 1, sm: 1, lg: 4 }}>
             <TextInput
-              label="Prompt Search"
-              placeholder="Type anything..."
+              placeholder="Search for any entry..."
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.currentTarget.value)}
               disabled={!hasEntries}
+              leftSection={<FaSearch />}
+              flex={2}
             />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          </Box>
+          <Box flex={{ base: 1, sm: 1, lg: 4 }}>
             <CategoryMultiSelect
               selectedCategories={categoryFilters}
               setSelectedCategories={setCategoryFilters}
               disabled={!hasEntries}
             />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          </Box>
+          <Box flex={{ base: 1, sm: 1, lg: 4 }}>
             <Select
-              label="Sort By"
               data={[
                 { value: "dateAsc", label: "Date - Oldest First" },
                 { value: "dateDesc", label: "Date - Newest First" },
@@ -78,14 +80,16 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                 { value: "wordCountAsc", label: "Word Count - Shortest First" },
                 { value: "wordCountDesc", label: "Word Count - Longest First" },
               ]}
-              placeholder="None selected"
+              placeholder="Sort by..."
               value={sortBy}
               onChange={setSortBy}
               disabled={!hasEntries}
               clearable
+              leftSection={<TbArrowsSort />}
+              flex={2}
             />
-          </Grid.Col>
-        </Grid>
+          </Box>
+        </Flex>
       </Box>
     </Stack>
   );

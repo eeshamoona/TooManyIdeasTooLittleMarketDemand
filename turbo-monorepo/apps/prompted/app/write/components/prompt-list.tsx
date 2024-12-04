@@ -3,6 +3,7 @@ import {
   Badge,
   Button,
   Center,
+  Flex,
   Group,
   ScrollArea,
   Select,
@@ -164,16 +165,8 @@ export function PromptList({
 
     return (
       <Table.Tr key={row.text}>
-        <Table.Td>{index + 1}</Table.Td>
-        <Table.Td
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
+        <Table.Td style={{ width: '40px' }}>{index + 1}</Table.Td>
+        <Table.Td style={{ width: 'auto', minWidth: '150px' }}>
           {Icon && (
             <Badge
               size="md"
@@ -186,15 +179,17 @@ export function PromptList({
             </Badge>
           )}
         </Table.Td>
-        <Table.Td
-          style={{
-            whiteSpace: "wrap",
-          }}
-        >
+        <Table.Td style={{ 
+          width: '100%',
+          maxWidth: '1px', // Forces the column to squeeze
+          whiteSpace: 'normal', // Allows text to wrap
+          wordWrap: 'break-word', // Ensures long words break and wrap
+          minWidth: '200px' // Ensures some minimum readable width
+        }}>
           {row.text}
         </Table.Td>
         {onSelectPrompt && (
-          <Table.Td>
+          <Table.Td style={{ width: '40px' }}>
             <ActionIcon variant="subtle" size={"lg"} onClick={handleOnClick}>
               <RiArrowRightCircleLine size={20} />
             </ActionIcon>
@@ -213,40 +208,46 @@ export function PromptList({
       }}
     >
       <Group justify="space-between" mb="md">
-        <TextInput
-          flex={1}
-          placeholder="Search for any prompt"
-          leftSection={<FaSearch style={{ width: "1rem", height: "1rem" }} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
-        <Select
-          flex={2}
-          defaultValue={null}
-          placeholder="Filter prompts by category"
-          data={NEW_PROMPT_CATEGORIES.map((category) => ({
-            value: category.title,
-            label: category.title,
-            description: category.description,
-            icon: category.icon,
-          }))}
-          renderOption={renderSelectOption}
-          size="sm"
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          leftSection={leftSectionIcon()}
-          clearable
-        />
-        <Button
-          color={fullSelectedCategory?.color}
-          onClick={handleRandomPrompt}
-          variant="light"
-          size="sm"
-          leftSection={randomIcon()}
-          aria-label={`Get Random ${fullSelectedCategory?.title} Prompt`}
+        <Flex
+          w="100%"
+          direction={{ base: "column-reverse", sm: "row" }}
+          gap="md"
         >
-          Get Random Prompt
-        </Button>
+          <TextInput
+            flex={1}
+            placeholder="Search for any prompt"
+            leftSection={<FaSearch style={{ width: "1rem", height: "1rem" }} />}
+            value={search}
+            onChange={handleSearchChange}
+          />
+          <Select
+            flex={2}
+            defaultValue={null}
+            placeholder="Filter prompts by category"
+            data={NEW_PROMPT_CATEGORIES.map((category) => ({
+              value: category.title,
+              label: category.title,
+              description: category.description,
+              icon: category.icon,
+            }))}
+            renderOption={renderSelectOption}
+            size="sm"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            leftSection={leftSectionIcon()}
+            clearable
+          />
+          <Button
+            color={fullSelectedCategory?.color}
+            onClick={handleRandomPrompt}
+            variant="light"
+            size="sm"
+            leftSection={randomIcon()}
+            aria-label={`Get Random ${fullSelectedCategory?.title} Prompt`}
+          >
+            Get Random Prompt
+          </Button>
+        </Flex>
       </Group>
 
       <div style={{ flex: 1, overflow: "hidden" }}>
