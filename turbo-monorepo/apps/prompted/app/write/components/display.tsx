@@ -1,17 +1,8 @@
 "use client";
-import {
-  ActionIcon,
-  Box,
-  Center,
-  Group,
-  SelectProps,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Box, Group, Stack } from "@mantine/core";
 import { useState } from "react";
-import { FaCheck } from "react-icons/fa";
 import { TbWriting } from "react-icons/tb";
-import { profileQuizQuestions } from "../../profile-quiz/constants";
+import { getProfileDescription } from "../../profile-quiz/constants";
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import { PromptList } from "./prompt-list";
 import TrackedTextarea from "./tracked-textarea";
@@ -88,69 +79,6 @@ export default function Display({ prompts, profile }: DisplayProps) {
     );
   };
 
-  const renderSelectOption: SelectProps["renderOption"] = ({
-    option,
-    checked,
-  }) => {
-    const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value
-    );
-    const Icon = category?.icon;
-    const color = category?.color;
-    return (
-      <Group
-        flex="1"
-        align="center"
-        style={{
-          padding: "0px",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-        gap="sm"
-      >
-        {Icon && (
-          <Center>
-            <ActionIcon variant="light" color={color} size="lg">
-              <Icon />
-            </ActionIcon>
-          </Center>
-        )}
-        <Text
-          style={{
-            fontWeight: "600",
-            fontSize: "14px",
-          }}
-        >
-          {option.value}
-        </Text>
-        <Text
-          c="dimmed"
-          style={{
-            fontSize: "12px",
-          }}
-        >
-          {option["description"]}
-        </Text>
-        {checked && (
-          <FaCheck
-            style={{
-              marginLeft: "auto",
-              color: "#1976d2",
-            }}
-          />
-        )}
-      </Group>
-    );
-  };
-
-  const getProfileDescription = (questionKey: string, value: string) => {
-    const question = profileQuizQuestions.find(
-      (q) => q.question === questionKey
-    );
-    const option = question?.options.find((opt) => opt.value === value);
-    return option ? `${option.label} - ${option.description}` : value;
-  };
-
   const enrichedProfile =
     profile && Object.keys(profile).length > 0
       ? {
@@ -176,7 +104,7 @@ export default function Display({ prompts, profile }: DisplayProps) {
             promptText={randomPrompt?.text}
             categoryText={randomPrompt?.category}
             targetWordCount={enrichedProfile?.targetWordCount}
-            profile={enrichedProfile}
+            profile={enrichedProfile ?? null}
             onResetPrompt={clearRandomPrompt}
             Icon={fullCategoryElement?.icon}
             color={fullCategoryElement?.color}

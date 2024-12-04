@@ -7,16 +7,17 @@ import {
   ScrollArea,
   Select,
   SelectProps,
+  Switch,
   Table,
   Text,
   TextInput,
   UnstyledButton,
-  rem,
 } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheck, FaRandom, FaSearch } from "react-icons/fa";
 import { IoShuffleOutline } from "react-icons/io5";
 import { RiArrowRightCircleLine } from "react-icons/ri";
+
 import { NEW_PROMPT_CATEGORIES } from "../interface";
 import { Prompt } from "./display";
 
@@ -57,7 +58,13 @@ export function PromptList({
   randomPrompt,
 }: PromptListProps): JSX.Element {
   const [search, setSearch] = useState("");
-  const [showPrompts, setShowPrompts] = useState(true);
+  const [showPrompts, setShowPrompts] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setShowPrompts(true);
+  }, []);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.currentTarget.value);
@@ -198,12 +205,18 @@ export function PromptList({
   });
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100vh - 8rem)",
+      }}
+    >
       <Group justify="space-between" mb="md">
         <TextInput
           flex={1}
           placeholder="Search for any prompt"
-          leftSection={<FaSearch style={{ width: rem(16), height: rem(16) }} />}
+          leftSection={<FaSearch style={{ width: "1rem", height: "1rem" }} />}
           value={search}
           onChange={handleSearchChange}
         />
@@ -227,52 +240,71 @@ export function PromptList({
         <Button
           color={fullSelectedCategory?.color}
           onClick={handleRandomPrompt}
-          variant={"light"}
+          variant="light"
           size="sm"
           leftSection={randomIcon()}
           aria-label={`Get Random ${fullSelectedCategory?.title} Prompt`}
         >
-          {"Get Random Prompt"}
+          Get Random Prompt
         </Button>
       </Group>
 
-      {showPrompts && (
+      <div style={{ flex: 1, overflow: "hidden" }}>
         <ScrollArea
-          h={"55vh"}
+          h="100%"
           offsetScrollbars
           scrollbarSize={8}
           scrollHideDelay={0}
         >
-          <Table
-            horizontalSpacing="sm"
-            verticalSpacing="sm"
-            stickyHeader
-            highlightOnHover={onSelectPrompt ? false : true}
-          >
-            <Table.Thead>
-              <Table.Tr>
-                <Th>#</Th>
-                <Th>Category</Th>
-                <Th>Prompt</Th>
-                {onSelectPrompt && <Th>{undefined}</Th>}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {rows.length > 0 ? (
-                rows
-              ) : (
+          {mounted && (
+            <Table
+              horizontalSpacing="sm"
+              verticalSpacing="sm"
+              stickyHeader
+              highlightOnHover={onSelectPrompt ? false : true}
+            >
+              <Table.Thead>
                 <Table.Tr>
-                  <Table.Td colSpan={Object.keys(data[0]).length + 1}>
-                    <Text fw={500} ta="center">
-                      Nothing found
-                    </Text>
-                  </Table.Td>
+                  <Table.Th colSpan={onSelectPrompt ? 4 : 3} pl={0} pt={0}>
+                    <Group justify="space-between">
+                      <Group>
+                        <Th>#</Th>
+                        <Th>Category</Th>
+                        <Th>Prompt</Th>
+                        {onSelectPrompt && <Th>{undefined}</Th>}
+                      </Group>
+                      <Switch
+                        checked={showPrompts}
+                        onChange={handleToggleChange}
+                        label="Show Prompts"
+                        size="xs"
+                        style={{
+                          fontWeight: "normal",
+                        }}
+                      />
+                    </Group>
+                  </Table.Th>
                 </Table.Tr>
+              </Table.Thead>
+              {showPrompts && (
+                <Table.Tbody>
+                  {rows.length > 0 ? (
+                    rows
+                  ) : (
+                    <Table.Tr>
+                      <Table.Td colSpan={Object.keys(data[0]).length + 1}>
+                        <Text fw={500} ta="center">
+                          Nothing found
+                        </Text>
+                      </Table.Td>
+                    </Table.Tr>
+                  )}
+                </Table.Tbody>
               )}
-            </Table.Tbody>
-          </Table>
+            </Table>
+          )}
         </ScrollArea>
-      )}
+      </div>
     </div>
   );
 }

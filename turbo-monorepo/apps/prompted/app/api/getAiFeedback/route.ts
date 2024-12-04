@@ -40,7 +40,7 @@ function getSystemInstructions(profile?: {
     instructions = instructions.replace("{{MOTIVATING_FEEDBACK}}", "");
   }
 
-  console.log("Using profile instructions");
+  console.log("Using profile instructions", profile);
 
   return instructions;
 }

@@ -146,10 +146,20 @@ export const profileQuizQuestions = [
 
 export const getWordCountDescription = (count: number): string => {
   if (count <= 200)
-    return `Quick Answer - Great for brainstorming or a vivid moment.`;
-  if (count <= 400) return `Short Story - A concise, focused response.`;
-  if (count <= 650) return `Developed Tale - Enough room to explore ideas.`;
+    return `Quick - Great for brainstorming.`;
+  if (count <= 400) return `Short - A focused response.`;
+  if (count <= 650) return `Developed - Room to explore ideas.`;
   if (count <= 850)
-    return `Rich Narrative - Add depth and detail to your story.`;
-  return `Epic Story - Fully immerse yourself in a complete world.`;
+    return `Rich - Add depth to your story.`;
+  return `Epic - Immerse in a complete world.`;
+};
+
+export const getProfileDescription = (questionKey: string, value: string) => {
+  const question = profileQuizQuestions.find(
+    (q) => q.question === questionKey
+  );
+  const option = question?.options.find((opt) => opt.value === value);
+  return option
+    ? `${option.value} ${option.label} - ${option.description}`
+    : value;
 };
