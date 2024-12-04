@@ -15,8 +15,7 @@ import { useDisclosure } from "@mantine/hooks";
 import DiffMatchPatch from "diff-match-patch";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaLightbulb, FaRegLightbulb } from "react-icons/fa";
-import { FaWandMagicSparkles } from "react-icons/fa6";
+import { FaBolt, FaLightbulb, FaRegLightbulb } from "react-icons/fa";
 import { getTitleOrder } from "../actions";
 import { Profile } from "./display";
 import { StatsGrid } from "./stats";
@@ -346,7 +345,7 @@ export default function TrackedTextarea({
                 color="grape"
                 size="lg"
               >
-                <FaWandMagicSparkles />
+                <FaBolt />
               </ActionIcon>
             </Tooltip>
           </>

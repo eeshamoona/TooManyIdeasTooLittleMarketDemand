@@ -1,6 +1,7 @@
 import "@mantine/charts/styles.css";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { Metadata } from "next";
 import React, { Suspense } from "react";
 import "react-calendar-heatmap/dist/styles.css";
 import "react-tooltip/dist/react-tooltip.css";
@@ -10,6 +11,12 @@ import Loading from "./loading";
 import { CustomAppShell } from "./shell";
 import { createClient } from "./utils/supabase/server";
 
+export const metadata: Metadata = {
+  title: "Prompted",
+  description: "Making creative writing effortless",
+  metadataBase: new URL("https://www.writeprompted.com"),
+};
+
 export default async function RootLayout({
   children,
 }: {
@@ -17,12 +24,6 @@ export default async function RootLayout({
 }) {
   const supabase = createClient();
   const { data } = await supabase.auth.getUser();
-  // const { data: prompts, error } = await supabase.from("prompts").select();
-  // write prompts to react context so that it is loaded for the enteire app
-  // const prompts = await supabase.from("prompts").select();
-  // console.log("prompts:", prompts);
-
-  // if (error) return <div>{error.message}</div>;
 
   const { data: prompts, error } = await supabase.from("prompts").select();
   if (error) return <div>{error.message}</div>;
