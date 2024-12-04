@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Badge,
   Box,
   Button,
   Group,
@@ -15,7 +16,8 @@ import { useDisclosure } from "@mantine/hooks";
 import DiffMatchPatch from "diff-match-patch";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaBolt, FaLightbulb, FaRegLightbulb } from "react-icons/fa";
+import { IconType } from "react-icons";
+import { FaBolt, FaLightbulb, FaRedo, FaRegLightbulb } from "react-icons/fa";
 import { getTitleOrder } from "../actions";
 import { Profile } from "./display";
 import { StatsGrid } from "./stats";
@@ -28,6 +30,9 @@ interface TrackedTextareaProps {
   categoryText: string;
   targetWordCount?: number;
   profile?: Profile;
+  onResetPrompt?: () => void;
+  Icon?: IconType;
+  color?: string;
 }
 
 export interface Character {
@@ -43,6 +48,9 @@ export default function TrackedTextarea({
   categoryText,
   targetWordCount,
   profile,
+  onResetPrompt,
+  Icon,
+  color,
 }: TrackedTextareaProps) {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [showStats, setShowStats] = useState(false);
@@ -296,16 +304,38 @@ export default function TrackedTextarea({
   return (
     <Stack style={{ width: "100%", height: "100%" }}>
       <Stack flex={1}>
+        <Group justify="space-between" align="end">
+          {Icon && (
+            <Badge
+              size="md"
+              radius="md"
+              variant="light"
+              color={color}
+              leftSection={<Icon />}
+            >
+              {categoryText}
+            </Badge>
+          )}
+          <Button
+            onClick={onResetPrompt}
+            variant="outline"
+            color="red"
+            size="xs"
+            leftSection={<FaRedo size={"0.75rem"} />}
+          >
+            Reset Prompt
+          </Button>
+        </Group>
         <Group
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <Title m={4} flex={1} order={titleOrder}>
-            {promptText}
-          </Title>
-          <>
+            <Title m={4} flex={1} order={titleOrder}>
+              {promptText}
+            </Title>
             <Tooltip
               label="Show Stats"
               aria-label="Character stats tooltip"
@@ -348,8 +378,7 @@ export default function TrackedTextarea({
                 <FaBolt />
               </ActionIcon>
             </Tooltip>
-          </>
-        </Group>
+      </Group>
 
         <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
           {showStats ? (

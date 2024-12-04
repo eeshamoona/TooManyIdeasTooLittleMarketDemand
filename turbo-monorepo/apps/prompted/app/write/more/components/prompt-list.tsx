@@ -1,12 +1,9 @@
 import {
   ActionIcon,
   Badge,
-  Button,
-  Center,
   Group,
   ScrollArea,
-  Select,
-  SelectProps,
+  Switch,
   Table,
   Text,
   TextInput,
@@ -14,22 +11,15 @@ import {
   rem,
 } from "@mantine/core";
 import { useState } from "react";
-import { FaCheck, FaRandom, FaSearch } from "react-icons/fa";
-import { IoShuffleOutline } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 import { RiArrowRightCircleLine } from "react-icons/ri";
-import { NEW_PROMPT_CATEGORIES } from "../interface";
-import { Prompt } from "./display";
+import { Prompt } from "../../../write/components/display";
+import { NEW_PROMPT_CATEGORIES } from "../../../write/interface";
 
 interface PromptListProps {
   data: Prompt[];
   // eslint-disable-next-line no-unused-vars
   onSelectPrompt?: (prompt: Prompt) => void;
-  handleFilterChange: (value: string) => void;
-  leftSectionIcon: () => JSX.Element;
-  selectedCategory: string | null;
-  handleCategoryChange: (value: string) => void;
-  handleRandomPrompt: () => void;
-  randomPrompt: Prompt | null;
 }
 
 function Th({ children }) {
@@ -49,12 +39,6 @@ function Th({ children }) {
 export function PromptList({
   data,
   onSelectPrompt,
-  handleFilterChange,
-  leftSectionIcon,
-  selectedCategory,
-  handleCategoryChange,
-  handleRandomPrompt,
-  randomPrompt,
 }: PromptListProps): JSX.Element {
   const [search, setSearch] = useState("");
   const [showPrompts, setShowPrompts] = useState(true);
@@ -65,79 +49,6 @@ export function PromptList({
 
   const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowPrompts(event.currentTarget.checked);
-  };
-
-  const fullSelectedCategory = NEW_PROMPT_CATEGORIES.find(
-    (cat) => cat.title === selectedCategory
-  );
-
-  const randomIcon = () => {
-    if (fullSelectedCategory === undefined) return <IoShuffleOutline />;
-    const Icon = fullSelectedCategory?.icon;
-
-    return Icon ? <Icon /> : <IoShuffleOutline />;
-  };
-  const renderSelectOption: SelectProps["renderOption"] = ({
-    option,
-    checked,
-  }) => {
-    const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === option.value
-    );
-    const Icon = category?.icon;
-    const color = category?.color;
-    return (
-      <Group
-        flex="1"
-        align="center"
-        style={{
-          padding: "0px",
-          borderRadius: "8px",
-          cursor: "pointer",
-        }}
-        gap="sm"
-      >
-        {Icon && (
-          <Center>
-            <ActionIcon variant="light" color={color} size="lg">
-              <Icon />
-            </ActionIcon>
-          </Center>
-        )}
-        <Text
-          style={{
-            fontWeight: "600",
-            fontSize: "14px",
-          }}
-        >
-          {option.value}
-        </Text>
-        <Text
-          c="dimmed"
-          style={{
-            fontSize: "12px",
-          }}
-        >
-          {option["description"]}
-        </Text>
-        {checked && (
-          <FaCheck
-            style={{
-              marginLeft: "auto",
-              color: "#1976d2",
-            }}
-          />
-        )}
-      </Group>
-    );
-  };
-
-  const renderIcon = (categoryName: string | null) => {
-    if (!categoryName) return <FaRandom />;
-    const category = NEW_PROMPT_CATEGORIES.find(
-      (cat) => cat.title === categoryName
-    );
-    return category?.icon;
   };
 
   const filteredData = data.filter((item) =>
@@ -207,33 +118,11 @@ export function PromptList({
           value={search}
           onChange={handleSearchChange}
         />
-        <Select
-          flex={2}
-          defaultValue={null}
-          placeholder="Filter prompts by category"
-          data={NEW_PROMPT_CATEGORIES.map((category) => ({
-            value: category.title,
-            label: category.title,
-            description: category.description,
-            icon: category.icon,
-          }))}
-          renderOption={renderSelectOption}
-          size="sm"
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          leftSection={leftSectionIcon()}
-          clearable
+        <Switch
+          label="Show Prompts"
+          checked={showPrompts}
+          onChange={handleToggleChange}
         />
-        <Button
-          color={fullSelectedCategory?.color}
-          onClick={handleRandomPrompt}
-          variant={"light"}
-          size="sm"
-          leftSection={randomIcon()}
-          aria-label={`Get Random ${fullSelectedCategory?.title} Prompt`}
-        >
-          {"Get Random Prompt"}
-        </Button>
       </Group>
 
       {showPrompts && (
