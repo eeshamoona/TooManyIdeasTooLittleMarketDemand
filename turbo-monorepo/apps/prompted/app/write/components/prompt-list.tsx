@@ -165,11 +165,11 @@ export function PromptList({
 
     return (
       <Table.Tr key={row.text}>
-        <Table.Td style={{ width: '40px' }}>{index + 1}</Table.Td>
-        <Table.Td style={{ width: 'auto', minWidth: '150px' }}>
+        <Table.Td style={{ width: "40px" }}>{index + 1}</Table.Td>
+        <Table.Td style={{ width: "auto", minWidth: "150px" }}>
           {Icon && (
             <Badge
-              size="md"
+              size="sm"
               radius="md"
               variant="light"
               color={color}
@@ -179,17 +179,19 @@ export function PromptList({
             </Badge>
           )}
         </Table.Td>
-        <Table.Td style={{ 
-          width: '100%',
-          maxWidth: '1px', // Forces the column to squeeze
-          whiteSpace: 'normal', // Allows text to wrap
-          wordWrap: 'break-word', // Ensures long words break and wrap
-          minWidth: '200px' // Ensures some minimum readable width
-        }}>
+        <Table.Td
+          style={{
+            width: "100%",
+            maxWidth: "1px", // Forces the column to squeeze
+            whiteSpace: "normal", // Allows text to wrap
+            wordWrap: "break-word", // Ensures long words break and wrap
+            minWidth: "200px", // Ensures some minimum readable width
+          }}
+        >
           {row.text}
         </Table.Td>
         {onSelectPrompt && (
-          <Table.Td style={{ width: '40px' }}>
+          <Table.Td style={{ width: "40px" }}>
             <ActionIcon variant="subtle" size={"lg"} onClick={handleOnClick}>
               <RiArrowRightCircleLine size={20} />
             </ActionIcon>

@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Select,
-  Stack,
-  TextInput,
-  useMantineColorScheme,
-} from "@mantine/core";
+import { Box, Flex, Select, Stack, TextInput } from "@mantine/core";
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { TbArrowsSort } from "react-icons/tb";
@@ -32,27 +25,19 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   sortBy,
   setSortBy,
 }) => {
-  const { colorScheme } = useMantineColorScheme();
-
-  const headingColor =
-    colorScheme === "dark"
-      ? "var(--mantine-color-dark-5)"
-      : "var(--mantine-color-gray-0)";
-
   return (
     <Stack px="sm" align="end" gap="xs">
       <Box
-        p="sm"
+        p="0"
         style={{
           position: "sticky",
           top: 0,
           zIndex: 1,
-          backgroundColor: headingColor,
           borderRadius: 5,
           width: "100%",
         }}
       >
-        <Flex direction={{ base: 'column', sm: 'row' }} gap="md">
+        <Flex direction={{ base: "column", sm: "row" }} gap="md">
           <Box flex={{ base: 1, sm: 1, lg: 4 }}>
             <TextInput
               placeholder="Search for any entry..."

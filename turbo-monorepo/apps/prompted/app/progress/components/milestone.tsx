@@ -21,14 +21,14 @@ const MilestoneBadges: React.FC<MilestoneBadgesProps> = ({ badges }) => {
 
   return (
     <>
-      <Grid mt="md" justify="start">
+      <Grid mt="md" justify="center">
         {sortedBadges.map((badge) => (
           <Grid.Col
             key={badge.id}
             style={{
-              maxWidth: "150px",
+              maxWidth: "100%",
               minHeight: "180px",
-              height: "full",
+              height: "auto",
             }}
           >
             <MilestoneBadge

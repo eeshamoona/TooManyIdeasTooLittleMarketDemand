@@ -118,7 +118,11 @@ const LevelProgressPage: React.FC<LevelProgressPageProps> = ({
     });
   };
 
-  return <Grid mt="md">{renderContent()}</Grid>;
+  return (
+    <Grid mt="md" justify="center">
+      {renderContent()}
+    </Grid>
+  );
 };
 
 export default LevelProgressPage;
