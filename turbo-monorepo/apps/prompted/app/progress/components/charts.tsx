@@ -93,8 +93,8 @@ const StatCharts: React.FC<StatChartsProps> = ({ entries }) => {
         return acc;
       },
       [
-        { name: "Human Words", color: "blue", value: 0 },
-        { name: "AI Words", color: "grape", value: 0 },
+        { name: "Human Words", color: "teal", value: 0 },
+        { name: "AI Words", color: "blue", value: 0 },
       ]
     );
 

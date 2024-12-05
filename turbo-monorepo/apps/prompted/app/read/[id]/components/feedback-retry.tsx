@@ -2,6 +2,7 @@
 import { Button, Center, Stack, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getProfileDescription } from "../../../profile-quiz/constants";
 import { Profile } from "../../../write/components/display";
 import { updateEntryFeedback } from "../actions";
 
@@ -23,6 +24,21 @@ export function FeedbackRetry({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
+  const enrichedProfile =
+    profile && Object.keys(profile).length > 0
+      ? {
+          targetWordCount: profile.targetWordCount,
+          feedbackPersona: getProfileDescription(
+            "feedbackPersona",
+            profile.feedbackPersona
+          ),
+          motivatingFeedback: getProfileDescription(
+            "motivatingFeedback",
+            profile.motivatingFeedback
+          ),
+        }
+      : null;
+
   const handleRetry = async () => {
     setIsLoading(true);
     try {
@@ -35,7 +51,7 @@ export function FeedbackRetry({
           response: text,
           category,
           prompt,
-          profile,
+          profile: enrichedProfile ?? null,
         }),
       });
 
