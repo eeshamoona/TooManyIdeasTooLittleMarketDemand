@@ -31,7 +31,7 @@ export const featureDescriptions = {
     title: "Track Your Progress",
     description:
       "Dive into visual charts that showcase your writing journey. Monitor your growth, spot trends, and use insights to stay motivated and reach new milestones.",
-    mainContent: <ShowStats />,
+    mainContent: <ShowStats isStats={true} />,
     icon: FaBarsProgress,
   },
   B: {
@@ -93,11 +93,7 @@ export const featureDescriptions = {
     title: "Browse Past Entries",
     description:
       "Easily explore your past entries with powerful search and sorting options. Revisit your favorite pieces or find inspiration in previous works.",
-    mainContent: (
-      <div style={{ width: "100%", height: "auto", textAlign: "center" }}>
-        Placeholder image here for Search and Sort Entries
-      </div>
-    ),
+    mainContent: <ShowStats isStats={false} />,
     icon: FaSearch,
   },
 };

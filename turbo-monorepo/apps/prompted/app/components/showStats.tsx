@@ -1,9 +1,11 @@
 import { Card, useMantineColorScheme } from "@mantine/core";
 import Image from "next/image";
+import ReadPageDark from "../../public/images/ReadPageDark.gif";
+import ReadPageLight from "../../public/images/ReadPageLight.gif";
 import ShowStatsDark from "../../public/images/ShowStatsDark.gif";
 import ShowStatsLight from "../../public/images/ShowStatsLight.gif";
 
-export default async function ShowStats() {
+export default async function ShowStats({ isStats }: { isStats: boolean }) {
   const colorScheme = useMantineColorScheme();
 
   return (
@@ -11,18 +13,26 @@ export default async function ShowStats() {
       withBorder
       m={0}
       p={0}
+      radius={"md"}
       style={{
         width: "fit-content",
-        height: "fit-content",
+        height: "100%",
         textAlign: "center",
+        overflow: "hidden",
       }}
     >
       <Image
         src={
-          colorScheme.colorScheme === "dark" ? ShowStatsDark : ShowStatsLight
+          isStats
+            ? colorScheme.colorScheme === "dark"
+              ? ShowStatsDark
+              : ShowStatsLight
+            : colorScheme.colorScheme === "dark"
+              ? ReadPageDark
+              : ReadPageLight
         }
         alt="Stat Charts"
-        height={275}
+        height={isStats ? 300 : 350}
         objectFit="cover"
       />
     </Card>
