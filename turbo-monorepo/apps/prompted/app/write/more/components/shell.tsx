@@ -8,7 +8,7 @@ import { Display } from "./display_one";
 
 export const Shell = ({ prompts }: { prompts: Prompt[] }) => {
   return (
-    <Tabs mt="xl" mb="lg" defaultValue="gallery">
+    <Tabs mt="xl" mb="lg" defaultValue="gallery" color="" variant="pills">
       <Tabs.List grow>
         <Tabs.Tab value="gallery" leftSection={<TbFileArrowRight />}>
           Manual

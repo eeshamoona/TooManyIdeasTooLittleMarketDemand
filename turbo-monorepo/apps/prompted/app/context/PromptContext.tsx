@@ -13,7 +13,9 @@ interface PromptsContextType {
   prompts: Prompt[] | null;
 }
 
-const PromptsContext = createContext<PromptsContextType | undefined>(undefined);
+const PromptsContext = createContext<PromptsContextType>({
+  prompts: null
+});
 
 export const PromptsProvider: React.FC<{
   children: React.ReactNode;

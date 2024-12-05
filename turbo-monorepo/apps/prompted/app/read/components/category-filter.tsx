@@ -8,6 +8,8 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { FaCheck } from "react-icons/fa";
+import { IoFilter } from "react-icons/io5";
+
 import { NEW_PROMPT_CATEGORIES } from "../../write/interface";
 
 interface CategoryMultiSelectProps {
@@ -32,7 +34,6 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
     const color = category?.color;
     return (
       <Group
-        flex="1"
         align="center"
         style={{
           padding: "0px", // Add padding for better spacing
@@ -81,14 +82,13 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
 
   return (
     <MultiSelect
-      label="Filter Categories"
       data={NEW_PROMPT_CATEGORIES.map((category) => ({
         value: category.title,
         label: category.title,
         description: category.description,
         icon: category.icon,
       }))}
-      placeholder={selectedCategories.length === 0 ? "None Selected" : ""}
+      placeholder={selectedCategories.length === 0 ? "Filter by category" : ""}
       value={selectedCategories}
       onChange={handleCategoryChange}
       searchable
@@ -96,6 +96,7 @@ const CategoryMultiSelect: React.FC<CategoryMultiSelectProps> = ({
       renderOption={renderSelectOption}
       flex={3}
       disabled={disabled}
+      leftSection={<IoFilter />}
     />
   );
 };

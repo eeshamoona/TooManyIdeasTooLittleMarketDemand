@@ -203,11 +203,11 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
                       style={{
                         color:
                           char.type === "AI"
-                            ? "var(--mantine-color-grape-light-color)"
+                            ? "var(--mantine-color-blue-light-color)"
                             : "",
                         backgroundColor:
                           char.type === "AI"
-                            ? "var(--mantine-color-grape-light-hover)"
+                            ? "var(--mantine-color-blue-light-hover)"
                             : "transparent",
                       }}
                     >
@@ -280,7 +280,7 @@ export default function DisplayText({ data, profile }: DisplayTextProps) {
               <ActionIcon
                 onClick={handleToggleAiParts}
                 disabled={data.metadata_stats.aiCallCount <= 0}
-                color={!showAIParts ? "gray" : "grape"}
+                color={!showAIParts ? "gray" : "blue"}
                 variant="subtle"
               >
                 {showAIParts ? <FaLightbulb /> : <FaRegLightbulb />}

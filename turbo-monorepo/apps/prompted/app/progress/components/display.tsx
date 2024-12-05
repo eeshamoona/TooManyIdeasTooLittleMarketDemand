@@ -19,7 +19,6 @@ export default function Display({ progress }: DisplayProps) {
         <Tabs.List justify="center" grow mb="md">
           <Tabs.Tab value="levels">Levels</Tabs.Tab>
           <Tabs.Tab value="milestones">Milestones</Tabs.Tab>
-          {/* <Tabs.Tab value="charts">Charts</Tabs.Tab> */}
         </Tabs.List>
 
         <Tabs.Panel
@@ -44,18 +43,6 @@ export default function Display({ progress }: DisplayProps) {
             <MilestoneBadges badges={milestone_badges} />
           </Container>
         </Tabs.Panel>
-        {/* <Tabs.Panel value="charts">
-          <Container
-            fluid
-            style={{
-              height: "75vh",
-              overflowY: "scroll",
-              overflowX: "hidden",
-            }}
-          >
-            <Charts entries={entries} />
-          </Container>
-        </Tabs.Panel> */}
       </Tabs>
     </>
   );

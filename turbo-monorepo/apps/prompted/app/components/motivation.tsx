@@ -11,22 +11,27 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import React, { createElement, useEffect, useRef, useState } from "react";
+import React, {
+  createElement,
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { FaIdBadge, FaMedal, FaSearch } from "react-icons/fa";
 import { FaBarsProgress } from "react-icons/fa6";
 import LevelProgressAnimation from "../process/[id]/components/level-animation";
 import MilestoneProgressAnimation from "../process/[id]/components/milestone-animation";
+
+const ShowStats = lazy(() => import("./showStats"));
 
 export const featureDescriptions = {
   A: {
     title: "Track Your Progress",
     description:
       "Dive into visual charts that showcase your writing journey. Monitor your growth, spot trends, and use insights to stay motivated and reach new milestones.",
-    mainContent: (
-      <div style={{ width: "100%", height: "auto", textAlign: "center" }}>
-        Placeholder image here for Stat Charts
-      </div>
-    ),
+    mainContent: <ShowStats isStats={true} />,
     icon: FaBarsProgress,
   },
   B: {
@@ -88,11 +93,7 @@ export const featureDescriptions = {
     title: "Browse Past Entries",
     description:
       "Easily explore your past entries with powerful search and sorting options. Revisit your favorite pieces or find inspiration in previous works.",
-    mainContent: (
-      <div style={{ width: "100%", height: "auto", textAlign: "center" }}>
-        Placeholder image here for Search and Sort Entries
-      </div>
-    ),
+    mainContent: <ShowStats isStats={false} />,
     icon: FaSearch,
   },
 };
@@ -158,7 +159,9 @@ const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
               style={{ height: "18rem", backgroundColor: "transparent" }}
             >
               <Center style={{ height: "100%" }}>
-                {featureDescriptions[selectedFeature].mainContent}
+                <Suspense fallback={<div>Loading...</div>}>
+                  {featureDescriptions[selectedFeature].mainContent}
+                </Suspense>
               </Center>
             </Card>
 

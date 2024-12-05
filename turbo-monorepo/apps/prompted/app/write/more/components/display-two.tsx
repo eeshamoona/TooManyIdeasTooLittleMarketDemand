@@ -2,8 +2,8 @@
 import { Box, Divider } from "@mantine/core";
 import { useState } from "react";
 import { Prompt } from "../../components/display";
-import { PromptList } from "../../components/prompt-list";
 import { AiAddPromptForm } from "./ai-add-prompt";
+import { PromptList } from "./prompt-list";
 
 type Display2Props = {
   prompts: Prompt[];

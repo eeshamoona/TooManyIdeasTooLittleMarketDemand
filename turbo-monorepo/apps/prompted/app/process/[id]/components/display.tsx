@@ -5,12 +5,12 @@ import {
   Center,
   Container,
   Flex,
-  RingProgress,
   SimpleGrid,
   Text,
 } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
 import LevelProgressAnimation, { LevelInformation } from "./level-animation";
 import MilestoneProgressAnimation from "./milestone-animation";
 
@@ -54,24 +54,6 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
       skipAnimations();
     }
   }, [currentIndex, showAll, badgeProgress.length]);
-
-  // Countdown timer for routing to read page
-  useEffect(() => {
-    if (showAll) {
-      const countdownTimer = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer === 1) {
-            setTimeout(() => {
-              goToReadPage();
-            }, 0); // Delay routing until after render cycle completes
-            clearInterval(countdownTimer);
-          }
-          return prevTimer - 1;
-        });
-      }, 1000); // Decrement every second
-      return () => clearInterval(countdownTimer);
-    }
-  }, [showAll, entryId, router]);
 
   const skipAnimations = () => {
     setShowAll(true);
@@ -193,26 +175,14 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
   return (
     <div>
       {showAll && (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <div style={{ textAlign: "center", margin: "1rem" }}>
           <Button
-            variant="light"
+            variant="filled"
             fullWidth
             onClick={goToReadPage}
-            rightSection={
-              <RingProgress
-                size={33}
-                thickness={3}
-                roundCaps
-                sections={[{ value: (timer / 30) * 100, color: "blue" }]}
-                label={
-                  <Text c="blue" ta="center" size="xs">
-                    {timer}
-                  </Text>
-                }
-              />
-            }
+            rightSection={<FaArrowRight />}
           >
-            Go to Read Page
+            Go to my entry
           </Button>
         </div>
       )}
