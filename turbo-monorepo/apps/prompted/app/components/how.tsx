@@ -90,7 +90,7 @@ export default function HowItWorks() {
       <Group>
         <Divider flex={1} />
         <Title ta="center" order={1}>
-          How It Works
+          How To Start Writing
         </Title>
         <Divider flex={1} />
       </Group>
