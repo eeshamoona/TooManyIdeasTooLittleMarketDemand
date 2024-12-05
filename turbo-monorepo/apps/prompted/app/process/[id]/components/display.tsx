@@ -55,25 +55,6 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
     }
   }, [currentIndex, showAll, badgeProgress.length]);
 
-  // Countdown timer for routing to read page
-  // useEffect(() => {
-  //   if (showAll) {
-  //     const countdownTimer = setInterval(() => {
-  //       setTimer((prevTimer) => {
-  //         if (prevTimer === 1) {
-  //           setTimeout(() => {
-  //             console.log("Going to read page");
-  //             // goToReadPage();
-  //           }, 0); // Delay routing until after render cycle completes
-  //           clearInterval(countdownTimer);
-  //         }
-  //         return prevTimer - 1;
-  //       });
-  //     }, 1000); // Decrement every second
-  //     return () => clearInterval(countdownTimer);
-  //   }
-  // }, [showAll, entryId, router]);
-
   const skipAnimations = () => {
     setShowAll(true);
   };
@@ -199,19 +180,6 @@ export default function Display({ badgeProgress, entryId }: DisplayProps) {
             variant="filled"
             fullWidth
             onClick={goToReadPage}
-            // rightSection={
-            //   <RingProgress
-            //     size={33}
-            //     thickness={3}
-            //     roundCaps
-            //     sections={[{ value: (timer / 30) * 100, color: "blue" }]}
-            //     label={
-            //       <Text ta="center" size="xs">
-            //         {timer}
-            //       </Text>
-            //     }
-            //   />
-            // }
             rightSection={<FaArrowRight />}
           >
             Go to my entry
