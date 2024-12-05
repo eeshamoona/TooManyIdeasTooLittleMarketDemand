@@ -308,6 +308,17 @@ const StatCharts: React.FC<StatChartsProps> = ({
           series={[{ name: "count", color: "blue.4", opacity: 0.5 }]}
           withPolarAngleAxis
           withPolarRadiusAxis={false}
+          polarAngleAxisProps={{
+            tickFormatter: (category) => {
+              const data: { category: string; count: number }[] =
+                numberOfEntriesInEachCategory as {
+                  category: string;
+                  count: number;
+                }[];
+              const entry = data.find((d) => d.category === category);
+              return entry ? `${entry.category} [${entry.count}]` : category;
+            },
+          }}
         />
       </Grid.Col>
       <Grid.Col span={{ base: 12, md: 6 }}>

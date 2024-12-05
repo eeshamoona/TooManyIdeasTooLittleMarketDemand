@@ -1,7 +1,7 @@
 "use client";
 import { Button, Container } from "@mantine/core";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaLock } from "react-icons/fa";
 import Loading from "../loading";
 import { getData, isUserLoggedIn } from "./actions";
@@ -14,8 +14,12 @@ const ProfilePage: React.FC = () => {
   const [username, setUserName] = useState<string | null>(null);
   const [entries, setEntries] = useState(null);
   const [profile, setProfile] = useState(null);
+  const initializationRef = useRef(false);
 
   useEffect(() => {
+    if (initializationRef.current) return; // Prevent re-initialization
+    initializationRef.current = true;
+
     const handleCheckedLoggedIn = async () => {
       try {
         setLoading(true);
@@ -38,7 +42,7 @@ const ProfilePage: React.FC = () => {
       }
     };
     handleCheckedLoggedIn();
-  }, []);
+  }, [router]);
 
   if (loading) {
     return <Loading />;
