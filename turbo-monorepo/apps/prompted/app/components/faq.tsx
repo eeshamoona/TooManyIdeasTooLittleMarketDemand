@@ -1,12 +1,12 @@
 import { Accordion, Container, Grid, Image } from "@mantine/core";
-import image from "../../public/FAQs-rafiki.png";
+import image from "../../public/images/FAQ.png";
 
 const faqData = [
   {
     value: "prompt-authors",
     question: "Who writes the prompts?",
     answer:
-      "The prompts are crafted by the Prompted team to spark creativity and self-reflection. We focus on universal questions that anyone can enjoy. In the future, we might add AI-generated prompts or let the community contribute.",
+      "The prompts are manually curated by the Prompted team to spark creativity and self-reflection. We focus on universal questions that anyone can enjoy. In the future, we might add AI-generated prompts or let the community contribute.",
   },
   {
     value: "application-developer",
@@ -24,7 +24,7 @@ const faqData = [
     value: "feedback-suggestions",
     question: "How can I provide feedback or suggest new features?",
     answer:
-      "You can share feedback or suggest features by creating an Issue on our GitHub. It helps us track and prioritize community suggestions. We appreciate your support!",
+      "You can share feedback or suggest features by joining our discussion board on our repository on GitHub. It helps us track and prioritize community suggestions and turn them into features. We appreciate your support!",
   },
   {
     value: "subscription-plans",
@@ -36,7 +36,7 @@ const faqData = [
     value: "ai-usage",
     question: "How does the app use AI?",
     answer:
-      "AI helps in two ways: giving writing suggestions and providing feedback. For suggestions, it uses the last 500 characters of your text to help with writer's block. Feedback analyzes the final submission, keeping your identity private.",
+      "AI helps in two ways: giving writing suggestions and providing feedback. For suggestions, it uses at least 100 characters of your text to help with writer's block. Feedback analyzes the final submission, keeping your identity private.",
   },
 ];
 

@@ -19,6 +19,9 @@ export default async function ShowStats({ isStats }: { isStats: boolean }) {
         height: "100%",
         textAlign: "center",
         overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: isStats ? "center" : "flex-start",
       }}
     >
       <Image
@@ -32,8 +35,9 @@ export default async function ShowStats({ isStats }: { isStats: boolean }) {
               : ReadPageLight
         }
         alt="Stat Charts"
-        height={isStats ? 300 : 350}
-        objectFit="cover"
+        width={500}
+        height={450}
+        unoptimized
       />
     </Card>
   );

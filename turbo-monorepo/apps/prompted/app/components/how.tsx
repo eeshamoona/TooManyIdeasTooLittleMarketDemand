@@ -11,6 +11,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import {
@@ -27,7 +28,7 @@ export default function HowItWorks() {
   const { colorScheme } = useMantineColorScheme();
 
   useEffect(() => {
-    const stepDuration = 20000; // 20 seconds for each step
+    const stepDuration = 26000; // Increased to 26 seconds for each step
     const interval = setInterval(() => {
       setActiveStep((prevStep) => (prevStep + 1) % 4);
       setProgress(0); // Reset progress when changing step automatically
@@ -172,12 +173,14 @@ export default function HowItWorks() {
               {stepContent.description}
             </Text>
             <Card p="0" m="0" bg={"transparent"}>
-              <img
+              <Image
                 src={stepContent.gifSrc}
                 alt={stepContent.title}
+                width={600}
+                height={300}
+                layout="responsive"
+                unoptimized
                 style={{
-                  width: "100%",
-                  objectFit: "contain",
                   transform: "scale(1.1)",
                 }}
               />
