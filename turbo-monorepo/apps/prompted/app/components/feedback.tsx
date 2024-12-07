@@ -9,19 +9,46 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 
-function FeedbackForm() {
+function FeedbackForm({ userEmail }: { userEmail: string }) {
   const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [confirmation, setConfirmation] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    // TODO: Implement feedback submission logic
-    console.log("Feedback submitted:", feedback);
-    //Send email to admin@writeprompted.com
-    const email = "admin@writeprompted.com";
-    const subject = "Prompted Feedback";
-    const body = feedback;
-    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
-    setFeedback("");
+    // Prepare the feedback data
+    const feedbackData = {
+      userEmail: userEmail,
+      message: feedback,
+    };
+
+    setLoading(true);
+    setConfirmation("");
+
+    try {
+      // Send feedback to the API
+      const response = await fetch("/api/sendFeedbackEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(feedbackData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send feedback");
+      }
+
+      const result = await response.json();
+      console.log("Feedback submitted:", result.message);
+      setFeedback(""); // Clear the feedback input
+      setConfirmation("Feedback sent successfully!");
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      setError("Error sending feedback. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -49,10 +76,24 @@ function FeedbackForm() {
         <Button size="xs" variant="default" onClick={() => setFeedback("")}>
           Clear
         </Button>
-        <Button size="xs" flex={1} onClick={handleSubmit}>
-          Send Feedback
+        <Button size="xs" flex={1} onClick={handleSubmit} disabled={loading}>
+          {loading ? "Sending..." : "Send Feedback"}
         </Button>
       </Group>
+
+      {/* Confirmation Message */}
+      {confirmation && (
+        <Text size="xs" c="green" mt="md" ta="center">
+          {confirmation}
+        </Text>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <Text size="xs" c="red" mt="md" ta="center">
+          {error}
+        </Text>
+      )}
 
       {/* Footer Section */}
       <Text size="xs" c="dimmed" mt="md" ta="center">

@@ -12,6 +12,7 @@ import {
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
+  Popover,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
@@ -188,26 +189,33 @@ export function CustomAppShell({
                 </Button>
               </Group>
             )}
+
             <Group>
+              {isLoggedIn && (
+                <Popover
+                  width={350}
+                  shadow="sm"
+                  position="bottom-end"
+                  withArrow
+                >
+                  <Popover.Target>
+                    <ActionIcon 
+                      variant="subtle" 
+                      size="lg"
+                      onMouseEnter={(event) => event.currentTarget.click()}
+                    >
+                      <GoCommentDiscussion
+                        style={{ width: "1rem", height: "1rem" }}
+                      />
+                    </ActionIcon>
+                  </Popover.Target>
+                  <Popover.Dropdown>
+                    <FeedbackForm userEmail={metadata.email} />
+                  </Popover.Dropdown>
+                </Popover>
+              )}
               {isLoggedIn ? (
                 <Group gap={"sm"} visibleFrom="sm">
-                  <HoverCard
-                    width={300}
-                    shadow="sm"
-                    position="bottom-end"
-                    withArrow
-                  >
-                    <HoverCard.Target>
-                      <ActionIcon variant="subtle" size="lg">
-                        <GoCommentDiscussion
-                          style={{ width: "1rem", height: "1rem" }}
-                        />
-                      </ActionIcon>
-                    </HoverCard.Target>
-                    <HoverCard.Dropdown>
-                      <FeedbackForm />
-                    </HoverCard.Dropdown>
-                  </HoverCard>
                   <UserMenu username={metadata.username} />
                 </Group>
               ) : (
@@ -228,6 +236,7 @@ export function CustomAppShell({
                   </Button>
                 </Group>
               )}
+
               <ActionIcon
                 onClick={() => toggleColorScheme()}
                 variant="transparent"
