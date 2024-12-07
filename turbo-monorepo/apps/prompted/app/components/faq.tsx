@@ -4,27 +4,27 @@ import image from "../../public/images/FAQ.png";
 const faqData = [
   {
     value: "prompt-authors",
-    question: "Who writes the prompts?",
+    question: "Where do the prompts come from?",
     answer:
-      "The prompts are manually curated by the Prompted team to spark creativity and self-reflection. We focus on universal questions that anyone can enjoy. In the future, we might add AI-generated prompts or let the community contribute.",
+      "The prompts are manually curated to spark creativity and self-reflection. We focus on universal questions that anyone can enjoy. In the future, we might add AI-generated prompts or let the community contribute.",
   },
   {
     value: "application-developer",
     question: "Who developed this application?",
     answer:
-      "Prompted was created by Eesha Moona, a software engineer. The app is built with Next.js, React, and Mantine, deployed on Vercel, and uses Supabase for authentication and database management.",
+      "Prompted was created and currently maintained by Eesha Moona, a software engineer. The app is built with Next.js, React, and Mantine, deployed on Vercel, and uses Supabase for authentication and database management.",
   },
   {
     value: "data-privacy",
     question: "How is my data handled?",
     answer:
-      "We use Supabase to manage data securely, with encryption for data in transit and at rest. We only store what's necessary, and for AI interactions, no personal info is included—just the relevant text.",
+      "We use Supabase to manage data securely, with encryption for data in transit and at rest. We only store what's necessary, and for AI interactions, no personal info is included—just the entry, the question, and any customizations in your profile.",
   },
   {
     value: "feedback-suggestions",
     question: "How can I provide feedback or suggest new features?",
     answer:
-      "You can share feedback or suggest features by joining our discussion board on our repository on GitHub. It helps us track and prioritize community suggestions and turn them into features. We appreciate your support!",
+      "You can share feedback by logging in and clicking the feedback button in the top right corner, or suggest features by joining our discussion board on our repository on GitHub. We appreciate your support!",
   },
   {
     value: "subscription-plans",
@@ -36,7 +36,7 @@ const faqData = [
     value: "ai-usage",
     question: "How does the app use AI?",
     answer:
-      "AI helps in two ways: giving writing suggestions and providing feedback. For suggestions, it uses at least 100 characters of your text to help with writer's block. Feedback analyzes the final submission, keeping your identity private.",
+      "AI helps in two ways: unblocking your while your write and providing feedback after you're done. For suggestions, it uses at least 100 characters of your text to help you continue writing. Feedback analyzes the final submission, keeping your identity private.",
   },
 ];
 
