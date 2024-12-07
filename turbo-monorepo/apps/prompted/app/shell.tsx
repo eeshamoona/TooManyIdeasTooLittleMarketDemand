@@ -7,8 +7,8 @@ import {
   Button,
   Group,
   Menu,
+  Popover,
   Text,
-  Tooltip,
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
@@ -20,6 +20,7 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { GoCommentDiscussion } from "react-icons/go";
 import { IoExitOutline } from "react-icons/io5";
 import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
+import FeedbackForm from "./components/feedback";
 import { handleLogout } from "./logout/logoutClient";
 
 interface CustomAppShellProps {
@@ -187,30 +188,33 @@ export function CustomAppShell({
                 </Button>
               </Group>
             )}
+
             <Group>
-              {isLoggedIn ? (
-                <Group gap={"sm"} visibleFrom="sm">
-                  <Tooltip
-                    label="Share Feedback"
-                    position="bottom"
-                    withArrow
-                    offset={11}
-                  >
+              {isLoggedIn && (
+                <Popover
+                  width={350}
+                  shadow="xl"
+                  position="bottom-end"
+                  withArrow
+                >
+                  <Popover.Target>
                     <ActionIcon
                       variant="subtle"
                       size="lg"
-                      component="a"
-                      href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
-                      target="_blank"
+                      onMouseEnter={(event) => event.currentTarget.click()}
                     >
                       <GoCommentDiscussion
-                        style={{
-                          width: "1rem",
-                          height: "1rem",
-                        }}
+                        style={{ width: "1rem", height: "1rem" }}
                       />
                     </ActionIcon>
-                  </Tooltip>
+                  </Popover.Target>
+                  <Popover.Dropdown>
+                    <FeedbackForm userEmail={metadata.email} />
+                  </Popover.Dropdown>
+                </Popover>
+              )}
+              {isLoggedIn ? (
+                <Group gap={"sm"} visibleFrom="sm">
                   <UserMenu username={metadata.username} />
                 </Group>
               ) : (
@@ -231,6 +235,7 @@ export function CustomAppShell({
                   </Button>
                 </Group>
               )}
+
               <ActionIcon
                 onClick={() => toggleColorScheme()}
                 variant="transparent"

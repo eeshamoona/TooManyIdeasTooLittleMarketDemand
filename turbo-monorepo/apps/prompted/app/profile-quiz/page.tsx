@@ -33,6 +33,7 @@ export default function ProfileQuiz() {
   const router = useRouter();
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
+  const [loading, setLoading] = useState(false);
 
   const handleAnswerChange = (question: string, value: string | number) => {
     setAnswers((prev) => ({
@@ -65,6 +66,7 @@ export default function ProfileQuiz() {
     if (activeStep < profileQuizQuestions.length - 1) {
       setActiveStep((current) => current + 1);
     } else {
+      setLoading(true);
       try {
         const { success } = await updateProfile(answers);
         if (success) {
@@ -74,6 +76,8 @@ export default function ProfileQuiz() {
         }
       } catch (error) {
         console.error("Failed to update profile:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -224,7 +228,11 @@ export default function ProfileQuiz() {
                   Back
                 </Button>
               </Group>
-              <Button onClick={nextStep} disabled={!isCurrentStepValid()}>
+              <Button
+                onClick={nextStep}
+                disabled={!isCurrentStepValid()}
+                loading={loading}
+              >
                 {activeStep === profileQuizQuestions.length - 1
                   ? "Start Writing"
                   : "Next"}

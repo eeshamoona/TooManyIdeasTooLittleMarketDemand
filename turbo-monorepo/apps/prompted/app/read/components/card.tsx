@@ -51,15 +51,31 @@ export function EntryCard({
   const handleCardClick = () => {
     router.push(`/read/${entry.id}`);
   };
-
-  const handleExport = (e: React.MouseEvent) => {
+  
+  const handleExport = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log("Export initiated for entry:", entry.id);
     setExported(true);
 
-    getEntry(entry);
+    const entryContent = await getEntry(entry);
+    console.log("Entry fetched:", entryContent);
+
+    // Create a Blob from the entry content
+    const blob = new Blob([entryContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    // Create a link element to trigger the download
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `entry_${entry.id}.txt`; // Set the filename
+    document.body.appendChild(link);
+    link.click(); // Trigger the download
+    document.body.removeChild(link); // Clean up
 
     setTimeout(() => {
+      console.log("Export completed for entry:", entry.id);
       setExported(false);
+      URL.revokeObjectURL(url); // Release the object URL
     }, 3000);
   };
 
