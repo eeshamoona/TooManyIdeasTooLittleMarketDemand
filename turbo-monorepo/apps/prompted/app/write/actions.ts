@@ -26,18 +26,26 @@ export function getTitleOrder(promptTextLength: number): TitleOrder {
   }
 }
 
-export const generateCharacterStats = (characters: Character[], combinedResponse: string, targetWordCount?: number) => {
+export const generateCharacterStats = (
+  characters: Character[],
+  combinedResponse: string,
+  targetWordCount?: number
+) => {
   const totalCharacters = characters.length;
   const aiCharacters = characters.filter((char) => char.type === "AI").length;
-  const userCharacters = characters.filter((char) => char.type === "user").length;
+  const userCharacters = characters.filter(
+    (char) => char.type === "user"
+  ).length;
 
-  const userPercentage = totalCharacters > 0 ? (userCharacters / totalCharacters) * 100 : 0;
+  const userPercentage =
+    totalCharacters > 0 ? (userCharacters / totalCharacters) * 100 : 0;
 
   const totalWords = combinedResponse.trim().split(/\s+/).length;
   const aiWordCount = combinedResponse
     .split(/\s+/)
     .filter((_, index, array) => {
-      const startIndex = array.slice(0, index + 1).join(" ").length - array[index].length;
+      const startIndex =
+        array.slice(0, index + 1).join(" ").length - array[index].length;
       return characters[startIndex]?.type === "AI";
     }).length;
 

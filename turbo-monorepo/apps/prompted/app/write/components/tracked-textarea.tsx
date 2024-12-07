@@ -391,18 +391,22 @@ export default function TrackedTextarea({
         </Group>
       </Stack>
 
-      {/* Save Confirmation Modal */}
       <Modal
         opened={showSaveModal}
         onClose={() => setShowSaveModal(false)}
-        title={<Text fw={700}>Save Response</Text>}
+        title={<Text fw="bold"> Save Your Progress 🎉</Text>}
+        centered
       >
-        <Text size="sm">Are you ready to save your writing?</Text>
-        <Text c="dimmed" size="sm" mb="md">
-          This will save your progress and take you to the results page.
+        {/* Celebrate Message */}
+        <Text size="sm">
+          Great job on your latest writing! Ready to save your progress?
         </Text>
-        {preloadedStats && <StatsGrid stats={preloadedStats.stats} />}
-        <Group justify="space-between" mt="md">
+        <Text size="sm" c="dimmed">
+          We'll also send your response to AI for feedback
+        </Text>
+
+        {/* Action Buttons */}
+        <Group justify="space-between" mt="lg" gap="sm">
           <Button variant="default" onClick={() => setShowSaveModal(false)}>
             Cancel
           </Button>
@@ -411,7 +415,7 @@ export default function TrackedTextarea({
             loaderProps={{ type: "dots" }}
             onClick={handleConfirmSave}
           >
-            Save Response
+            Save
           </Button>
         </Group>
       </Modal>
@@ -420,18 +424,21 @@ export default function TrackedTextarea({
       <Modal
         opened={showClearModal}
         onClose={() => setShowClearModal(false)}
-        title={<Text fw={700}>Clear Response</Text>}
+        title={<Text fw="bold"> Clear Writing 🗑️</Text>}
+        centered
       >
-        <Text size="sm">Are you sure you want to clear your response?</Text>
-        <Text c="dimmed" size="sm" mb="md">
-          This action cannot be undone!
+        <Text size="sm">
+          Want to start over? This will action cannot be undone!
         </Text>
-        <Group justify="space-between" mt="md">
-          <Button variant="default" onClick={() => setShowClearModal(false)}>
+        <Text size="sm" c="dimmed">
+          The timer will also restart
+        </Text>
+        <Group justify="space-between" mt="lg">
+          <Button variant="outline" onClick={() => setShowClearModal(false)}>
             Cancel
           </Button>
           <Button color="red" onClick={handleConfirmClear}>
-            Clear Response
+            Clear
           </Button>
         </Group>
       </Modal>
