@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Group,
+  Modal,
   Paper,
   Stack,
   Text,
@@ -18,7 +19,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IconType } from "react-icons";
 import { FaBolt, FaLightbulb, FaRedo, FaRegLightbulb } from "react-icons/fa";
-import { getTitleOrder } from "../actions";
+import {
+  generateCharacterStats,
+  getTitleOrder,
+  wordFrequencyMap,
+} from "../actions";
 import { Profile } from "./display";
 import { StatsGrid } from "./stats";
 
@@ -59,6 +64,9 @@ export default function TrackedTextarea({
   const [aiLoading, { open: openAi, close: closeAi }] = useDisclosure();
   const [isSaving, setIsSaving] = useState(false);
   const router = useRouter();
+  const [showClearModal, setShowClearModal] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [preloadedStats, setPreloadedStats] = useState<any>(null);
 
   //TODO: Debounce the user input for better performance
   // Ex. const [debounced] = useDebouncedValue(combinedResponse, 200);
@@ -126,60 +134,46 @@ export default function TrackedTextarea({
     }
   };
 
-  const wordFrequencyMap = (text: string) => {
-    // Convert the text to lowercase and remove punctuation
-    const cleanText = text.toLowerCase().replace(/[^\w\s]/g, "");
-
-    // Split the text into individual words
-    const words = cleanText.split(/\s+/).filter((word) => word !== "");
-
-    // Create a word frequency dictionary
-    const wordFreq: { [word: string]: number } = {};
-
-    words.forEach((word) => {
-      if (wordFreq[word]) {
-        wordFreq[word]++;
-      } else {
-        wordFreq[word] = 1;
-      }
-    });
-
-    // Convert the dictionary to an array of tuples [word, frequency]
-    const sortedWordFreq = Object.entries(wordFreq).sort(
-      ([, a], [, b]) => b - a
+  const prepareStats = () => {
+    const stats = generateCharacterStats(
+      characters,
+      combinedResponse,
+      targetWordCount
     );
-
-    // Convert back to an object and return
-    const sortedWordFreqDict: { [word: string]: number } = {};
-    sortedWordFreq.forEach(([word, freq]) => {
-      sortedWordFreqDict[word] = freq;
-    });
-
-    // Get the top 10 most commonly used words
-    const top10Words = sortedWordFreq.slice(0, 10);
-
-    return { sortedWordFreqDict, top10Words };
-  };
-
-  const saveEntry = async () => {
-    setIsSaving(true);
-    const stats = generateCharacterStats(characters);
-    const { sortedWordFreqDict, top10Words } =
-      wordFrequencyMap(combinedResponse);
-
+    const { sortedWordFreqDict } = wordFrequencyMap(combinedResponse);
     const uniqueWordCount = Object.keys(sortedWordFreqDict).length;
     const uniqueWordPercentage = (uniqueWordCount / stats.totalWords) * 100;
 
-    //Append sortedWordFreqDict, totalWords, top10Words to stats object
     stats["uniqueWordCount"] = uniqueWordCount;
     stats["uniqueWordPercentage"] = uniqueWordPercentage;
     stats["aiCallCount"] = aiCallCount;
-
     const elapsedTime = startTime ? (Date.now() - startTime) / 1000 : 0;
-    setStartTime(null);
     stats["elapsedTime"] = elapsedTime;
+
+    return {
+      stats,
+      sortedWordFreqDict,
+    };
+  };
+
+  const handleSaveClick = () => {
+    const preparedStats = prepareStats();
+    setPreloadedStats(preparedStats);
+    setShowSaveModal(true);
+  };
+
+  const handleClearClick = () => {
+    setShowClearModal(true);
+  };
+
+  const handleConfirmSave = async () => {
+    setIsSaving(true);
+    setShowSaveModal(false);
+    const stats = preloadedStats.stats;
+    const sortedWordFreqDict = preloadedStats.sortedWordFreqDict;
     let ai_feedback = {};
 
+    // Fetch AI feedback
     try {
       const aiFeedbackData = await fetch("/api/getAiFeedback", {
         method: "POST",
@@ -194,18 +188,12 @@ export default function TrackedTextarea({
         }),
       });
       const generatedJson = await aiFeedbackData.json();
-      console.log("Raw AI Feedback Data:", generatedJson);
-
-      try {
-        ai_feedback = JSON.parse(generatedJson["aiFeedback"]);
-        console.log("Parsed AI Feedback JSON:", ai_feedback);
-      } catch (error) {
-        console.error("Error parsing AI Feedback JSON:", error);
-      }
+      ai_feedback = JSON.parse(generatedJson["aiFeedback"]);
     } catch (error) {
       console.error("Error calling API:", error);
     }
 
+    // Save entry
     try {
       const saveResponse = await fetch("/api/saveEntry", {
         method: "POST",
@@ -223,12 +211,16 @@ export default function TrackedTextarea({
         }),
       });
       const data = await saveResponse.json();
-      const entry_id = data.entryId;
-      console.log("Route to entry page with ID:", entry_id);
-      router.push(`/process/${entry_id}`);
+      router.push(`/process/${data.entryId}`);
     } catch (error) {
       console.error("Error calling API:", error);
     }
+  };
+
+  const handleConfirmClear = () => {
+    setStartTime(null);
+    setCharacters([]);
+    setShowClearModal(false);
   };
 
   const handleGenerateClick = async () => {
@@ -252,43 +244,11 @@ export default function TrackedTextarea({
     }
   };
 
-  const generateCharacterStats = (characters: Character[]) => {
-    const totalCharacters = characters.length;
-    const aiCharacters = characters.filter((char) => char.type === "AI").length;
-    const userCharacters = characters.filter(
-      (char) => char.type === "user"
-    ).length;
-
-    const userPercentage =
-      totalCharacters > 0 ? (userCharacters / totalCharacters) * 100 : 0;
-
-    const totalWords = combinedResponse.trim().split(/\s+/).length;
-    const aiWordCount = combinedResponse
-      .split(/\s+/)
-      .filter((_, index, array) => {
-        const startIndex =
-          array.slice(0, index + 1).join(" ").length - array[index].length;
-        return characters[startIndex]?.type === "AI";
-      }).length;
-
-    return {
-      totalCharacters,
-      aiCharacters,
-      userCharacters,
-      userPercentage: parseFloat(userPercentage.toFixed(2)),
-      totalWords,
-      targetWordCount: targetWordCount ?? null,
-      aiWordCount,
-    };
-  };
-
-  const handleSaveAndClearResponse = () => {
-    console.log("Clearing response...");
-    setStartTime(null);
-    setCharacters([]);
-  };
-
-  const stats = generateCharacterStats(characters);
+  const stats = generateCharacterStats(
+    characters,
+    combinedResponse,
+    targetWordCount
+  );
 
   const promptTextLength = promptText.length;
 
@@ -414,7 +374,7 @@ export default function TrackedTextarea({
         <Group grow>
           <Button
             variant="outline"
-            onClick={handleSaveAndClearResponse}
+            onClick={handleClearClick}
             disabled={combinedResponse.trim() === ""}
           >
             Clear
@@ -423,13 +383,58 @@ export default function TrackedTextarea({
             loading={isSaving}
             loaderProps={{ type: "dots" }}
             variant="solid"
-            onClick={saveEntry}
+            onClick={handleSaveClick}
             disabled={combinedResponse.trim() === ""}
           >
             Save Response
           </Button>
         </Group>
       </Stack>
+
+      {/* Save Confirmation Modal */}
+      <Modal
+        opened={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        title={<Text fw={700}>Save Response</Text>}
+      >
+        <Text size="sm">Are you ready to save your writing?</Text>
+        <Text c="dimmed" size="sm" mb="md">
+          This will save your progress and take you to the results page.
+        </Text>
+        {preloadedStats && <StatsGrid stats={preloadedStats.stats} />}
+        <Group justify="space-between" mt="md">
+          <Button variant="default" onClick={() => setShowSaveModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            loading={isSaving}
+            loaderProps={{ type: "dots" }}
+            onClick={handleConfirmSave}
+          >
+            Save Response
+          </Button>
+        </Group>
+      </Modal>
+
+      {/* Clear Confirmation Modal */}
+      <Modal
+        opened={showClearModal}
+        onClose={() => setShowClearModal(false)}
+        title={<Text fw={700}>Clear Response</Text>}
+      >
+        <Text size="sm">Are you sure you want to clear your response?</Text>
+        <Text c="dimmed" size="sm" mb="md">
+          This action cannot be undone!
+        </Text>
+        <Group justify="space-between" mt="md">
+          <Button variant="default" onClick={() => setShowClearModal(false)}>
+            Cancel
+          </Button>
+          <Button color="red" onClick={handleConfirmClear}>
+            Clear Response
+          </Button>
+        </Group>
+      </Modal>
     </Stack>
   );
 }
