@@ -74,6 +74,7 @@ export const featureDescriptions = {
           margin: "0 auto",
           alignContent: "center",
         }}
+        w={"fit-content"}
       >
         <Text ta="center" size="xl">
           Milestone Reached!
@@ -117,18 +118,9 @@ const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-    intervalRef.current = setInterval(() => {
-      setSelectedFeature((prev) => {
-        const featureKeys = Object.keys(featureDescriptions);
-        const currentIndex = featureKeys.indexOf(prev);
-        const nextIndex = (currentIndex + 1) % featureKeys.length;
-        return featureKeys[nextIndex];
-      });
-    }, 8000); // Rotate every 8 seconds
   };
 
   useEffect(() => {
-    resetInterval();
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -149,9 +141,9 @@ const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
       <Text ta="center" c="dimmed" mb="xl">
         Discover more ways to stay motivated and inspired
       </Text>
-      <Grid gutter={30}>
+      <Grid gutter={30} mb="xl">
         {/* Left Column: Main and Secondary Features */}
-        <Grid.Col span={8}>
+        <Grid.Col span={{ base: 12, md: 8 }}>
           <Stack gap="lg">
             {/* Main Feature */}
             <Card
@@ -209,8 +201,8 @@ const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={4}>
-          <Stack gap="sm" pt={"xl"}>
+        <Grid.Col span={{ base: 12, md: 4 }}>
+          <Stack gap="sm" py={{ base: "sm", md: "xl" }}>
             <Group w="full" align="center" gap="sm">
               {featureDescriptions[selectedFeature]?.icon &&
                 createElement(featureDescriptions[selectedFeature].icon, {

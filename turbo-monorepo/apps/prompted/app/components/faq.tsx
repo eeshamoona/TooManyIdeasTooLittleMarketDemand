@@ -1,44 +1,6 @@
 import { Accordion, Container, Grid, Image } from "@mantine/core";
 import image from "../../public/images/FAQ.png";
-
-const faqData = [
-  {
-    value: "prompt-authors",
-    question: "Who writes the prompts?",
-    answer:
-      "The prompts are manually curated by the Prompted team to spark creativity and self-reflection. We focus on universal questions that anyone can enjoy. In the future, we might add AI-generated prompts or let the community contribute.",
-  },
-  {
-    value: "application-developer",
-    question: "Who developed this application?",
-    answer:
-      "Prompted was created by Eesha Moona, a software engineer. The app is built with Next.js, React, and Mantine, deployed on Vercel, and uses Supabase for authentication and database management.",
-  },
-  {
-    value: "data-privacy",
-    question: "How is my data handled?",
-    answer:
-      "We use Supabase to manage data securely, with encryption for data in transit and at rest. We only store what's necessary, and for AI interactions, no personal info is included—just the relevant text.",
-  },
-  {
-    value: "feedback-suggestions",
-    question: "How can I provide feedback or suggest new features?",
-    answer:
-      "You can share feedback or suggest features by joining our discussion board on our repository on GitHub. It helps us track and prioritize community suggestions and turn them into features. We appreciate your support!",
-  },
-  {
-    value: "subscription-plans",
-    question: "Are there any subscription plans or in-app purchases?",
-    answer:
-      "Right now, Prompted is free with no in-app purchases. We want to keep it accessible for everyone. Down the road, we may add premium features for more tools and insights.",
-  },
-  {
-    value: "ai-usage",
-    question: "How does the app use AI?",
-    answer:
-      "AI helps in two ways: giving writing suggestions and providing feedback. For suggestions, it uses at least 100 characters of your text to help with writer's block. Feedback analyzes the final submission, keeping your identity private.",
-  },
-];
+import { faqData } from "./data";
 
 export default function FaqWithImage() {
   return (

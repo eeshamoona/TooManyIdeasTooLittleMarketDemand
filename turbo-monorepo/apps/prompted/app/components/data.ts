@@ -130,6 +130,44 @@ export const questions = [
   },
 ];
 
+export const faqData = [
+  {
+    value: "prompt-authors",
+    question: "Where do the prompts come from?",
+    answer:
+      "The prompts are manually curated to spark creativity and self-reflection. We focus on universal questions that anyone can enjoy. In the future, we might add AI-generated prompts or let the community contribute.",
+  },
+  {
+    value: "application-developer",
+    question: "Who developed this application?",
+    answer:
+      "Prompted was created and currently maintained by Eesha Moona, a software engineer. The app is built with Next.js, React, and Mantine, deployed on Vercel, and uses Supabase for authentication and database management.",
+  },
+  {
+    value: "data-privacy",
+    question: "How is my data handled?",
+    answer:
+      "We use Supabase to manage data securely, with encryption for data in transit and at rest. We only store what's necessary, and for AI interactions, no personal info is included—just the entry, the question, and any customizations in your profile.",
+  },
+  {
+    value: "feedback-suggestions",
+    question: "How can I provide feedback or suggest new features?",
+    answer:
+      "You can share feedback by logging in and clicking the feedback button in the top right corner, or suggest features by joining our discussion board on our repository on GitHub. We appreciate your support!",
+  },
+  {
+    value: "subscription-plans",
+    question: "Are there any subscription plans or in-app purchases?",
+    answer:
+      "Right now, Prompted is free with no in-app purchases. We want to keep it accessible for everyone. Down the road, we may add premium features for more tools and insights.",
+  },
+  {
+    value: "ai-usage",
+    question: "How does the app use AI?",
+    answer:
+      "AI helps in two ways: unblocking your while your write and providing feedback after you're done. For suggestions, it uses at least 100 characters of your text to help you continue writing. Feedback analyzes the final submission, keeping your identity private.",
+  },
+];
 export const subtext = [
   "Writing isn’t about perfection; it’s about starting. With prompts anyone can answer, AI support, and stats to keep you motivated, you’ll find inspiration, growth, and support at every step.",
   "New to writing? No worries—start small and have fun. Our prompts, AI help, and progress tracking make writing simple, enjoyable, and rewarding.",
