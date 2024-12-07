@@ -133,9 +133,6 @@ export default function TrackedTextarea({
     // Split the text into individual words
     const words = cleanText.split(/\s+/).filter((word) => word !== "");
 
-    // Calculate the total number of words
-    const totalWords = words.length;
-
     // Create a word frequency dictionary
     const wordFreq: { [word: string]: number } = {};
 
@@ -161,23 +158,19 @@ export default function TrackedTextarea({
     // Get the top 10 most commonly used words
     const top10Words = sortedWordFreq.slice(0, 10);
 
-    return { sortedWordFreqDict, totalWords, top10Words };
+    return { sortedWordFreqDict, top10Words };
   };
 
   const saveEntry = async () => {
     setIsSaving(true);
     const stats = generateCharacterStats(characters);
-    const { sortedWordFreqDict, totalWords, top10Words } =
+    const { sortedWordFreqDict, top10Words } =
       wordFrequencyMap(combinedResponse);
 
     const uniqueWordCount = Object.keys(sortedWordFreqDict).length;
-    const uniqueWordPercentage = (uniqueWordCount / totalWords) * 100;
-
-    // Get the top 10 most commonly used words
-    console.log("Top 10 most words:", top10Words);
+    const uniqueWordPercentage = (uniqueWordCount / stats.totalWords) * 100;
 
     //Append sortedWordFreqDict, totalWords, top10Words to stats object
-    stats["totalWords"] = totalWords;
     stats["uniqueWordCount"] = uniqueWordCount;
     stats["uniqueWordPercentage"] = uniqueWordPercentage;
     stats["aiCallCount"] = aiCallCount;
@@ -269,7 +262,7 @@ export default function TrackedTextarea({
     const userPercentage =
       totalCharacters > 0 ? (userCharacters / totalCharacters) * 100 : 0;
 
-    const wordCount = combinedResponse.trim().split(/\s+/).length;
+    const totalWords = combinedResponse.trim().split(/\s+/).length;
     const aiWordCount = combinedResponse
       .split(/\s+/)
       .filter((_, index, array) => {
@@ -283,7 +276,7 @@ export default function TrackedTextarea({
       aiCharacters,
       userCharacters,
       userPercentage: parseFloat(userPercentage.toFixed(2)),
-      wordCount,
+      totalWords,
       targetWordCount: targetWordCount ?? null,
       aiWordCount,
     };
@@ -333,52 +326,52 @@ export default function TrackedTextarea({
             alignItems: "center",
           }}
         >
-            <Title m={4} flex={1} order={titleOrder}>
-              {promptText}
-            </Title>
-            <Tooltip
-              label="Show Stats"
-              aria-label="Character stats tooltip"
-              position="left"
-              withArrow
-              color="gray"
-              transitionProps={{ transition: "fade" }}
+          <Title m={4} flex={1} order={titleOrder}>
+            {promptText}
+          </Title>
+          <Tooltip
+            label="Show Stats"
+            aria-label="Character stats tooltip"
+            position="left"
+            withArrow
+            color="gray"
+            transitionProps={{ transition: "fade" }}
+          >
+            <ActionIcon
+              onMouseEnter={handleStatsMouseDown}
+              onMouseLeave={handleStatsMouseUp}
+              color={showStats ? "blue" : "gray"}
+              disabled={characters.length === 0}
+              variant="light"
+              size="lg"
             >
-              <ActionIcon
-                onMouseEnter={handleStatsMouseDown}
-                onMouseLeave={handleStatsMouseUp}
-                color={showStats ? "blue" : "gray"}
-                disabled={characters.length === 0}
-                variant="light"
-                size="lg"
-              >
-                {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip
-              label={
-                combinedResponse.length > 100
-                  ? "Generate AI text"
-                  : "At least 100 characters required"
-              }
-              position="right"
-              withArrow
-              color={combinedResponse.length > 100 ? "blue" : "gray"}
-              transitionProps={{ transition: "fade" }}
+              {showStats ? <FaLightbulb /> : <FaRegLightbulb />}
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip
+            label={
+              combinedResponse.length > 100
+                ? "Generate AI text"
+                : "At least 100 characters required"
+            }
+            position="right"
+            withArrow
+            color={combinedResponse.length > 100 ? "blue" : "gray"}
+            transitionProps={{ transition: "fade" }}
+          >
+            <ActionIcon
+              loading={aiLoading}
+              loaderProps={{ type: "dots", size: "xs" }}
+              onClick={handleGenerateClick}
+              disabled={combinedResponse.length <= 100}
+              variant={"filled"}
+              color="blue"
+              size="lg"
             >
-              <ActionIcon
-                loading={aiLoading}
-                loaderProps={{ type: "dots", size: "xs" }}
-                onClick={handleGenerateClick}
-                disabled={combinedResponse.length <= 100}
-                variant={"filled"}
-                color="blue"
-                size="lg"
-              >
-                <FaBolt />
-              </ActionIcon>
-            </Tooltip>
-      </Group>
+              <FaBolt />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
 
         <Box style={{ width: "100%", minHeight: minTextBoxHeight }}>
           {showStats ? (

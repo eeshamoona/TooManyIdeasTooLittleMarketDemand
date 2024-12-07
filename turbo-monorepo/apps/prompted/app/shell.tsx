@@ -6,9 +6,9 @@ import {
   Burger,
   Button,
   Group,
+  HoverCard,
   Menu,
   Text,
-  Tooltip,
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
@@ -20,6 +20,7 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { GoCommentDiscussion } from "react-icons/go";
 import { IoExitOutline } from "react-icons/io5";
 import { LuAward, LuBookOpen, LuPencil } from "react-icons/lu";
+import FeedbackForm from "./components/feedback";
 import { handleLogout } from "./logout/logoutClient";
 
 interface CustomAppShellProps {
@@ -190,27 +191,18 @@ export function CustomAppShell({
             <Group>
               {isLoggedIn ? (
                 <Group gap={"sm"} visibleFrom="sm">
-                  <Tooltip
-                    label="Share Feedback"
-                    position="bottom"
-                    withArrow
-                    offset={11}
-                  >
-                    <ActionIcon
-                      variant="subtle"
-                      size="lg"
-                      component="a"
-                      href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
-                      target="_blank"
-                    >
-                      <GoCommentDiscussion
-                        style={{
-                          width: "1rem",
-                          height: "1rem",
-                        }}
-                      />
-                    </ActionIcon>
-                  </Tooltip>
+                  <HoverCard width={350} shadow="md">
+                    <HoverCard.Target>
+                      <ActionIcon variant="subtle" size="lg">
+                        <GoCommentDiscussion
+                          style={{ width: "1rem", height: "1rem" }}
+                        />
+                      </ActionIcon>
+                    </HoverCard.Target>
+                    <HoverCard.Dropdown>
+                      <FeedbackForm />
+                    </HoverCard.Dropdown>
+                  </HoverCard>
                   <UserMenu username={metadata.username} />
                 </Group>
               ) : (
