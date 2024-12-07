@@ -81,7 +81,7 @@ export default function HeroPage({
             </List.Item>
           </List>
 
-          <Group mt={30}>
+          <Group mt={30} w="max-content">
             <Button radius="sm" size="md" onClick={goToLoginCallback}>
               Start Writing
             </Button>

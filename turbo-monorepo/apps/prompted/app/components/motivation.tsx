@@ -151,7 +151,7 @@ const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
       </Text>
       <Grid gutter={30}>
         {/* Left Column: Main and Secondary Features */}
-        <Grid.Col span={8}>
+        <Grid.Col span={{ base: 12, md: 8 }}>
           <Stack gap="lg">
             {/* Main Feature */}
             <Card
@@ -209,8 +209,8 @@ const FeatureHighlight: React.FC<FeatureHighlightProps> = ({ answerQ4 }) => {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={4}>
-          <Stack gap="sm" pt={"xl"}>
+        <Grid.Col span={{ base: 12, md: 4 }}>
+          <Stack gap="sm" py={{ base: "sm", md: "xl" }}>
             <Group w="full" align="center" gap="sm">
               {featureDescriptions[selectedFeature]?.icon &&
                 createElement(featureDescriptions[selectedFeature].icon, {

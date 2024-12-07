@@ -1,4 +1,5 @@
 import { Button, Container, Stack, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import React, { Suspense } from "react";
 import { FaArrowRight } from "react-icons/fa";
@@ -15,6 +16,11 @@ const Footer = React.lazy(() => import("./footer"));
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
+
+  // Check if screen is mobile (40em ~ 640px)
+  const isMobile = useMediaQuery("(max-width: 40em)", true, {
+    getInitialValueInEffect: false,
+  });
 
   const scrollToHowItWorks = () => {
     const element = document.getElementById("how-it-works");
@@ -47,17 +53,19 @@ const LandingPage: React.FC = () => {
           />
         </FullHeightSection>
 
-        <Stack
-          gap="sm"
-          align="center"
-          style={{
-            textAlign: "center",
-            padding: "2rem",
-          }}
-        >
-          <Title ta="center">Get inspired with prompts like...</Title>
-          <TypewriterArray strings={displayPrompts} />
-        </Stack>
+        {!isMobile && (
+          <Stack
+            gap="sm"
+            align="center"
+            style={{
+              textAlign: "center",
+              padding: "2rem",
+            }}
+          >
+            <Title ta="center">Get inspired with prompts like...</Title>
+            <TypewriterArray strings={displayPrompts} />
+          </Stack>
+        )}
 
         <FullHeightSection id="how-it-works">
           <HowItWorks />
