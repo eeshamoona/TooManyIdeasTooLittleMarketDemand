@@ -16,6 +16,7 @@
     "@repo/ui": "*",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.4",
+    "@vercel/analytics": "^1.4.1",
     "alasql": "^4.5.2",
     "diff-match-patch": "^1.0.5",
     "install": "^0.13.0",

@@ -1,6 +1,7 @@
 import "@mantine/charts/styles.css";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { Analytics } from "@vercel/analytics/next";
 import { Metadata } from "next";
 import React, { Suspense } from "react";
 import "react-calendar-heatmap/dist/styles.css";
@@ -43,6 +44,7 @@ export default async function RootLayout({
             </PromptsProvider>
           </Suspense>
         </MantineProvider>
+        <Analytics />
       </body>
     </html>
   );
