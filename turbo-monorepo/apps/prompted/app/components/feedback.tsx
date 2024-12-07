@@ -1,4 +1,12 @@
-import { Anchor, Box, Button, Group, Text, Textarea } from "@mantine/core";
+import {
+  Anchor,
+  Button,
+  Container,
+  Group,
+  Text,
+  Textarea,
+  Title,
+} from "@mantine/core";
 import { useState } from "react";
 
 function FeedbackForm() {
@@ -7,40 +15,56 @@ function FeedbackForm() {
   const handleSubmit = async () => {
     // TODO: Implement feedback submission logic
     console.log("Feedback submitted:", feedback);
+    //Send email to admin@writeprompted.com
+    const email = "admin@writeprompted.com";
+    const subject = "Prompted Feedback";
+    const body = feedback;
+    const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
     setFeedback("");
   };
 
   return (
-    <Box p="md" mx="auto">
-      <Text size="xs" mb="xs">
-        Quickly send feedback or suggestions for Prompted:
+    <Container size="xs" px="0">
+      {/* Header Section */}
+      <Title order={5} mb="3">
+        Feedback
+      </Title>
+      <Text size="xs" c="dimmed" mb="md">
+        We’d love to hear your thoughts or suggestions for improving Prompted!
       </Text>
+
+      {/* Feedback Input */}
       <Textarea
-        placeholder="Share your thoughts with us"
+        placeholder="What’s on your mind?"
         value={feedback}
+        size="sm"
         onChange={(e) => setFeedback(e.currentTarget.value)}
         minRows={3}
         mb="sm"
-        resize="vertical"
       />
-      <Group justify="apart" grow>
-        <Button variant="subtle" fullWidth onClick={() => setFeedback("")}>
+
+      {/* Button Group */}
+      <Group dir="column" gap="xs" w="100%">
+        <Button size="xs" variant="default" onClick={() => setFeedback("")}>
           Clear
         </Button>
-        <Button fullWidth variant="light" onClick={handleSubmit}>
-          Send feedback
+        <Button size="xs" flex={1} onClick={handleSubmit}>
+          Send Feedback
         </Button>
       </Group>
-      <Text size="xs" mt="sm" ta="center">
-        Or join our{" "}
+
+      {/* Footer Section */}
+      <Text size="xs" c="dimmed" mt="md" ta="center">
+        Want to discuss more? Join our{" "}
         <Anchor
           href="https://github.com/eeshamoona/TooManyIdeasTooLittleMarketDemand/discussions/66"
-          type="button"
+          target="_blank"
         >
-          discussion board on Github!
+          GitHub Community
         </Anchor>
       </Text>
-    </Box>
+    </Container>
   );
 }
 

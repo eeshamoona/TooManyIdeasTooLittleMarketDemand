@@ -191,7 +191,12 @@ export function CustomAppShell({
             <Group>
               {isLoggedIn ? (
                 <Group gap={"sm"} visibleFrom="sm">
-                  <HoverCard width={350} shadow="md">
+                  <HoverCard
+                    width={300}
+                    shadow="sm"
+                    position="bottom-end"
+                    withArrow
+                  >
                     <HoverCard.Target>
                       <ActionIcon variant="subtle" size="lg">
                         <GoCommentDiscussion
