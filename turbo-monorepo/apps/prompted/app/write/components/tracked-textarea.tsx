@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IconType } from "react-icons";
 import { FaBolt, FaLightbulb, FaRedo, FaRegLightbulb } from "react-icons/fa";
+import { LuPartyPopper, LuTrash2 } from "react-icons/lu";
 import {
   generateCharacterStats,
   getTitleOrder,
@@ -394,7 +395,12 @@ export default function TrackedTextarea({
       <Modal
         opened={showSaveModal}
         onClose={() => setShowSaveModal(false)}
-        title={<Text fw="bold"> Save Your Progress 🎉</Text>}
+        title={
+          <Group gap="xs">
+            <LuPartyPopper />
+            <Text fw="bold">Save Your Progress</Text>
+          </Group>
+        }
         centered
       >
         {/* Celebrate Message */}
@@ -402,7 +408,7 @@ export default function TrackedTextarea({
           Great job on your latest writing! Ready to save your progress?
         </Text>
         <Text size="sm" c="dimmed">
-          We'll also send your response to AI for feedback
+          Saving may take a moment - please be patient
         </Text>
 
         {/* Action Buttons */}
@@ -424,12 +430,15 @@ export default function TrackedTextarea({
       <Modal
         opened={showClearModal}
         onClose={() => setShowClearModal(false)}
-        title={<Text fw="bold"> Clear Writing 🗑️</Text>}
+        title={
+          <Group gap="xs">
+            <LuTrash2 />
+            <Text fw="bold">Clear Writing</Text>
+          </Group>
+        }
         centered
       >
-        <Text size="sm">
-          Want to start over? This will action cannot be undone!
-        </Text>
+        <Text size="sm">Want to start over? This action cannot be undone!</Text>
         <Text size="sm" c="dimmed">
           The timer will also restart
         </Text>

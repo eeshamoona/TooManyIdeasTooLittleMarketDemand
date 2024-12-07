@@ -6,13 +6,12 @@ import {
   Burger,
   Button,
   Group,
-  HoverCard,
   Menu,
+  Popover,
   Text,
   UnstyledButton,
   useMantineColorScheme,
   useMantineTheme,
-  Popover,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter } from "next/navigation";
@@ -194,13 +193,13 @@ export function CustomAppShell({
               {isLoggedIn && (
                 <Popover
                   width={350}
-                  shadow="sm"
+                  shadow="xl"
                   position="bottom-end"
                   withArrow
                 >
                   <Popover.Target>
-                    <ActionIcon 
-                      variant="subtle" 
+                    <ActionIcon
+                      variant="subtle"
                       size="lg"
                       onMouseEnter={(event) => event.currentTarget.click()}
                     >
