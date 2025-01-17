@@ -1,10 +1,11 @@
-{'rule': 'Starts with B', 'condition': "word.startswith('B')", 'allowed': ['Banana', 'Book', 'Bag'], 'disallowed': ['Apple', 'Car', 'Dog']}
+{'rule': 'Starts with B', 'condition': "word.startswith('b')", 'allowed': ['Banana', 'Book', 'Bag', 'Bottle', 'Biscuit', 'Box'], 'disallowed': ['Apple', 'Car', 'Dog']}
 {'rule': 'Contains double letters', 'condition': "'ee' in word or 'oo' in word", 'allowed': ['Feet', 'Book', 'Balloon'], 'disallowed': ['Cat', 'Dog', 'Apple']}
 {'rule': 'Ends with "ing"', 'condition': "word.endswith('ing')", 'allowed': ['Running', 'Jumping', 'Swimming'], 'disallowed': ['Run', 'Jump', 'Swim']}
-{'rule': 'Has more than 5 letters', 'condition': "len(word) > 5", 'allowed': ['Banana', 'Orange', 'Giraffe'], 'disallowed': ['Apple', 'Cat', 'Dog']}
-{'rule': 'Starts and ends with the same letter', 'condition': "word[0].lower() == word[-1].lower()", 'allowed': ['Level', 'Radar', 'Kayak'], 'disallowed': ['Apple', 'Car', 'Book']}
+{'rule': 'Has more than 5 letters', 'condition': 'len(word) > 5', 'allowed': ['Banana', 'Orange', 'Giraffe', 'Elephant', 'Pineapple', 'Tomato'], 'disallowed': ['Apple', 'Cat', 'Dog', 'Mango']}
+{'rule': 'Starts and ends with the same letter', 'condition': 'word[0].lower() == word[-1].lower()', 'allowed': ['Level', 'Radar', 'Kayak', 'Civic', 'Racecar', 'Rotator'], 'disallowed': ['Apple', 'Car', 'Book']}
 {'rule': 'Ends with T', 'condition': "word.endswith('t')", 'allowed': ['Hat', 'Rat', 'Habitat', 'Flat', 'Gnat'], 'disallowed': ['Fair', 'Tooth', 'Wrong', 'Wired', 'None']}
 {'rule': 'Contains the letter X', 'condition': "'x' in word.lower()", 'allowed': ['Box', 'Relax', 'Axel'], 'disallowed': ['Book', 'Cat', 'Run']}
 {'rule': 'Has at least two vowels', 'condition': "sum(1 for c in word.lower() if c in 'aeiou') >= 2", 'allowed': ['Apple', 'Orange', 'Idea'], 'disallowed': ['Cat', 'Dog', 'Sky']}
 {'rule': 'Starts with a vowel', 'condition': "word[0].lower() in 'aeiou'", 'allowed': ['Apple', 'Orange', 'Idea'], 'disallowed': ['Banana', 'Car', 'Dog']}
-{'rule': 'Is a palindrome', 'condition': "word.lower() == word.lower()[::-1]", 'allowed': ['Level', 'Radar', 'Civic'], 'disallowed': ['Apple', 'Car', 'Book']}
+{'rule': 'Is a palindrome', 'condition': 'word.lower() == word.lower()[::-1]', 'allowed': ['Level', 'Radar', 'Civic', 'Racecar'], 'disallowed': ['Apple', 'Car', 'Book']}
+{'rule': 'Starts with V', 'condition': "word.startswith('v')", 'allowed': ['Vulture', 'Volvo', 'Virtue', 'Vaccine', 'Vortex', 'Venture'], 'disallowed': []}

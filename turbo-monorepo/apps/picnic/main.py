@@ -28,16 +28,17 @@ def load_rules_dataset(file_path):
         print(f"Dataset file {file_path} not found. Starting with an empty dataset.")
     return rules
 
-# Save a new rule to the dataset
-def save_rule(file_path, rule):
+# Save the updated dataset back to the text file
+def save_updated_rules(file_path, rules):
     """
-    Appends a new rule to the dataset file.
+    Rewrites the dataset file with updated rules.
     :param file_path: Path to the dataset file.
-    :param rule: The rule dictionary to save.
+    :param rules: The full list of updated rules.
     """
-    with open(file_path, "a", encoding="utf-8") as f:
-        f.write(f"{rule}\n")
-    print("Rule saved!")
+    with open(file_path, "w", encoding="utf-8") as f:
+        for rule in rules:
+            f.write(f"{rule}\n")
+    print("Rules dataset updated!")
 
 rules_dataset = load_rules_dataset("rules_dataset.txt")
 
@@ -50,17 +51,18 @@ def evaluate_rule(rule_condition, word):
     :return: True if the word satisfies the rule, False otherwise.
     """
     try:
-        print(eval(rule_condition.format(word=repr(word))))
+        word = word.lower()
         return eval(rule_condition.format(word=repr(word)))
     except Exception as e:
         print(f"Error evaluating rule: {e}")
         return False
 
 # Function to use GPT-4o to generate a word guess
-def ai_guess_word(allowed):
+def ai_guess_word(allowed, disallowed):
     """
     Uses GPT-4o-mini to generate a single-word guess that fits the rule based on allowed examples.
     :param allowed: List of examples that fit the rule.
+    :param disallowed: List of examples that do not fit the rule.
     :return: The AI's guessed word.
     """
     try:
@@ -69,13 +71,14 @@ def ai_guess_word(allowed):
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a word-guessing assistant. Your task is to guess a single word that fits the given examples.",
+                    "content": "You are a word-guessing assistant. Guess a single word that fits the given examples.",
                 },
                 {
                     "role": "user",
                     "content": f"""
                     Based on these examples, guess a single word that fits the pattern:
                     Allowed: {allowed}
+                    Already guessed (do not repeat): {allowed + disallowed}
                     Output only the word, nothing else.
                     """,
                 },
@@ -103,13 +106,15 @@ def start_game():
         rule = random.choice(rules_dataset)
         print(f"\nSelected Rule: {rule['rule']}")
         allowed = rule["allowed"]
+        disallowed = rule["disallowed"]
         condition = rule["condition"]
     elif choice == "custom":
         rule_name = input("Enter a description of your rule: ")
         condition = input("Enter the Python-compatible logic for your rule: ")
         allowed = input("Enter examples that fit your rule, separated by commas: ").split(", ")
-        rule = {"rule": rule_name, "condition": condition, "allowed": allowed}
-        save_rule("rules_dataset.txt", rule)
+        disallowed = []
+        rule = {"rule": rule_name, "condition": condition, "allowed": allowed, "disallowed": disallowed}
+        rules_dataset.append(rule)
     else:
         print("Invalid choice. Returning to main menu.")
         return
@@ -120,17 +125,19 @@ def start_game():
     incorrect_guesses = 0
 
     while correct_guesses < 3 and incorrect_guesses < 3:
-        ai_word_guess = ai_guess_word(allowed)
+        ai_word_guess = ai_guess_word(allowed, disallowed)
         print(f"AI's Guess: {ai_word_guess}")
-        print("Evaluating", condition)
 
-        if evaluate_rule(condition, ai_word_guess):
+        if ai_word_guess in allowed or ai_word_guess in disallowed:
+            print("This word was already guessed. AI loses this turn!")
+            incorrect_guesses += 1
+        elif evaluate_rule(condition, ai_word_guess):
             print("Correct!")
-            # TODO: Add the correct result to the array 
+            allowed.append(ai_word_guess)  # Add to allowed if correct
             correct_guesses += 1
         else:
             print("Incorrect!")
-            # TODO: Add the incorrect result to the array
+            disallowed.append(ai_word_guess)  # Add to disallowed if incorrect
             incorrect_guesses += 1
 
         print(f"Score: AI {correct_guesses} correct, {incorrect_guesses} incorrect.")
@@ -139,6 +146,11 @@ def start_game():
         print("\nThe AI wins!")
     else:
         print("\nThe AI loses!")
+
+    # Update rule in the dataset
+    rule["allowed"] = allowed
+    rule["disallowed"] = disallowed
+    save_updated_rules("rules_dataset.txt", rules_dataset)
 
 # Main program loop
 def main():
