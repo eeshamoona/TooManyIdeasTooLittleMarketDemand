@@ -1,5 +1,5 @@
 from host_game_engine import HostPicnicGame
-from rules import Rule, RuleManager
+from rules import RuleManager
 
 
 class SetupGame:
@@ -33,12 +33,11 @@ class SetupGame:
         print("Either pick a predefined rule or create a custom one, or any other key to exit.")
         print("--------------------------------------------------")
         rule_type = input("Enter '1 - Predefined', '2 - Custom', to set a rule: ").strip().lower()
-        rule: Rule = None
 
         if rule_type == '1':
             # Fetch a random predefined rule
-            rule = self.rule_manager.get_random_predefined_rule()
-            print("\nA predefined rule has been selected!")
+            selected_rule = self.rule_manager.get_random_predefined_rule()
+            print("\nPredefined rule selected successfully!\n", selected_rule.rule, selected_rule.condition)
         elif rule_type == '2':
             # Create a custom rule based on user input
             print("\nCreating a custom rule...")
@@ -47,15 +46,15 @@ class SetupGame:
             allowed = input("Enter examples that fit your rule, separated by commas: ").split(", ")
             disallowed = input("Enter examples that do not fit your rule, separated by commas: ").split(", ")
 
-            rule = self.rule_manager.create_custom_rule(
+            selected_rule = self.rule_manager.create_custom_rule(
                 rule_description, rule_pattern, allowed, disallowed
             )
 
-            if rule:
+            if selected_rule:
                 print("\nRule created and validated successfully!")
                 save_rule = input("Do you want to save this rule? (yes/no): ").strip().lower()
                 if save_rule == 'yes':
-                    self.rule_manager.update_rules_dataset(rule)
+                    self.rule_manager.update_rules_dataset(selected_rule)
                     print("\nCustom rule saved successfully!\n")
             else:
                 print("\nError: The custom rule could not be validated.\n")
@@ -67,13 +66,13 @@ class SetupGame:
             return
 
         # Exit if no rule was successfully created or retrieved
-        if not rule:
+        if not selected_rule:
             print("\nError creating or retrieving rule. Exiting host mode.\n")
             return
 
         # Display the selected rule
-        print(f"\nSelected Rule: \n- Description: {rule.description}\n- Condition: {rule.condition}\n")
+        print(f"\nSelected Rule: \n- Description: {selected_rule.rule}\n- Condition: {selected_rule.condition}\n")
 
         # Initialize and start the host game
-        new_game = HostPicnicGame(rule)
-        new_game.host_game(rule)
+        new_game = HostPicnicGame(selected_rule)
+        new_game.host_game()

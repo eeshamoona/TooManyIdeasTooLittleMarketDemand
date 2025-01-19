@@ -1,4 +1,4 @@
-def evaluate_rule(rule_condition, word):
+def evaluate_rule(rule_condition, word, expected=True):
     """
     Evaluates a word against a given rule condition.
     :param rule_condition: A string defining the rule logic (e.g., "word.startswith('B')").
@@ -8,7 +8,7 @@ def evaluate_rule(rule_condition, word):
     try:
         word = word.lower()
         formatted_condition = rule_condition.format(word=repr(word))
-        return eval(formatted_condition)
+        return eval(formatted_condition) == expected
     except Exception as e:
         print(f"Error evaluating rule: {e}")
         return False

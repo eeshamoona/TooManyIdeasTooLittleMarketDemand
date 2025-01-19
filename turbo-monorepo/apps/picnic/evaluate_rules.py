@@ -1,18 +1,5 @@
-def evaluate_rule(rule_condition, word):
-    """
-    Evaluates a word against a given rule condition.
-    :param rule_condition: A string defining the rule logic (e.g., "word.startswith('B')").
-    :param word: The word to be evaluated.
-    :return: True if the word satisfies the rule, False otherwise.
-    """
-    try:
-        word = word.lower()
-        formatted_condition = rule_condition.format(word=repr(word))
-        print("EVALUATING", eval(formatted_condition))
-        return eval(rule_condition.format(word=repr(word)))
-    except Exception as e:
-        print(f"Error evaluating rule: {e}")
-        return False
+from util import evaluate_rule
+
 
 def test_rules_evaluation(rules_dataset):
     """

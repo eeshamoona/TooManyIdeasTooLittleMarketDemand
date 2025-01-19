@@ -1,4 +1,8 @@
-from ai_agent import AIAgent
+import json
+
+from ai_agent import (STATIC_PROMPT_RULE_GUESS, STATIC_PROMPT_WORD_GUESS,
+                      AIAgent)
+from pydantic_core.core_schema import int_schema
 from rules import Rule
 
 
@@ -18,7 +22,9 @@ class HostPicnicGame:
         if not self.rule:
             print("No rule selected. Returning to main menu.")
             return
-    
+
+        # Log for starting up the game with the rule
+        print(f"Starting game with rule: {self.rule.rule} ({self.rule.condition}), allowed: {self.rule.allowed}, disallowed: {self.rule.disallowed}")
         # Initialize the game state
         allowed_words = self.rule.allowed
         disallowed_words = self.rule.disallowed
@@ -28,7 +34,7 @@ class HostPicnicGame:
         self.message_history = [
             {
                 "role": "system",
-                "content": "You are playing a word-guessing game. Generate a single word guess based on the allowed and disallowed examples. Avoid repeating words that have already been guessed. Your response must be strictly structured as follows: \nWord: <your_guess>\nAllowed: <yes/no>\nReasoning: <explanation>. Your goal is to deduce the rule based on the examples and achieve 3 correct guesses to unlock a chance to guess the rule."
+                "content": STATIC_PROMPT_WORD_GUESS
             }
         ]
 
@@ -36,7 +42,7 @@ class HostPicnicGame:
         while self.ai_rule_guesses < 3:
                 
             # Inner Game loop
-            while self.ai_score["correct"] < 3:
+            while int(self.ai_score["correct"]) < ((self.ai_rule_guesses + 1)*3):
                 # User message with current game state
                 user_message = {
                     "role": "user",
@@ -44,30 +50,42 @@ class HostPicnicGame:
                 }
                 self.message_history.append(user_message)
         
+                with open("debug.txt", "w") as f:
+                    f.write(json.dumps(self.message_history, indent=4))
+                
+
                 # AI makes a guess
                 guess, is_allowed, reasoning = self.ai_agent.make_guess(self.message_history)
                 guessed_words.append(guess)
         
                 # Check if the guess is allowed
-                correct = self.rule.check_word(guess, is_allowed)
-                self.ai_score["correct"] += 1 if correct else 0
-                self.ai_score["incorrect"] += 1 if not correct else 0
+                evaluation = self.rule.check_word(guess, is_allowed)
         
+                # Update game state
+                self.ai_score["correct"] += 1 if evaluation == is_allowed else 0
+                self.ai_score["incorrect"] += 1 if not evaluation == is_allowed else 0
+
+                if evaluation:
+                    allowed_words.append(guess)
+                else:
+                    disallowed_words.append(guess)
+
                 # AI response   
                 ai_message = {
                     "role": "assistant",
-                    "content": f"Word: {guess}\nAllowed: {'yes' if correct else 'no'}\nReasoning: {reasoning}"
+                    "content": f"Word: {guess}\nAllowed: {is_allowed}\nReasoning: {reasoning}"
                 }
                 self.message_history.append(ai_message)
 
                 user_message = {
                     "role": "user",
-                    "content": f"Correct! Score: {self.ai_score['correct']} incorrect: {self.ai_score['incorrect']}" if correct else f"Incorrect. Score: {self.ai_score['correct']} incorrect: {self.ai_score['incorrect']}"
+                    "content": f"Correct! Score: {self.ai_score['correct']} incorrect: {self.ai_score['incorrect']}" if (evaluation == is_allowed) else f"Incorrect. Score: {self.ai_score['correct']} incorrect: {self.ai_score['incorrect']}"
                 }
                 self.message_history.append(user_message)
-                
+            
+
                 # User feedback
-                if self.ai_score["correct"] >= 3:
+                if int(self.ai_score["correct"]) >= int((self.ai_rule_guesses + 1)*3):
                     break
         
             final_message = {
@@ -77,8 +95,7 @@ class HostPicnicGame:
             self.message_history.append(final_message)
 
             # Replace the first message with a new system message indicating the user has won
-            self.message_history[0]["content"] = ("You are analyzing a word-guessing game. Reflect on the reasoning history to infer the rule. "
-                            "Be concise and provide a single sentence describing the rule.")
+            self.message_history[0]["content"] = STATIC_PROMPT_RULE_GUESS
             # Final message to indicate the AI has a chance to guess the rule
             ai_rule_guess = self.ai_agent.guess_rule(self.message_history)
             self.ai_rule_guesses += 1
@@ -96,7 +113,7 @@ class HostPicnicGame:
                     "content": f"Incorrect! You have {3 - self.ai_rule_guesses} attempts left to guess the rule."
                 }
                 self.message_history.append(user_message)
-                self.message_history[0]["content"] = ("You are playing a word-guessing game. Generate a single word guess based on the allowed and disallowed examples. Avoid repeating words that have already been guessed. Your response must be strictly structured as follows: \nWord: <your_guess>\nAllowed: <yes/no>\nReasoning: <explanation>. Your goal is to deduce the rule based on the examples and achieve 3 correct guesses to unlock a chance to guess the rule.")
+                self.message_history[0]["content"] = STATIC_PROMPT_WORD_GUESS
                 if self.ai_rule_guesses == 3:
                     self.end_game()
                 else:
@@ -106,14 +123,13 @@ class HostPicnicGame:
         print(self.message_history)
     
     def complete_game(self):
-        print("The AI has been invited to the picnic!")
+        print("\n\nThe AI has been invited to the picnic!")
 
-        print("Final message history:")
-        print(self.message_history)
-        print("AI score:")
+        print("\nFinal score:")
         print(self.ai_score)
-        print("Rule:")
-        print(self.rule)
+
+        with open("debug.txt", "w") as f:
+            f.write(json.dumps(self.message_history, indent=4))
 
         # Reset the game state
         self.ai_agent = AIAgent()
