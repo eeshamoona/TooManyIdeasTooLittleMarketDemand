@@ -1,5 +1,5 @@
+from host_game_engine import how_to_play_instructions
 from setup_game import SetupGame
-from logger import how_to_play_instructions
 
 
 def main():

@@ -1,45 +1,79 @@
 from host_game_engine import HostPicnicGame
-from rules import RuleManager
+from rules import Rule, RuleManager
 
 
-class SetupGame: 
+class SetupGame:
     def __init__(self):
-        self.rule_manager = RuleManager()  
+        """
+        Initializes the SetupGame class, setting up the RuleManager instance.
+        """
+        self.rule_manager = RuleManager()  # Manages predefined and custom rules
 
     def start_game(self):
-        print("New game started!")
-        mode = input("Do you want to play as the '1 - host' or the '2 - invitee'? ").strip().lower()
+        """
+        Starts the game, allowing the user to choose their role as host or invitee.
+        """
+        print("\n=== Welcome to the Picnic Rule Guessing Game! ===")
+        print("We are going to a picnic, try to guess the rules and get invited!")
+        print("--------------------------------------------------")
+        mode = input("Do you want to play as the '1 - Host' or the '2 - Invitee'? ").strip().lower()
 
         if mode == '1':
             self.play_as_host()
         elif mode == '2':
-            print("Invitee mode is not implemented yet. Stay tuned!")
+            print("\nInvitee mode is not implemented yet. Stay tuned!\n")
         else:
-            print("Invalid choice. Returning to the main menu.")
+            print("\nInvalid choice. Returning to the main menu.\n")
 
     def play_as_host(self):
-        rule_type = input("Enter '1 - predefined' or '2 - custom' to set a rule: ").strip().lower()
-        rule = None
+        """
+        Allows the user to play as the host, selecting or creating a rule for the game.
+        """
+        print("\n--- Host Mode: Pick a Rule ---")
+        print("Either pick a predefined rule or create a custom one, or any other key to exit.")
+        print("--------------------------------------------------")
+        rule_type = input("Enter '1 - Predefined', '2 - Custom', to set a rule: ").strip().lower()
+        rule: Rule = None
+
         if rule_type == '1':
+            # Fetch a random predefined rule
             rule = self.rule_manager.get_random_predefined_rule()
+            print("\nA predefined rule has been selected!")
         elif rule_type == '2':
+            # Create a custom rule based on user input
+            print("\nCreating a custom rule...")
             rule_description = input("Enter a description for your custom rule: ").strip()
             rule_pattern = input("Enter the Python-compatible logic for your rule: ").strip()
             allowed = input("Enter examples that fit your rule, separated by commas: ").split(", ")
             disallowed = input("Enter examples that do not fit your rule, separated by commas: ").split(", ")
-            rule = self.rule_manager.create_custom_rule(rule_description, rule_pattern, allowed, disallowed)
-            print("Rule created and validated successfully!")
-            save_rule = input("Do you want to save this rule? (yes/no): ").strip().lower()
-            if save_rule == 'yes':
-                self.rule_manager.update_rules_dataset(rule)
+
+            rule = self.rule_manager.create_custom_rule(
+                rule_description, rule_pattern, allowed, disallowed
+            )
+
+            if rule:
+                print("\nRule created and validated successfully!")
+                save_rule = input("Do you want to save this rule? (yes/no): ").strip().lower()
+                if save_rule == 'yes':
+                    self.rule_manager.update_rules_dataset(rule)
+                    print("\nCustom rule saved successfully!\n")
+            else:
+                print("\nError: The custom rule could not be validated.\n")
+        elif rule_type == '':
+            print("\nReturning to the main menu.\n")
+            return
         else:
-            print("Invalid rule type. Exiting host mode.")
+            print("\nExiting host mode.\n")
             return
 
+        # Exit if no rule was successfully created or retrieved
         if not rule:
-            print("Error creating or retrieving rule. Exiting host mode.")
+            print("\nError creating or retrieving rule. Exiting host mode.\n")
             return
 
-        print(f"Selected Rule: {rule.description} - {rule.condition}")
-        new_game = HostPicnicGame(rule_text = rule.description, criteria = rule.condition)
+        # Display the selected rule
+        print(f"\nSelected Rule: \n- Description: {rule.description}\n- Condition: {rule.condition}\n")
+
+        # Initialize and start the host game
+        new_game = HostPicnicGame(rule)
         new_game.host_game(rule)
