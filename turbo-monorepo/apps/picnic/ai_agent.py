@@ -21,19 +21,20 @@ class AIResponse(BaseModel):
     reasoning: str
 
 STATIC_PROMPT_WORD_GUESS = (
-    "You are playing a word-guessing game governed by a consistent logical rule. Your task is to generate a single word guess based on the information provided, including the lists of allowed and disallowed words, feedback from previous guesses, and patterns you observe. "
-    "Avoid repeating any previously guessed words. Carefully analyze the characteristics of the allowed and disallowed words (such as length, structure, letters, or meaning) to refine your understanding of the rule. "
-    "Your response must be strictly structured as follows:\n"
-    "Word: <your_guess>\n"
-    "Allowed: <yes/no>\n"
-    "Reasoning: <your logical explanation of why this word fits or does not fit the rule>. "
-    "Your goal is to deduce the always-true logical rule based on your guesses. Be creative, but ensure your reasoning is precise and supports progress toward understanding the rule. The rule has no exceptions, so focus on patterns that apply universally."
+    "You are playing a word-guessing game with a clear, logical rule. Use the allowed and disallowed words to form and test concise hypotheses about the rule. "
+    "Each guess should explore a specific, testable feature, such as word length, spelling patterns, or categories (e.g., fruits, animals). "
+    "Format your response strictly as: "
+    "Word: <your_guess>\nAllowed: <yes/no>\nReasoning: <a concise explanation of why this word fits or does not fit the rule>. "
+    "Avoid repeating previously guessed or known words. Use feedback from incorrect guesses to refine your understanding. Focus on clear, observable patterns for each guess."
 )
 
 
 STATIC_PROMPT_RULE_GUESS = (
-    "You are analyzing a word-guessing game based on a logical, consistent rule, such as 'Words that end with \"ing\"'. Use the reasoning history, patterns in the allowed and disallowed words, and any notable features of the words (such as length, structure, or meaning) to deduce the rule. "
-    "Think critically and creatively to identify the underlying logic but remember the solution is simple and logic based. Provide a single clear and concise sentence describing the rule, ensuring it accounts for all observed examples."
+    "You are analyzing a word-guessing game to deduce a clear, consistent rule governing the allowed and disallowed words. "
+    "Use patterns observed in the lists to form a concise, logical hypothesis about the rule. The rule should be simple and testable, describing a single feature that applies to all allowed words and none of the disallowed words. "
+    "Format your response strictly as: "
+    "Rule: <a single, concise sentence describing the rule>. "
+    "For example: 'Allowed words have more than 5 letters.' If incorrect, refine your rule based on feedback and avoid contradictions. Focus on binary, consistent patterns."
 )
 
 class AIAgent:
@@ -46,11 +47,12 @@ class AIAgent:
                 model="gpt-4o-mini",
                 messages=message_history,
                 response_format=AIResponse,
+                temperature=0.7
             )
             ai_response = data_packet.choices[0].message.content
             ai_response_dict = AIResponse(**json.loads(ai_response))
             return ai_response_dict.guess, ai_response_dict.is_allowed, ai_response_dict.reasoning
-        except Exception as e:
+        except Exception as e:  
             print(f"Error generating AI rule guess: {e}")
             return "Unable to guess the rule.", False, ""
 
@@ -64,8 +66,9 @@ class AIAgent:
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
-                messages=message_history
-            )
+                messages=message_history,
+                temperature=0.7
+            )   
             guess = response.choices[0].message.content.strip()
             return guess
         except Exception as e:

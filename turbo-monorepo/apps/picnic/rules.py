@@ -13,26 +13,6 @@ class Rule:
         self.allowed = allowed or []
         self.disallowed = disallowed or []
 
-    def check_word(self, word, is_allowed=True):
-        """
-        Checks if a word satisfies the rule's pattern.
-        The pattern is assumed to be a Python expression where the word is evaluated.
-        
-        Parameters:
-            word (str): The word to check.
-            is_allowed (bool): True to check if the word is allowed; False for disallowed.
-
-        Returns:
-            bool: Whether the word satisfies the rule's condition.
-        """
-        try:
-            evaluation = evaluate_rule(self.condition, word)
-            print("So the word is "+ word + (" allowed?" if is_allowed else " disallowed?") + " That is " + str(evaluation == is_allowed))
-            return evaluation
-        except Exception as e:
-            print(f"Error evaluating rule: {e}")
-            return False
-
 class RuleManager:
     def __init__(self):
         """

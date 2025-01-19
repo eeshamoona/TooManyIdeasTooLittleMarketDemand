@@ -13,7 +13,7 @@ class SetupGame:
         """
         Starts the game, allowing the user to choose their role as host or invitee.
         """
-        print("\n=== Welcome to the Picnic Rule Guessing Game! ===")
+        print("--------------------------------------------------")
         print("We are going to a picnic, try to guess the rules and get invited!")
         print("--------------------------------------------------")
         mode = input("Do you want to play as the '1 - Host' or the '2 - Invitee'? ").strip().lower()
@@ -37,7 +37,7 @@ class SetupGame:
         if rule_type == '1':
             # Fetch a random predefined rule
             selected_rule = self.rule_manager.get_random_predefined_rule()
-            print("\nPredefined rule selected successfully!\n", selected_rule.rule, selected_rule.condition)
+            print("\nPredefined rule selected successfully!\n")
         elif rule_type == '2':
             # Create a custom rule based on user input
             print("\nCreating a custom rule...")
@@ -71,7 +71,7 @@ class SetupGame:
             return
 
         # Display the selected rule
-        print(f"\nSelected Rule: \n- Description: {selected_rule.rule}\n- Condition: {selected_rule.condition}\n")
+        print(f"\nSelected Rule: \n- Description: {selected_rule.rule}\n- Python Check Condition: {selected_rule.condition}\n")
 
         # Initialize and start the host game
         new_game = HostPicnicGame(selected_rule)
