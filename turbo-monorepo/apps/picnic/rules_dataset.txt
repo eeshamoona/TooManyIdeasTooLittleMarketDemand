@@ -6,5 +6,5 @@
 {'rule': 'ends with t', 'condition': "word.endswith('t')", 'allowed': ['hat', 'rat', 'habitat', 'flat', 'gnat'], 'disallowed': ['fair', 'tooth', 'wrong', 'wired', 'none']}
 {'rule': 'contains the letter x', 'condition': "'x' in word.lower()", 'allowed': ['box', 'relax', 'axel'], 'disallowed': ['book', 'cat', 'run']}
 {'rule': 'has at least two vowels', 'condition': "sum(1 for c in word.lower() if c in 'aeiou') >= 2", 'allowed': ['apple', 'orange', 'idea', 'fruit', 'banana', 'grape'], 'disallowed': ['cat', 'dog', 'sky']}
-{'rule': 'starts with a vowel', 'condition': "word[0].lower() in 'aeiou'", 'allowed': ['apple', 'orange', 'idea'], 'disallowed': ['banana', 'car', 'dog', 'pear', "'elephant'", 'peach', "'blue'", "'thought'", 'grape', 'mango', 'fruit']}
+{'rule': 'starts with a vowel', 'condition': "word[0].lower() in 'aeiou'", 'allowed': ['apple', 'orange', 'idea'], 'disallowed': ['banana', 'car', 'dog', 'pear','fruit']}
 {'rule': 'is a palindrome', 'condition': 'word.lower() == word.lower()[::-1]', 'allowed': ['level', 'radar', 'civic', 'deed', "'madam'", "'rotor'", "'racecar'", "'kayak'", "'refer'"], 'disallowed': ['apple', 'car', 'book']}

@@ -3,17 +3,15 @@ import os
 
 from dotenv import load_dotenv
 from openai import OpenAI
+from pydantic import BaseModel
 
 # Load environment variables
 load_dotenv()
 
 # Initialize OpenAI client
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),  # Fetch the API key from environment variables
+    api_key=os.getenv("OPENAI_API_KEY"), 
 )
-
-from pydantic import BaseModel
-
 
 class AIResponse(BaseModel):
     guess: str
@@ -34,7 +32,7 @@ STATIC_PROMPT_RULE_GUESS = (
     "Use patterns observed in the lists to form a concise, logical hypothesis about the rule. The rule should be simple and testable, describing a single feature that applies to all allowed words and none of the disallowed words. "
     "Format your response strictly as: "
     "Rule: <a single, concise sentence describing the rule>. "
-    "For example: 'Allowed words have more than 5 letters.' If incorrect, refine your rule based on feedback and avoid contradictions. Focus on binary, consistent patterns."
+    "For example: 'Allowed words have more than 5 letters.' If incorrect, refine your rule based on feedback and avoid contradictions. Focus on binary, consistent patterns. Do not say the rule is just what is allowed and disallowed, it has to be an encompassing larger rule"
 )
 
 class AIAgent:
