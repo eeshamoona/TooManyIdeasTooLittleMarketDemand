@@ -1,14 +1,14 @@
-import cv2
-import yt_dlp  # for extracting the YouTube stream URL
-import torch
-import time
-import threading
-from transformers import BlipProcessor, BlipForConditionalGeneration
-from PIL import Image
-import textwrap
-import warnings
+import cv2  # OpenCV for image/video processing
+import yt_dlp  # Extracts video stream URLs from YouTube
+import torch  # PyTorch for deep learning (e.g., YOLOv5)
+import time  # Time functions (delays, timestamps)
+import threading  # Run concurrent tasks
+from transformers import BlipProcessor, BlipForConditionalGeneration # Hugging Face models for image captioning (BLIP)
+from PIL import Image  # Pillow for image handling and format conversion
+import textwrap  # Wraps text for neat display
+import warnings  # Manage warning messages
 
-warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)  # Suppress FutureWarnings
 
 # ---------------------------
 # Global Variables for Multithreading
@@ -99,10 +99,6 @@ def get_stream_url(video_url):
             print("Error extracting video URL:", e)
             return None
 
-
-# ---------------------------
-# Header Banner Function
-# ---------------------------
 def print_header_banner():
     """
     Print a header banner introducing the Smart Wildlife Detection program.
@@ -111,15 +107,11 @@ def print_header_banner():
     \n\nPress 'q' in the display window to quit.\n"""
     print(banner)
 
-def wrap_text(text, max_width=40):
-    """Wrap text into multiple lines for better readability."""
-    return textwrap.wrap(text, width=max_width)
-
 def draw_caption(frame, text):
     """
     Draw the BLIP caption at the bottom center of the frame.
     """
-    lines = wrap_text(text, max_width=70)
+    lines = textwrap.wrap(text, width=70)
     font = cv2.FONT_HERSHEY_SIMPLEX
 
     frame_h, frame_w = frame.shape[:2]
