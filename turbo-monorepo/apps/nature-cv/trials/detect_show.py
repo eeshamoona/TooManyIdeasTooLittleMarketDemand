@@ -1,7 +1,11 @@
-import cv2
-import yt_dlp  # using yt-dlp directly instead of pafy
-import torch
+# pylint: disable=missing-module-docstring, invalid-name, no-member
+
 import warnings
+
+import cv2
+import torch
+import yt_dlp  # using yt-dlp directly instead of pafy
+
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 def get_stream_url(video_url):

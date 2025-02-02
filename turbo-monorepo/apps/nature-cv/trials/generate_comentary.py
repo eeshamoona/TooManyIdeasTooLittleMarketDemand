@@ -1,14 +1,19 @@
-import cv2
-import yt_dlp  # For extracting the stream URL
-import torch
-import openai
+# pylint: disable=missing-module-docstring, invalid-name, no-member
+
 import base64
-import warnings
 import os
+import warnings
+
+import cv2
+import openai
+import torch
+import yt_dlp  # For extracting the stream URL
 from dotenv import load_dotenv
+
 load_dotenv()
 warnings.filterwarnings("ignore", category=FutureWarning)
 from openai import OpenAI
+
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),  # This is the default and can be omitted
 )

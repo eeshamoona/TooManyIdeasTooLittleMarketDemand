@@ -1,3 +1,5 @@
+# pylint: disable=missing-module-docstring, invalid-name, no-member
+
 import cv2
 import yt_dlp  # for extracting the YouTube stream URL
 import torch

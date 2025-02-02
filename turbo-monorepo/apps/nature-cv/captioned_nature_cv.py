@@ -1,14 +1,21 @@
-import cv2  # OpenCV for image/video processing
-import yt_dlp  # Extracts video stream URLs from YouTube
-import torch  # PyTorch for deep learning (e.g., YOLOv5)
-import time  # Time functions (delays, timestamps)
-import threading  # Run concurrent tasks
-from transformers import BlipProcessor, BlipForConditionalGeneration # Hugging Face models for image captioning (BLIP)
-from PIL import Image  # Pillow for image handling and format conversion
+# pylint: disable=missing-module-docstring, invalid-name, no-member
+
 import textwrap  # Wraps text for neat display
+import threading  # Run concurrent tasks
+import time  # Time functions (delays, timestamps)
 import warnings  # Manage warning messages
 
-warnings.filterwarnings("ignore", category=FutureWarning)  # Suppress FutureWarnings
+import cv2  # OpenCV for image/video processing
+import torch  # PyTorch for deep learning (e.g., YOLOv5)
+import yt_dlp  # Extracts video stream URLs from YouTube
+from PIL import Image  # Pillow for image handling and format conversion
+from transformers import (  # Hugging Face models for image captioning (BLIP)
+    BlipForConditionalGeneration,
+    BlipProcessor,
+)
+
+# Suppress FutureWarnings
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 # ---------------------------
 # Global Variables for Multithreading
@@ -25,6 +32,8 @@ bounding_boxes = []  # Each item: (x1, y1, x2, y2, label)
 # ---------------------------
 # Get Detection Models
 # ---------------------------
+
+
 def load_models():
     """
     Load the AI models for image captioning (BLIP) and object detection (YOLOv5).
@@ -33,16 +42,21 @@ def load_models():
     """
     print("Loading BLIP captioning model...")
     processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
-    caption_model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-base")
-    
+    caption_model = BlipForConditionalGeneration.from_pretrained(
+        "Salesforce/blip-image-captioning-base"
+    )
+
     print("Loading YOLOv5 detection model...")
-    detection_model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
-    
+    detection_model = torch.hub.load("ultralytics/yolov5", "yolov5s", pretrained=True)
+
     return processor, caption_model, detection_model
+
 
 # ---------------------------
 # Use Loaded Models on an image frame
 # ---------------------------
+
+
 def generate_blip_caption(frame, processor, caption_model):
     """
     Use BLIP to generate an English caption for a given frame.
@@ -52,6 +66,7 @@ def generate_blip_caption(frame, processor, caption_model):
     inputs = processor(pil_image, return_tensors="pt")
     out = caption_model.generate(**inputs)
     return processor.decode(out[0], skip_special_tokens=True)
+
 
 def run_yolo_detection(frame, detection_model, confidence_threshold=0.5):
     """
@@ -70,34 +85,34 @@ def run_yolo_detection(frame, detection_model, confidence_threshold=0.5):
 
         # Filter out low confidence predictions
         for _, row in df.iterrows():
-            if row['confidence'] > confidence_threshold:
-                x1 = int(row['xmin'])
-                y1 = int(row['ymin'])
-                x2 = int(row['xmax'])
-                y2 = int(row['ymax'])
-                label = row['name']
+            if row["confidence"] > confidence_threshold:
+                x1 = int(row["xmin"])
+                y1 = int(row["ymin"])
+                x2 = int(row["xmax"])
+                y2 = int(row["ymax"])
+                label = row["name"]
                 new_boxes.append((x1, y1, x2, y2, label))
     except Exception as e:
         print("Error in object detection:", e)
-    
+
     return new_boxes
+
 
 # ---------------------------
 # Helper Functions
 # ---------------------------
+
+
 def get_stream_url(video_url):
-    ydl_opts = {
-        'quiet': True,
-        'skip_download': True,
-        'format': 'best[ext=mp4]/best'
-    }
+    ydl_opts = {"quiet": True, "skip_download": True, "format": "best[ext=mp4]/best"}
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
             info = ydl.extract_info(video_url, download=False)
-            return info['url']
+            return info["url"]
         except Exception as e:
             print("Error extracting video URL:", e)
             return None
+
 
 def print_header_banner():
     """
@@ -106,6 +121,7 @@ def print_header_banner():
     banner = f"""\nWelcome to Smart Wildlife Viewer:\n1. Streams any YouTube video.\n2. Generates image captions using the BLIP model.\n3. Detects objects with green borders using YOLOv5.
     \n\nPress 'q' in the display window to quit.\n"""
     print(banner)
+
 
 def draw_caption(frame, text):
     """
@@ -119,7 +135,9 @@ def draw_caption(frame, text):
     thickness = 2
 
     # Calculate text sizes for proper positioning.
-    text_sizes = [cv2.getTextSize(line, font, font_scale, thickness)[0] for line in lines]
+    text_sizes = [
+        cv2.getTextSize(line, font, font_scale, thickness)[0] for line in lines
+    ]
     max_text_width = max(size[0] for size in text_sizes) if text_sizes else 0
     line_height = text_sizes[0][1] if text_sizes else 20
     total_height = sum(sz[1] for sz in text_sizes) + 5 * (len(lines) - 1)
@@ -130,25 +148,58 @@ def draw_caption(frame, text):
     # Draw each line with an outline
     y = y_start
     for line in lines:
-        cv2.putText(frame, line, (x, y), font, font_scale, (0, 0, 0), thickness + 2, cv2.LINE_AA)
-        cv2.putText(frame, line, (x, y), font, font_scale, (255, 255, 255), thickness, cv2.LINE_AA)
+        cv2.putText(
+            frame, line, (x, y), font, font_scale, (0, 0, 0), thickness + 2, cv2.LINE_AA
+        )
+        cv2.putText(
+            frame,
+            line,
+            (x, y),
+            font,
+            font_scale,
+            (255, 255, 255),
+            thickness,
+            cv2.LINE_AA,
+        )
         y += line_height + 5
+
 
 def draw_yolo_boxes(frame):
     """
     Draw bounding boxes (from YOLO detection) on the given frame.
     """
     with boxes_lock:
-        for (x1, y1, x2, y2, label) in bounding_boxes:
+        for x1, y1, x2, y2, label in bounding_boxes:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             # Draw label text (with outline)
             lbl_y = y1 - 10 if (y1 - 10) > 10 else y1 + 20
-            cv2.putText(frame, label, (x1, lbl_y), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 3, cv2.LINE_AA)
-            cv2.putText(frame, label, (x1, lbl_y), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1, cv2.LINE_AA)
+            cv2.putText(
+                frame,
+                label,
+                (x1, lbl_y),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (0, 0, 0),
+                3,
+                cv2.LINE_AA,
+            )
+            cv2.putText(
+                frame,
+                label,
+                (x1, lbl_y),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (255, 255, 255),
+                1,
+                cv2.LINE_AA,
+            )
+
 
 # ---------------------------
 # Worker for Captioning and Detection Service
 # ---------------------------
+
+
 def caption_and_detection_worker(processor, caption_model, detection_model):
     """
     Background thread that:
@@ -175,7 +226,9 @@ def caption_and_detection_worker(processor, caption_model, detection_model):
 
         # Run YOLO detection
         try:
-            new_boxes = run_yolo_detection(frame_copy, detection_model, confidence_threshold=0.5)
+            new_boxes = run_yolo_detection(
+                frame_copy, detection_model, confidence_threshold=0.5
+            )
         except Exception as e:
             print("Error generating YOLO Boxes:", e)
             new_boxes = []  # Ensure new_boxes is defined
@@ -186,13 +239,16 @@ def caption_and_detection_worker(processor, caption_model, detection_model):
         with boxes_lock:
             bounding_boxes = new_boxes
 
+
 # ---------------------------
 # MAIN: Open the YouTube Stream with OpenCV
 # ---------------------------
+
+
 def main():
     global latest_frame  # Declare global since we update it in this function
     print_header_banner()
-    
+
     # Get YouTube URL from the user (or use default)
     default_url = "https://www.youtube.com/watch?v=QfVOXYPIZqs"
     user_input = input("Enter a YouTube URL or press Enter for default:\n>").strip()
@@ -212,7 +268,7 @@ def main():
     worker_thread = threading.Thread(
         target=caption_and_detection_worker,
         args=(processor, caption_model, detection_model),
-        daemon=True
+        daemon=True,
     )
     worker_thread.start()
 
@@ -243,12 +299,13 @@ def main():
         draw_caption(frame, current_caption)
 
         cv2.imshow("Smart Wildlife Detection", frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
     cap.release()
     cv2.destroyAllWindows()
     print("Goodbye. Thanks for watching!")
+
 
 if __name__ == "__main__":
     main()
