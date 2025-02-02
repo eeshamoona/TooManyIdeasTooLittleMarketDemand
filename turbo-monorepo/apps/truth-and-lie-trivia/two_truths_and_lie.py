@@ -122,6 +122,18 @@ def get_wikipedia_facts(topic: str, num_facts: int = 5) -> tuple[List[str], str]
         raise WikipediaError(f"Error fetching Wikipedia content: {str(e)}") from e
 
 
+def get_random_wikipedia_page() -> wikipedia.WikipediaPage:
+    """Fetch a random Wikipedia page.
+
+    Returns:
+        Random Wikipedia page
+    """
+    try:
+        return wikipedia.page(wikipedia.random(pages=1))
+    except Exception as e:
+        raise WikipediaError(f"Error fetching random page: {str(e)}") from e
+
+
 def cosine_similarity(vec1: np.ndarray, vec2: np.ndarray) -> float:
     """Calculate cosine similarity between two vectors.
 
@@ -209,8 +221,16 @@ def generate_fake_fact(real_fact: str, topic: str) -> str:
 def play_game_round() -> None:
     """Run a single round of the Two Truths and a Lie game."""
     try:
-        topic = input("🔍 Enter a topic (e.g., Black Holes, Ancient Rome, The Moon): ")
-        print("\n🔍 Fetching real facts from Wikipedia...")
+        choice = input("🔍 Enter a topic (e.g., Black Holes, Ancient Rome, The Moon) or type 'random': ").strip().lower()
+        if choice == 'random':
+            print("\n🔍 Fetching a random Wikipedia page...")
+            page = get_random_wikipedia_page()
+            topic = page.title
+            print(f"\n🎲 Selected random topic: {topic}")
+        else:
+            topic = choice
+
+        print("\n🔍 Querying Wikipedia...")
 
         original_facts, page_title = get_wikipedia_facts(topic)
         if len(original_facts) < 2:
@@ -224,7 +244,7 @@ def play_game_round() -> None:
         lie_fact = generate_fake_fact(random.choice(original_facts), page_title)
         attempts = 0
         while not check_fact_similarity(lie_fact, stored_embeddings) and attempts < 3:
-            print("⚠️ Lie too similar to real fact! Regenerating...")
+            print("...Generated a lie too similar to real fact! Regenerating...")
             lie_fact = generate_fake_fact(random.choice(original_facts), page_title)
             attempts += 1
 
