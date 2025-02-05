@@ -1,5 +1,6 @@
 # pylint: disable=missing-module-docstring, invalid-name, no-member
 
+import queue  # Thread-safe queue
 import textwrap  # Wraps text for neat display
 import threading  # Run concurrent tasks
 import time  # Time functions (delays, timestamps)
@@ -10,9 +11,7 @@ import torch  # PyTorch for deep learning (e.g., YOLOv5)
 import yt_dlp  # Extracts video stream URLs from YouTube
 from PIL import Image  # Pillow for image handling and format conversion
 from transformers import (  # Hugging Face models for image captioning (BLIP)
-    BlipForConditionalGeneration,
-    BlipProcessor,
-)
+    BlipForConditionalGeneration, BlipForQuestionAnswering, BlipProcessor)
 
 # Suppress FutureWarnings
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -38,18 +37,24 @@ def load_models():
     """
     Load the AI models for image captioning (BLIP) and object detection (YOLOv5).
 
-    :return: Tuple (processor, caption_model, detection_model).
+    :return: Tuple (caption_processor, caption_model, vqa_processor, vqa_model, detection_model).
     """
     print("Loading BLIP captioning model...")
-    processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
+    caption_processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-base")
     caption_model = BlipForConditionalGeneration.from_pretrained(
         "Salesforce/blip-image-captioning-base"
+    )
+
+    print("Loading BLIP VQA model...")
+    vqa_processor = BlipProcessor.from_pretrained("Salesforce/blip-vqa-base")
+    vqa_model = BlipForQuestionAnswering.from_pretrained(
+        "Salesforce/blip-vqa-base"
     )
 
     print("Loading YOLOv5 detection model...")
     detection_model = torch.hub.load("ultralytics/yolov5", "yolov5s", pretrained=True)
 
-    return processor, caption_model, detection_model
+    return caption_processor, caption_model, vqa_processor, vqa_model, detection_model
 
 
 # ---------------------------
@@ -57,15 +62,15 @@ def load_models():
 # ---------------------------
 
 
-def generate_blip_caption(frame, processor, caption_model):
+def generate_blip_caption(frame, caption_processor, caption_model):
     """
     Use BLIP to generate an English caption for a given frame.
     """
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     pil_image = Image.fromarray(rgb_frame)
-    inputs = processor(pil_image, return_tensors="pt")
+    inputs = caption_processor(pil_image, return_tensors="pt")
     out = caption_model.generate(**inputs)
-    return processor.decode(out[0], skip_special_tokens=True)
+    return caption_processor.decode(out[0], skip_special_tokens=True)
 
 
 def run_yolo_detection(frame, detection_model, confidence_threshold=0.5):
@@ -114,12 +119,20 @@ def get_stream_url(video_url):
             return None
 
 
-def print_header_banner():
+def print_header_banner() -> None:
     """
     Print a header banner introducing the Smart Wildlife Detection program.
     """
-    banner = f"""\nWelcome to Smart Wildlife Viewer:\n1. Streams any YouTube video.\n2. Generates image captions using the BLIP model.\n3. Detects objects with green borders using YOLOv5.
-    \n\nPress 'q' in the display window to quit.\n"""
+    banner = """\
+Welcome to Smart Wildlife Viewer:
+
+1. Streams any YouTube video.
+2. Generates image captions using the BLIP model.
+3. Detects objects with green borders using YOLOv5.
+4. Use keybinds to ask questions about the livestream
+
+Press 'q' in the display window to quit.
+"""
     print(banner)
 
 
@@ -196,11 +209,93 @@ def draw_yolo_boxes(frame):
 
 
 # ---------------------------
+# VQA Interaction Functions
+# ---------------------------
+
+# Global variables for VQA analysis
+vqa_queue = queue.Queue()
+vqa_lock = threading.Lock()
+
+def get_vqa_keybinds():
+    """
+    Return a dictionary mapping keys to specific VQA questions.
+    Add new key bindings here for easy extensibility.
+    """
+    return {
+        ord('s'): "Are there any animals visible?",
+        ord('w'): "Are there any people visible?",
+        ord('b'): "Can you see any birds?",
+        ord('t'): "Are there any trees or plants?",
+        ord('v'): "Are there any vehicles?"
+    }
+
+def analyze_single_question(frame, vqa_processor, vqa_model, question):
+    """
+    Analyze a frame with a single VQA question.
+    """
+    try:
+        # Convert to PIL Image and resize
+        pil_image = Image.fromarray(frame)
+        pil_image = pil_image.resize((384, 384))
+        
+        # Format a more detailed prompt
+        detailed_prompt = f"Please analyze this image carefully and answer: {question} Provide a clear yes or no answer."
+        
+        # Process with VQA
+        inputs = vqa_processor(
+            images=pil_image,
+            text=detailed_prompt,
+            return_tensors="pt",
+            padding=True,
+            truncation=True
+        )
+        
+        # Generate simple yes/no answer
+        out = vqa_model.generate(
+            input_ids=inputs['input_ids'],
+            pixel_values=inputs['pixel_values'],
+            max_new_tokens=5,  # Very short responses
+            num_beams=1,  # More focused search
+            length_penalty=1.0,  # Neutral length penalty
+            temperature=0.1,  # More deterministic
+            top_k=5,  # Very limited vocabulary for yes/no
+            do_sample=False  # Deterministic output
+        )
+        
+        return vqa_processor.decode(out[0], skip_special_tokens=True)
+    except Exception as e:
+        print(f"VQA Error: {str(e)}")
+        return "Error processing question"
+
+def vqa_worker(vqa_processor, vqa_model):
+    """
+    Background worker for VQA analysis.
+    Processes questions from the queue and prints results.
+    """
+    while True:
+        try:
+            # Get the next question and frame from the queue
+            frame, question = vqa_queue.get()
+            if frame is None or question is None:
+                continue
+                
+            # Process the question
+            print(f"\nAnalyzing: {question}")
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            answer = analyze_single_question(rgb_frame, vqa_processor, vqa_model, question)
+            print(f"Answer: {answer}\n")
+            
+            # Mark task as done
+            vqa_queue.task_done()
+        except Exception as e:
+            print(f"VQA Worker Error: {str(e)}")
+            continue
+
+# ---------------------------
 # Worker for Captioning and Detection Service
 # ---------------------------
 
-
-def caption_and_detection_worker(processor, caption_model, detection_model):
+def caption_and_detection_worker(caption_processor, caption_model, detection_model):
     """
     Background thread that:
       - Grabs the latest frame every few seconds.
@@ -219,7 +314,7 @@ def caption_and_detection_worker(processor, caption_model, detection_model):
 
         # Generate BLIP caption
         try:
-            blip_text = generate_blip_caption(frame_copy, processor, caption_model)
+            blip_text = generate_blip_caption(frame_copy, caption_processor, caption_model)
         except Exception as e:
             print("Error generating BLIP caption:", e)
             blip_text = "Caption unavailable."
@@ -244,9 +339,8 @@ def caption_and_detection_worker(processor, caption_model, detection_model):
 # MAIN: Open the YouTube Stream with OpenCV
 # ---------------------------
 
-
 def main():
-    global latest_frame  # Declare global since we update it in this function
+    global latest_frame
     print_header_banner()
 
     # Get YouTube URL from the user (or use default)
@@ -262,25 +356,41 @@ def main():
         print("\nSuccess! Loading models...\n")
 
     # Load the AI models
-    processor, caption_model, detection_model = load_models()
+    caption_processor, caption_model, vqa_processor, vqa_model, detection_model = load_models()
 
-    # Start the background thread for captioning and detection
-    worker_thread = threading.Thread(
+    # Start the background threads
+    caption_thread = threading.Thread(
         target=caption_and_detection_worker,
-        args=(processor, caption_model, detection_model),
-        daemon=True,
+        args=(caption_processor, caption_model, detection_model),
+        daemon=True
     )
-    worker_thread.start()
+    caption_thread.start()
+    
+    vqa_thread = threading.Thread(
+        target=vqa_worker,
+        args=(vqa_processor, vqa_model),
+        daemon=True
+    )
+    vqa_thread.start()
 
     cap = cv2.VideoCapture(stream_url)
     if not cap.isOpened():
         raise RuntimeError("Could not open video stream.")
+    
+    # Now we will start creating the video canvas to interact with:
 
     # Create a named window with a fixed size
     cv2.namedWindow("Smart Wildlife Detection", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("Smart Wildlife Detection", 800, 600)
 
-    print("\nRemember: Press 'q' in the display window to quit.\n")
+    # Get key bindings
+    keybinds = get_vqa_keybinds()
+    
+    # Print available commands
+    print("\nAvailable commands:")
+    for key, question in keybinds.items():
+        print(f"Press '{chr(key)}' to ask: {question}")
+    print("Press 'q' to quit\n")
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -298,9 +408,19 @@ def main():
         # Draw the BLIP caption
         draw_caption(frame, current_caption)
 
-        cv2.imshow("Smart Wildlife Detection", frame)
-        if cv2.waitKey(1) & 0xFF == ord("q"):
+        # Check for key presses
+        key = cv2.waitKey(1) & 0xFF
+        
+        # Handle VQA questions
+        if key in keybinds:
+            with frame_lock:
+                if latest_frame is not None:
+                    # Add question to the queue for processing
+                    vqa_queue.put((latest_frame.copy(), keybinds[key]))
+        elif key == ord('q'):
             break
+
+        cv2.imshow("Smart Wildlife Detection", frame)
 
     cap.release()
     cv2.destroyAllWindows()
